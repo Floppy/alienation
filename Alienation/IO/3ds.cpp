@@ -45,7 +45,6 @@ CLoad3DS::CLoad3DS() :
 
 bool CLoad3DS::import3DS(CModel *pModel, const char *strFileName)
 {
-   fprintf(stderr, "-------------------------\nimport3ds called on file %s\n",strFileName);
 	m_pCurrentChunk = new CChunk;				 
 	m_pTempChunk    = new CChunk;
 
@@ -92,7 +91,6 @@ void CLoad3DS::cleanUp()
 
 void CLoad3DS::processNextChunk(CModel *pModel, CChunk *pPreviousChunk)
 {
-   fprintf(stderr, "processNextChunk called\n");
    unsigned short iVersion = 0;
    int aiBuffer[50000] = {0};
    
@@ -149,7 +147,6 @@ void CLoad3DS::processNextChunk(CModel *pModel, CChunk *pPreviousChunk)
 
 void CLoad3DS::processNextObjectChunk(CModel *pModel, CChunk *pPreviousChunk)
 {
-   fprintf(stderr, "processNextObjectChunk called\n");
    CMesh* pMesh = new CMesh;
    
    // Read name
@@ -191,7 +188,6 @@ void CLoad3DS::processNextObjectChunk(CModel *pModel, CChunk *pPreviousChunk)
 
 void CLoad3DS::processNextObjectChunk2(CMesh *pMesh, CChunk *pPreviousChunk)
 {
-   fprintf(stderr, "processNextObjectChunk2 called\n");
    	
    char buffer[50000];
    memset(buffer,0,50000);
@@ -243,7 +239,6 @@ void CLoad3DS::processNextObjectChunk2(CMesh *pMesh, CChunk *pPreviousChunk)
 
 void CLoad3DS::processNextMaterialChunk(CModel *pModel, CChunk *pPreviousChunk)
 {
-   fprintf(stderr, "processNextMaterialChunk called\n");
    CMaterial newMaterial;   
    char strMaterialName[128];
 
@@ -256,6 +251,14 @@ void CLoad3DS::processNextMaterialChunk(CModel *pModel, CChunk *pPreviousChunk)
    
       switch (m_pCurrentChunk->m_uiID)
       {
+      case _3DS_MATNAME: {         
+         // Read material name
+         m_pCurrentChunk->m_iBytesRead += fread(strMaterialName,
+                                                1, 
+                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
+                                                m_pFilePointer);
+      } break;
+			
       case _3DS_MATMAP: {
          processNextMaterialChunk2(newMaterial, m_pCurrentChunk);
       }	break;
@@ -275,7 +278,6 @@ void CLoad3DS::processNextMaterialChunk(CModel *pModel, CChunk *pPreviousChunk)
 
    // Add material to map
    m_oMaterials[strMaterialName] = newMaterial;
-   fprintf(stderr," -- finished loading material \"%s\"\n",strMaterialName);
 
    // Tidy up and finish
    delete m_pCurrentChunk;
@@ -284,7 +286,6 @@ void CLoad3DS::processNextMaterialChunk(CModel *pModel, CChunk *pPreviousChunk)
 
 void CLoad3DS::processNextMaterialChunk2(CMaterial& oMaterial, CChunk *pPreviousChunk)
 {
-   fprintf(stderr, "processNextMaterialChunk2 called\n");
    char strMaterialName[128];
 
    // Read new chunk
@@ -296,15 +297,6 @@ void CLoad3DS::processNextMaterialChunk2(CMaterial& oMaterial, CChunk *pPrevious
    
       switch (m_pCurrentChunk->m_uiID)
       {
-      case _3DS_MATNAME: {         
-         // Read material name
-         m_pCurrentChunk->m_iBytesRead += fread(strMaterialName,
-                                                1, 
-                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
-                                                m_pFilePointer);
-         fprintf(stderr, " -- material name: %s\n",strMaterialName);
-      } break;
-			
       case _3DS_MATDIFFUSE: {
          // Read colour into material
          readColorChunk(&oMaterial, m_pCurrentChunk);
@@ -319,7 +311,6 @@ void CLoad3DS::processNextMaterialChunk2(CMaterial& oMaterial, CChunk *pPrevious
                                                 m_pFilePointer);         
          // Load texture and store ID
          oMaterial.m_uiTexture = g_oTextureManager.load(strFilename);
-         fprintf(stderr," -- loaded texure %d from file %s\n",oMaterial.m_uiTexture,strFilename);
       }	break;
 			
       default: {
@@ -358,7 +349,6 @@ void CLoad3DS::readChunk(CChunk *pChunk)
 
 int CLoad3DS::getString(char *pBuffer)
 {
-   fprintf(stderr, "getString called - result: ");
 	int index = 0;
 	
 	fread(pBuffer, 1, 1, m_pFilePointer);
@@ -367,7 +357,6 @@ int CLoad3DS::getString(char *pBuffer)
 	{
 		fread(pBuffer + index, 1, 1, m_pFilePointer);
 	}
-   fprintf(stderr, "%s\n", pBuffer);
 	
 	return strlen(pBuffer) + 1;
 }
@@ -379,7 +368,6 @@ int CLoad3DS::getString(char *pBuffer)
 
 void CLoad3DS::readColorChunk(CMaterial *pMaterial, CChunk *pChunk)
 {
-   fprintf(stderr, "readColorChunk called\n");
    // Allocate colour storage
    unsigned char col[4] = {0,0,0,0};
    // Read data
@@ -388,7 +376,6 @@ void CLoad3DS::readColorChunk(CMaterial *pMaterial, CChunk *pChunk)
    pChunk->m_iBytesRead += m_pTempChunk->m_iBytesRead;
    // store
    pMaterial->m_oDiffuse = CRGBAColour(col[0],col[1],col[2],col[3]);
-   fprintf(stderr," -- %d, %d, %d, %d\n", col[0],col[1],col[2],col[3]);
 }
 
 
@@ -398,7 +385,6 @@ void CLoad3DS::readColorChunk(CMaterial *pMaterial, CChunk *pChunk)
 
 void CLoad3DS::readVertexIndices(CMesh *pObject, CChunk *pPreviousChunk)
 {
-   fprintf(stderr, "readVertexIndices called\n");
 	unsigned short iIndex = 0;					 
 	pPreviousChunk->m_iBytesRead += fread(&pObject->m_iNumFaces, 1, 2, m_pFilePointer);
 	
@@ -427,7 +413,6 @@ void CLoad3DS::readVertexIndices(CMesh *pObject, CChunk *pPreviousChunk)
 
 void CLoad3DS::readUVCoordinates(CMesh *pObject, CChunk *pPreviousChunk)
 {
-   fprintf(stderr, "readUVCoordinates called\n");
 	pPreviousChunk->m_iBytesRead += fread(&pObject->m_iNumTexVertex, 1, 2, m_pFilePointer);
 	
 	pObject->m_pTexVerts = new CVector2 [pObject->m_iNumTexVertex];
@@ -442,7 +427,6 @@ void CLoad3DS::readUVCoordinates(CMesh *pObject, CChunk *pPreviousChunk)
 
 void CLoad3DS::readVertices(CMesh *pObject, CChunk *pPreviousChunk)
 { 
-   fprintf(stderr, "readVertices called\n");
 	pPreviousChunk->m_iBytesRead += fread(&(pObject->m_iNumVertices), 1, 2, m_pFilePointer);
 	
 	pObject->m_pVerts = new CVector3 [pObject->m_iNumVertices];
@@ -458,7 +442,6 @@ void CLoad3DS::readVertices(CMesh *pObject, CChunk *pPreviousChunk)
 
 void CLoad3DS::readObjectMaterial(CMesh *pObject, CChunk *pPreviousChunk)
 {
-   fprintf(stderr, "readObjectMaterial called\n");
 	char strMaterial[255];	
         memset(strMaterial,0,255);
 	int aiBuffer[50000] = {0};
