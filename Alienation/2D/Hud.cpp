@@ -113,9 +113,10 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 												//shouldnt be really                        //
 												//////////////////////////////////////////////
         CMaterial oMaterial;
-        oMaterial.m_oEmissive = CRGBAColour(0.4f,1.0f,0.3f,0.06f);
+        oMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f,0.5f);
         oMaterial.render();
-	glEnable(GL_BLEND);
+        glEnable(GL_BLEND);
+        glDepthMask(GL_FALSE);
 
 												//////////////////////////////////////////////
 												//Right Shield                              //
