@@ -20,6 +20,8 @@
 #include <fmod.h>
 #include <SDL.h>
 
+#include <iostream>
+using namespace std;
 
 #define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
 #define piover180 	(0.0174532925f)
@@ -38,7 +40,8 @@ int main(int argc, char* argv[])
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) == -1)
 	{
-		return 0;
+		cerr << "Failed to initialise SDL" << endl;
+		return 1;
 	}
 
 	SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
@@ -51,7 +54,8 @@ int main(int argc, char* argv[])
 
 	if (!FSOUND_Init(44100, 64, 0))
 	{
-		return 0;
+		cerr << "Failed to initialise FMOD" << endl;
+		return 1;
 	}
 
   
@@ -59,13 +63,15 @@ int main(int argc, char* argv[])
 	poMod = FSOUND_Stream_OpenFile("./Data/Audio/demo.mp3", FSOUND_LOOP_NORMAL, 0);
 	if (!poMod)
 	{
-		return 0;
+		cerr << "Failed to open demo.mp3" << endl;
+		return 1;
 	}
 
 
 	// Set the video mode
 	if( SDL_SetVideoMode( 1024, 768, 16, iFlags ) == 0 ) {
-		return 0;
+		cerr << "Failed to set video mode" << endl;
+		return 1;
 	}
 
 	SDL_JoystickEventState(SDL_ENABLE);
