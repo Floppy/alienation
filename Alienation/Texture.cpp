@@ -35,7 +35,7 @@ bool CTexture::load(char **astrFnames, int iNoOfFiles)
 
 		if (strlen(astrFnames[iCount]) > 0)
 		{
-			strcpy(strFile, "Data/texture/");
+			strcpy(strFile, "Data/Texture/");
 			strcat(strFile, astrFnames[iCount]);
 
 			// Load the file
