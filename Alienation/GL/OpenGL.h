@@ -20,7 +20,6 @@
 #include "Game/Stars.h"
 #include "Game/Ship.h"
 #include "GL/GLFont.h"
-#include "Game/Skybox.h"
 #include "Game/PlayerShip.h"
 #include "AI/AIShip.h"
 #include "3D/Light.h"
@@ -46,7 +45,6 @@ class COpenGL {
 		CLight *m_poLight;
 		CStars  *m_poStars;
 		CPlayerShip *m_poShip;
-		CSkybox *m_poSkybox;
 		CAIShip *m_poAIShip;
       COpenGL();
 		void Update (unsigned long int dMilliseconds);
