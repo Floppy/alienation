@@ -10,4 +10,4 @@ SDL_CFLAGS="`sdl-config --cflags`"
 AC_SUBST(SDL_LIBS)
 AC_SUBST(SDL_CFLAGS)
 
-AC_OUTPUT(Makefile Math/Makefile IO/Makefile)
+AC_OUTPUT(Makefile Math/Makefile IO/Makefile 3D/Makefile)
