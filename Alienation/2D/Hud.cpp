@@ -286,8 +286,7 @@ void CHud::drawQuad(CVector3 *Verts, CVector2 *Tex)
 // Author           : Gary Ingram
 // Return type      : void 
 // Date Created     : 25/05/2003
-// Argument         : CShipData *poTarget
-// Argument         : CMass **poMass
+// Argument         : CShip *poTarget
 // Argument         : CShip *poThisShip
 // Description      : This routine draws the hologram on the target on the hud. 
 //                    Although this is its main function it is also used to 
@@ -302,12 +301,14 @@ void CHud::drawQuad(CVector3 *Verts, CVector2 *Tex)
 //                                         required to view the target correctly. 
 //                                         (Note: To work 100%, needs to render 
 //                                         to texture, so all work is in 2D)  
+//     1.2           23/08/2003   JS       Changed args to get more data.
 //**************************************************************************************
-void CHud::drawTargetData(CShipData *poTarget, CMass **poMass, CShip *poThisShip)
+void CHud::drawTargetData(CShip *poTarget, CShip *poThisShip)
 {
 
 	CVector3 vecTarget, vecTemp;
 	CVector3 vecThisRight, vecThisUp, vecThisHead, vecThisLeft;
+
 
 												//////////////////////////////////////////////
 												//Initialise all the variables. The         //
@@ -318,7 +319,7 @@ void CHud::drawTargetData(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 												//to the origin                             //
 												//////////////////////////////////////////////
 
-	vecTarget =  poMass[0]->m_vecPos - poThisShip->m_ppMasses[0]->m_vecPos;
+	vecTarget =  poTarget->m_ppMasses[0]->m_vecPos - poThisShip->m_ppMasses[0]->m_vecPos;
 	vecThisRight = poThisShip->m_poShips[0].m_vecRight    - poThisShip->m_ppMasses[0]->m_vecPos;
 	vecThisUp    = poThisShip->m_poShips[0].m_vecUp       - poThisShip->m_ppMasses[0]->m_vecPos;	
 	vecThisHead  = poThisShip->m_poShips[0].m_vecHeading  - poThisShip->m_ppMasses[0]->m_vecPos;	
@@ -462,7 +463,7 @@ void CHud::drawTargetData(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 	glMultMatrixf(matM.glElements());
 
 	glTranslatef(vecHoloPos.X(), vecHoloPos.Y(), vecHoloPos.Z());
-	glMultMatrixf(poTarget->m_matRotation.glElements());
+	glMultMatrixf(poTarget->m_poShips[0].m_matRotation.glElements());
 
 	CMatrix matGet(GL_MODELVIEW_MATRIX);
 
@@ -474,7 +475,7 @@ void CHud::drawTargetData(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 
 	glScalef(0.02f, 0.02f, 0.02f);
 
-	poTarget->m_oModel.render();
+	poTarget->m_poShips[0].m_oModel.render();
 
 	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
@@ -496,7 +497,7 @@ void CHud::drawTargetData(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 	m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f);
 	m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f);
 
-	sprintf(strFont,"%5d m/s", static_cast<int>(poTarget->m_fVel));
+	sprintf(strFont,"%5d m/s", static_cast<int>(poTarget->m_poShips[0].m_fVel));
 	m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f);
 	m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f);
 

@@ -55,11 +55,9 @@ public:
     * Although this is its main function it is also used to 
     * display other target information  
     * @param poTarget The current target
-    * @param poMass not sure what this is, sorry!
     * @param poThisShip The player's ship
-    * @bug (doc) Don't knot what poMass represents.
     */
-   void drawTargetData(CShipData *poTarget, CMass **poMass, CShip *poThisShip);
+   void drawTargetData(CShip *poTarget, CShip *poThisShip);
 
  protected:
 

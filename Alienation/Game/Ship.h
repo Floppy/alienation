@@ -23,12 +23,13 @@
 #include "3D/Frustum.h"
 #include "3D/BoundingSphere.h"
 
+class CShip;
+
 class CShipData
 {
 public:
 	CBoundingSphere m_oSphere;
-	CShipData	*m_poTargetData;
-	CMass			**m_poTargetMass;
+        CShip*          m_poTarget;
 	CModel	         m_oModel;
 	CVector3		m_vecForce;
 	CVector3		m_vecHeading, m_vecUp, m_vecRight, m_vecDirection;

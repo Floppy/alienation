@@ -29,8 +29,7 @@ CShip::CShip(int num, float mass) : CSimulation(num, mass)
    m_poShips[0].m_quaCamOrientation.loadIdentity();
    m_poShips[0].m_fDrag = 0.025f;
    m_poShips[0].m_iFlightMode = 1;
-   m_poShips[0].m_poTargetData = NULL;
-   m_poShips[0].m_poTargetMass = NULL;
+   m_poShips[0].m_poTarget = NULL;
 
    m_poShips[0].m_poWeapon = new CWeapon(100, CVector3(0.0f, -0.3f, -3.3f)); 
    m_poShips[0].m_poBrake = new CBrake(100, CVector3(0.0f, 0.0f, 0.0f));
@@ -235,7 +234,6 @@ void CShip::rotHeading(CMatrix mat)
 
 void CShip::setTarget(CShip& oShip) 
 {
-   m_poShips[0].m_poTargetData = &oShip.m_poShips[0];
-   m_poShips[0].m_poTargetMass = oShip.m_ppMasses;
+   m_poShips[0].m_poTarget = &oShip;
 }
 
