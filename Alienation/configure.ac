@@ -32,7 +32,8 @@ AC_ARG_WITH(fmod,
     [FMOD_PREFIX=$with_fmod],
 )
 LIBS="$LIBS -lfmod-3.62"
-if test -n "$with_fmod"; then
+if test "$with_fmod"; then
+  echo Using fmod API from $with_fmod
   CPPFLAGS="$CPPFLAGS -I$with_fmod/inc"
   LIBS="$LIBS -L$with_fmod"
 fi
