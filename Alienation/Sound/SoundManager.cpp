@@ -116,16 +116,15 @@ void CSoundManager::setPlaybackLocation(CVector3 vecPosition, CVector3 vecUp, CV
    m_vecRight.normalise();
 }
 
-#include <iostream>
-using namespace std;
-
 bool CSoundManager::setChannelLocation(int iChannel, CVector3 vecPosition) 
 {
    // Calculate direction vector
    CVector3 vecDirection = m_vecPosition - vecPosition;
    // Calculate distance
-   unsigned char cDistance = static_cast<unsigned char>(vecDirection.length());
-   vecDirection.normalise();
+   float fLength = vecDirection.length();
+   unsigned char cDistance = (fLength<500) ? (fLength/500) * 255 : 255;
+   // Normalise direction vector
+   vecDirection /= fLength;
    // Calculate which side the sound is
    int iAngle = (vecDirection.dot(m_vecRight) > 0) ? -1 : 1;
    // Take cross product of sound vector and local up vector
