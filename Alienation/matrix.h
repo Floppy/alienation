@@ -3,7 +3,7 @@
 #define _MATRIX_H
 
 #include "quat.h"
-#include "physics1.h"
+#include "Physics1.h"
 #include "vector.h"
 
 //Matrix class from Aquas workspace. Need to add operator overloading

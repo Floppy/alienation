@@ -5,7 +5,7 @@
 #pragma comment(lib, "data/lib/jpeg.lib")
 
 #include "3ds.h"
-#include "texture.h"
+#include "Texture.h"
 #include <windows.h>
 #include <windowsx.h>
 #include <stdio.h>

@@ -12,10 +12,9 @@
 #ifndef _Particle_Engine_h
 #define _Particle_Engine_h
 
-#include "physics1.h"
-#include "particle.h"
+#include "Physics1.h"
+#include "Particle.h"
 #include "vector.h"
-#include <windows.h>
 
 #define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
 

@@ -10,7 +10,7 @@
 #ifndef _Particle_h
 #define _Particle_h
 #include "vector.h"
-#include "physics1.h"
+#include "Physics1.h"
 
 //Should actually be called tParticle and be a struct rather than a class.
 //Will do this soon. Handles all particle data. Used by the abstract
@@ -34,3 +34,4 @@ public:
 };
 
 #endif
+

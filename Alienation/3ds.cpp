@@ -1,7 +1,6 @@
 
 #include "3ds.h"
 //#include "3dmath.h"
-#include <windows.h>
 
 
 //-------------------------------- CLOADS3DS ------------------------------------

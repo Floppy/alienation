@@ -18,14 +18,14 @@
 #include <gl\gl.h>    // Header File For The OpenGL32 Library
 #include <gl\glu.h>   // Header File For The GLu32 Library
 #include <gl\glaux.h> // Header File For The GLaux Library
-#include "stars.h"
-#include "ship.h"
-#include "glfont.h"
-#include "skybox.h"
-#include "playership.h"
-#include "aiship.h"
-#include "light.h"
-#include "SDL.h"
+#include "Stars.h"
+#include "Ship.h"
+#include "GLFont.h"
+#include "Skybox.h"
+#include "PlayerShip.h"
+#include "AIShip.h"
+#include "Light.h"
+#include <SDL.h>
 
 class CKeys {											// Structure For Keyboard Stuff
 public:
@@ -63,4 +63,4 @@ class COpenGL {
 		CKeys m_oKeys;
 };
 
-#endif;
+#endif

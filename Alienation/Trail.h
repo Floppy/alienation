@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <time.h>
 #include "vector.h"
-#include "texture.h"
+#include "Texture.h"
 #include "matrix.h"
 
 #include <gl\gl.h>    // Header File For The OpenGL32 Library

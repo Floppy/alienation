@@ -11,7 +11,7 @@
 
 #include <time.h>
 #include "ParticleEngine.h"
-#include "texture.h"
+#include "Texture.h"
 #include "matrix.h"
 //Draws (badly) a brake trail at the front of the ship. Was done in 10 minutes flat
 //and need far more time. For this reason didnt make the demo. Works similary to the 

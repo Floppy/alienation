@@ -5,7 +5,7 @@
  *  http://vulcanus.its.tudelft.nl/robert
  */
 
-#include "particleengine.h"
+#include "ParticleEngine.h"
 
 // Empty constructor
 CParticleEngine::CParticleEngine(void)

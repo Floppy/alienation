@@ -13,7 +13,7 @@
 #include <gl\gl.h>
 #include <gl\glu.h>
 #include <gl\glaux.h>
-#include "texture.h"
+#include "Texture.h"
 #include "vector.h"
 #include "matrix.h"
 

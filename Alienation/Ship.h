@@ -10,8 +10,8 @@
 #endif // _MSC_VER > 1000
 
 //#include "Physics1.h"
-#include "3dsloader.h"
-#include "trail.h"
+#include "3dsLoader.h"
+#include "Trail.h"
 #include <stdio.h>
 #include <gl\gl.h>    // Header File For The OpenGL32 Library
 #include <gl\glu.h>   // Header File For The GLu32 Library
@@ -19,8 +19,8 @@
 #include "vector.h"
 #include "quat.h"
 #include "matrix.h"
-#include "weapon.h"
-#include "brake.h"
+#include "Weapon.h"
+#include "Brake.h"
 
 #define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
 #define piover180 	(0.0174532925f)

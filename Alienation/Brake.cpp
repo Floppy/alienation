@@ -193,3 +193,4 @@ void CBrake::reset()
 	memset ((void *)m_poParticles, 0, sizeof(CParticle) * m_iParticlesCreated);
 	m_iParticlesCreated = 0;
 }
+

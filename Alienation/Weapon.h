@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "ParticleEngine.h"
-#include "texture.h"
+#include "Texture.h"
 #include "matrix.h"
 
 class CWeapon : public CParticleEngine  
