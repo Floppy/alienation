@@ -2,15 +2,11 @@
 #ifndef _3DSLOADER_H
 #define _3DSLOADER_H
 
-#pragma comment(lib, "data/lib/jpeg.lib")
-
 #include "3ds.h"
 #include "Texture.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 #define MAXTEXTURE 100
 
 

@@ -9,8 +9,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 #include <stdio.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include "Texture.h"
 #include "vector.h"
 #include "matrix.h"

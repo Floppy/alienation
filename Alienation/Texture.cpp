@@ -5,6 +5,11 @@
 #include "Texture.h"
 #include <SDL_image.h>
 
+#ifdef WIN32
+  #include <windows.h>
+#endif
+#include <GL/gl.h>
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -22,15 +27,15 @@ CTexture::~CTexture()
 
 bool CTexture::load(char *strDir, char **astrFnames, int iNoOfFiles)
 {
-	bool bStatus = false;						// Status Indicator
+	bool bGood = false;
 	char strFile[200];
-
-	SDL_Surface *poTextureImage[1];					// Create Storage Space For The Texture
-	poTextureImage[0] = NULL;
 
 	int iCount;
 	for ( iCount = 0 ; iCount < iNoOfFiles ; iCount++ )
 	{
+		// We will load into an SDL surface
+		SDL_Surface * poTextureImage = NULL;
+
 		if (strlen(astrFnames[iCount]) > 0)
 		{
 			if (strlen(strDir) > 0)
@@ -44,27 +49,28 @@ bool CTexture::load(char *strDir, char **astrFnames, int iNoOfFiles)
 			}
 			strcat(strFile, astrFnames[iCount]);
 
-			memset(poTextureImage,0,sizeof(void *)*1);           	// Set The Pointer To NULL
-	
-			// Load The Bitmap, Check For Errors, If Bitmap's Not Found Quit
-			if (poTextureImage[0]= IMG_Load(strFile))
+			// Load the file
+			poTextureImage = IMG_Load(strFile);
+
+			// If texture was loaded OK
+			if (poTextureImage)
 			{
-				bStatus=true;									// Set The Status To TRUE
+				bGood=true;
 	
-				glGenTextures(1, &m_puiTexture[iCount]);					// Create Three Textures
+				glGenTextures(1, &m_puiTexture[iCount]);
 
 				// Create Linear Filtered Texture
 				glBindTexture(GL_TEXTURE_2D, m_puiTexture[iCount]);
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-				glTexImage2D(GL_TEXTURE_2D, 0, 3, poTextureImage[0]->w, poTextureImage[0]->h, 0, GL_RGB, GL_UNSIGNED_BYTE, poTextureImage[0]->pixels);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, poTextureImage->w, poTextureImage->h, 0, GL_RED, GL_UNSIGNED_BYTE, poTextureImage->pixels);
 			}
 		}
+		// Free the SDL surface
+		SDL_FreeSurface(poTextureImage);
 	}
-
-	SDL_FreeSurface(poTextureImage[0]);
-
-	return bStatus;										// Return The Status
+	// Done
+	return bGood;
 }
 
 void CTexture::setActive(unsigned int t)

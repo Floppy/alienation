@@ -83,8 +83,9 @@ void CLoad3DS::processNextChunk(C3DModel *pModel, CChunk *pPreviousChunk)
 			
 			m_pCurrentChunk->m_iBytesRead += fread(&iVersion, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
 			
-			if (iVersion > 0x03)
+			if (iVersion > 0x03) {
 				//MessageBox(NULL, "This 3DS file is over version 3 so it may load incorrectly", "Warning", MB_OK);
+			}
 			break;
 			
 		case OBJECTINFO:						

@@ -9,8 +9,12 @@
 #pragma once
 #endif // _MSC_VER > 1000
 #include <stdio.h>
+
+#ifdef WIN32
+  #include <windows.h>
+#endif
+
 #include <GL/gl.h>
-#include <GL/glu.h>
 
 
 //Class to represent lighting. Needs far more work, but again, should be easy to expand

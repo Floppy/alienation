@@ -13,8 +13,6 @@
 #include "3dsLoader.h"
 #include "Trail.h"
 #include <stdio.h>
-#include <GL/gl.h>    // Header File For The OpenGL32 Library
-#include <GL/glu.h>   // Header File For The GLu32 Library
 #include "vector.h"
 #include "quat.h"
 #include "matrix.h"

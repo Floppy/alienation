@@ -28,8 +28,6 @@
 #define OBJECT_UV			0x4140			
 
 #include "vector.h"
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include <stdio.h>
 #include <string.h>
 #include <fstream>

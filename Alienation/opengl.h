@@ -13,9 +13,12 @@
 
 #define WIN32_LEAN_AND_MEAN
 
+#ifdef WIN32
+  #include <windows.h>
+#endif
+#include <GL/gl.h>
+
 #include <stdio.h>
-#include <GL/gl.h>    // Header File For The OpenGL32 Library
-#include <GL/glu.h>   // Header File For The GLu32 Library
 #include "Stars.h"
 #include "Ship.h"
 #include "GLFont.h"

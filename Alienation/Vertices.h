@@ -8,8 +8,12 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
+
+#ifdef WIN32
+  #include <windows.h>
+#endif
+
 #include <GL/gl.h>			// Header File For The OpenGL32 Library
-#include <GL/glu.h>			// Header File For The GLu32 Library
 
 class CVertices  
 {

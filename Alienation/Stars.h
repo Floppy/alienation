@@ -9,8 +9,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 #include <stdio.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include "quat.h"
 #include "matrix.h"
 #include "vector.h"
