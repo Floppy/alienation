@@ -12,6 +12,9 @@
 #include "config.h"
 #include "3D/Material.h"
 #include "3D/Light.h"
+#include "Equipment/Shield.h"
+#include "Equipment/SpeedIndicator.h"
+#include "Equipment/ThrustInformation.h"
 
 namespace NSD2D {
 
@@ -92,7 +95,7 @@ namespace NSD2D {
       /**
        * Texture IDs
        */
-      unsigned int m_auiTextures[9];
+      unsigned int m_auiOffScreenTexture;
       
       /**
        * Object for 2d drawing
@@ -104,6 +107,13 @@ namespace NSD2D {
        */
       CLight m_oLight;
   
+   private:
+	   CShield * m_poLeftShield;
+	   CShield * m_poRightShield;
+	   CShield * m_poRearShield;
+	   CShield * m_poFrontShield;
+	   CSpeedIndicator * m_poSpeedIndicator;
+	   CThrustIndicator * m_poThrustIndicator;
    };
    
 }

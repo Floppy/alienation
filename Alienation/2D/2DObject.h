@@ -1,55 +1,64 @@
-#ifndef SDS_2DOBJECT_H
-#define SDS_2DOBJECT_H
+// 2DObject.h: interface for the C2DObject class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#if !defined(AFX_2DOBJECT_H__90BFDDBC_B0A5_4AD3_8A38_13C4ECC07894__INCLUDED_)
+#define AFX_2DOBJECT_H__90BFDDBC_B0A5_4AD3_8A38_13C4ECC07894__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "config.h"
 #include "Math/Vector.h"
+#include "3D/TextureManager.h"
+#include "3D/Material.h"
+#include "config.h"
+#include <GL/gl.h>
 
-namespace NSD2D {
+class C2DObject  
+{
+public:
+	void setActiveMaterial(CRGBAColour oDiffuse, CRGBAColour oAmbient, CRGBAColour oEmissive);
+	void swapTextures();
+	void swapMaterials();
+   unsigned int getActiveTexture();
+   void setActiveTexture(unsigned int uiTexture);
+   unsigned int getAltTexture();
+   void setAltTexture(unsigned int uiTexture);
+   float getHeight();
+   float getWidth();
+   float getLeft();
+   float getTop();
+   int getScreenWidth();
+   int getScreenHeight();
+   bool mouseClickedInside(int iXPos, int iYPos);
+   void setTexturePercentage(float fPercentage);
+   void setScreen(int iWidth, int iHeight);
+   void setPosition(float fXPos, float fYPos, float fWidth, float fHeight);
+   C2DObject();
+   virtual ~C2DObject();
+   void init2D(float fXPos, float fYPos, float fWidth, float fHeight, char *sFilename);
+   void renderQuad();
 
-   using namespace NSDMath;
-   
+private:
+	float m_fScreenXPos;
+	float m_fScreenYPos;
+	float m_fScreenPosWidth;
+	float m_fScreenPosHeight;
+	void convertToScreenCoords();
+   NSDMath::CVector2 m_vecTex[4];
+   unsigned m_uiActiveTexture;
+   unsigned int m_uiAltTexture;
+   CMaterial m_oActiveMaterial;
+   CMaterial m_oAltMaterial;
+   float m_fXPos;
+   float m_fYPos;
+   float m_fWidth;
+   float m_fHeight;
 
-   /**
-    * A 2D screen object.
-    * Generally used for overlays, GUI elements etc.
-    */
-   class C2DObject {
 
-   public:
-      
-      /** 
-       * Constructor.
-       */
-      C2DObject();
+   static int m_iScreenWidth;
+   static int m_iScreenHeight;
+};
 
-      /** 
-       * Destructor.
-       */
-      virtual ~C2DObject();
-
-      void setScreen(int iWidth, int iHeight);
-
-      void setPosition(int iXPos, int iYPos);
-
-      void renderQuad(float fPosX, float fPosY, float fWidth, 
-                      float fHeight, CVector2* vecTex);
-      
-   private:
-      
-      int m_iXPos;
-
-      int m_iYPos;
-      
-      static int m_iWidth;
-
-      static int m_iHeight;
-
-   };
-   
-}
-
-#endif // SDS_2DOBJECT_H
+#endif // !defined(AFX_2DOBJECT_H__90BFDDBC_B0A5_4AD3_8A38_13C4ECC07894__INCLUDED_)
