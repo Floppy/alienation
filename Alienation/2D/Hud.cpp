@@ -56,12 +56,8 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 {   
 
 
-	CMatrix matMatrix;
-	CVector3 vecTempPos;
-	float afCol[4];
 	char strFont[20];
 	float fWidthSpeed, fWidthThrust;
-	CVector3 avecVerts[4];
 	CVector2 avecTex[4];
 
 												//////////////////////////////////////////////
@@ -369,11 +365,10 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 												//rotate the target.                        //
 												//////////////////////////////////////////////
 
-	CMatrix matP;
 
 	CQuat quaPitch(0.0f, 0.0f, DEG_TO_RAD(fPitch));
-	matP.QuatToMatrix(quaPitch);
-	vecTemp = matP.MultMatrixVector(vecTemp);
+	CMatrix matP(quaPitch);
+	vecTemp = matP * vecTemp;
 
 												//////////////////////////////////////////////
 												//Now we have our new rotated target        //
@@ -405,14 +400,13 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 												//operate correctly                         //
 												//////////////////////////////////////////////
 
-	CMatrix matY, matM;
 	char strFont[20];
 
 	CQuat quaYaw(DEG_TO_RAD(fYaw), 0.0f, 0.0f);
-	matY.QuatToMatrix(quaYaw);
-	matM = matP * matY;
+	CMatrix matY(quaYaw);
+	CMatrix matM(matP * matY);
 
-	matM.MatrixInverse();
+	matM.invert();
 
 												//////////////////////////////////////////////
 												//Now to draw the actual holo ship.         //
@@ -438,21 +432,20 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 	glPushMatrix();
 	glLoadIdentity();
 
-	CMatrix matGet;
 	CVector3 vecHoloPos = vecTemp * 30.0f;
 
-	glMultMatrixf(matM.m_afElement);
+	glMultMatrixf(matM.glElements());
 
 	glTranslatef(vecHoloPos.X(), vecHoloPos.Y(), vecHoloPos.Z());
-	glMultMatrixf(poTarget->m_matRotation.m_afElement);
+	glMultMatrixf(poTarget->m_matRotation.glElements());
 
-	glGetFloatv(GL_MODELVIEW_MATRIX, matGet.m_afElement);
+	CMatrix matGet(GL_MODELVIEW_MATRIX);
 
-	matGet.m_afElement[12] = -0.87f;
-	matGet.m_afElement[13] = 0.59f;
-	matGet.m_afElement[14] = -2.0f;
+	matGet.element(12) = -0.87f;
+	matGet.element(13) = 0.59f;
+	matGet.element(14) = -2.0f;
 
-	glLoadMatrixf(matGet.m_afElement);
+	glLoadMatrixf(matGet.glElements());
 
 	glScalef(0.02f, 0.02f, 0.02f);
 

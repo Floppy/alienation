@@ -63,29 +63,8 @@ void CFrustum::NormalizePlane(int side)
 //**************************************************************************************
 void CFrustum::CalculateFrustum()
 {    
-	CMatrix   proj;								// This will hold our projection matrix
-	CMatrix   modl;								// This will hold our modelview matrix
-	CMatrix   clip;								// This will hold the clipping planes
-
-												//////////////////////////////////////////////
-												//glGetFloatv() is used to extract          //
-												//information about our OpenGL world.       //
-												//Below, we pass in GL_PROJECTION_MATRIX    //
-												//to abstract our projection matrix. It     //
-												//then stores the matrix into an array of   //
-												//[16].                                     //
-												//////////////////////////////////////////////
-
-	glGetFloatv( GL_PROJECTION_MATRIX, proj.m_afElement );
-
-												//////////////////////////////////////////////
-												//By passing in GL_MODELVIEW_MATRIX, we     //
-												//can abstract our model view matrix. This  //
-												//also stores it in an array of [16].       //
-												//////////////////////////////////////////////
-
-	glGetFloatv( GL_MODELVIEW_MATRIX, modl.m_afElement );
-
+	CMatrix   proj(GL_PROJECTION_MATRIX);
+	CMatrix   modl(GL_MODELVIEW_MATRIX);
 												//////////////////////////////////////////////
 												//Now that we have our modelview and        //
 												//projection matrix, if we combine these 2  //
@@ -94,8 +73,7 @@ void CFrustum::CalculateFrustum()
 												//multiply them.                            //
 												//////////////////////////////////////////////
 
-
-	clip = proj * modl;
+	CMatrix clip(proj*modl);
 
 												//////////////////////////////////////////////
 												//Now we actually want to get the sides of  //
@@ -110,10 +88,10 @@ void CFrustum::CalculateFrustum()
 												//frustum                                   //
 												//////////////////////////////////////////////
 
-	m_Frustum[RIGHT][A] = clip.m_afElement[ 3] - clip.m_afElement[ 0];
-	m_Frustum[RIGHT][B] = clip.m_afElement[ 7] - clip.m_afElement[ 4];
-	m_Frustum[RIGHT][C] = clip.m_afElement[11] - clip.m_afElement[ 8];
-	m_Frustum[RIGHT][D] = clip.m_afElement[15] - clip.m_afElement[12];
+	m_Frustum[RIGHT][A] = clip.element( 3) - clip.element( 0);
+	m_Frustum[RIGHT][B] = clip.element( 7) - clip.element( 4);
+	m_Frustum[RIGHT][C] = clip.element(11) - clip.element( 8);
+	m_Frustum[RIGHT][D] = clip.element(15) - clip.element(12);
 
 												//////////////////////////////////////////////
 												//Now that we have a normal (A,B,C) and a   //
@@ -133,10 +111,10 @@ void CFrustum::CalculateFrustum()
 												//frustum                                   //
 												//////////////////////////////////////////////
 
-	m_Frustum[LEFT][A] = clip.m_afElement[ 3] + clip.m_afElement[ 0];
-	m_Frustum[LEFT][B] = clip.m_afElement[ 7] + clip.m_afElement[ 4];
-	m_Frustum[LEFT][C] = clip.m_afElement[11] + clip.m_afElement[ 8];
-	m_Frustum[LEFT][D] = clip.m_afElement[15] + clip.m_afElement[12];
+	m_Frustum[LEFT][A] = clip.element( 3) + clip.element( 0);
+	m_Frustum[LEFT][B] = clip.element( 7) + clip.element( 4);
+	m_Frustum[LEFT][C] = clip.element(11) + clip.element( 8);
+	m_Frustum[LEFT][D] = clip.element(15) + clip.element(12);
 
 												//////////////////////////////////////////////
 												//Normalize the LEFT side                   //
@@ -149,10 +127,10 @@ void CFrustum::CalculateFrustum()
 												//frustum                                   //
 												//////////////////////////////////////////////
 
-	m_Frustum[BOTTOM][A] = clip.m_afElement[ 3] + clip.m_afElement[ 1];
-	m_Frustum[BOTTOM][B] = clip.m_afElement[ 7] + clip.m_afElement[ 5];
-	m_Frustum[BOTTOM][C] = clip.m_afElement[11] + clip.m_afElement[ 9];
-	m_Frustum[BOTTOM][D] = clip.m_afElement[15] + clip.m_afElement[13];
+	m_Frustum[BOTTOM][A] = clip.element( 3) + clip.element( 1);
+	m_Frustum[BOTTOM][B] = clip.element( 7) + clip.element( 5);
+	m_Frustum[BOTTOM][C] = clip.element(11) + clip.element( 9);
+	m_Frustum[BOTTOM][D] = clip.element(15) + clip.element(13);
 
 												//////////////////////////////////////////////
 												//Normalize the BOTTOM side                 //
@@ -165,10 +143,10 @@ void CFrustum::CalculateFrustum()
 												//Frustum                                   //
 												//////////////////////////////////////////////
 
-	m_Frustum[TOP][A] = clip.m_afElement[ 3] - clip.m_afElement[ 1];
-	m_Frustum[TOP][B] = clip.m_afElement[ 7] - clip.m_afElement[ 5];
-	m_Frustum[TOP][C] = clip.m_afElement[11] - clip.m_afElement[ 9];
-	m_Frustum[TOP][D] = clip.m_afElement[15] - clip.m_afElement[13];
+	m_Frustum[TOP][A] = clip.element( 3) - clip.element( 1);
+	m_Frustum[TOP][B] = clip.element( 7) - clip.element( 5);
+	m_Frustum[TOP][C] = clip.element(11) - clip.element( 9);
+	m_Frustum[TOP][D] = clip.element(15) - clip.element(13);
 
 												//////////////////////////////////////////////
 												//Normalize the TOP side                    //
@@ -181,10 +159,10 @@ void CFrustum::CalculateFrustum()
 												//frustum                                   //
 												//////////////////////////////////////////////
 
-	m_Frustum[BACK][A] = clip.m_afElement[ 3] - clip.m_afElement[ 2];
-	m_Frustum[BACK][B] = clip.m_afElement[ 7] - clip.m_afElement[ 6];
-	m_Frustum[BACK][C] = clip.m_afElement[11] - clip.m_afElement[10];
-	m_Frustum[BACK][D] = clip.m_afElement[15] - clip.m_afElement[14];
+	m_Frustum[BACK][A] = clip.element( 3) - clip.element( 2);
+	m_Frustum[BACK][B] = clip.element( 7) - clip.element( 6);
+	m_Frustum[BACK][C] = clip.element(11) - clip.element(10);
+	m_Frustum[BACK][D] = clip.element(15) - clip.element(14);
 
 												//////////////////////////////////////////////
 												//Normalize the BACK side                   //
@@ -197,10 +175,10 @@ void CFrustum::CalculateFrustum()
 												//frustum                                   //
 												//////////////////////////////////////////////
 
-	m_Frustum[FRONT][A] = clip.m_afElement[ 3] + clip.m_afElement[ 2];
-	m_Frustum[FRONT][B] = clip.m_afElement[ 7] + clip.m_afElement[ 6];
-	m_Frustum[FRONT][C] = clip.m_afElement[11] + clip.m_afElement[10];
-	m_Frustum[FRONT][D] = clip.m_afElement[15] + clip.m_afElement[14];
+	m_Frustum[FRONT][A] = clip.element( 3) + clip.element( 2);
+	m_Frustum[FRONT][B] = clip.element( 7) + clip.element( 6);
+	m_Frustum[FRONT][C] = clip.element(11) + clip.element(10);
+	m_Frustum[FRONT][D] = clip.element(15) + clip.element(14);
 
 												//////////////////////////////////////////////
 												//Normalize the FRONT side                  //

@@ -40,7 +40,7 @@ CShip::CShip(int num, float mass) : CSimulation(num, mass)
    m_poShips[0].m_poWeapon = new CWeapon(100, CVector3(0.0f, -0.3f, -3.3f)); 
    m_poShips[0].m_poBrake = new CBrake(100, CVector3(0.0f, 0.0f, 0.0f));
    
-   m_poShips[0].m_matRotation.LoadIdentity();
+   m_poShips[0].m_matRotation.loadIdentity();
 }
 
 CShip::~CShip()
@@ -71,7 +71,7 @@ void CShip::draw()
    {
 	  glPushMatrix();					//Save copy of lookat rotation
 	  glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z()); //move to ship position
-	  glMultMatrixf(m_poShips[0].m_matRotation.m_afElement); //multiply by the ships rotation matrix
+	  glMultMatrixf(m_poShips[0].m_matRotation.glElements()); //multiply by the ships rotation matrix
 	  m_poShips[0].m_oModel.render(); //draw the ship
 
 	  glPopMatrix(); // Make the gluLookat matrix again active
@@ -203,7 +203,7 @@ void CShip::rotate(int iShip, float fDT)
 	CQuat quaTemp(DEG_TO_RAD(fYaw), DEG_TO_RAD(fRoll), DEG_TO_RAD(fPitch));
 	quaTemp *= m_poShips[iShip].m_quaOrientation;
 	m_poShips[iShip].m_quaOrientation = quaTemp;
-	m_poShips[iShip].m_matRotation.QuatToMatrix(m_poShips[0].m_quaOrientation);
+	m_poShips[iShip].m_matRotation = CMatrix(m_poShips[0].m_quaOrientation);
 
 	rotHeading(m_poShips[0].m_matRotation);
 
@@ -215,12 +215,12 @@ void CShip::rotate(int iShip, float fDT)
 void CShip::rotHeading(CMatrix mat)
 {
 
-	m_poShips[0].m_vecHeading = mat.MultMatrixVector(CVector3(0.0f, 0.0f, -1.0f));
-	m_poShips[0].m_vecUp = mat.MultMatrixVector(CVector3(0.0f, 1.0f, 0.0f));
-	m_poShips[0].m_vecRight = mat.MultMatrixVector(CVector3(1.0f, 0.0f, 0.0f));
-	m_poShips[0].m_avecWeaponPoints[0] = mat.MultMatrixVector(CVector3(0.0f, -0.7f, -7.3f));
+	m_poShips[0].m_vecHeading = mat * CVector3(0.0f, 0.0f, -1.0f);
+	m_poShips[0].m_vecUp = mat * CVector3(0.0f, 1.0f, 0.0f);
+	m_poShips[0].m_vecRight = mat * CVector3(1.0f, 0.0f, 0.0f);
+	m_poShips[0].m_avecWeaponPoints[0] = mat * CVector3(0.0f, -0.7f, -7.3f);
 	m_poShips[0].m_avecTrailPoints[0] = (m_poShips[0].m_vecHeading * -6.7f) + ((m_poShips[0].m_vecUp * -1) * 0.37f);
-	m_poShips[0].m_vecBrakePoint = mat.MultMatrixVector(CVector3(0.0f, 0.7f, -2.5f));
+	m_poShips[0].m_vecBrakePoint = mat * CVector3(0.0f, 0.7f, -2.5f);
 
 	m_poShips[0].m_vecHeading += m_ppMasses[0]->m_vecPos;
 	m_poShips[0].m_vecUp += m_ppMasses[0]->m_vecPos;

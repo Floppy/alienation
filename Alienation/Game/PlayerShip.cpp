@@ -27,7 +27,7 @@ CPlayerShip::CPlayerShip() :
 	m_poShips[0].m_bWeaponFire = false;
 
 	m_poHud = new CHud();
-	m_poShips[0].m_matCamRotation.LoadIdentity();
+	m_poShips[0].m_matCamRotation.loadIdentity();
 	m_bLeftLook = m_bRightLook = m_bUpLook = m_bBackLook = false;
 
         // Setup cockpit light
@@ -70,18 +70,17 @@ void CPlayerShip::simulate(float fDT)
 void CPlayerShip::draw()
 {
 
-	CMatrix matM, matC;
 	CVector3 vecTemp;
 
-	matM.CopyMatrix(m_poShips[0].m_matRotation.m_afElement);
-	matM.MatrixInverse();
-	matC.CopyMatrix(m_poShips[0].m_matCamRotation.m_afElement);
-	matC.MatrixInverse();
+	CMatrix matM(m_poShips[0].m_matRotation);
+	matM.invert();
+	CMatrix matC(m_poShips[0].m_matCamRotation);
+	matC.invert();
 
 	if (m_bInsideView)
 	{
 		vecTemp = m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos;
-		glLoadMatrixf(matM.m_afElement);
+		glLoadMatrixf(matM.glElements());
 		if (m_bLeftLook)
 		{
 			glRotatef(-90.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
@@ -102,7 +101,7 @@ void CPlayerShip::draw()
 		glTranslatef(-m_ppMasses[0]->m_vecPos.X(), -m_ppMasses[0]->m_vecPos.Y(), -m_ppMasses[0]->m_vecPos.Z()); 
 		glPushMatrix();
 		glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
-		glMultMatrixf(m_poShips[0].m_matRotation.m_afElement);
+		glMultMatrixf(m_poShips[0].m_matRotation.glElements());
 
                 glDisable(GL_LIGHT0);
                 m_oLight.enable();
@@ -115,11 +114,11 @@ void CPlayerShip::draw()
 	
 	if (!m_bInsideView)
 	{
-		glLoadMatrixf(matC.m_afElement);
+		glLoadMatrixf(matC.glElements());
 		glTranslatef(-m_poShips[0].m_vecCamView.X(), -m_poShips[0].m_vecCamView.Y(), -m_poShips[0].m_vecCamView.Z());
 		glPushMatrix();
 		glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
-		glMultMatrixf(m_poShips[0].m_matRotation.m_afElement);
+		glMultMatrixf(m_poShips[0].m_matRotation.glElements());
 		m_poShips[0].m_oModel.render(); //draw the ship
 		glPopMatrix();
 	}
@@ -146,10 +145,10 @@ void CPlayerShip::rotateCam(float fDT)
 	CQuat quaTemp(DEG_TO_RAD(fYaw), 0.0f, DEG_TO_RAD(fPitch));
 	quaTemp *= m_poShips[0].m_quaCamOrientation;
 	m_poShips[0].m_quaCamOrientation = quaTemp;
-	m_poShips[0].m_matCamRotation.QuatToMatrix(m_poShips[0].m_quaCamOrientation);
+	m_poShips[0].m_matCamRotation = CMatrix(m_poShips[0].m_quaCamOrientation);
 
-	matM.CopyMatrix(m_poShips[0].m_matCamRotation.m_afElement);
-	m_poShips[0].m_vecCamView = matM.MultMatrixVector(CVector3(0.0f, 0.0f, 20.0f));	
+	matM = (m_poShips[0].m_matCamRotation);
+	m_poShips[0].m_vecCamView = matM * CVector3(0.0f, 0.0f, 20.0f);
 	m_poShips[0].m_vecCamView += m_ppMasses[0]->m_vecPos;
 
 }
