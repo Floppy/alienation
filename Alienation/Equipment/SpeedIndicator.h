@@ -20,8 +20,14 @@ public:
 	virtual ~CSpeedIndicator();
 	void operator = (CSpeedIndicator * poSpeed);
 
+        void init2D(float fXPos, float fYPos, float fWidth, float fHeight, const char *sFilename);
+        void renderQuad();
+	void setActiveMaterial(CRGBAColour oDiffuse, CRGBAColour oAmbient, CRGBAColour oEmissive);
+
 private:
 	float m_fSpeed;
+        C2DObject m_oScale;
+
 };
 
 #endif // !defined(AFX_SPEEDINDICATOR_H__23D2CC30_9075_477C_ABC2_01B943596FED__INCLUDED_)
