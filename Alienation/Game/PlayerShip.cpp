@@ -202,11 +202,11 @@ void CPlayerShip::drawHud()
       m_poSpeedIndicator->setTexturePercentage(fWidthSpeed);
       m_poSpeedIndicator->renderQuad();
       sprintf(strFont,"V: %.1f", m_fVel);
-      oFont->print(strFont, CVector2(0.4f, 0.30f), 0.0075f, CVector3(0,1,0));
+      oFont->print(strFont, CVector2(0.4f, 0.35f), 0.0075f, CVector3(0,1,0));
       m_poThrustIndicator->setTexturePercentage(fWidthThrust);      
       m_poThrustIndicator->renderQuad();
       sprintf(strFont,"T: %.0f", fThrust);
-      oFont->print(strFont, CVector2(0.5f, 0.30f), 0.0075f, CVector3(0,1,0));
+      oFont->print(strFont, CVector2(0.52f, 0.35f), 0.0075f, CVector3(0,1,0));
 
       // Draw radar
       m_poRadar->renderQuad();
@@ -223,10 +223,6 @@ void CPlayerShip::drawHud()
       sprintf(strFont,"%3ld FPS", iFPS);
       oFont->print(strFont, CVector2(0.9f, 0.0075f), 0.0075f, CVector3(0,1,0));
       m_iLastTime = iTime;      
-
-      // Draw radar
-//      m_poRadar->render();
-      
 
       m_oLight.disable();
 
