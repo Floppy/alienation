@@ -66,13 +66,6 @@ class CTexture
    void postRenderToTexture(GLenum mode);
 
    /**
-    * Get OpenGL texture ID.
-    * @return The OpenGL texture ID.
-    */
-   unsigned int ID() 
-   { return m_uiTextureID; }
-   
-   /**
     * Set the value of a single pixel.
     * This function will only have any effect before init() is called.
     * @param iX The x-coordinate of the pixel to set.
