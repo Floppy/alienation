@@ -10,7 +10,7 @@
 #endif // _MSC_VER > 1000
 #include "config.h"
 #include <GL/gl.h>
-#include "math/vector.h"
+#include "Math/Vector.h"
 
 class C2DObject  
 {
