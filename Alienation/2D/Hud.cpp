@@ -305,6 +305,7 @@ void CHud::drawQuad(CVector3 *Verts, CVector2 *Tex)
 //**************************************************************************************
 void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip)
 {
+
 	CVector3 vecTarget, vecTemp;
 	CVector3 vecThisRight, vecThisUp, vecThisHead, vecThisLeft;
 
@@ -326,6 +327,8 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 	vecThisRight = CVector3(1.0f, 0.0f, 0.0f);
 	vecThisHead = CVector3(0.0f, 0.0f, -1.0f);
 	vecThisUp = CVector3(0.0f, 1.0f, 0.0f);
+
+        int iRange = static_cast<int>(vecTarget.length());
 
 	vecTarget.normalise();
 
@@ -448,6 +451,9 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 												//////////////////////////////////////////////
 
 	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glPushMatrix();
 	glLoadIdentity();
 
@@ -485,17 +491,19 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 //	m_poTexture->setActive(6);
 //	draw2DQuad(100.0f, 100.0f, 100.0f, 100.0f, avecTex);
 
+	char strFont[20];
+
 //	sprintf(strFont,"Pitch: %.1f AI Pitch: %.1f", fPitch, poTarget->m_fPitchRate);
 //	m_poFont->print(strFont, CVector2(50.0f, 200.0f), 5.0f);
 
-//	sprintf(strFont,"Yaw: %.1f AI Yaw: %.1f", fYaw, poTarget->m_fYawRate);
-//	m_poFont->print(strFont, CVector2(50.0f, 230.0f), 5.0f);
-
+	sprintf(strFont,"%dm", iRange);
+	m_poFont->print(strFont, CVector2(50.0f, 230.0f), 5.0f);
 
 	glPopMatrix();
 
-	glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);	
 
+	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	glPopMatrix(); 
 
