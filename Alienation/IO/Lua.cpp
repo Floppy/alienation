@@ -55,53 +55,67 @@ namespace NSDIO {
       return true;
    }
 
-   bool CLua::enterTable(const char* table) {
-      lua_pushstring(m_pState, table);
-      lua_gettable(m_pState,-2);
-      if (!lua_istable(m_pState,-1))
+   bool CLua::push(const char* name, int type) {
+      lua_pushstring(m_pState, name);
+      lua_rawget(m_pState,-2);
+      if (lua_type(m_pState,-1) != type) {
+         fprintf(stderr,"ERROR: Wrong type! Expected %s, got %s\n",
+                 lua_typename(m_pState,type),lua_typename(m_pState,lua_type(m_pState,-1)));
+         pop();
          return false;
+      }
+      return true;      
+   }
+
+   bool CLua::push(unsigned int index, int type) {
+      lua_rawgeti(m_pState,-1,index+1);
+      if (lua_type(m_pState,-1) != type) {
+         fprintf(stderr,"ERROR: Wrong type! Expected %s, got %s\n",
+                 lua_typename(m_pState,type),lua_typename(m_pState,lua_type(m_pState,-1)));
+         pop();
+         return false;
+      }
       return true;      
    }
    
-   void CLua::exitTable() {
+   void CLua::pop() {
       lua_pop(m_pState,1);
+   }
+
+   unsigned int CLua::tableSize() {
+      unsigned int iResult = luaL_getn(m_pState,-1);
+      return iResult;
    }
 
    float CLua::getNumber(const char* field)
    {
-      lua_pushstring(m_pState, field);
-      lua_gettable(m_pState,-2);
-      if (!lua_isnumber(m_pState,-1)) {
+      if (!push(field,LUA_TNUMBER))
          return 0;
-      }
       // Get number
       float fResult = static_cast<float>(lua_tonumber(m_pState,-1));
       // Pop stack
-      lua_pop(m_pState,1);
+      pop();
       // Done
       return fResult;
    }
    
    const char* CLua::getString(const char* field)
    {
-      lua_pushstring(m_pState, field);
-      lua_gettable(m_pState,-2);
-      if (!lua_isstring(m_pState,-1)) {
+      if (!push(field,LUA_TSTRING))
          return NULL;
-      }
       // Copy out string
       const char* strTemp = lua_tostring(m_pState,-1);
       char* strResult = new char[strlen(strTemp)+1];
       strcpy(strResult,strTemp);
       // Pop stack
-      lua_pop(m_pState,1);
+      pop();
       // Done
       return strResult;
    }
 
    CRGBAColour CLua::getColour(const char* field)
    {
-      if (!enterTable(field))
+      if (!push(field))
          return CRGBAColour(0,0,0,0);
       // Get values
       float fRed = getNumber("r");
@@ -109,34 +123,55 @@ namespace NSDIO {
       float fBlue = getNumber("b");
       float fAlpha = getNumber("a");
       // Pop stack
-      exitTable();
+      pop();
       // Done
       return CRGBAColour(fRed,fGreen,fBlue,fAlpha);
    }
 
    CVector3 CLua::getVector3(const char* field) 
    {
-      if (!enterTable(field))
+      if (!push(field))
          return CVector3(0,0,0);
+      // Get vector
+      CVector3 val(getVector3());
+      // Pop stack
+      pop();
+      // Done
+      return val;
+   }
+
+   CVector3 CLua::getVector3(unsigned int field)
+   {
+      if (!push(field))
+         return CVector3(0,0,0);
+      // Get vector
+      CVector3 val(getVector3());
+      // Pop stack
+      pop();
+      // Done
+      return val;
+   }
+
+   CVector3 CLua::getVector3() 
+   {
       // Get values
       float fX = getNumber("x");
       float fY = getNumber("y");
       float fZ = getNumber("z");
-      // Pop stack
-      exitTable();
       // Done
       return CVector3(fX,fY,fZ);
    }
 
+
    CVector2 CLua::getVector2(const char* field) 
    {
-      if (!enterTable(field))
+      if (!push(field))
          return CVector2(0,0);
       // Get values
       float fX = getNumber("x");
       float fY = getNumber("y");
       // Pop stack
-      exitTable();
+      pop();
       // Done
       return CVector2(fX,fY);
    }

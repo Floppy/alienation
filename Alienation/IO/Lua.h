@@ -40,16 +40,31 @@ namespace NSDIO {
       bool setGlobalTable(const char* table);
 
       /**
-       * Enter a sub-table.
-       * @param table The name of the table to enter.
-       * @return true if the table was pushed successfully.
+       * Push a name onto the stack.
+       * @param name The name of the object to push.
+       * @param type The type of the object expected. These types are defined in lua.h.
+       * @return true if the table was pushed successfully and was the correct type.
        */
-      bool enterTable(const char* table);
+      bool push(const char* name, int type = LUA_TTABLE);
+
+      /**
+       * Push an indexed value onto the stack.
+       * @param name The index of the object to push.
+       * @param type The type of the object expected. These types are defined in lua.h.
+       * @return true if the table was pushed successfully and was the correct type.
+       */
+      bool push(unsigned int index, int type = LUA_TTABLE);
+
+      /**
+       * Get size of current table.
+       * @return The size of the table.
+       */
+      unsigned int tableSize();
 
       /**
        * Exit the current sub-table.
        */
-      void exitTable();
+      void pop();
 
       /**
        * Get numerical value for a field.
@@ -73,11 +88,20 @@ namespace NSDIO {
       CRGBAColour getColour(const char* field);
 
       /**
-       * Get a 3D vector from a field.
+       * Get a 3D vector from a named field.
        * @param field The field name to access.
        * @return The vector from the field.
        */
       CVector3 getVector3(const char* field);
+
+      /**
+       * Get a 3D vector from a numbered field.
+       * @param field The field number to access.
+       * @return The vector from the field.
+       */
+      CVector3 getVector3(unsigned int field);
+
+      CVector3 getVector3();
 
       /**
        * Get a 2D vector from a field.
