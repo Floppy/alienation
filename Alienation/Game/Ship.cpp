@@ -3,8 +3,6 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Game/Ship.h"
-#include "IO/3ds.h"
-#include "IO/WeaponFactory.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -33,7 +31,6 @@ CShip::CShip(int num, float mass) :
    m_quaCamOrientation.loadIdentity();
    m_matCamRotation.loadIdentity();
 
-   m_poWeapon = NSDIO::CWeaponFactory::load("ter_ppc1.lua");
    m_poBrake = new CBrake(100,CVector3(0.0f, 0.0f, 0.0f));
 }
 

@@ -5,6 +5,7 @@
 #include "Game/PlayerShip.h"
 #include "IO/3ds.h"
 #include "Sound/SoundManager.h"
+#include "IO/WeaponFactory.h"
 
 using namespace NSDSound;
 
@@ -50,6 +51,8 @@ CPlayerShip::CPlayerShip() :
    for (int i=0; i<m_iNumTrails; i++)
 	  m_poTrails[i].setup(250, m_avecTrailPoints[i]);
 
+   // Load weapon
+   m_poWeapon = NSDIO::CWeaponFactory::load("ter_ppc2.lua");
 
 }
 
