@@ -20,7 +20,6 @@
 #include "Game/Ship.h"
 #include "GL/GLFont.h"
 #include "Game/PlayerShip.h"
-#include "AI/AIShip.h"
 #include "3D/Light.h"
 #include "3D/Frustum.h"
 #include "3D/Model.h"
@@ -47,7 +46,6 @@ class COpenGL {
 		CLight *m_poLight;
 		CStars  *m_poStars;
 		CPlayerShip *m_poShip;
-		CAIShip *m_poAIShip;
       COpenGL();
       ~COpenGL();
 		void Update (unsigned long int dMilliseconds);

@@ -16,6 +16,7 @@
 #include "Math/Random.h"
 #include "3D/TextureManager.h"
 #include "Game/Asteroid.h"
+#include "AI/AIShip.h"
 
 // We define the joystick axes here, because they
 // seem to be different in windows and linux
@@ -113,19 +114,27 @@ bool COpenGL :: initGL() {
    m_poStars = new CStars;
    m_poStars->initStars();
    
-   // Create and load ships
-   m_poAIShip = new CAIShip(1, 5000.0f);
-   m_poAIShip->load();
+   // Create player ship
    m_poShip = new CPlayerShip();
    m_poShip->load();
-   
-   m_poAIShip->setTarget(m_poShip);
-   m_poShip->setTarget(m_poAIShip);
 
-   m_opObjects.push_back(m_poAIShip);
+   // Create and load AI ships
+   CRandom prng(547343);
+   for (int i=0; i<3; i++) {
+      CAIShip* poAIShip = new CAIShip(1, 5000.0f,
+                                      CVector3(prng.randDouble()*1000 - 500,
+                                               prng.randDouble()*1000 - 500,
+                                               prng.randDouble()*1000 - 500));
+      poAIShip->load();      
+      poAIShip->setTarget(m_poShip);
+      m_opObjects.push_back(poAIShip);
+   }
+
+   // Set initial target
+   m_poShip->setTarget(m_opObjects.front());
+
 
    // Load roids
-   CRandom prng(42);
    for (int i=0; i<40; i++) {
       CAsteroid* pRoid = new CAsteroid(1,50000);
       // Select type
@@ -418,8 +427,8 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 	if (m_oKeys.m_abKeyDown[SDLK_F5] && !m_oKeys.m_abStillPressed[SDLK_F5])
 	{
            m_oKeys.m_abStillPressed[SDLK_F5] = true;
-           m_pTarget++;
-           if (m_pTarget == m_opObjects.end()) m_pTarget = m_opObjects.begin();
+           if (m_pTarget == m_opObjects.begin()) m_pTarget = m_opObjects.end();
+           m_pTarget--;
            m_poShip->setTarget(*m_pTarget);
 	}
 
@@ -427,8 +436,8 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 	if (m_oKeys.m_abKeyDown[SDLK_F6] && !m_oKeys.m_abStillPressed[SDLK_F6])
 	{
            m_oKeys.m_abStillPressed[SDLK_F6] = true;
-           if (m_pTarget == m_opObjects.begin()) m_pTarget = m_opObjects.end();
-           m_pTarget--;
+           m_pTarget++;
+           if (m_pTarget == m_opObjects.end()) m_pTarget = m_opObjects.begin();
            m_poShip->setTarget(*m_pTarget);
 	}
 
@@ -470,10 +479,6 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 	int a;
 	for (a = 0; a < iNumOfIterations; ++a)					// We Need To Iterate Simulations "numOfIterations" Times
 	{
-		m_poAIShip->m_vecTargetPos = m_poShip->m_ppMasses[0]->m_vecPos;
-		m_poAIShip->m_vecTargetDirection = m_poShip->m_vecDirection;
-		m_poAIShip->m_fTargetSpeed = m_poShip->m_fVel;
-                
                 for (std::vector<CGameObject*>::iterator it = m_opObjects.begin(); it != m_opObjects.end(); it++)
                    (*it)->operate(fDT);
 		m_poShip->operate(fDT);							// Iterate constantVelocity Simulation By dt Seconds
