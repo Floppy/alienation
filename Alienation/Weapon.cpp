@@ -65,8 +65,9 @@ void CWeapon::update(float timepassed)
 
 void CWeapon::update(float fDT, CVector3 vecHeading, CVector3 vecPos, float fSpeed, bool bFireHeld)
 {
-	CVector3 vecVel;
+	CVector3 vecVel, vecTemp1;
 	int iEmp = -1;
+	FILE *fp;
 
 
 	if (!bFireHeld && m_iParticlesCreated == 0)

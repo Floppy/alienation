@@ -22,6 +22,10 @@ public:
 	float m_fXAngle;
 	float m_fYAngle;
 	CVector3 m_vecTargetPos;
+	float m_fTargetSpeed;
+	CVector3 m_vecTargetDirection;
+
+
 
 };
 

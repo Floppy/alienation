@@ -57,7 +57,7 @@ void CAIShip::simulate(float fDT)
 		m_poShips[0].m_vecDirection = vecMovement;
 	}
 
-	//temp is the vector from the ai ship to the target, normalised
+	//vecTarget is the vector from the ai ship to the target, normalised
 	CVector3 vecTarget = m_vecTargetPos - m_ppMasses[0]->m_vecPos;
 	vecTarget.unitize();
 
@@ -121,7 +121,7 @@ void CAIShip::simulate(float fDT)
 
 void CAIShip::solve()
 {
-	CVector3 vecForce, vecDragForce;
+	CVector3 vecForce, vecDragForce, vecBrakeForce;
 
 	//Normal flight, forces are thrust, drag and braking (if applied)
 	vecForce = (m_poShips[0].m_vecHeading - m_ppMasses[0]->m_vecPos) * m_poShips[0].m_fThrust;

@@ -30,15 +30,12 @@ bool CTexture::load(char **astrFnames, int iNoOfFiles)
 	int iCount;
 	for ( iCount = 0 ; iCount < iNoOfFiles ; iCount++ )
 	{
-		//reinit filename
-		memset(strFile,0,200);
-		strcpy(strFile,"Data/Texture/");
-
 		// We will load into an SDL surface
 		SDL_Surface * poTextureImage = NULL;
 
 		if (strlen(astrFnames[iCount]) > 0)
 		{
+			strcpy(strFile, "Data/texture/");
 			strcat(strFile, astrFnames[iCount]);
 
 			// Load the file

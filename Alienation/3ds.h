@@ -77,7 +77,7 @@ public:
 	int  m_iNumOfVerts;			
 	int  m_iNumOfFaces;			
 	int  m_iNumTexVertex;			
-	unsigned int  m_iMaterialID;			
+	int  m_iMaterialID;			
 	bool m_bHasTexture;			
 	char m_strName[255];			
 	unsigned int     *m_pIndices;		

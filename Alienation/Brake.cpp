@@ -54,7 +54,7 @@ void CBrake::update(float fDT)
 // start = the trails start position
 void CBrake::update(float fDT, CVector3 vecPos, CVector3 vecHead, CVector3 vecStart, bool bKeyDown)
 {
-	CVector3 vecSpeed;
+	CVector3 vecSpeed, vecTemp;
 
 	CVector3 vecTHead = vecStart - vecPos;
 
@@ -97,6 +97,7 @@ void CBrake::createParticle(int i, CVector3 vecHead, CVector3 vecOrigin)
 {
 
 
+	CVector3 vecTemp1, vecTemp2;
 	float fRandNum;
 
 		m_poParticles[i].m_vecPosition = vecOrigin;

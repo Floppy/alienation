@@ -49,9 +49,10 @@ CShip::~CShip()
 //load model, trail texture and brake texture
 void CShip::loadShip()
 {
-        m_poShips[0].m_oModel.init3ds("Data/Model/shuttle.3ds");
+	m_poShips[0].m_oModel.init3ds("Data/Model/shuttle.3ds");
 	m_poShips[0].m_poTrail->init();
 	m_poShips[0].m_poBrake->init();
+	m_poShips[0].m_poWeapon->init();
 }
 
 //what it says on the tin

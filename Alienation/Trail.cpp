@@ -40,7 +40,7 @@ void CTrail::update(float timepassed)
 void CTrail::update(float fDT, float fThrust, CVector3 vecPos, CVector3 vecStart, CVector3 vecDistance, CVector3 vecUp, CVector3 vecRight,
 					float fWidth, float fHeight)
 {
-	CVector3 vecSpeed;
+	CVector3 vecSpeed, vecTemp;
 
 	//Create a heading for any new particles created this update
 	// The start vector is the position of the of the origin of the 
@@ -74,7 +74,7 @@ void CTrail::update(float fDT, float fThrust, CVector3 vecPos, CVector3 vecStart
 		{
 			//calculate the speed based on the acceleration (itself calculated
 			//from the above thead vector)
-			vecSpeed = ((m_poParticles[iCount].m_vecAcceleration * 0.4f) * fDT);
+			vecSpeed = ((m_poParticles[iCount].m_vecAcceleration * 0.2f) * fDT);
 			vecSpeed += vecDistance;
 			m_poParticles[iCount].m_vecPosition += vecSpeed;// get the new position
 			m_poParticles[iCount].m_fSize -= 0.001f;
@@ -87,7 +87,7 @@ void CTrail::update(float fDT, float fThrust, CVector3 vecPos, CVector3 vecStart
 		for (iCount = 0 ; iCount < 5 ; iCount++)
 		{
 			//Create a new one and update the particle iCount
-			createParticle(iCount, fThrust, vecTHead, vecStart, vecUp, vecRight, vecPos, fWidth, fHeight);
+			createParticle(m_iParticlesCreated, fThrust, vecTHead, vecStart, vecUp, vecRight, vecPos, fWidth, fHeight);
 			m_iParticlesCreated ++;
 		}
 	}
