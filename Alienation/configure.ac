@@ -28,14 +28,14 @@ AC_CHECK_LIB(SDL_image,IMG_Load,,exit)
 
 # fmod
 AC_ARG_WITH(fmod,
-    [ --with-fmod=<path> path to fmod library. e.g. /usr/lib or /usr/local/lib],
+    [ --with-fmod=<path> path to fmod. e.g. /usr or /usr/local],
     [FMOD_PREFIX=$with_fmod],
 )
 LIBS="$LIBS -lfmod-3.62"
 if test "$with_fmod"; then
   echo Using fmod API from $with_fmod
-  CPPFLAGS="$CPPFLAGS -I$with_fmod/inc"
-  LIBS="$LIBS -L$with_fmod"
+  CPPFLAGS="$CPPFLAGS -I$with_fmod/include"
+  LIBS="$LIBS -L$with_fmod/lib"
 fi
 AC_CHECK_HEADER(fmod.h,,exit)
 AC_CHECK_LIB(fmod-3.62,FSOUND_Init,,exit)
@@ -63,4 +63,5 @@ AC_OUTPUT(3D/Makefile
           IO/Makefile
           Math/Makefile
           Physics/Makefile
+          Sound/Makefile
           Makefile)

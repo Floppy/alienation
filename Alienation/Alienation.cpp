@@ -17,7 +17,7 @@
  */
 
 #include "GL/OpenGL.h"
-#include <fmod.h>
+#include "Sound/SoundManager.h"
 #include <SDL.h>
 
 #include <iostream>
@@ -35,7 +35,6 @@ int main(int argc, char* argv[])
    COpenGL	oGame = COpenGL();
 	SDL_Event oEvent;
 	SDL_Joystick *poJoystick;
-	FSOUND_STREAM * poMod = NULL;
 	bool bNoJoystick = true;
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) == -1)
@@ -52,18 +51,14 @@ int main(int argc, char* argv[])
 
 	int iFlags = SDL_OPENGL;// | SDL_FULLSCREEN;
 
-	if (FSOUND_Init(44100, 64, 0))
-	{
-	  // LOAD SONG
-	  poMod = FSOUND_Stream_OpenFile("./Data/Audio/demo.mp3", FSOUND_LOOP_NORMAL, 0);
-	  if (poMod)
-	    FSOUND_Stream_Play(FSOUND_FREE, poMod);   
-	  else 
+	// Play sound
+	CSoundManager oSndMgr;
+	if (oSndMgr.Ready()) {
+	  if (!oSndMgr.PlayLoopedMP3("./Data/Audio/demo.mp3"))
 	    cerr << "Failed to open demo.mp3" << endl;
 	}
 	else 
-	  cerr << "Failed to initialise FMOD" << endl;
-  
+	  cerr << "Failed to initialise sound subsystem!" << endl;  
 
 
 	// Set the video mode
