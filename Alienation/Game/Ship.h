@@ -55,13 +55,15 @@ class CShip : public CGameObject
 	CMatrix		m_matCamRotation;
 	CVector3*		m_avecTrailPoints;
 	CVector3*		m_avecOrigTrailPoints;
-	CVector3		m_avecWeaponPoints[4];
+	CVector3*		m_avecWeaponPoints;
+	CVector3*		m_avecOrigWeaponPoints;
 	CVector3*		m_avecBrakePoints;
 	CVector3*		m_avecOrigBrakePoints;
         int              m_iNumTrails;
+        int              m_iNumWeapons;
         int              m_iNumBrakes;
 	CTrail		*m_poTrails;
-	CWeapon		*m_poWeapon;
+	CWeapon**        m_ppWeapons;
 	CBrake**	 m_ppBrakes;
 	int			m_iFlightMode;
 	bool			m_bWeaponFire;
