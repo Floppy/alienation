@@ -25,6 +25,10 @@ CPlayerShip::CPlayerShip(float mass) :
    m_iThrustChannel(0)
 {
    m_poHud = new CHud(this);
+	m_poRadar = new CRadar();
+	m_poRadar->init();
+	m_poRadar->init2D(0.4f, 0.7f, 0.2f, 0.2f, "");
+	m_poRadar->setRange(25000);
    m_matCamRotation.loadIdentity();
       
    // Load thruster sound
@@ -154,17 +158,31 @@ void CPlayerShip::drawHud()
       m_oCockpitModel.render(); 
       glPopMatrix();
       m_poHud->render();
+		m_poRadar->render();
    }
+
 }
 
 void CPlayerShip::renderOffScreen()
 {
    if (m_bInsideView) {
       m_poHud->renderOffScreen();
+		m_poRadar->renderOffScreen(this->m_ppMasses[0]->m_vecPos);
    }
 }
 
 void CPlayerShip::setTarget(CGameObject *pTarget) 
 {
    m_poHud->setTarget(pTarget);
+	m_poRadar->setTarget(pTarget->getObjectID());
+}
+
+void CPlayerShip::addTarget(CGameObject *pTarget)
+{
+	m_poRadar->addTarget(pTarget->getObjectID(), pTarget->getObjectType(), pTarget->m_ppMasses[0]->m_vecPos);
+}
+
+void CPlayerShip::clearTargetList()
+{
+	m_poRadar->clearTargetList();
 }

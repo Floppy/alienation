@@ -13,7 +13,8 @@
 
 #include "Game/Ship.h"
 #include "3D/Model.h"
-#include "Game/Hud.h"
+#include "2D/Hud.h"
+#include "Equipment/Radar.h"
 
 using namespace NSD2D;
 
@@ -22,6 +23,8 @@ using namespace NSD2D;
 class CPlayerShip : public CShip  
 {
 public:
+	void clearTargetList();
+	void addTarget(CGameObject *pTarget);
    	void drawHud();
 	CPlayerShip(float mass);
 	virtual ~CPlayerShip();
@@ -37,7 +40,7 @@ public:
          */
         void setTarget(CGameObject *pTarget);
 
-
+	CRadar *m_poRadar;
 	bool  m_bInsideView;
 	bool  m_bLeftLook, m_bRightLook, m_bUpLook, m_bBackLook;
         CHud *m_poHud;

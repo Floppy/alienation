@@ -1,5 +1,7 @@
 #include "Game/GameObject.h"
 
+int CGameObject::m_iLastID = 0;
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -25,6 +27,7 @@ CGameObject::CGameObject(int num, float mass) :
    m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
    m_vecHeading = CVector3(0.0f, -2.0f, -11.0f);
    m_matRotation.loadIdentity();
+	m_iObjectID = m_iLastID++;
 }
 
 CGameObject::CGameObject(){} 
@@ -117,4 +120,19 @@ void CGameObject::simulate(float fDT)
 	//Perform rotation to ship 0
 	rotate (fDT);
 
+}
+
+void CGameObject::setObjectType(int iObjectType)
+{
+	m_iObjectType = iObjectType;
+}
+
+int CGameObject::getObjectType()
+{
+	return m_iObjectType;
+}
+
+int CGameObject::getObjectID()
+{
+	return m_iObjectID;
 }

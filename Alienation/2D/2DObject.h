@@ -18,7 +18,10 @@
 class C2DObject  
 {
 public:
+	void setActiveMaterial(CMaterial *oMaterial);
 	void setActiveMaterial(CRGBAColour oDiffuse, CRGBAColour oAmbient, CRGBAColour oEmissive);
+	void setActiveMaterial(CRGBAColour oDiffuse, CRGBAColour oAmbient, CRGBAColour oEmissive, unsigned int uiTexture);
+	void setAltMaterial(CMaterial *oMaterial);
 	void swapTextures();
 	void swapMaterials();
    unsigned int getActiveTexture();

@@ -27,6 +27,8 @@ public:
          */
 	CLight(GLenum iLight);
 
+	CLight();
+
         /**
          * Destructor.
          */
@@ -51,7 +53,10 @@ public:
          * Turn on light.
          */
         void enable()
-        { glEnable(m_iLight); }
+        { 
+			  glEnable(GL_LIGHTING);
+			  glEnable(m_iLight); 
+		  }
         
         /**
          * Turn off light.

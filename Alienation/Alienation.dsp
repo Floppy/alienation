@@ -51,7 +51,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib SDL.lib SDLmain.lib SDL_image.lib SDL_mixer.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib SDL.lib SDL_image.lib SDL_mixer.lib lua.lib lualib.lib /nologo /subsystem:console /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib SDL.lib SDLmain.lib SDL_image.lib SDL_mixer.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib SDL.lib SDL_image.lib SDL_mixer.lib lua.lib lualib.lib /nologo /subsystem:console /machine:I386
 
 !ELSEIF  "$(CFG)" == "Alienation - Win32 Debug"
 
@@ -67,7 +67,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "./" /I "./include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "./" /I "./include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR /FD /GZ /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
 # ADD RSC /l 0x809 /d "_DEBUG"
@@ -117,7 +117,23 @@ SOURCE=.\Game\Brake.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\GUI\Button.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\CheckBox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Equipment\Equipment.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\3D\FMesh.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\Frame.cpp
 # End Source File
 # Begin Source File
 
@@ -129,7 +145,15 @@ SOURCE=.\Game\GameObject.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\GL\GLFont.cpp
+SOURCE=.\2D\GLFont.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\2D\GLFontManager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\GUI.cpp
 # End Source File
 # Begin Source File
 
@@ -141,7 +165,23 @@ SOURCE=.\2D\Hud.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Equipment\HudInformation.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\3D\Light.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\List.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\ListItem.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\ListSubItem.cpp
 # End Source File
 # Begin Source File
 
@@ -189,7 +229,23 @@ SOURCE=.\Math\Quat.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Equipment\Radar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\RadioButton.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\RadioContainer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Math\Random.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Equipment\Shield.cpp
 # End Source File
 # Begin Source File
 
@@ -197,7 +253,15 @@ SOURCE=.\Game\Ship.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Game\ShipFactory.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Sound\SoundManager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Equipment\SpeedIndicator.cpp
 # End Source File
 # Begin Source File
 
@@ -217,6 +281,10 @@ SOURCE=.\3D\TextureManager.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Equipment\ThrustInformation.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Game\Trail.cpp
 # End Source File
 # Begin Source File
@@ -225,7 +293,7 @@ SOURCE=.\Game\Weapon.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\IO\WeaponFactory.cpp
+SOURCE=.\Game\WeaponFactory.cpp
 # End Source File
 # Begin Source File
 
@@ -265,11 +333,27 @@ SOURCE=.\Game\Brake.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\GUI\Button.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\CheckBox.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\config.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Equipment\Equipment.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\3D\FMesh.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\Frame.h
 # End Source File
 # Begin Source File
 
@@ -281,7 +365,15 @@ SOURCE=.\Game\GameObject.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\GL\GLFont.h
+SOURCE=.\2D\GLFont.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\2D\GLFontManager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\GUI.h
 # End Source File
 # Begin Source File
 
@@ -297,11 +389,27 @@ SOURCE=.\2D\Hud.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Equipment\HudInformation.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Input.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\3D\Light.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\List.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\ListItem.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\ListSubItem.h
 # End Source File
 # Begin Source File
 
@@ -353,7 +461,23 @@ SOURCE=.\Math\Quat.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Equipment\Radar.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\RadioButton.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUI\RadioContainer.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Math\Random.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Equipment\Shield.h
 # End Source File
 # Begin Source File
 
@@ -361,7 +485,15 @@ SOURCE=.\Game\Ship.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Game\ShipFactory.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Sound\SoundManager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Equipment\SpeedIndicator.h
 # End Source File
 # Begin Source File
 
@@ -381,6 +513,10 @@ SOURCE=.\3D\TextureManager.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Equipment\ThrustInformation.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Game\Trail.h
 # End Source File
 # Begin Source File
@@ -393,7 +529,7 @@ SOURCE=.\Game\Weapon.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\IO\WeaponFactory.h
+SOURCE=.\Game\WeaponFactory.h
 # End Source File
 # Begin Source File
 

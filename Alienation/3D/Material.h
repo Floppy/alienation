@@ -29,6 +29,10 @@ public:
       m_afColour[3] = fAlpha;
    }
 
+   CRGBAColour() 
+   {
+   }
+
    /**
     * Component access.
     * @return The red value.

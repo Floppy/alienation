@@ -15,9 +15,18 @@
 #include "3D/Model.h"
 #include "3D/Frustum.h"
 
+enum eTargetType
+{
+	TGT_SHIP,
+	TGT_ASTEROID
+};
+
 class CGameObject : public CSimulation 
 {
  public:
+	 int getObjectID();
+	 int getObjectType();
+	 void setObjectType(int iObjectType);
    
    CGameObject(int num, float mass);
    CGameObject();
@@ -60,6 +69,12 @@ class CGameObject : public CSimulation
    float			m_fVel;
 
    float			m_fDrag;
+
+
+private:
+	int			m_iObjectType;
+	int			m_iObjectID;
+	static int	m_iLastID;
 
 };
 

@@ -7,10 +7,51 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-C2DObject::C2DObject()
-{
+//<<<<<<< 2DObject.cpp
+//   int C2DObject::m_iWidth(0);
+//   int C2DObject::m_iHeight(0);
+   
+   C2DObject::C2DObject()
+   {
+   }
+   
+//   C2DObject::~C2DObject()
+//   {
+//   }
+   
+//   void C2DObject::renderQuad(float fPosX, float fPosY, float fWidth, float fHeight, NSDMath::CVector2* vecTex)
+//   {
+//      glBegin(GL_QUADS);
+      
+//      glTexCoord2fv(vecTex[0].glVector());
+//      glVertex2f(fPosX, fPosY);
+//      glTexCoord2fv(vecTex[1].glVector());
+//      glVertex2f(fPosX + fWidth, fPosY);
+//      glTexCoord2fv(vecTex[2].glVector());
+//      glVertex2f(fPosX + fWidth, fPosY - fHeight);
+//      glTexCoord2fv(vecTex[3].glVector());
+//      glVertex2f(fPosX, fPosY - fHeight);
+      
+//      glEnd();
+//   }
+   
+//   void C2DObject::setPosition(int iXPos, int iYPos)
+//   {
+//      m_iXPos = iXPos;
+//      m_iYPos = iYPos;
+//   }
+   
+//   void C2DObject::setScreen(int iWidth, int iHeight)
+//   {
+//      m_iWidth  = iWidth;
+//      m_iHeight = iHeight;
+//   }
+//=======
+//C2DObject::C2DObject()
+//{
+//>>>>>>> 1.5
 
-}
+//}
 
 C2DObject::~C2DObject()
 {
@@ -33,13 +74,13 @@ void C2DObject::renderQuad()
 
    glBegin(GL_QUADS);
 
-	  glTexCoord2fv(m_vecTex[3].glVector());
-	  glVertex2f(m_fXPos, m_fYPos + m_fHeight);
-	  glTexCoord2fv(m_vecTex[2].glVector());
-	  glVertex2f(m_fXPos + m_fWidth, m_fYPos + m_fHeight);
-	  glTexCoord2fv(m_vecTex[1].glVector());
-	  glVertex2f(m_fXPos + m_fWidth, m_fYPos);
 	  glTexCoord2fv(m_vecTex[0].glVector());
+	  glVertex2f(m_fXPos, m_fYPos + m_fHeight);
+	  glTexCoord2fv(m_vecTex[1].glVector());
+	  glVertex2f(m_fXPos + m_fWidth, m_fYPos + m_fHeight);
+	  glTexCoord2fv(m_vecTex[2].glVector());
+	  glVertex2f(m_fXPos + m_fWidth, m_fYPos);
+	  glTexCoord2fv(m_vecTex[3].glVector());
 	  glVertex2f(m_fXPos, m_fYPos);
 
    glEnd();
@@ -63,6 +104,7 @@ void C2DObject::init2D(float fXPos, float fYPos, float fWidth, float fHeight, ch
    m_fYPos = fYPos;
    m_fWidth = fWidth;
    m_fHeight = fHeight;
+	char strNullString[1] = "";
 
    m_vecTex[0] = NSDMath::CVector2(0.0f, 1.0f);
 
@@ -73,8 +115,12 @@ void C2DObject::init2D(float fXPos, float fYPos, float fWidth, float fHeight, ch
    m_vecTex[3] = NSDMath::CVector2(0.0f, 0.0f);
 
 //   m_oActiveMaterial = CMaterial();
-   m_oActiveMaterial.m_uiTexture = g_oTextureManager.load(strFilename);
-   m_oActiveMaterial.init();
+	int iFileExists = strcmp(strFilename, strNullString);
+	if ( iFileExists )
+	{
+	   m_oActiveMaterial.m_uiTexture = g_oTextureManager.load(strFilename);
+		m_oActiveMaterial.init();
+	}
 
    setTexturePercentage(100.00f);
 
@@ -142,7 +188,7 @@ void C2DObject::setActiveTexture(unsigned int uiTexture)
 
 unsigned int C2DObject::getActiveTexture()
 {
-   return m_uiActiveTexture;
+   return m_oActiveMaterial.m_uiTexture;
 }
 
 
@@ -163,4 +209,30 @@ void C2DObject::setActiveMaterial(CRGBAColour oDiffuse, CRGBAColour oAmbient, CR
    m_oActiveMaterial.m_oDiffuse = oDiffuse;
    m_oActiveMaterial.m_oAmbient = oAmbient;
    m_oActiveMaterial.m_oEmissive = oEmissive;
+}
+
+void C2DObject::setActiveMaterial(CRGBAColour oDiffuse, CRGBAColour oAmbient, CRGBAColour oEmissive, unsigned int uiTexture)
+{
+   m_oActiveMaterial.m_oDiffuse = oDiffuse;
+   m_oActiveMaterial.m_oAmbient = oAmbient;
+   m_oActiveMaterial.m_oEmissive = oEmissive;
+	m_oActiveMaterial.m_uiTexture = uiTexture;
+   m_oActiveMaterial.init();
+}
+
+void C2DObject::setActiveMaterial(CMaterial *oMaterial)
+{
+   m_oActiveMaterial.m_oDiffuse = oMaterial->m_oDiffuse;
+   m_oActiveMaterial.m_oAmbient = oMaterial->m_oAmbient;
+   m_oActiveMaterial.m_oEmissive = oMaterial->m_oEmissive;
+	m_oActiveMaterial.m_uiTexture = oMaterial->m_uiTexture;
+//   m_oActiveMaterial.init();
+}
+
+void C2DObject::setAltMaterial(CMaterial *oMaterial)
+{
+   m_oAltMaterial.m_oDiffuse = oMaterial->m_oDiffuse;
+   m_oAltMaterial.m_oAmbient = oMaterial->m_oAmbient;
+   m_oAltMaterial.m_oEmissive = oMaterial->m_oEmissive;
+	m_oAltMaterial.m_uiTexture = oMaterial->m_uiTexture;
 }

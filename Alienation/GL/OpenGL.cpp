@@ -123,6 +123,7 @@ bool COpenGL :: initGL() {
    CRGBAColour oAmbient(0.25f, 0.25f, 0.25f, 1.0f);
    CRGBAColour oDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
    CVector3 oPosition(0.0f, 0.0f, -1000.0f);
+
    m_poLight = new CLight(GL_LIGHT0);
    m_poLight->init(oAmbient, oDiffuse, oPosition);
    // Create sun sprite
@@ -166,6 +167,8 @@ bool COpenGL :: initGL() {
       poAIShip->setPosition(CVector3(prng.randDouble()*1000 - 500,
                                      prng.randDouble()*1000 - 500,
                                      prng.randDouble()*1000 - 500));
+		poAIShip->setObjectType(0);
+		m_poShip->addTarget(poAIShip);
       poAIShip->setTarget(m_poShip);
       m_opObjects.push_back(poAIShip);
    }
@@ -175,7 +178,15 @@ bool COpenGL :: initGL() {
 
 
    // Load roids
+//<<<<<<< OpenGL.cpp
+//<<<<<<< OpenGL.cpp
+//   for (i=0; i<40; i++) {
+//=======
+//   for (int r=0; r<40; r++) {
+//>>>>>>> 1.34
+//=======
    for (int r=0; r<iNumRoids; r++) {
+//>>>>>>> 1.38
       CAsteroid* pRoid = new CAsteroid(1,50000);
       // Select type
       float fRandom = prng.randDouble();
@@ -189,6 +200,8 @@ bool COpenGL :: initGL() {
       // Load
       pRoid->load(type);
       m_opObjects.push_back(pRoid);
+		pRoid->setObjectType(1);
+		m_poShip->addTarget(pRoid);
    }
 
    m_pTarget = m_opObjects.begin();
@@ -244,7 +257,7 @@ bool COpenGL::DrawGLScene(GLvoid) {
    }
    
    m_poShip->drawHud();
-   m_poLight->disable();
+//   m_poLight->disable();
    
    // Everything Went OK
    return true; 
@@ -254,7 +267,13 @@ bool COpenGL::DrawGLScene(GLvoid) {
 //function calls for readability
 void COpenGL::Update (unsigned long int dMilliseconds)								
 {
+	int i;
 
+	m_poShip->clearTargetList();
+	for ( i = 0 ; i < m_opObjects.size() ; i++ )
+	{
+		m_poShip->addTarget(m_opObjects[i]);
+	}
 
 	float fDT = dMilliseconds / 1000.0f;							// Let's Convert Milliseconds To Seconds
 

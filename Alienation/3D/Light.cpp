@@ -17,6 +17,10 @@ CLight::CLight(GLenum iLight) :
       m_afPosition[i] = 0;
 }
 
+CLight::CLight()
+{
+}
+
 CLight::~CLight()
 {
 }

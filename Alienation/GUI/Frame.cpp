@@ -53,9 +53,22 @@ void CFrame::addControl(CFrame *poFrame)
 	m_arrControls.push_back(poFrame);
 }
 
+
+//**************************************************************************************
+// Function name    : CFrame::removeControl
+// Author           : Gary Ingram
+// Return type      : void 
+// Date Created     : 01/11/2003
+// Argument         : CFrame *poFrame
+// Description      : This method removes a control from the array of controls  
+//**************************************************************************************
 void CFrame::removeControl(CFrame *poFrame)
 {
 	vector<CFrame *>::iterator itrFrame;
+												//////////////////////////////////////////////
+												//iterate throught the list of controls to  //
+												//find the correct one to remove            //
+												//////////////////////////////////////////////
 
 	for (itrFrame = m_arrControls.begin() ; itrFrame < m_arrControls.end() ; itrFrame++)
 	{

@@ -24,7 +24,11 @@
 #include "3D/Frustum.h"
 #include "3D/Model.h"
 #include "3D/Sprite.h"
+//<<<<<<< OpenGL.h
+#include "Equipment/Radar.h"
+//=======
 #include "Math/Vector.h"
+//>>>>>>> 1.15
 
 #include <vector>
 
