@@ -51,7 +51,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib SDL.lib SDL_image.lib fmodvc.lib /nologo /subsystem:console /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib SDL.lib SDL_image.lib SDL_mixer.lib lua.lib lualib.lib /nologo /subsystem:console /machine:I386
 
 !ELSEIF  "$(CFG)" == "Alienation - Win32 Debug"
 
@@ -76,7 +76,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib SDL.lib SDLmain.lib SDL_image.lib SDL_mixer.lib /nologo /subsystem:console /profile /map /debug /machine:I386 /nodefaultlib:"msvcrt.lib" /libpath:"./library"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib SDL.lib SDLmain.lib SDL_image.lib SDL_mixer.lib lua.lib lualib.lib /nologo /subsystem:console /profile /map /debug /machine:I386 /nodefaultlib:"msvcrt.lib" /libpath:"./library"
 
 !ENDIF 
 
@@ -142,6 +142,10 @@ SOURCE=.\2D\Hud.cpp
 # Begin Source File
 
 SOURCE=.\3D\Light.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\IO\Lua.cpp
 # End Source File
 # Begin Source File
 
@@ -221,6 +225,10 @@ SOURCE=.\Game\Weapon.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\IO\WeaponFactory.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\3D\WEMesh.cpp
 # End Source File
 # End Group
@@ -294,6 +302,10 @@ SOURCE=.\Input.h
 # Begin Source File
 
 SOURCE=.\3D\Light.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\IO\Lua.h
 # End Source File
 # Begin Source File
 
@@ -378,6 +390,10 @@ SOURCE=.\Math\Vector.h
 # Begin Source File
 
 SOURCE=.\Game\Weapon.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\IO\WeaponFactory.h
 # End Source File
 # Begin Source File
 

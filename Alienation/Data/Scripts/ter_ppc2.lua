@@ -1,12 +1,12 @@
 -- ter_ppc2.lua
--- Configuration file for the Terran Purple Particle Cannon Mk.2
+-- Configuration file for the Terran Pulsed Particle Cannon Mk.2
 
 weapon = {
 	uname   	= "ter_ppc2",
 	race    	= "terran",
-	fullname	= "PPC (Purple Particle Cannon) Mk.2",
+	fullname	= "PPC (Pulsed Particle Cannon) Mk.2",
 	class		= "projectile",
-	firerate	= 0.5,
+	firerate	= 0.4,
 	sound		= "weapon.wav",
 	colour 		= {r=1, g=1, b=0, a=1},
 	texture		= "star.png",
