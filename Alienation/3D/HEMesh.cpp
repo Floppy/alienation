@@ -1,21 +1,21 @@
-#include "3D/VMesh.h"
+#include "3D/HEMesh.h"
 #include <GL/gl.h>
 #include <iostream>
 
 using namespace std;
 
-CVMesh::CVMesh() {
+CHEMesh::CHEMesh() {
 }
 
-CVMesh::~CVMesh() {
+CHEMesh::~CHEMesh() {
 }
 
-void CVMesh::init() {
+void CHEMesh::init() {
    CMesh::init();
    return;
 }
 
-void CVMesh::render() const {
+void CHEMesh::render() const {
    if (!m_bInitialised) {
       cerr << "WARNING: Mesh not initialised!" << endl;
       return;
