@@ -161,7 +161,7 @@ SOURCE=.\3D\HEMesh.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\2D\Hud.cpp
+SOURCE=.\Game\Hud.cpp
 # End Source File
 # Begin Source File
 
@@ -385,7 +385,7 @@ SOURCE=.\3D\HEMesh.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\2D\Hud.h
+SOURCE=.\Game\Hud.h
 # End Source File
 # Begin Source File
 
