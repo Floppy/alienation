@@ -32,8 +32,11 @@ CShip::CShip(int num, float mass) :
    m_quaCamOrientation.loadIdentity();
    m_matCamRotation.loadIdentity();
 
-   m_poWeapon = new CWeapon(100, CVector3(0.0f, -0.3f, -3.3f)); 
-   m_poBrake = new CBrake(100, CVector3(0.0f, 0.0f, 0.0f));
+   m_poWeapon = new CWeapon(CVector3(0.0f, -0.3f, -3.3f),
+                            1.0f,7.0f,235.0f,0.5f,
+                            "weapon.wav","ball.png",
+                            CRGBAColour(1.0f,0.2f,0.4f,1.0f));
+   m_poBrake = new CBrake(100,CVector3(0.0f, 0.0f, 0.0f));
 }
 
 CShip::~CShip()

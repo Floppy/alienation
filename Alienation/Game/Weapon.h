@@ -21,7 +21,7 @@
 class CWeapon : public CParticleEngine  
 {
 public:
-	CWeapon(int iNumParticles, CVector3 vecOrigin);
+	CWeapon(const CVector3& vecOrigin, float fSize, float fLifetime, float fSpeed, float fRate, const char* sound, const char* texture, const CRGBAColour& colour);
 	virtual ~CWeapon();
 
 	void resetParticle(int i);              // Resets specific particle (with index i)
@@ -31,6 +31,9 @@ public:
 	void createParticle(int i, CVector3 vecHead, CVector3 vecPos, float fSpeed);
 	void init();
         unsigned int m_uiTexture;
+        float m_fSize;
+        float m_fLifetime;
+        float m_fSpeed;
 	float m_fFireRate;
 	float m_fTimeSinceLast;
 	bool m_abEmpty[100];

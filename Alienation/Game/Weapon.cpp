@@ -14,19 +14,33 @@ using namespace NSDSound;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CWeapon::CWeapon(int iNumParticles, CVector3 vecOrigin) :
-   CParticleEngine(iNumParticles, vecOrigin),
+CWeapon::CWeapon(const CVector3& vecOrigin, float fSize, float fLifetime, float fSpeed, float fRate, const char* sound, const char* texture, const CRGBAColour& colour) :
+   CParticleEngine(100, vecOrigin),
+   m_fSize(fSize),
+   m_fLifetime(fLifetime),
+   m_fSpeed(fSpeed),
+   m_fFireRate(fRate),
+   m_fTimeSinceLast(fRate),
    m_uiSoundEffect(-1)
 {
-   m_fFireRate = 0.5f;
-   m_fTimeSinceLast = 0.5f;
    int i;
    for (i = 0; i < 100 ; i++)
       m_abEmpty[i] = true;
-   
+
    // Load sound
-   m_uiSoundEffect = g_oSoundManager.load("weapon.wav");
+   m_uiSoundEffect = g_oSoundManager.load(sound);
+
+   // Set material
+   CMaterial oMaterial;
+   oMaterial.m_oEmissive = colour;
+   oMaterial.m_oAmbient = colour;
+   oMaterial.m_oDiffuse = colour;
+   oMaterial.m_uiTexture = g_oTextureManager.load(texture);
+   m_oSprite.setMaterial(oMaterial);
+
 }
+
+   
 
 CWeapon::~CWeapon()
 {
@@ -141,14 +155,11 @@ void CWeapon::createParticle(int i, CVector3 vecHead, CVector3 vecPos, float fSp
 	//Sets the particles heading (see the update method)
 	m_poParticles[i].m_vecAcceleration = vecHead;
 	//Set size
-	m_poParticles[i].m_fSize = 1.0f ;
-
-	m_poParticles[i].m_fTimeToLive = 7.0f;
-
+	m_poParticles[i].m_fSize = m_fSize;
+	m_poParticles[i].m_fTimeToLive = m_fLifetime;
+	m_poParticles[i].m_fSpeed = m_fSpeed;
 	m_poParticles[i].m_fAge = 0.0f;
 
-	m_poParticles[i].m_fSpeed = 235.0f;
-        
         //Play sound whenever we create a particle
         int iChannel = g_oSoundManager.play(m_uiSoundEffect);
         if (iChannel != -1) g_oSoundManager.setChannelLocation(iChannel,vecPos);
@@ -182,11 +193,5 @@ void CWeapon::render(void)
 
 void CWeapon::init()
 {
-   CMaterial oMaterial;
-   oMaterial.m_oEmissive = CRGBAColour(1.0f,0.2f,0.4f,1.0f);
-   oMaterial.m_oAmbient = CRGBAColour(1.0f,0.2f,0.4f,1.0f);
-   oMaterial.m_oDiffuse = CRGBAColour(1.0f,0.2f,0.4f,1.0f);
-   oMaterial.m_uiTexture = g_oTextureManager.load("ball.png");
-   m_oSprite.setMaterial(oMaterial);
    m_oSprite.init();
 }
