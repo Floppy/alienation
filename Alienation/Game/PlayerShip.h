@@ -13,6 +13,7 @@
 
 #include "Game/Ship.h"
 #include "3D/Model.h"
+#include "3D/Light.h"
 #include "2D/Hud.h"
 
 //Player ship. A combination of ship and camera (pointless having them as 
@@ -32,6 +33,7 @@ public:
 	bool  m_bInsideView;
 	bool  m_bLeftLook, m_bRightLook, m_bUpLook, m_bBackLook;
         CHud *m_poHud;
+        CLight m_oLight;
 };
 
 #endif // !defined(AFX_PLAYERSHIP_H__037FA971_63AF_49C5_9C78_DCF151372718__INCLUDED_)

@@ -39,13 +39,14 @@ COpenGL :: COpenGL() :
 
 bool COpenGL :: initGL() {
 	//All initialisation. Nothing rocket science here.
-	float afAmbient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+	float afAmbient[4] = {0.25f, 0.25f, 0.25f, 1.0f};
 	float afDiffuse[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 	float afPosition[4] = {0.0f, 0.0f, 2.0f, 0.0f};
 
 	m_bSlowmo = false;
-	m_poLight = new CLight();
-	m_poLight->init(afAmbient, afDiffuse, afPosition, GL_LIGHT0);
+	m_poLight = new CLight(GL_LIGHT0);
+	m_poLight->init(afAmbient, afDiffuse, afPosition);
+        m_poLight->enable();
 	m_bCamUp = m_bCamDown = m_bCamLeft = m_bCamRight = m_bFire = false;
 	m_poGlfont = new CGLFont();
 	m_poGlfont->load();

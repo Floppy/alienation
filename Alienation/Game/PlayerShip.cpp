@@ -16,7 +16,8 @@
 //class, This is me a) being lazy, b) being after quick results 
 CPlayerShip::CPlayerShip() : 
    CShip(1, 5000.0f),
-   m_bInsideView(true)
+   m_bInsideView(true),
+   m_oLight(GL_LIGHT1)
 {
 	m_ppMasses[0]->m_vecPos = CVector3(0.0f, 0.0f, 0.0f);
 	m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
@@ -28,6 +29,13 @@ CPlayerShip::CPlayerShip() :
 	m_poHud = new CHud();
 	m_poShips[0].m_matCamRotation.LoadIdentity();
 	m_bLeftLook = m_bRightLook = m_bUpLook = m_bBackLook = false;
+
+        // Setup cockpit light
+	float afAmbient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+	float afDiffuse[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+	float afPosition[4] = {0.0f, 0.0f, 2.0f, 0.0f};
+	m_oLight.init(afAmbient, afDiffuse, afPosition);
+
 }
 
 CPlayerShip::~CPlayerShip()
@@ -40,12 +48,6 @@ void CPlayerShip::loadShip()
    CShip::loadShip();
    CLoad3DS oLoad3ds;
    if (oLoad3ds.import3DS(&m_oCockpitModel, "Data/Model/canopy02.3ds")) {
-      // Swap colours
-      for (int i=0; i<m_oCockpitModel.numMeshes(); i++) {
-         CMaterial material = m_oCockpitModel.getMesh(i)->getMaterial();
-         material.m_oAmbient = material.m_oDiffuse;
-         m_oCockpitModel.getMesh(i)->setMaterial(material);
-      }
       // Prepare
       m_oCockpitModel.init();
    }
@@ -67,6 +69,7 @@ void CPlayerShip::simulate(float fDT)
 //Needs to be over-ridden in this case. The use of external views means a lot more code
 void CPlayerShip::draw()
 {
+
 	CMatrix matM, matC;
 	CVector3 vecTemp;
 
@@ -100,7 +103,10 @@ void CPlayerShip::draw()
 		glPushMatrix();
 		glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
 		glMultMatrixf(m_poShips[0].m_matRotation.m_afElement);
-		m_oCockpitModel.render(); //draw the ship
+
+                m_oLight.enable();
+                m_oCockpitModel.render(); //draw the cockpit
+                m_oLight.disable();
 		glPopMatrix();
 	}
 

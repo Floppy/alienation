@@ -8,38 +8,36 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CLight::CLight()
+CLight::CLight(GLenum iLight) :
+   m_iLight(iLight)
 {
-
 }
 
 CLight::~CLight()
 {
-
 }
 
-//Creates ambient and diffuse lighting. Really neds a seperate init for each type of light
-//to make it easier to add specular and spotlights etc
-void CLight::init(float afAmbient[4], float afDiffuse[4], float afPosition[4], GLenum Light)
+void CLight::init(float afAmbient[4], float afDiffuse[4], float afPosition[4])
 {
-	int i;
-	for (i = 0; i < 4 ; i++)
-	{
-		m_afLightAmbient[i] = afAmbient[i];
-		m_afLightDiffuse[i] = afDiffuse[i];
-		m_afLightPosition[i] = afPosition[i];
-	}
+   // Turn on lighting
+   glEnable(GL_LIGHTING);
 
-	glLightfv(Light, GL_AMBIENT, m_afLightAmbient);
-	glLightfv(Light, GL_DIFFUSE, m_afLightDiffuse);
-	glLightfv(Light, GL_POSITION, m_afLightPosition);
+   // Set values
+   for (int i = 0; i < 4 ; i++)
+   {
+      m_afLightAmbient[i] = afAmbient[i];
+      m_afLightDiffuse[i] = afDiffuse[i];
+      m_afLightPosition[i] = afPosition[i];
+   }
 
-	glEnable(Light);
-	glEnable(GL_LIGHTING);
+   // Setup GL
+   glLightfv(m_iLight, GL_AMBIENT, m_afLightAmbient);
+   glLightfv(m_iLight, GL_DIFFUSE, m_afLightDiffuse);
+   glLightfv(m_iLight, GL_POSITION, m_afLightPosition);
+   
 }
 
-//Update anything that already exists
-void CLight::update(GLenum light, GLenum type, float afAmount[4])
+void CLight::update(GLenum type, float afAmount[4])
 {
-	glLightfv(light, type, afAmount);
+   glLightfv(m_iLight, type, afAmount);
 }

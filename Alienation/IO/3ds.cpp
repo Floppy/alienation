@@ -376,6 +376,7 @@ void CLoad3DS::readColorChunk(CMaterial *pMaterial, CChunk *pChunk)
    pChunk->m_iBytesRead += m_pTempChunk->m_iBytesRead;
    // store
    pMaterial->m_oDiffuse = CRGBAColour(col[0]/255.0,col[1]/255.0,col[2]/255.0,col[3]/255.0);
+   pMaterial->m_oAmbient = pMaterial->m_oDiffuse;
 }
 
 
