@@ -153,7 +153,7 @@ void CLoad3DS::processNextChunk(CModel *pModel, CChunk *pPreviousChunk)
 
 void CLoad3DS::processNextObjectChunk(CModel *pModel, CChunk *pPreviousChunk)
 {
-   CMesh* pMesh = new CMesh;
+   CFMesh* pMesh = new CFMesh;
    
    // Read name
    char strName[256];
@@ -189,7 +189,7 @@ void CLoad3DS::processNextObjectChunk(CModel *pModel, CChunk *pPreviousChunk)
    m_pCurrentChunk = pPreviousChunk;
 }
 
-void CLoad3DS::processNextMeshChunk(CMesh *pMesh, CChunk *pPreviousChunk)
+void CLoad3DS::processNextMeshChunk(CFMesh *pMesh, CChunk *pPreviousChunk)
 {
    	
    m_pCurrentChunk = new CChunk;
@@ -373,7 +373,7 @@ CRGBAColour CLoad3DS::readColorChunk(CChunk *pChunk)
 //		This function reads in the indices for the vertex array
 //---------------------------------- READ VERTEX INDECES -----------------------------------
 
-void CLoad3DS::readFaces(CMesh *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::readFaces(CFMesh *pObject, CChunk *pPreviousChunk)
 {
 	unsigned short iIndex = 0;					 
 	pPreviousChunk->m_iBytesRead += fread(&pObject->m_iNumFaces, 1, 2, m_pFilePointer);
@@ -401,7 +401,7 @@ void CLoad3DS::readFaces(CMesh *pObject, CChunk *pPreviousChunk)
 //		This function reads in the UV coordinates for the object
 //---------------------------------- READ UV COORDINATES -----------------------------------
 
-void CLoad3DS::readTexCoords(CMesh *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::readTexCoords(CFMesh *pObject, CChunk *pPreviousChunk)
 {
 	pPreviousChunk->m_iBytesRead += fread(&pObject->m_iNumTexVertex, 1, 2, m_pFilePointer);
 	
@@ -421,7 +421,7 @@ void CLoad3DS::readTexCoords(CMesh *pObject, CChunk *pPreviousChunk)
 //	This function reads in the vertices for the object
 //---------------------------------- READ VERTICES -----------------------------------
 
-void CLoad3DS::readVertices(CMesh *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::readVertices(CFMesh *pObject, CChunk *pPreviousChunk)
 { 
 	pPreviousChunk->m_iBytesRead += fread(&(pObject->m_iNumVertices), 1, 2, m_pFilePointer);
 	
@@ -436,7 +436,7 @@ void CLoad3DS::readVertices(CMesh *pObject, CChunk *pPreviousChunk)
 //	This function reads in the material name assigned to the object and sets the materialID
 //---------------------------------- READ OBJECT MATERIAL -----------------------------------
 
-void CLoad3DS::readObjectMaterial(CMesh *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::readObjectMaterial(CFMesh *pObject, CChunk *pPreviousChunk)
 {
 	char strMaterial[255];	
         memset(strMaterial,0,255);

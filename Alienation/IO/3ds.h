@@ -3,7 +3,7 @@
 
 #include "config.h"
 #include "Math/Vector.h"
-#include "3D/Mesh.h"
+#include "3D/FMesh.h"
 #include "3D/Model.h"
 #include "3D/Material.h"
 
@@ -82,7 +82,7 @@ private:
    /** 
     * Load a mesh chunk.
     */
-   void processNextMeshChunk(CMesh *pMesh, CChunk *);
+   void processNextMeshChunk(CFMesh *pMesh, CChunk *);
    
    /** 
     * Load a material chunk.
@@ -104,22 +104,22 @@ private:
    /** 
     * Read vertex data chunk.
     */
-   void readVertices(CMesh *pObject, CChunk *);
+   void readVertices(CFMesh *pObject, CChunk *);
    
    /** 
     * Read face data chunk.
     */
-   void readFaces(CMesh *pObject, CChunk *);
+   void readFaces(CFMesh *pObject, CChunk *);
    
    /** 
     * Read texture coordinates.
     */
-   void readTexCoords(CMesh *pObject, CChunk *);
+   void readTexCoords(CFMesh *pObject, CChunk *);
    
    /** 
     * Read object material chunk.
     */
-   void readObjectMaterial(CMesh *pObject, CChunk *pPreviousChunk);
+   void readObjectMaterial(CFMesh *pObject, CChunk *pPreviousChunk);
    
    /** 
     * Swallow unwanted chunk data.
