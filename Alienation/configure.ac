@@ -33,8 +33,8 @@ LIBS="$LIBS -lGL -lGLU"
 # SDL
 SDL_LIBS="`sdl-config --libs`"
 SDL_CFLAGS="`sdl-config --cflags`"
-CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS -lSDL_image -lSDL_mixer"
+CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
 AC_CHECK_HEADER(SDL.h,,exit)
 AC_CHECK_LIB(SDL,SDL_Init,,exit)
 AC_CHECK_HEADER(SDL_image.h,,exit)
@@ -42,9 +42,11 @@ AC_CHECK_LIB(SDL_image,IMG_Load,,exit)
 AC_CHECK_HEADER(SDL_mixer.h,,exit)
 AC_CHECK_LIB(SDL_mixer,Mix_OpenAudio,,exit)
 
-# Expat
-AC_CHECK_HEADER(expat.h,,exit)
-AC_CHECK_LIB(expat,XML_Parse,,exit)
+# Lua
+LIBS="-llua -llualib"
+AC_CHECK_HEADER(lua.h,,exit)
+AC_CHECK_HEADER(lualib.h,,exit)
+AC_CHECK_LIB(lualib,lua_open,,exit)
 
 # Checks for headers
 AC_HEADER_STDC
@@ -64,6 +66,7 @@ AC_OUTPUT(2D/Makefile
           Data/Makefile
           Data/Audio/Makefile
           Data/Model/Makefile
+          Data/Scripts/Makefile
           Data/Texture/Makefile
           Data/Texture/Hud/Makefile
           Game/Makefile

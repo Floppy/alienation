@@ -1,1 +1,1 @@
-SUBDIRS = Audio Model Texture
+SUBDIRS = Audio Model Texture Scripts
