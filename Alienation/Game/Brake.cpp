@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include "3D/TextureManager.h"
 #include "3D/Material.h"
+#include "Math/Random.h"
 
 #ifdef WIN32
   #include <windows.h>
@@ -25,7 +26,7 @@ CBrake::CBrake(int iNumParticles, CVector3 vecOrigin) :
 
 	m_poParticles = new CParticle[m_iNumParticles];     // Create particle list
 	m_iParticlesCreated = 0;
-	srand( (unsigned)time( NULL ) );
+	randomSeed( (unsigned)time( NULL ) );
 }
 
 CBrake::~CBrake()
@@ -109,7 +110,7 @@ void CBrake::createParticle(int i, CVector3 vecHead, CVector3 vecOrigin)
 		m_poParticles[i].m_vecAcceleration = vecHead + vecOrigin;
 		//Set size
 
-		fRandNum = RANDOM_FLOAT;
+		fRandNum = random01();
 		m_poParticles[i].m_fSize = fRandNum * 0.1f ;
 
 		//Set how long the particle will live (max 2 seconds)

@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <GL/gl.h>
 #include "3D/TextureManager.h"
+#include "Math/Random.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -31,8 +32,8 @@ void CStars::initStars()
 	m_iNumStars = 500;
 	for (i = 0; i < 500; i++)
 	{
-		fy = RANDOM_FLOAT * 360;
-		fp = RANDOM_FLOAT * 360;
+		fy = random01() * 360;
+		fp = random01() * 360;
 		CQuat quaTemp(DEG_TO_RAD(fy), 0.0f, DEG_TO_RAD(fp));
 		CMatrix mat(quaTemp);	
 		vecPos = CVector3(0.0f, 0.0f, -1.0f);
@@ -40,7 +41,7 @@ void CStars::initStars()
 		m_aoStars[i].m_vecPos *= 9000.0f;
 		m_aoStars[i].m_iTexture = 0;
 		
-		fy = RANDOM_FLOAT;
+		fy = random01();
 		if (fy < 0.33f)
 		{
 			m_aoStars[i].m_fSize = 15.0f;

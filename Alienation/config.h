@@ -36,7 +36,6 @@
 #define NULL 0
 #endif
 
-#define RANDOM_FLOAT   ((float)(rand()%1000)/1000.0f)
 #define DEG_TO_RAD(x)  ((x) * 0.0174532925f)
 #define RAD_TO_DEG(x)  ((x) * 57.295779513f)
 

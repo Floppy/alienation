@@ -4,6 +4,7 @@
 
 #include "Game/Trail.h"
 #include "3D/TextureManager.h"
+#include "Math/Random.h"
 #include <stdlib.h>
 #include <GL/gl.h>
 
@@ -18,7 +19,7 @@ CTrail::CTrail(int iNumParticles, CVector3 vecOrigin)
 
 	m_poParticles = new CParticle[m_iNumParticles];     // Create particle list
 	m_iParticlesCreated = 0;
-	srand( (unsigned)time( NULL ) );
+	randomSeed( (unsigned)time( NULL ) );
 
 }
 
@@ -157,9 +158,9 @@ void CTrail::reset()
 void CTrail::createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vecOrigin, CVector3 vecUp, CVector3 vecRight,
 					CVector3 vecPos, float fWidth, float fHeight)
 {
-//	srand( (unsigned)time( NULL ) );
+//	randomSeed( (unsigned)time( NULL ) );
 
-	float fNum = RANDOM_FLOAT;
+	float fNum = random01();
 
 	CVector3 vecTemp, vecTemp1, vecTemp2;
 
@@ -182,7 +183,7 @@ void CTrail::createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vec
 
 	vecTemp = vecRight * fWidth;
 
-	fNum = RANDOM_FLOAT;
+	fNum = random01();
 	if (fNum > 0.5f)
 	{	
 		vecTemp2 = vecTemp * (fNum - 0.5f);
@@ -197,7 +198,7 @@ void CTrail::createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vec
 	vecTemp = vecOrigin - vecPos;
 	vecTemp.normalise();
 
-	fNum = RANDOM_FLOAT;
+	fNum = random01();
 	m_poParticles[i].m_vecPosition += vecTemp * (fNum * 4.5f);
 
 	vecTemp.X() = m_poParticles[i].m_vecPosition.X() - vecOrigin.X();
@@ -208,11 +209,11 @@ void CTrail::createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vec
 	//Sets the m_poParticles heading (see the update method)
 	m_poParticles[i].m_vecAcceleration = vecHead - m_poParticles[i].m_vecPosition;
 	//Set size
-	fNum = RANDOM_FLOAT;
+	fNum = random01();
 	m_poParticles[i].m_fSize = 1.0f ;
 
 	//Set how long the particle will live (max 2 seconds)
-	fNum = RANDOM_FLOAT;
+	fNum = random01();
 	m_poParticles[i].m_fTimeToLive = fNum * (fThrust / 2000);
 
 	m_poParticles[i].m_fAge = 0.0f;
