@@ -73,7 +73,8 @@ AC_C_CONST
 AC_CHECK_FUNCS([atexit memset sqrt])
 
 # Output
-AC_OUTPUT(3D/Makefile
+AC_OUTPUT(2D/Makefile
+          3D/Makefile
           AI/Makefile
           Data/Makefile
           Data/Audio/Makefile
