@@ -102,19 +102,19 @@ void CTargetingComputer::render()
          // Render reticle
          m_poTargetingReticle->setPosition(dX-dW, (1-dY)-dH, dW*2, dH*2);
 	 m_poTargetingReticle->renderQuad();
+         // Radar imagexs
+	 m_poHoloTarget->renderQuad();
          // Calculate range
 	 NSDMath::CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
          int iRange = static_cast<int>(vecTarget.length());           
          // Range
          sprintf(strFont,"%5d m", iRange);
-         //m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f, CVector3(1,1,1));
-         //m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f, CVector3(1,1,1));
+         m_poFont->print("Range:", CVector2(0.0f, 0.0f), 0.05f, CVector3(1,0,0));
+         //m_poFont->print(strFont, CVector2(0.0f, 0.1f), 0.05f, CVector3(1,1,1));
          // Velocity
          sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_fVel));
-         //m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f, CVector3(1,1,1));
-         //m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f, CVector3(1,1,1));
-         // Radar image
-	 m_poHoloTarget->renderQuad();
+         //m_poFont->print("Velocity:", CVector2(0.0f, 0.2f), 0.05f, CVector3(1,1,1));
+         //m_poFont->print(strFont, CVector2(0.0f, 0.3f), 0.05f, CVector3(1,1,1));
       }
 }
  
