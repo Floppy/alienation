@@ -9,6 +9,7 @@
  ********************************************************************/
 
 #include "GL/OpenGL.h"
+#include <GL/glu.h>
 
 // We define the joystick axes here, because they
 // seem to be different in windows and linux
@@ -103,7 +104,6 @@ bool COpenGL :: DrawGLScene(GLvoid) {
 	m_poAIShip->drawWeapons();
 	m_poShip->drawBrake();
 	m_poShip->drawHud();
-	printf("Here!!");
 
    return true; // Everything Went OK
 }

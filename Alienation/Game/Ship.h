@@ -12,7 +12,6 @@
 #endif // _MSC_VER > 1000
 
 //#include "Physics/Physics1.h"
-#include "IO/3dsLoader.h"
 #include "Trail.h"
 #include <stdio.h>
 #include "Math/Vector.h"
@@ -20,12 +19,9 @@
 #include "Math/Matrix.h"
 #include "Weapon.h"
 #include "Brake.h"
+#include "3D/Model.h"
 #include "3D/Frustum.h"
 #include "3D/BoundingSphere.h"
-
-#define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
-#define piover180 	(0.0174532925f)
-#define todegrees    (57.295779513f)
 
 class CShipData
 {
@@ -33,7 +29,7 @@ public:
 	CBoundingSphere m_oSphere;
 	CShipData	*m_poTargetData;
 	CMass			**m_poTargetMass;
-	C3dsLoader	m_oModel;
+	CModel	         m_oModel;
 	CVector3		m_vecForce;
 	CVector3		m_vecHeading, m_vecUp, m_vecRight, m_vecDirection;
 	CVector3		m_vecLastForce, m_vecBrakePoint;

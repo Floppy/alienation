@@ -16,14 +16,21 @@
 
 class CTexture  
 {
-public:
-	void setActive(unsigned int t);
-	bool load(char **astrFnames, int iNoOfFiles);
-	CTexture(int iNum);
-	virtual ~CTexture();
-	void loadImage(char *strFilename);				// Loads A Bitmap Image
-	int m_iNoOfTextures;
-	unsigned int * m_puiTexture;
+ public:
+
+   CTexture();
+   // Constructor
+
+   bool load(const char *strFilename);
+   // Load from file
+
+   unsigned int ID() 
+   { return m_uiTexture; }
+   // Get texture ID
+
+ protected:
+   
+   unsigned int m_uiTexture;
 };
 
 #endif // !defined(AFX_TEXTURE_H__8395B95E_91B1_4EDB_BBB6_4FB7757FCBA3__INCLUDED_)

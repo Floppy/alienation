@@ -5,6 +5,9 @@
 #include "3D/TextureManager.h"
 #include <GL/gl.h>
 
+#include <iostream>
+using namespace std;
+
 CTextureManager g_oTextureManager;
 
 //////////////////////////////////////////////////////////////////////
@@ -74,5 +77,5 @@ bool CTextureManager::activate(unsigned int uiTexture) const
 
 bool CTextureManager::valid(unsigned int uiTexture) const 
 {
-   return true;//glTexValid(uiTexture);
+   return glIsTexture(uiTexture);
 }

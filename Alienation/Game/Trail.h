@@ -38,7 +38,7 @@ public:
 	void reset();
 private:
 	CFrustum m_oFrustum;
-	CTexture *m_poTexture;
+	unsigned int m_auiTextures[2];
 };
 
 #endif // !defined(AFX_TRAIL_H__0572019F_F31B_441D_AFAE_4247EB700A35__INCLUDED_)

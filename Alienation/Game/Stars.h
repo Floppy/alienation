@@ -17,9 +17,6 @@
 #include "3D/Texture.h"
 #include "3D/Frustum.h"
 
-#define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
-#define piover180 	(0.0174532925f)
-
 class CStar
 {
 public:
@@ -36,7 +33,7 @@ public:
 	CStar m_aoStars[500];
 	virtual ~CStars();
 	int m_iNumStars;
-	CTexture *m_poTexture;
+	unsigned int m_auiTextures[3];
 	void initStars();
 	void draw(CVector3 vecPos);
 private:

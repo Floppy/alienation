@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Game/PlayerShip.h"
+#include "IO/3ds.h"
 
 #include <GL/gl.h>
 
@@ -13,9 +14,10 @@
 //In the real thing all ship data will be loaded from file and this
 //initialisation will be got from there (or possible from the CShip
 //class, This is me a) being lazy, b) being after quick results 
-CPlayerShip::CPlayerShip() : CShip(1, 5000.0f)
+CPlayerShip::CPlayerShip() : 
+   CShip(1, 5000.0f),
+   m_bInsideView(true)
 {
-	m_bInsideView = true;
 	m_ppMasses[0]->m_vecPos = CVector3(0.0f, 0.0f, 0.0f);
 	m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
 	m_poShips[0].m_vecLastForce = CVector3(0.0f, 0.0f, 0.0f);
@@ -30,21 +32,16 @@ CPlayerShip::CPlayerShip() : CShip(1, 5000.0f)
 
 CPlayerShip::~CPlayerShip()
 {
-
+   delete m_poHud;
 }
 
-//Again, not a good use of inheritance, too much duplicated code 
 void CPlayerShip::loadShip()
 {
-    m_poHud->init();
-	m_poShips[0].m_poTargetData = new CShipData;
-	m_poShips[0].m_poTargetMass = new CMass*[1];
-	m_poShips[0].m_poTargetMass[0] = new CMass;
-    m_poShips[0].m_oModel.init3ds("Data/Model/shuttle.3ds");
-	m_poShips[0].m_poTrail->init();
-	m_oCockpitModel.init3ds("Data/Model/canopy02.3ds");
-	m_poShips[0].m_poWeapon->init();
-	m_poShips[0].m_poBrake->init();
+   CShip::loadShip();
+   CLoad3DS oLoad3ds;
+   if (oLoad3ds.import3DS(&m_oCockpitModel, "Data/Model/canopy02.3ds")) {
+      m_oCockpitModel.init();
+   }
 }
 
 //At last!! using inheritance! Only extra thing this does is rotate the camera
@@ -105,7 +102,7 @@ void CPlayerShip::draw()
 		glPushMatrix();
 		glTranslatef(m_ppMasses[0]->m_vecPos.m_fx, m_ppMasses[0]->m_vecPos.m_fy, m_ppMasses[0]->m_vecPos.m_fz);
 		glMultMatrixf(m_poShips[0].m_matRotation.m_afElement);
-		m_oCockpitModel.render3ds(); //draw the ship
+		m_oCockpitModel.render(); //draw the ship
 		glPopMatrix();
 	}
 
@@ -117,7 +114,7 @@ void CPlayerShip::draw()
 		glPushMatrix();
 		glTranslatef(m_ppMasses[0]->m_vecPos.m_fx, m_ppMasses[0]->m_vecPos.m_fy, m_ppMasses[0]->m_vecPos.m_fz);
 		glMultMatrixf(m_poShips[0].m_matRotation.m_afElement);
-		m_poShips[0].m_oModel.render3ds(); //draw the ship
+		m_poShips[0].m_oModel.render(); //draw the ship
 		glPopMatrix();
 	}
 
@@ -140,7 +137,7 @@ void CPlayerShip::rotateCam(float fDT)
 		fYaw = fDT * m_poShips[0].m_fCamYaw;			//change in yaw rate over time
 	}
 
-	quaTemp.eulerToQuat(fYaw * piover180, 0.0f, fPitch * piover180);
+	quaTemp.eulerToQuat(DEG_TO_RAD(fYaw), 0.0f, DEG_TO_RAD(fPitch));
 	quaTemp.multQuat(m_poShips[0].m_quaCamOrientation);
 	m_poShips[0].m_quaCamOrientation.copyQuat(quaTemp);
 	m_poShips[0].m_matCamRotation.QuatToMatrix(m_poShips[0].m_quaCamOrientation);

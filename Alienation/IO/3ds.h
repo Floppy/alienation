@@ -10,6 +10,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <fstream>
+#include <map>
+#include <string>
+
+using namespace std;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Here is our structure for our 3DS indicies (since .3DS stores 4 unsigned shorts)
@@ -40,7 +44,7 @@ class CLoad3DS
 public:
 	CLoad3DS();								
 
-	bool import3DS(CModel *pModel, char *strFileName);
+	bool import3DS(CModel *pModel, const char *strFileName);
 
 private:
 	int getString(char *);
@@ -49,7 +53,8 @@ private:
 
 	void processNextChunk(CModel *pModel, CChunk *);
 
-	void processNextObjectChunk(CModel *pModel, CMesh *pObject, CChunk *);
+	void processNextObjectChunk(CModel *pModel, CChunk *);
+	void processNextObjectChunk2(CMesh *pMesh, CChunk *);
 
 	void processNextMaterialChunk(CModel *pModel, CChunk *);
 
@@ -61,16 +66,17 @@ private:
 
 	void readUVCoordinates(CMesh *pObject, CChunk *);
 
-	void readObjectMaterial(CModel *pModel, CMesh *pObject, CChunk *pPreviousChunk);
+	void readObjectMaterial(CMesh *pObject, CChunk *pPreviousChunk);
 	
-	void computeNormals(CModel *pModel);
-
 	void cleanUp();
 	
 	FILE *m_pFilePointer;
 	
-	CChunk *m_pCurrentChunk;
-	CChunk *m_pTempChunk;
+	CChunk* m_pCurrentChunk;
+	CChunk* m_pTempChunk;
+
+        map<string,CMaterial> m_oMaterials;
+
 };
 
 

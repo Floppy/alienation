@@ -4,20 +4,22 @@
 
 #include "Game/Stars.h"
 #include <stdlib.h>
-
 #include <GL/gl.h>
+#include "3D/TextureManager.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CStars::CStars() :
-	m_poTexture(NULL)
-{}
+CStars::CStars()
+{
+}
 
 CStars::~CStars()
 {
-	delete m_poTexture;
+   for (int i=0; i<3; i++) {
+      g_oTextureManager.removeReference(m_auiTextures[i]);
+   }
 }
 
 void CStars::initStars()
@@ -28,13 +30,12 @@ void CStars::initStars()
 	CVector3 vecPos;
 	int i;
 
-	m_poTexture = new CTexture(3);
 	m_iNumStars = 500;
 	for (i = 0; i < 500; i++)
 	{
 		fy = RANDOM_FLOAT * 360;
 		fp = RANDOM_FLOAT * 360;
-		quaTemp.eulerToQuat(fy * piover180, 0.0f, fp * piover180);
+		quaTemp.eulerToQuat(DEG_TO_RAD(fy), 0.0f, DEG_TO_RAD(fp));
 		mat.QuatToMatrix(quaTemp);	
 		vecPos = CVector3(0.0f, 0.0f, -1.0f);
 		m_aoStars[i].m_vecPos = mat.MultMatrixVector(vecPos);
@@ -61,16 +62,10 @@ void CStars::initStars()
 		m_aoStars[i].m_vecColor.m_fy = RANDOM_FLOAT;
 		m_aoStars[i].m_vecColor.m_fz = RANDOM_FLOAT;
 	}
-	char **astrFiles = new char*[3];
 
-	astrFiles[0] = new char(16);
-	strcpy(astrFiles[0], "an01.png");
-	astrFiles[1] = new char(16);
-	strcpy(astrFiles[1], "an02.png");
-	astrFiles[2] = new char(16);
-	strcpy(astrFiles[2], "an03.png");
-
-	m_poTexture->load(astrFiles, 3);
+        m_auiTextures[0] = g_oTextureManager.load("an01.png");
+        m_auiTextures[1] = g_oTextureManager.load("an02.png");
+        m_auiTextures[2] = g_oTextureManager.load("an03.png");
 
 //	LoadGLTextures();
 }
@@ -83,9 +78,8 @@ void CStars::draw(CVector3 vecPos)
 
 	glEnable(GL_BLEND);
 
-	m_poTexture->setActive(0);
+	g_oTextureManager.activate(m_auiTextures[0]);
 
-//	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	int iCount;
 	glBegin(GL_QUADS);
 		for (iCount = 0 ; iCount < m_iNumStars ; iCount++)

@@ -1,6 +1,6 @@
 
 #include "IO/3ds.h"
-//#include "3dmath.h"
+#include "3D/TextureManager.h"
 
 // Primary Chunk, at the beginning of each file
 #define _3DS_PRIMARY       0x4D4D
@@ -11,8 +11,8 @@
 #define _3DS_EDITKEYFRAME  0xB000				
 
 // Sub defines of OBJECTINFO
-#define _3DS_MATERIAL	  0xAFFF				
-#define _3DS_OBJECT		  0x4000				
+#define _3DS_MATERIAL	   0xAFFF				
+#define _3DS_OBJECT	   0x4000				
 
 // Sub defines of MATERIAL
 #define _3DS_MATNAME       0xA000				
@@ -24,32 +24,37 @@
 
 // Sub defines of OBJECT_MESH
 #define _3DS_OBJECT_VERTICES     0x4110			
-#define _3DS_OBJECT_FACES		0x4120			
-#define _3DS_OBJECT_MATERIAL		0x4130			
-#define _3DS_OBJECT_UV			0x4140			
+#define _3DS_OBJECT_FACES	 0x4120			
+#define _3DS_OBJECT_MATERIAL	 0x4130			
+#define _3DS_OBJECT_UV		 0x4140			
 
 
 //-------------------------------- CLOADS3DS ------------------------------------
 //	This constructor initializes the tChunk data
 //-------------------------------- CLOADS3DS ------------------------------------
 
-CLoad3DS::CLoad3DS()
+CLoad3DS::CLoad3DS() :
+   m_pCurrentChunk(NULL),
+   m_pTempChunk(NULL)
 {
-	m_pCurrentChunk = new CChunk;				 
-	m_pTempChunk    = new CChunk;					
 }
 
 //---------------------------------- IMPORT 3DS ----------------------------------
 //		This is called by the client to open the .3ds file, read it, then clean up
 //---------------------------------- IMPORT 3DS -----------------------------------
 
-bool CLoad3DS::import3DS(CModel *pModel, char *strFileName)
+bool CLoad3DS::import3DS(CModel *pModel, const char *strFileName)
 {
+   fprintf(stderr, "-------------------------\nimport3ds called on file %s\n",strFileName);
+	m_pCurrentChunk = new CChunk;				 
+	m_pTempChunk    = new CChunk;
+
 	m_pFilePointer = fopen(strFileName, "rb");
 	
 	if(!m_pFilePointer) 
 	{
 		fprintf(stderr, "Unable to find the file: %s!\n", strFileName);
+                cleanUp();
 		return false;
 	}
 	
@@ -58,16 +63,15 @@ bool CLoad3DS::import3DS(CModel *pModel, char *strFileName)
 	if (m_pCurrentChunk->m_uiID != _3DS_PRIMARY)
 	{
 		fprintf(stderr, "Unable to load PRIMARY chuck from file: %s!\n", strFileName);
+                cleanUp();
 		return false;
 	}
 	
 	processNextChunk(pModel, m_pCurrentChunk);
 	
-	computeNormals(pModel);
-	
 	cleanUp();
 	
-	return 0;
+	return true;
 }
 
 //---------------------------------- CLEAN UP ----------------------------------
@@ -88,74 +92,54 @@ void CLoad3DS::cleanUp()
 
 void CLoad3DS::processNextChunk(CModel *pModel, CChunk *pPreviousChunk)
 {
-	CMesh newObject;					 
-	CMaterial newTexture;				
-	unsigned short iVersion = 0;					
-	int aiBuffer[50000] = {0};					
-	
-	m_pCurrentChunk = new CChunk;				
-	
-	while (pPreviousChunk->m_iBytesRead < pPreviousChunk->m_iLength)
-	{
-		readChunk(m_pCurrentChunk);
-		
-		switch (m_pCurrentChunk->m_uiID)
-		{
-		case _3DS_VERSION:							
-			
-			m_pCurrentChunk->m_iBytesRead += fread(&iVersion, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
-			
-			if (iVersion > 0x03) {
-				fprintf(stderr,"This 3DS file is over version 3 so it may load incorrectly\n");
-			}
-			break;
-			
-		case _3DS_OBJECTINFO:						
-			readChunk(m_pTempChunk);
-			
-			m_pTempChunk->m_iBytesRead += fread(&iVersion, 1, m_pTempChunk->m_iLength - m_pTempChunk->m_iBytesRead, m_pFilePointer);
-			
-			m_pCurrentChunk->m_iBytesRead += m_pTempChunk->m_iBytesRead;
-			
-			processNextChunk(pModel, m_pCurrentChunk);
-			break;
-			
-		case _3DS_MATERIAL:						
-			pModel->m_iNumMaterials++;
-			
-			pModel->m_pMaterials.push_back(newTexture);
-			
-			processNextMaterialChunk(pModel, m_pCurrentChunk);
-			break;
-			
-		case _3DS_OBJECT:							
-			pModel->m_iNumObjects++;
-			
-			pModel->m_pObject.push_back(newObject);
-			
-			memset(&(pModel->m_pObject[pModel->m_iNumObjects - 1]), 0, sizeof(CMesh));
-			
-			m_pCurrentChunk->m_iBytesRead += getString(pModel->m_pObject[pModel->m_iNumObjects - 1].m_strName);
-			
-			processNextObjectChunk(pModel, &(pModel->m_pObject[pModel->m_iNumObjects - 1]), m_pCurrentChunk);
-			break;
-			
-		case _3DS_EDITKEYFRAME:
-			
-			m_pCurrentChunk->m_iBytesRead += fread(aiBuffer, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
-			break;
-			
-		default: 
-			
-			m_pCurrentChunk->m_iBytesRead += fread(aiBuffer, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
-			break;
-		}
-		
-		pPreviousChunk->m_iBytesRead += m_pCurrentChunk->m_iBytesRead;
-	}
-	
-	delete m_pCurrentChunk;
-	m_pCurrentChunk = pPreviousChunk;
+   fprintf(stderr, "processNextChunk called\n");
+   unsigned short iVersion = 0;
+   int aiBuffer[50000] = {0};
+   
+   m_pCurrentChunk = new CChunk;
+   
+   while (pPreviousChunk->m_iBytesRead < pPreviousChunk->m_iLength)
+   {
+      readChunk(m_pCurrentChunk);
+      
+      switch (m_pCurrentChunk->m_uiID)
+      {
+         case _3DS_VERSION: {
+            // Read version
+            m_pCurrentChunk->m_iBytesRead += fread(&iVersion, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
+            // Check version
+            if (iVersion > 0x03) {
+               fprintf(stderr,"This 3DS file is over version 3 so it may load incorrectly\n");
+            }
+         } break;
+         
+         case _3DS_OBJECTINFO: {
+            // Read chunk
+            readChunk(m_pTempChunk);                   
+            m_pTempChunk->m_iBytesRead += fread(&iVersion, 1, m_pTempChunk->m_iLength - m_pTempChunk->m_iBytesRead, m_pFilePointer);
+            m_pCurrentChunk->m_iBytesRead += m_pTempChunk->m_iBytesRead;
+            processNextChunk(pModel, m_pCurrentChunk);
+         } break;
+         
+         case _3DS_MATERIAL: {
+            processNextMaterialChunk(pModel, m_pCurrentChunk);
+         } break;
+         
+         case _3DS_OBJECT: {
+            processNextObjectChunk(pModel, m_pCurrentChunk);
+         } break;
+         
+         case _3DS_EDITKEYFRAME:
+         default: {
+            m_pCurrentChunk->m_iBytesRead += fread(aiBuffer, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
+         } break;
+      }
+      
+      pPreviousChunk->m_iBytesRead += m_pCurrentChunk->m_iBytesRead;
+   }
+   
+   delete m_pCurrentChunk;
+   m_pCurrentChunk = pPreviousChunk;
 }
 
 
@@ -163,48 +147,93 @@ void CLoad3DS::processNextChunk(CModel *pModel, CChunk *pPreviousChunk)
 //		This function handles all the information about the objects in the file
 //---------------------------------- PROCESS NEXT OBJECT CHUNK -----------------------------------
 
-void CLoad3DS::processNextObjectChunk(CModel *pModel, CMesh *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::processNextObjectChunk(CModel *pModel, CChunk *pPreviousChunk)
 {
-	int buffer[50000] = {0};					
+   fprintf(stderr, "processNextObjectChunk called\n");
+   CMesh* pMesh = new CMesh;
+   
+   // Read name
+   char buffer[50000];
+   memset(buffer,0,50000);
+   m_pCurrentChunk->m_iBytesRead += getString(buffer);
 	
-	m_pCurrentChunk = new CChunk;
+   m_pCurrentChunk = new CChunk;
 	
-	while (pPreviousChunk->m_iBytesRead < pPreviousChunk->m_iLength)
-	{
-		readChunk(m_pCurrentChunk);
+   while (pPreviousChunk->m_iBytesRead < pPreviousChunk->m_iLength)
+   {
+      readChunk(m_pCurrentChunk);
+      
+      switch (m_pCurrentChunk->m_uiID)
+      {
+
+      case _3DS_OBJECT_MESH: {
+         processNextObjectChunk2(pMesh, m_pCurrentChunk);
+      } break;
+
+      default: {
+         m_pCurrentChunk->m_iBytesRead += fread(buffer, 
+                                                1, 
+                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
+                                                m_pFilePointer);
+      } break;
+      }
+
+      pPreviousChunk->m_iBytesRead += m_pCurrentChunk->m_iBytesRead;
+   }
+   
+   // Store
+   pModel->addMesh(pMesh);
+
+   // Tidy
+   delete m_pCurrentChunk;
+   m_pCurrentChunk = pPreviousChunk;
+}
+
+void CLoad3DS::processNextObjectChunk2(CMesh *pMesh, CChunk *pPreviousChunk)
+{
+   fprintf(stderr, "processNextObjectChunk2 called\n");
+   	
+   char buffer[50000];
+   memset(buffer,0,50000);
+   m_pCurrentChunk = new CChunk;
+	
+   while (pPreviousChunk->m_iBytesRead < pPreviousChunk->m_iLength)
+   {
+      readChunk(m_pCurrentChunk);
+      
+      switch (m_pCurrentChunk->m_uiID)
+      {
+
+      case _3DS_OBJECT_VERTICES: {
+         readVertices(pMesh, m_pCurrentChunk);
+      } break;
+
+      case _3DS_OBJECT_FACES: {
+         readVertexIndices(pMesh, m_pCurrentChunk);
+      } break;
+
+      case _3DS_OBJECT_MATERIAL: {
+         readObjectMaterial(pMesh, m_pCurrentChunk);			
+      } break;
+
+      case _3DS_OBJECT_UV: {
+         readUVCoordinates(pMesh, m_pCurrentChunk);
+      } break;
+
+      default: {
+         m_pCurrentChunk->m_iBytesRead += fread(buffer, 
+                                                1, 
+                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
+                                                m_pFilePointer);
+      } break;
+      }
 		
-		switch (m_pCurrentChunk->m_uiID)
-		{
-		case _3DS_OBJECT_MESH:		
-			processNextObjectChunk(pModel, pObject, m_pCurrentChunk);
-			break;
-			
-		case _3DS_OBJECT_VERTICES:			 
-			readVertices(pObject, m_pCurrentChunk);
-			break;
-			
-		case _3DS_OBJECT_FACES:				 
-			readVertexIndices(pObject, m_pCurrentChunk);
-			break;
-			
-		case _3DS_OBJECT_MATERIAL:			 
-			readObjectMaterial(pModel, pObject, m_pCurrentChunk);			
-			break;
-			
-		case _3DS_OBJECT_UV:					
-			readUVCoordinates(pObject, m_pCurrentChunk);
-			break;
-			
-		default: 
-			m_pCurrentChunk->m_iBytesRead += fread(buffer, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
-			break;
-		}
-		
-		pPreviousChunk->m_iBytesRead += m_pCurrentChunk->m_iBytesRead;
-	}
-	
-	delete m_pCurrentChunk;
-	m_pCurrentChunk = pPreviousChunk;
+      pPreviousChunk->m_iBytesRead += m_pCurrentChunk->m_iBytesRead;
+   }
+   
+   // Tidy
+   delete m_pCurrentChunk;
+   m_pCurrentChunk = pPreviousChunk;
 }
 
 
@@ -214,40 +243,101 @@ void CLoad3DS::processNextObjectChunk(CModel *pModel, CMesh *pObject, CChunk *pP
 
 void CLoad3DS::processNextMaterialChunk(CModel *pModel, CChunk *pPreviousChunk)
 {
-	int aiBuffer[50000] = {0};					  
-	m_pCurrentChunk = new CChunk;
-	
-	while (pPreviousChunk->m_iBytesRead < pPreviousChunk->m_iLength)
-	{
-		readChunk(m_pCurrentChunk);
-		
-		switch (m_pCurrentChunk->m_uiID)
-		{
-		case _3DS_MATNAME:						 
-			m_pCurrentChunk->m_iBytesRead += fread(pModel->m_pMaterials[pModel->m_iNumMaterials - 1].m_strName, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
-			break;
+   fprintf(stderr, "processNextMaterialChunk called\n");
+   CMaterial newMaterial;   
+   char strMaterialName[128];
+
+   // Read new chunk
+   m_pCurrentChunk = new CChunk;
+   // Read contents of previous chunk
+   while (pPreviousChunk->m_iBytesRead < pPreviousChunk->m_iLength)
+   {
+      readChunk(m_pCurrentChunk);
+   
+      switch (m_pCurrentChunk->m_uiID)
+      {
+      case _3DS_MATMAP: {
+         processNextMaterialChunk(oMaterial, m_pCurrentChunk);
+      }	break;
 			
-		case _3DS_MATDIFFUSE:					 
-			readColorChunk(&(pModel->m_pMaterials[pModel->m_iNumMaterials - 1]), m_pCurrentChunk);
-			break;
+      default: {
+         // Eat chunk
+         char aiBuffer[50000] = {0};
+         m_pCurrentChunk->m_iBytesRead += fread(aiBuffer, 
+                                                1, 
+                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
+                                                m_pFilePointer);
+      } break;
+      
+      }
+      pPreviousChunk->m_iBytesRead += m_pCurrentChunk->m_iBytesRead;
+   }
+
+   // Add material to map
+   m_oMaterials[strMaterialName] = newMaterial;
+   fprintf(stderr," -- finished loading material \"%s\"\n",strMaterialName);
+
+   // Tidy up and finish
+   delete m_pCurrentChunk;
+   m_pCurrentChunk = pPreviousChunk;
+}
+
+void CLoad3DS::processNextMaterialChunk2(CMaterial& oMaterial, CChunk *pPreviousChunk)
+{
+   fprintf(stderr, "processNextMaterialChunk2 called\n");
+   char strMaterialName[128];
+
+   // Read new chunk
+   m_pCurrentChunk = new CChunk;
+   // Read contents of previous chunk
+   while (pPreviousChunk->m_iBytesRead < pPreviousChunk->m_iLength)
+   {
+      readChunk(m_pCurrentChunk);
+   
+      switch (m_pCurrentChunk->m_uiID)
+      {
+      case _3DS_MATNAME: {         
+         // Read material name
+         m_pCurrentChunk->m_iBytesRead += fread(strMaterialName,
+                                                1, 
+                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
+                                                m_pFilePointer);
+         fprintf(stderr, " -- material name: %s\n",strMaterialName);
+      } break;
 			
-		case _3DS_MATMAP:						 
-			processNextMaterialChunk(pModel, m_pCurrentChunk);
-			break;
+      case _3DS_MATDIFFUSE: {
+         // Read colour into material
+         readColorChunk(&newMaterial, m_pCurrentChunk);
+      }	break;
 			
-		case _3DS_MATMAPFILE:						 
-			m_pCurrentChunk->m_iBytesRead += fread(pModel->m_pMaterials[pModel->m_iNumMaterials - 1].m_strFile, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
-			break;
+      case _3DS_MATMAPFILE: {
+         // Get filename
+         char strFilename[64];
+         m_pCurrentChunk->m_iBytesRead += fread(strFilename, 
+                                                1, 
+                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
+                                                m_pFilePointer);         
+         // Load texture and store ID
+         newMaterial.m_uiTexture = g_oTextureManager.load(strFilename);
+         fprintf(stderr," -- loaded texure %d from file %s\n",newMaterial.m_uiTexture,strFilename);
+      }	break;
 			
-		default:  
-			m_pCurrentChunk->m_iBytesRead += fread(aiBuffer, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
-			break;
-		}
-		pPreviousChunk->m_iBytesRead += m_pCurrentChunk->m_iBytesRead;
-	}
-	
-	delete m_pCurrentChunk;
-	m_pCurrentChunk = pPreviousChunk;
+      default: {
+         // Eat chunk
+         char aiBuffer[50000] = {0};
+         m_pCurrentChunk->m_iBytesRead += fread(aiBuffer, 
+                                                1, 
+                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
+                                                m_pFilePointer);
+      } break;
+      
+      }
+      pPreviousChunk->m_iBytesRead += m_pCurrentChunk->m_iBytesRead;
+   }
+
+   // Tidy up and finish
+   delete m_pCurrentChunk;
+   m_pCurrentChunk = pPreviousChunk;
 }
 
 //---------------------------------- READ CHUNK ----------------------------------
@@ -256,6 +346,7 @@ void CLoad3DS::processNextMaterialChunk(CModel *pModel, CChunk *pPreviousChunk)
 
 void CLoad3DS::readChunk(CChunk *pChunk)
 {
+   //fprintf(stderr, "readChunk called\n");
 	pChunk->m_iBytesRead = fread(&pChunk->m_uiID, 1, 2, m_pFilePointer);
 	
 	pChunk->m_iBytesRead += fread(&pChunk->m_iLength, 1, 4, m_pFilePointer);
@@ -267,6 +358,7 @@ void CLoad3DS::readChunk(CChunk *pChunk)
 
 int CLoad3DS::getString(char *pBuffer)
 {
+   fprintf(stderr, "getString called - result: ");
 	int index = 0;
 	
 	fread(pBuffer, 1, 1, m_pFilePointer);
@@ -275,6 +367,7 @@ int CLoad3DS::getString(char *pBuffer)
 	{
 		fread(pBuffer + index, 1, 1, m_pFilePointer);
 	}
+   fprintf(stderr, "%s\n", pBuffer);
 	
 	return strlen(pBuffer) + 1;
 }
@@ -286,9 +379,16 @@ int CLoad3DS::getString(char *pBuffer)
 
 void CLoad3DS::readColorChunk(CMaterial *pMaterial, CChunk *pChunk)
 {
-	readChunk(m_pTempChunk);
-	m_pTempChunk->m_iBytesRead += fread(pMaterial->m_uiColor, 1, m_pTempChunk->m_iLength - m_pTempChunk->m_iBytesRead, m_pFilePointer);
-	pChunk->m_iBytesRead += m_pTempChunk->m_iBytesRead;
+   fprintf(stderr, "readColorChunk called\n");
+   // Allocate colour storage
+   unsigned char col[4] = {0,0,0,0};
+   // Read data
+   readChunk(m_pTempChunk);   
+   m_pTempChunk->m_iBytesRead += fread(col, 1, m_pTempChunk->m_iLength - m_pTempChunk->m_iBytesRead, m_pFilePointer);
+   pChunk->m_iBytesRead += m_pTempChunk->m_iBytesRead;
+   // store
+   pMaterial->m_oDiffuse = CRGBAColour(col[0],col[1],col[2],col[3]);
+   fprintf(stderr," -- %d, %d, %d, %d\n", col[0],col[1],col[2],col[3]);
 }
 
 
@@ -298,6 +398,7 @@ void CLoad3DS::readColorChunk(CMaterial *pMaterial, CChunk *pChunk)
 
 void CLoad3DS::readVertexIndices(CMesh *pObject, CChunk *pPreviousChunk)
 {
+   fprintf(stderr, "readVertexIndices called\n");
 	unsigned short iIndex = 0;					 
 	pPreviousChunk->m_iBytesRead += fread(&pObject->m_iNumFaces, 1, 2, m_pFilePointer);
 	
@@ -326,6 +427,7 @@ void CLoad3DS::readVertexIndices(CMesh *pObject, CChunk *pPreviousChunk)
 
 void CLoad3DS::readUVCoordinates(CMesh *pObject, CChunk *pPreviousChunk)
 {
+   fprintf(stderr, "readUVCoordinates called\n");
 	pPreviousChunk->m_iBytesRead += fread(&pObject->m_iNumTexVertex, 1, 2, m_pFilePointer);
 	
 	pObject->m_pTexVerts = new CVector2 [pObject->m_iNumTexVertex];
@@ -340,6 +442,7 @@ void CLoad3DS::readUVCoordinates(CMesh *pObject, CChunk *pPreviousChunk)
 
 void CLoad3DS::readVertices(CMesh *pObject, CChunk *pPreviousChunk)
 { 
+   fprintf(stderr, "readVertices called\n");
 	pPreviousChunk->m_iBytesRead += fread(&(pObject->m_iNumVertices), 1, 2, m_pFilePointer);
 	
 	pObject->m_pVerts = new CVector3 [pObject->m_iNumVertices];
@@ -353,97 +456,19 @@ void CLoad3DS::readVertices(CMesh *pObject, CChunk *pPreviousChunk)
 //	This function reads in the material name assigned to the object and sets the materialID
 //---------------------------------- READ OBJECT MATERIAL -----------------------------------
 
-void CLoad3DS::readObjectMaterial(CModel *pModel, CMesh *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::readObjectMaterial(CMesh *pObject, CChunk *pPreviousChunk)
 {
-	char strMaterial[255] = {0};			
-	int aiBuffer[50000] = {0};				
-	char strTemp[255];
+   fprintf(stderr, "readObjectMaterial called\n");
+	char strMaterial[255];	
+        memset(strMaterial,0,255);
+	int aiBuffer[50000] = {0};
 
 	pPreviousChunk->m_iBytesRead += getString(strMaterial);
 	
-	for(int i = 0; i < pModel->m_iNumMaterials; i++)
-	{
-		if(strcmp(strMaterial, pModel->m_pMaterials[i].m_strName) == 0)
-		{
-			pObject->m_iMaterialID = i;
-			
-			strcpy(strTemp, pModel->m_pMaterials[i].m_strFile);
-			if(strlen(pModel->m_pMaterials[i].m_strFile) > 0) {
-				
-				pObject->m_bHasTexture = true;
-			}	
-			break;
-		}
-	}
+        pObject->setMaterial(m_oMaterials[strMaterial]);
 	
 	pPreviousChunk->m_iBytesRead += fread(aiBuffer, 1, pPreviousChunk->m_iLength - pPreviousChunk->m_iBytesRead, m_pFilePointer);
 }			
 
-
-
-//---------------------------------- COMPUTER NORMALS -----------------------------------
-//		This function computes the normals and vertex normals of the objects
-//---------------------------------- COMPUTER NORMALS -----------------------------------
-
-void CLoad3DS::computeNormals(CModel *pModel)
-{
-	CVector3 vecVector1, vecVector2, vecNormal, vecPoly[3];
-	
-	if(pModel->m_iNumObjects <= 0)
-		return;
-	
-	int index, i, j;
-	for(index = 0; index < pModel->m_iNumObjects; index++)
-	{
-		CMesh *pObject = &(pModel->m_pObject[index]);
-		
-		CVector3 *pTempNormals	= new CVector3 [pObject->m_iNumFaces];
-		pObject->m_pNormals		= new CVector3 [pObject->m_iNumVertices];
-		
-		for(i=0; i < pObject->m_iNumFaces; i++)
-		{												
-			vecPoly[0] = pObject->m_pVerts[pObject->m_pFaces[i].m_iVertIndex[0]];
-			vecPoly[1] = pObject->m_pVerts[pObject->m_pFaces[i].m_iVertIndex[1]];
-			vecPoly[2] = pObject->m_pVerts[pObject->m_pFaces[i].m_iVertIndex[2]];
-			
-			
-			vecVector1 = vecPoly[0] - vecPoly[2];
-			vecVector2 = vecPoly[2] - vecPoly[1];
-			
-			vecNormal  = vecVector1.cross(vecVector2);
-			pTempNormals[i] = vecNormal;					
-			vecNormal.unitize();				
-			
-		}
-		
-		
-		CVector3 vecSum(0.0, 0.0, 0.0);
-		CVector3 vecZero = vecSum;
-		int shared=0;
-		
-		for (i = 0; i < pObject->m_iNumVertices; i++)			
-		{
-			for (j = 0; j < pObject->m_iNumFaces; j++)	
-			{												
-				if (pObject->m_pFaces[j].m_iVertIndex[0] == i || 
-					pObject->m_pFaces[j].m_iVertIndex[1] == i || 
-					pObject->m_pFaces[j].m_iVertIndex[2] == i)
-				{
-					vecSum = vecSum + pTempNormals[j];			
-					shared++;								
-				}
-			}      
-	
-			pObject->m_pNormals[i] = vecSum / float(-shared);
-	
-			pObject->m_pNormals[i].unitize();	
-			
-			vecSum = vecZero;									 
-			shared = 0;										
-		}
-		
-		delete [] pTempNormals;
-	}
-}
 
 

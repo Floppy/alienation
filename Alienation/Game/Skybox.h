@@ -9,14 +9,12 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "IO/3dsLoader.h"
-#include <GL/gl.h>			// Header File For The OpenGL32 Library
-#include <GL/glu.h>			// Header File For The GLu32 Library
+#include "3D/Model.h"
 
 class CSkybox  
 {
 public:
-	C3dsLoader model;
+	CModel model;
 	unsigned int texture[6];
 	unsigned int list;
 	

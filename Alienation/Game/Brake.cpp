@@ -4,6 +4,7 @@
 
 #include "Game/Brake.h"
 #include <stdlib.h>
+#include "3D/TextureManager.h"
 
 #ifdef WIN32
   #include <windows.h>
@@ -15,7 +16,8 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CBrake::CBrake(int iNumParticles, CVector3 vecOrigin)
+CBrake::CBrake(int iNumParticles, CVector3 vecOrigin) :
+   m_uiTexture(0)
 {
 	m_iNumParticles = iNumParticles;               // Set number of particles
 	m_vecOrigin = vecOrigin;                           // Set origin of particles
@@ -27,19 +29,13 @@ CBrake::CBrake(int iNumParticles, CVector3 vecOrigin)
 
 CBrake::~CBrake()
 {
-	delete [] m_poParticles;
+   delete [] m_poParticles;
+   g_oTextureManager.removeReference(m_uiTexture);
 }
 
 void CBrake::init()
 {
-	m_poTexture = new CTexture(1);
-
-	char **astrFiles = new char*[1];
-
-	astrFiles[0] = new char(16);
-	strcpy(astrFiles[0], "smoke.png");
-
-	m_poTexture->load(astrFiles, 1);
+   m_uiTexture = g_oTextureManager.load("smoke.png");
 }
 
 void CBrake::update(float fDT)
@@ -141,7 +137,7 @@ void CBrake::render()
 	vecBillboard2 = vecRight - vecUp;
 
 	//Texture and blending stuff
-	m_poTexture->setActive(0);
+	g_oTextureManager.activate(m_uiTexture);
 	glEnable(GL_BLEND);
 	glDepthMask(GL_FALSE);
 

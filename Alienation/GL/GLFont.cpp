@@ -3,33 +3,26 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "GL/GLFont.h"
-
+#include "3D/TextureManager.h"
 #include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CGLFont::CGLFont()
+CGLFont::CGLFont() :
+   m_uiTexture(0)
 {
-	//Create new texture
-	m_poTexture = new CTexture(1);	
 }
 
 CGLFont::~CGLFont()
 {
-	delete [] m_poTexture;
+   g_oTextureManager.removeReference(m_uiTexture);
 }
 
 void CGLFont::load()
 {
-	//Create list of textures to load (1 in this case)
-	char **astrFiles = new char*[1];
-
-	astrFiles[0] = new char(16);
-	strcpy(astrFiles[0], "text.png");
-
-	m_poTexture->load(astrFiles, 1);
+   m_uiTexture = g_oTextureManager.load("text.png");
 }
 
 //pos is obviously the position in world co-ordinates, size is in same co-ords
@@ -48,7 +41,7 @@ void CGLFont::print(char *str, CVector3 vecPos, float fSize)
 	glPushMatrix();
 	glLoadIdentity();
 	//Texture and blending stuff
-	m_poTexture->setActive(0);
+	g_oTextureManager.activate(m_uiTexture);
 
 	//manually sets the material properties. Hard coded, shouldnt be really
 	glPushAttrib(GL_COLOR_MATERIAL);
@@ -133,7 +126,7 @@ void CGLFont::print(char *str, CVector2 vecPos, float fSize)
 	vecTempPos = vecPos;
 	iLen = strlen(str);
 	//Texture and blending stuff
-	m_poTexture->setActive(0);
+	g_oTextureManager.activate(m_uiTexture);
 
 	//manually sets the material properties. Hard coded, shouldnt be really
 	glPushAttrib(GL_COLOR_MATERIAL);

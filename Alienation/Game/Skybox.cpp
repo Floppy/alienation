@@ -1,6 +1,8 @@
 #include "Game/Skybox.h"
 #include <stdio.h>
 #include <SDL_image.h>
+#include <GL/gl.h>			// Header File For The OpenGL32 Library
+#include <GL/glu.h>			// Header File For The GLu32 Library
 
 CSkybox::CSkybox()
 {

@@ -31,7 +31,7 @@ public:
 	void createParticle(int i, CVector3 vecHead, CVector3 vecPos);
 	void reset();
 private:
-	CTexture *m_poTexture;
+	unsigned int m_uiTexture;
 };
 
 #endif // !defined(AFX_BRAKE_H__56947D38_1F83_4127_AD3D_D52EA855FBEB__INCLUDED_)

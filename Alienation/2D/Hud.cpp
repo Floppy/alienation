@@ -6,6 +6,10 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <SDL.h>
+#include "3D/TextureManager.h"
+
+#include <iostream>
+using namespace std;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -14,12 +18,17 @@
 CHud::CHud() :
    m_iLastTime(SDL_GetTicks())
 {
-
+   for (int i=0; i<7; i++) {
+      m_auiTextures[i] = 0;
+   }
+   init();
 }
 
 CHud::~CHud()
 {
-
+   for (int i=0; i<7; i++) {
+      g_oTextureManager.removeReference(m_auiTextures[i]);
+   }
 }
 
 
@@ -125,11 +134,11 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 	avecTex[2] = CVector2( 1.0f, 0.0f);
 	avecTex[3] = CVector2( 0.0f, 0.0f);
 
-	m_poTexture->setActive(6);
+	g_oTextureManager.activate(m_auiTextures[6]);
 	draw2DQuad(.0f, 500.0f, 400.0f, 500.0f, avecTex);
 
 
-	m_poTexture->setActive(2);
+	g_oTextureManager.activate(m_auiTextures[2]);
 	draw2DQuad(540.0f, 480.0f, 150.0f, 200.0f, avecTex);
 	
 												//////////////////////////////////////////////
@@ -137,21 +146,21 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 												//////////////////////////////////////////////
 
 
-	m_poTexture->setActive(3);
+	g_oTextureManager.activate(m_auiTextures[3]);
 	draw2DQuad(340.0f, 480.0f, 150.0f, 200.0f, avecTex);
 
 												//////////////////////////////////////////////
 												//Front Shield                              //
 												//////////////////////////////////////////////
 
-	m_poTexture->setActive(1);
+	g_oTextureManager.activate(m_auiTextures[1]);
 	draw2DQuad(415.0f, 560.0f, 200.0f, 150.0f, avecTex);
 
 												//////////////////////////////////////////////
 												//Back Shield                               //
 												//////////////////////////////////////////////
 
-	m_poTexture->setActive(0);
+	g_oTextureManager.activate(m_auiTextures[0]);
 	draw2DQuad(415.0f, 350.0f, 200.0f, 150.0f, avecTex);
 
 												//////////////////////////////////////////////
@@ -163,7 +172,7 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 	avecTex[2] = CVector2( fWidthSpeed - 0.001f, 0.0f);
 	avecTex[3] = CVector2( 0.0f, 0.0f);
 	
-	m_poTexture->setActive(4);
+	g_oTextureManager.activate(m_auiTextures[4]);
 	draw2DQuad(415.0f, 420.0f, 200.0f * fWidthSpeed, 200.0f, avecTex);
 
 												//////////////////////////////////////////////
@@ -175,7 +184,7 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 	avecTex[2] = CVector2( fWidthThrust - 0.001f, 0.0f);
 	avecTex[3] = CVector2( 0.0f, 0.0f);
 
-	m_poTexture->setActive(5);
+	g_oTextureManager.activate(m_auiTextures[5]);
 	draw2DQuad(415.0f, 550.0f, 200.0f * fWidthThrust, 200.0f, avecTex);
 
 	glPopAttrib();
@@ -215,35 +224,16 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 //**************************************************************************************
 void CHud::init()
 {
-	m_poTexture = new CTexture(7);
 	m_poFont = new CGLFont;
-
-	char **astrFiles = new char*[7];
-	
-	astrFiles[0] = new char[25];
-	strcpy(astrFiles[0], "Hud/hud_fore.png");
-
-	astrFiles[1] = new char[25];
-	strcpy(astrFiles[1], "Hud/hud_aft.png");
-
-	astrFiles[2] = new char[25];
-	strcpy(astrFiles[2], "Hud/hud_right.png");
-
-	astrFiles[3] = new char[25];
-	strcpy(astrFiles[3], "Hud/hud_left.png");
-
-	astrFiles[4] = new char[25];
-	strcpy(astrFiles[4], "Hud/hud_speed.png");
-
-	astrFiles[5] = new char[25];
-	strcpy(astrFiles[5], "Hud/hud_thrust.png");
-
-	astrFiles[6] = new char[25];
-	strcpy(astrFiles[6], "Hud/hud_target.png");
-
-	m_poTexture->load(astrFiles, 7);
 	m_poFont->load();
 
+        m_auiTextures[0] = g_oTextureManager.load("Hud/hud_fore.png");
+        m_auiTextures[1] = g_oTextureManager.load("Hud/hud_aft.png");
+        m_auiTextures[2] = g_oTextureManager.load("Hud/hud_right.png");
+        m_auiTextures[3] = g_oTextureManager.load("Hud/hud_left.png");
+        m_auiTextures[4] = g_oTextureManager.load("Hud/hud_speed.png");
+        m_auiTextures[5] = g_oTextureManager.load("Hud/hud_thrust.png");
+        m_auiTextures[6] = g_oTextureManager.load("Hud/hud_target.png");
 }
 
 
@@ -363,7 +353,7 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 												// Calculate the final pitch in degrees     //
 												//////////////////////////////////////////////
 
-	float fPitch = acos(fAPitch) * todegrees;
+	float fPitch = RAD_TO_DEG(acos(fAPitch));
 
 												//////////////////////////////////////////////
 												// Next, check the new target vector against//
@@ -389,7 +379,7 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 	CQuat quaPitch;
 	CMatrix matP;
 
-	quaPitch.eulerToQuat(0.0f, 0.0f, fPitch * piover180);
+	quaPitch.eulerToQuat(0.0f, 0.0f, DEG_TO_RAD(fPitch));
 	matP.QuatToMatrix(quaPitch);
 	vecTemp = matP.MultMatrixVector(vecTemp);
 
@@ -407,7 +397,7 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 
 	float fAYaw = vecThisHead.dot(vecTarget);
 
-	float fYaw = acos(fAYaw) * todegrees;
+	float fYaw = RAD_TO_DEG(acos(fAYaw));
 
 	float fYAngle = vecThisRight.dot(vecTarget);
 	if (fYAngle <= 0.0f)
@@ -427,7 +417,7 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 	CMatrix matY, matM;
 	char strFont[20];
 
-	quaYaw.eulerToQuat(fYaw * piover180, 0.0f, 0.0f);
+	quaYaw.eulerToQuat(DEG_TO_RAD(fYaw), 0.0f, 0.0f);
 	matY.QuatToMatrix(quaYaw);
 	matM = matP * matY;
 
@@ -475,7 +465,7 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 
 	glScalef(0.02f, 0.02f, 0.02f);
 
-	poTarget->m_oModel.render3ds();
+	poTarget->m_oModel.render();
 
 
 	glLoadIdentity();

@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Game/Ship.h"
-
+#include "IO/3ds.h"
 #include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////
@@ -12,35 +12,35 @@
 
 CShip::CShip(int num, float mass) : CSimulation(num, mass)
 {
-	//initialise data
-	m_poShips = new CShipData[1];
-	m_ppMasses[0]->m_vecPos = CVector3(-5.0f, -0.0f, -20.0f);
-	m_poShips[0].m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
-    m_poShips[0].m_oSphere.m_fRadius = 13.0f;
-	m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
-	m_poShips[0].m_avecTrailPoints[0] = CVector3(0.0f, 0.0f, 7.0f);
-	m_poShips[0].m_vecHeading = CVector3(0.0f, -2.0f, -11.0f);
-	m_poShips[0].m_fThrust = 0.0f;
-	m_poShips[0].m_fPitch = 0.0f;
-	m_poShips[0].m_fYaw = 0.0f;
-	m_poShips[0].m_fRoll = 0.0f;
-	m_poShips[0].m_fVel = 0.0f;
-	m_poShips[0].m_fPitchRate = 0.0f;
-	m_poShips[0].m_fYawRate = 0.0f;
-	m_poShips[0].m_fRollRate = 0.0f;	
-	m_poShips[0].m_fMaxPitchRate = 40.0f;
-	m_poShips[0].m_fMaxYawRate = 25.0f;
-	m_poShips[0].m_fMaxRollRate = 45.0f;	
-	m_poShips[0].m_quaOrientation.reset();
-	m_poShips[0].m_quaCamOrientation.reset();
-	m_poShips[0].m_fDrag = 0.025f;
-	m_poShips[0].m_iFlightMode = 1;
-
-	m_poShips[0].m_poTrail = new CTrail(1000, CVector3(0.0f, -0.5f, 7.2f));
-	m_poShips[0].m_poWeapon = new CWeapon(100, CVector3(0.0f, -0.3f, -3.3f)); 
-	m_poShips[0].m_poBrake = new CBrake(100, CVector3(0.0f, 0.0f, 0.0f));
-
-	m_poShips[0].m_matRotation.LoadIdentity();
+   //initialise data
+   m_poShips = new CShipData[1];
+   m_ppMasses[0]->m_vecPos = CVector3(-5.0f, -0.0f, -20.0f);
+   m_poShips[0].m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
+   m_poShips[0].m_oSphere.m_fRadius = 13.0f;
+   m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
+   m_poShips[0].m_avecTrailPoints[0] = CVector3(0.0f, 0.0f, 7.0f);
+   m_poShips[0].m_vecHeading = CVector3(0.0f, -2.0f, -11.0f);
+   m_poShips[0].m_fThrust = 0.0f;
+   m_poShips[0].m_fPitch = 0.0f;
+   m_poShips[0].m_fYaw = 0.0f;
+   m_poShips[0].m_fRoll = 0.0f;
+   m_poShips[0].m_fVel = 0.0f;
+   m_poShips[0].m_fPitchRate = 0.0f;
+   m_poShips[0].m_fYawRate = 0.0f;
+   m_poShips[0].m_fRollRate = 0.0f;	
+   m_poShips[0].m_fMaxPitchRate = 40.0f;
+   m_poShips[0].m_fMaxYawRate = 25.0f;
+   m_poShips[0].m_fMaxRollRate = 45.0f;	
+   m_poShips[0].m_quaOrientation.reset();
+   m_poShips[0].m_quaCamOrientation.reset();
+   m_poShips[0].m_fDrag = 0.025f;
+   m_poShips[0].m_iFlightMode = 1;
+   
+   m_poShips[0].m_poTrail = new CTrail(1000, CVector3(0.0f, -0.5f, 7.2f));
+   m_poShips[0].m_poWeapon = new CWeapon(100, CVector3(0.0f, -0.3f, -3.3f)); 
+   m_poShips[0].m_poBrake = new CBrake(100, CVector3(0.0f, 0.0f, 0.0f));
+   
+   m_poShips[0].m_matRotation.LoadIdentity();
 }
 
 CShip::~CShip()
@@ -51,13 +51,16 @@ CShip::~CShip()
 //load model, trail texture and brake texture
 void CShip::loadShip()
 {
-	m_poShips[0].m_poTargetData = new CShipData;
-	m_poShips[0].m_poTargetMass = new CMass*[1];
-	m_poShips[0].m_poTargetMass[0] = new CMass;
-	m_poShips[0].m_oModel.init3ds("Data/Model/shuttle.3ds");
-	m_poShips[0].m_poTrail->init();
-	m_poShips[0].m_poBrake->init();
-	m_poShips[0].m_poWeapon->init();
+   CLoad3DS oLoad3ds;
+   m_poShips[0].m_poTargetData = new CShipData;
+   m_poShips[0].m_poTargetMass = new CMass*[1];
+   m_poShips[0].m_poTargetMass[0] = new CMass;
+   if (oLoad3ds.import3DS(&(m_poShips[0].m_oModel), "Data/Model/shuttle.3ds")) {
+      m_poShips[0].m_oModel.init();
+   }
+   m_poShips[0].m_poTrail->init();
+   m_poShips[0].m_poBrake->init();
+   m_poShips[0].m_poWeapon->init();
 }
 
 //what it says on the tin
@@ -69,7 +72,7 @@ void CShip::draw()
 	  glPushMatrix();					//Save copy of lookat rotation
 	  glTranslatef(m_ppMasses[0]->m_vecPos.m_fx, m_ppMasses[0]->m_vecPos.m_fy, m_ppMasses[0]->m_vecPos.m_fz); //move to ship position
 	  glMultMatrixf(m_poShips[0].m_matRotation.m_afElement); //multiply by the ships rotation matrix
-	  m_poShips[0].m_oModel.render3ds(); //draw the ship
+	  m_poShips[0].m_oModel.render(); //draw the ship
 
 	  glPopMatrix(); // Make the gluLookat matrix again active
    }
@@ -198,7 +201,7 @@ void CShip::rotate(int iShip, float fDT)
 	}
 
 
-	quaTemp.eulerToQuat(fYaw * piover180, fRoll * piover180, fPitch * piover180);
+	quaTemp.eulerToQuat(DEG_TO_RAD(fYaw), DEG_TO_RAD(fRoll), DEG_TO_RAD(fPitch));
 	quaTemp.multQuat(m_poShips[iShip].m_quaOrientation);
 	m_poShips[iShip].m_quaOrientation.copyQuat(quaTemp);
 	m_poShips[iShip].m_matRotation.QuatToMatrix(m_poShips[0].m_quaOrientation);

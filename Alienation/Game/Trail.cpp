@@ -3,8 +3,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Game/Trail.h"
+#include "3D/TextureManager.h"
 #include <stdlib.h>
-
 #include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////
@@ -24,7 +24,10 @@ CTrail::CTrail(int iNumParticles, CVector3 vecOrigin)
 
 CTrail::~CTrail()
 {
-	delete [] m_poParticles;
+   delete [] m_poParticles;
+   for (int i=0; i<2; i++) {
+      g_oTextureManager.removeReference(m_auiTextures[i]);
+   }
 }
 
 void CTrail::update(float timepassed)
@@ -114,23 +117,23 @@ void CTrail::render(float fThrust, CVector3 vecOrigin)
    // Draw exhaust flare
    if (m_oFrustum.PointInFrustum(vecOrigin.m_fx, vecOrigin.m_fy, vecOrigin.m_fz))
    {
-	  // Bind Texture
-      m_poTexture->setActive(1);
-	  // Get material
-	  afMaterial[0] = 1.0f;
-	  afMaterial[1] = 1.0f;
-	  afMaterial[2] = 1.0f;
-	  afMaterial[3] = 0.05f;
-	  // Calculate engine flare size
-	  float fSize = fThrust * 0.0005f;
-	  if (fSize > 2.5f) fSize = 2.5f;
-	  // Render
-	  renderBillboard(vecOrigin,fSize,afMaterial);
+      // Bind Texture
+      g_oTextureManager.activate(m_auiTextures[1]);
+      // Get material
+      afMaterial[0] = 1.0f;
+      afMaterial[1] = 1.0f;
+      afMaterial[2] = 1.0f;
+      afMaterial[3] = 0.05f;
+      // Calculate engine flare size
+      float fSize = fThrust * 0.0005f;
+      if (fSize > 2.5f) fSize = 2.5f;
+      // Render
+      renderBillboard(vecOrigin,fSize,afMaterial);
    }
    // Draw trail
 
    // Bind Texture
-   m_poTexture->setActive(0);      
+   g_oTextureManager.activate(m_auiTextures[0]);
    // Draw each particle
    for (int iCount = 0 ; iCount < m_iParticlesCreated ; iCount++)
    {
@@ -290,14 +293,6 @@ void CTrail::createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vec
 
 void CTrail::init()
 {
-	m_poTexture = new CTexture(2);
-
-	char **astrFiles = new char*[2];
-
-	astrFiles[0] = new char(16);
-	strcpy(astrFiles[0], "star.png");
-	astrFiles[1] = new char(16);
-	strcpy(astrFiles[1], "flare.png");
-
-	m_poTexture->load(astrFiles, 2);
+   m_auiTextures[0] = g_oTextureManager.load("star.png");
+   m_auiTextures[1] = g_oTextureManager.load("flare.png");
 }

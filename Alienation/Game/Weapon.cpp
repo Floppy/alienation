@@ -4,7 +4,7 @@
 
 #include "Game/Weapon.h"
 #include "Physics/Physics1.h"
-
+#include "3D/TextureManager.h"
 #include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////
@@ -20,7 +20,6 @@ CWeapon::CWeapon(int iNumParticles, CVector3 vecOrigin)
 	m_iParticlesCreated = 0;
 	m_fFireRate = 0.5f;
 	m_fTimeSinceLast = 0.5f;
-	m_poTex = new CTexture(1);
 	int i;
 	for (i = 0; i < 100 ; i++)
 		m_abEmpty[i] = true;
@@ -28,7 +27,7 @@ CWeapon::CWeapon(int iNumParticles, CVector3 vecOrigin)
 
 CWeapon::~CWeapon()
 {
-
+   g_oTextureManager.removeReference(m_uiTexture);
 }
 
 void CWeapon::reset(void)
@@ -167,7 +166,7 @@ void CWeapon::render(void)
 	float afMaterial[4];
 
 	//Texture and blending stuff
-	m_poTex->setActive(0);
+	g_oTextureManager.activate(m_uiTexture);
 	glEnable(GL_BLEND);
 	glDepthMask(GL_FALSE);
 	glPushAttrib(GL_COLOR_MATERIAL);
@@ -197,12 +196,7 @@ void CWeapon::render(void)
 
 void CWeapon::init()
 {
-	char **astrFiles = new char*[1];
-
-	astrFiles[0] = new char(16);
-	strcpy(astrFiles[0], "ball.png");
-
-	m_poTex->load(astrFiles, 1);
+   m_uiTexture = g_oTextureManager.load("ball.png");
 }
 
 void CWeapon::renderBillboard(CVector3 oPos, float fSize, float* pfMaterial)

@@ -30,7 +30,7 @@ public:
 	void render(void);                      // Render particles to the screen
 	void createParticle(int i, CVector3 vecHead, CVector3 vecPos, float fSpeed);
 	void init();
-	CTexture *m_poTex;
+        unsigned int m_uiTexture;
 	float m_fFireRate;
 	float m_fTimeSinceLast;
 	bool m_abEmpty[100];

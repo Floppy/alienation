@@ -26,7 +26,7 @@ public:
 	void load();
 	CGLFont();
 	virtual ~CGLFont();
-	CTexture *m_poTexture;
+        unsigned int m_uiTexture;
 };
 
 #endif // !defined(AFX_GLFONT_H__1F582CF0_7FA7_4B78_9D84_724C2654D02F__INCLUDED_)
