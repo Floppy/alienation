@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 	int iDepth, iDouble, iStereo, iBPP;
 	CRGBAColour colDepth(0,0,0,0);
 	CVector2 vecSize(0,0);
-	bool bFullScreen;
+	bool bFullScreen, bEnableSound;
 	{
 		NSDIO::CLua config("config.lua");
 		if (!config.setGlobalTable("video")) {
@@ -43,11 +43,18 @@ int main(int argc, char* argv[])
 		}
 		vecSize = config.getVector2("resolution");
 		iBPP = static_cast<int>(config.getNumber("bpp"));
-		bFullScreen = static_cast<int>(config.getNumber("fullscreen"));
+		bFullScreen = static_cast<bool>(config.getNumber("fullscreen"));
 		colDepth = config.getColour("colours");
 		iDepth = static_cast<int>(config.getNumber("depthbuffer"));
 		iDouble = static_cast<int>(config.getNumber("doublebuffer"));
 		iStereo = static_cast<int>(config.getNumber("stereo"));
+
+		if (!config.setGlobalTable("sound")) {
+			cerr << "Couldn't load config file!" << endl;
+			return 1;
+		}
+                bEnableSound = static_cast<bool>(config.getNumber("enable"));
+
 	}
 	
 
@@ -70,6 +77,10 @@ int main(int argc, char* argv[])
       cerr << "Failed to set video mode: " << SDL_GetError() << endl;
       return 1;
    }
+
+   // Disable sound if apt
+   if (!bEnableSound)
+      g_oSoundManager.disable();
 
    // Play sound
    if (!g_oSoundManager.playMusicFile("background.ogg"))

@@ -30,6 +30,11 @@ namespace NSDSound {
        */
       ~CSoundManager();
     
+      /** 
+       * Disable sound output
+       */
+      void disable() {m_bReady = false;}
+
       /**
        * Is the sound system ready to go?
        * @return true if the sound subsystem has been initialised OK.
