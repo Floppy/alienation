@@ -42,7 +42,7 @@ namespace NSDMath {
          m_aiPermutation[i+256] = m_aiPermutation[i]; 
    }
 
-   float CPerlin::noise(const CVector3& vecPosition) {
+   double CPerlin::noise(const CVector3& vecPosition) {
    
       int X = static_cast<int>(floor(vecPosition.X())) & 255;
       int Y = static_cast<int>(floor(vecPosition.Y())) & 255;
@@ -73,11 +73,11 @@ namespace NSDMath {
                                      gradient(m_aiPermutation[BB+1], x-1, y-1, z-1 ))));
    }
 
-   float CPerlin::noise(const CVector2& vecPosition) {
+   double CPerlin::noise(const CVector2& vecPosition) {
       return noise(CVector3(vecPosition.X(),vecPosition.Y(),0.5));
    }
 
-   float CPerlin::noise(float fPosition) {
+   double CPerlin::noise(float fPosition) {
       return noise(CVector3(fPosition,0.5,0.5));
    }
 

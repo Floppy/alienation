@@ -33,19 +33,19 @@ namespace NSDMath {
        * Calculate 3D noise.
        * @param vecPosition 3D position of noise sample.
        */
-      float noise(const CVector3& vecPosition);
+      double noise(const CVector3& vecPosition);
 
       /**
        * Calculate 2D noise.
        * @param vecPosition 2D position of noise sample.
        */
-      float noise(const CVector2& vecPosition);
+      double noise(const CVector2& vecPosition);
 
       /**
        * Calculate 1D noise.
        * @param fPosition 1D position of noise sample.
        */
-      float noise(float fPosition);
+      double noise(float fPosition);
 
    protected:
 
@@ -58,7 +58,7 @@ namespace NSDMath {
       /**
        * Calculate the lattice gradient for a 3d point inside the cell.
        */
-      float gradient(int hash, float fX, float fY, float fZ)
+      double gradient(int hash, double fX, double fY, double fZ)
       { 
          int h = hash & 0xF;
          double u = h<8||h==12||h==13 ? fX : fY;
@@ -70,14 +70,14 @@ namespace NSDMath {
        * Spline function.
        * s(t) = 6t^5 - 15t^4 + 10t^3
        */
-      float spline(float fT)
+      double spline(double fT)
       { return fT * fT * fT * ( fT * (fT * 6 - 15) + 10 ); }
 
       /**
        * Linear interpolation function.
        * l(t,a,b) = (1-t)*a + t*b
        */
-      float lerp(float fT, float fA, float fB)
+      double lerp(double fT, double fA, double fB)
       { return fA + fT * (fB - fA); }
 
       /**
