@@ -32,14 +32,14 @@ public:
 	void update(float fDT, float fThrust, CVector3 vecPos, 
 		         CVector3 vecStart, CVector3 vecDistance, CVector3 vecUp, CVector3 vecRight,
 					float fWidth, float fHeight);
-	void update(float fDT);                        // Updates particle system
 	void render(void);                                    // Render particles to the screen
-	void render(float fThrust, CVector3 vecOrigin);                                    // Render particles to the screen
 	void createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vecOrigin, CVector3 vecUp, CVector3 vecRight,
 					CVector3 vecPos, float fWidth, float fHeight);
 private:
 
-        /**
+	void update(float fDT) {}                        // Updates particle system
+
+		/**
          * Engine flare geometry
          */
         CSprite m_oFlare;
@@ -48,6 +48,8 @@ private:
          * Trail particle geometry
          */
         CSprite m_oTrail;
+
+	float m_fThrust;
 
 	CFrustum m_oFrustum;
 	unsigned int m_auiTextures[2];

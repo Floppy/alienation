@@ -32,11 +32,6 @@ CTrail::~CTrail()
    }
 }
 
-void CTrail::update(float timepassed)
-{
-
-}
-
 // Updates the particles. 
 // timepassed = time passed since last update in seconds
 // thrust = the ships thrust
@@ -47,6 +42,9 @@ void CTrail::update(float fDT, float fThrust, CVector3 vecPos, CVector3 vecStart
 {
 	CVector3 vecSpeed, vecTemp;
 
+	m_vecOrigin = vecStart;
+	m_fThrust = fThrust;
+
 	//Create a heading for any new particles created this update
 	//The start vector is the position of the of the origin of the 
 	//particles on the ship itself. It is rotated along with the ships
@@ -56,7 +54,7 @@ void CTrail::update(float fDT, float fThrust, CVector3 vecPos, CVector3 vecStart
 	//goes up to 5000!
 	CVector3 vecTHead = vecStart - vecPos;
 	vecTHead *= fThrust/2000.0f;
-	vecTHead += vecPos;
+	vecTHead += vecStart;
 
 	//if no thrust then reset the array and exit
 	if (fThrust == 0.0f)
@@ -98,27 +96,21 @@ void CTrail::update(float fDT, float fThrust, CVector3 vecPos, CVector3 vecStart
 	}
 }
 
-void CTrail::render(void)
-{
-
-}
-
-void CTrail::render(float fThrust, CVector3 vecOrigin)
-{
+void CTrail::render(void) {
    // Enable alpha blend
    glEnable(GL_BLEND);
    glDepthMask(GL_FALSE);
 
    // Calculate engine flare size
-   float fSize = fThrust * 0.0005f;
+   float fSize = m_fThrust * 0.0005f;
    if (fSize > 3.0f) fSize = 3.0f;
    //m_oTrail.setSize(fSize);
 
    // Draw engine flare
-   if (m_oFrustum.PointInFrustum(vecOrigin)) {
+   if (m_oFrustum.PointInFrustum(m_vecOrigin)) {
       m_oFlare.setSize(fSize);
       // Set location
-      m_oFlare.setTranslation(vecOrigin);
+      m_oFlare.setTranslation(m_vecOrigin);
       // Draw exhaust flare
       m_oFlare.render();
    }
