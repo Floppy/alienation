@@ -48,6 +48,7 @@ int main(int argc, char* argv[])
 
 	int iFlags = SDL_OPENGL;// | SDL_FULLSCREEN;
 
+
 	// Play sound
         if (!g_oSoundManager.playMusicFile("background.ogg"))
            cerr << "Failed to open background.ogg" << endl;
@@ -57,6 +58,13 @@ int main(int argc, char* argv[])
 		cerr << "Failed to set video mode" << endl;
 		return 1;
 	}
+
+        // Set window title
+        #ifndef VERSION
+        SDL_WM_SetCaption("Alienation v" VERSION, "Alienation");
+        #else
+        SDL_WM_SetCaption("Alienation", "Alienation");
+        #endif
 
 	SDL_JoystickEventState(SDL_ENABLE);
 
