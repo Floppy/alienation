@@ -16,7 +16,7 @@
  *      Visit My Site At nehe.gamedev.net
  */
 
-#include "opengl.h"
+#include "GL/OpenGL.h"
 #include <fmod.h>
 #include <SDL.h>
 

@@ -11,4 +11,4 @@ SDL_CFLAGS="`sdl-config --cflags`"
 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS -lGL -lGLU -lSDL_image -lfmod-3.62"
 
-AC_OUTPUT(Makefile Math/Makefile IO/Makefile 3D/Makefile Physics/Makefile)
+AC_OUTPUT(Makefile Math/Makefile IO/Makefile 3D/Makefile Physics/Makefile GL/Makefile)
