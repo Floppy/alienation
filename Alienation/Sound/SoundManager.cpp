@@ -76,7 +76,7 @@ namespace NSDSound {
       int id(-1);
       // Create filename
       char strFile[256];
-      strcpy(strFile, "./Data/Audio/");
+      strcpy(strFile, "Data/Audio/");
       strcat(strFile, strFilename);   
       // Load from file
       Mix_Chunk* pSample = Mix_LoadWAV(strFile);
