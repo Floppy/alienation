@@ -1,9 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = Math 3D IO GL Physics Game AI 
+SUBDIRS = Math Physics 3D IO Game AI GL 
 
 bin_PROGRAMS = Alienation
 
 Alienation_SOURCES = config.h Alienation.cpp
 
-LDADD = Math/libAlienationMath.a 3D/libAlienation3D.a IO/libAlienationIO.a GL/libAlienationGL.a Physics/libAlienationPhysics.a AI/libAlienationAI.a Game/libAlienationGame.a
+Alienation_LDADD = GL/libAlienationGL.a AI/libAlienationAI.a Game/libAlienationGame.a IO/libAlienationIO.a 3D/libAlienation3D.a Physics/libAlienationPhysics.a Math/libAlienationMath.a
