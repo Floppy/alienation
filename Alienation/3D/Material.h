@@ -130,6 +130,11 @@ class CMaterial
    CRGBAColour m_oEmissive;
 
    /**
+    * Colour that this object reflects.
+    */ 
+   CRGBAColour m_oSpecular;
+
+   /**
     * Texture ID.
     */ 
    unsigned int m_uiTexture;
