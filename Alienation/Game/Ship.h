@@ -73,7 +73,7 @@ public:
 	void loadShip();
 	void rotate(int ship, float dt);
 	void draw();
-	void drawTrail();
+	virtual void drawTrail();
 	void drawWeapons();
 	void rotHeading(CMatrix m);
 	virtual void solve();

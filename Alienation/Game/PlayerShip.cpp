@@ -4,6 +4,7 @@
 
 #include "Game/PlayerShip.h"
 #include "IO/3ds.h"
+#include "Sound/SoundManager.h"
 
 #include <GL/gl.h>
 
@@ -17,7 +18,8 @@
 CPlayerShip::CPlayerShip() : 
    CShip(1, 5000.0f),
    m_bInsideView(true),
-   m_oLight(GL_LIGHT1)
+   m_oLight(GL_LIGHT1),
+   m_iThrustChannel(0)
 {
 	m_ppMasses[0]->m_vecPos = CVector3(0.0f, 0.0f, 0.0f);
 	m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
@@ -35,6 +37,11 @@ CPlayerShip::CPlayerShip() :
         CRGBAColour oDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
         CVector3 oPosition(0.0f, 0.0f, 0.0f);
 	m_oLight.init(oAmbient, oDiffuse, oPosition);
+
+        // Load thruster sound
+        int iSample = g_oSoundManager.load("thrust.wav");
+        m_iThrustChannel = g_oSoundManager.play(iSample,-1);
+        g_oSoundManager.setVolume(0,m_iThrustChannel);
 
 }
 
@@ -157,4 +164,12 @@ void CPlayerShip::drawHud()
 {
 	m_poHud->drawHoloTarget(m_poShips[0].m_poTargetData, m_poShips[0].m_poTargetMass, this);
 	m_poHud->draw(m_poShips[0].m_fVel, 300.0f, m_poShips[0].m_fThrust, 9578.0f);
+}
+
+void CPlayerShip::drawTrail() 
+{
+   // Set channel volume
+   g_oSoundManager.setVolume(m_poShips[0].m_fThrust/10000.0f,m_iThrustChannel);
+   // Call base class
+   CShip::drawTrail();
 }

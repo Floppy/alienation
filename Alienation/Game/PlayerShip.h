@@ -29,11 +29,19 @@ public:
 	void draw();
 	void rotateCam(float fDT);
 
+        /**
+         * Draw Trail.
+         * Overridden to add sound control.
+         */ 
+	void drawTrail();
+
+
 	CModel m_oCockpitModel;
 	bool  m_bInsideView;
 	bool  m_bLeftLook, m_bRightLook, m_bUpLook, m_bBackLook;
         CHud *m_poHud;
         CLight m_oLight;
+        int m_iThrustChannel;
 };
 
 #endif // !defined(AFX_PLAYERSHIP_H__037FA971_63AF_49C5_9C78_DCF151372718__INCLUDED_)
