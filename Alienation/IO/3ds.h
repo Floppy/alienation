@@ -57,6 +57,7 @@ private:
 	void processNextObjectChunk2(CMesh *pMesh, CChunk *);
 
 	void processNextMaterialChunk(CModel *pModel, CChunk *);
+	void processNextMaterialChunk2(CMaterial &pModel, CChunk *);
 
 	void readColorChunk(CMaterial *pMaterial, CChunk *pChunk);
 

@@ -257,7 +257,7 @@ void CLoad3DS::processNextMaterialChunk(CModel *pModel, CChunk *pPreviousChunk)
       switch (m_pCurrentChunk->m_uiID)
       {
       case _3DS_MATMAP: {
-         processNextMaterialChunk(oMaterial, m_pCurrentChunk);
+         processNextMaterialChunk2(newMaterial, m_pCurrentChunk);
       }	break;
 			
       default: {
@@ -307,7 +307,7 @@ void CLoad3DS::processNextMaterialChunk2(CMaterial& oMaterial, CChunk *pPrevious
 			
       case _3DS_MATDIFFUSE: {
          // Read colour into material
-         readColorChunk(&newMaterial, m_pCurrentChunk);
+         readColorChunk(&oMaterial, m_pCurrentChunk);
       }	break;
 			
       case _3DS_MATMAPFILE: {
@@ -318,8 +318,8 @@ void CLoad3DS::processNextMaterialChunk2(CMaterial& oMaterial, CChunk *pPrevious
                                                 m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
                                                 m_pFilePointer);         
          // Load texture and store ID
-         newMaterial.m_uiTexture = g_oTextureManager.load(strFilename);
-         fprintf(stderr," -- loaded texure %d from file %s\n",newMaterial.m_uiTexture,strFilename);
+         oMaterial.m_uiTexture = g_oTextureManager.load(strFilename);
+         fprintf(stderr," -- loaded texure %d from file %s\n",oMaterial.m_uiTexture,strFilename);
       }	break;
 			
       default: {
