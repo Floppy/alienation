@@ -105,6 +105,10 @@ SOURCE=.\Alienation.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Game\Asteroid.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\3D\BoundingSphere.cpp
 # End Source File
 # Begin Source File
@@ -118,6 +122,10 @@ SOURCE=.\3D\FMesh.cpp
 # Begin Source File
 
 SOURCE=.\3D\Frustum.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Game\GameObject.cpp
 # End Source File
 # Begin Source File
 
@@ -237,6 +245,10 @@ SOURCE=.\AI\AIShip.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Game\Asteroid.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\3D\BoundingSphere.h
 # End Source File
 # Begin Source File
@@ -254,6 +266,10 @@ SOURCE=.\3D\FMesh.h
 # Begin Source File
 
 SOURCE=.\3D\Frustum.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Game\GameObject.h
 # End Source File
 # Begin Source File
 
