@@ -8,6 +8,10 @@ EXE = Demo
 
 CPPFLAGS = -Wall
 
+INC =
+
+LIBS =
+
 OBJS = 3ds.o GLFont.o ParticleEngine.o skybox.o Weapon.o \
 	3dsLoader.o GUI.o PlayerShip.o Stars.o Widgit.o \
 	AIShip.o Light.o program.o Texture.o \
@@ -17,7 +21,7 @@ OBJS = 3ds.o GLFont.o ParticleEngine.o skybox.o Weapon.o \
 all: demo
 
 demo: $(OBJS)
-	$(CPP) -o $(EXE) $(OBJS)
+	$(CPP) -o $(EXE) $(LIBS) $(OBJS)
 
 .cpp.o:
-	$(CPP) -c $(CPPFLAGS) $<
+	$(CPP) -c $(INC) $(CPPFLAGS) $<
