@@ -92,7 +92,7 @@ namespace NSDIO {
    
    void CLoad3DS::cleanUp()
    {
-      fclose(m_pFilePointer);						 
+      if (m_pFilePointer) fclose(m_pFilePointer);						 
       delete m_pCurrentChunk;						
       delete m_pTempChunk;							
    }
