@@ -20,8 +20,9 @@ CSoundManager::CSoundManager() :
 
 CSoundManager::~CSoundManager()
 {
-   // Stop playing
-   Mix_HaltChannel(-1);
+   if (m_bReady)
+      // Stop playing
+      Mix_HaltChannel(-1);
    // Free music file
    if (m_pMusic) 
       Mix_FreeMusic(m_pMusic);
@@ -53,12 +54,17 @@ bool CSoundManager::playMusicFile(const char* strFilename)
 
 void CSoundManager::setVolume(float fVolume, int iChannel) 
 {
-   Mix_Volume(iChannel,static_cast<int>(MIX_MAX_VOLUME*fVolume));
+   if (m_bReady) {
+      Mix_Volume(iChannel,static_cast<int>(MIX_MAX_VOLUME*fVolume));
+   }
 }
 
 float CSoundManager::getVolume(int iChannel)
 {
-   return Mix_Volume(iChannel,-1);
+   if (m_bReady) {
+      return Mix_Volume(iChannel,-1);
+   }
+   else return 0;
 }
 
 int CSoundManager::load(const char* strFilename)
@@ -118,19 +124,22 @@ void CSoundManager::setPlaybackLocation(CVector3 vecPosition, CVector3 vecUp, CV
 
 bool CSoundManager::setChannelLocation(int iChannel, CVector3 vecPosition) 
 {
-   // Calculate direction vector
-   CVector3 vecDirection = m_vecPosition - vecPosition;
-   // Calculate distance
-   float fLength = vecDirection.length();
-   unsigned char cDistance = (fLength<500) ? (fLength/500) * 255 : 255;
-   // Normalise direction vector
-   vecDirection /= fLength;
-   // Calculate which side the sound is
-   int iAngle = (vecDirection.dot(m_vecRight) > 0) ? -1 : 1;
-   // Take cross product of sound vector and local up vector
-   vecDirection = m_vecUp.cross(vecDirection);
-   // Calculate angle between result and local right vector
-   iAngle *= RAD_TO_DEG(vecDirection.angle(m_vecRight));
-   // Set channel position
-   return Mix_SetPosition(iChannel,iAngle,cDistance);
+   if (m_bReady) {
+      // Calculate direction vector
+      CVector3 vecDirection = m_vecPosition - vecPosition;
+      // Calculate distance
+      float fLength = vecDirection.length();
+      unsigned char cDistance = (fLength<500) ? (fLength/500) * 255 : 255;
+      // Normalise direction vector
+      vecDirection /= fLength;
+      // Calculate which side the sound is
+      int iAngle = (vecDirection.dot(m_vecRight) > 0) ? -1 : 1;
+      // Take cross product of sound vector and local up vector
+      vecDirection = m_vecUp.cross(vecDirection);
+      // Calculate angle between result and local right vector
+      iAngle *= RAD_TO_DEG(vecDirection.angle(m_vecRight));
+      // Set channel position
+      return Mix_SetPosition(iChannel,iAngle,cDistance);
+   }
+   else return false;
 }
