@@ -25,11 +25,15 @@ CTexture::~CTexture()
 bool CTexture::load(char **astrFnames, int iNoOfFiles)
 {
 	bool bGood = false;
-	char strFile[200] = "Data/Texture/";
+	char strFile[200];
 
 	int iCount;
 	for ( iCount = 0 ; iCount < iNoOfFiles ; iCount++ )
 	{
+		//reinit filename
+		memset(strFile,0,200);
+		strcpy(strFile,"Data/Texture/");
+
 		// We will load into an SDL surface
 		SDL_Surface * poTextureImage = NULL;
 
