@@ -1,8 +1,5 @@
 #include "Math/Perlin.h"
 
-#include <iostream>
-using namespace std;
-
 #define PERLIN_SIZE 0x100
 
 namespace NSDMath {

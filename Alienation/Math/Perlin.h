@@ -5,9 +5,6 @@
 #include "Math/Random.h"
 #include "Math/Vector.h"
 
-#include <iostream>
-using namespace std;
-
 namespace NSDMath {
 
    /**
