@@ -67,7 +67,7 @@ bool COpenGL :: initGL() {
    glEnable(GL_LIGHTING);
    CRGBAColour oAmbient(0.25f, 0.25f, 0.25f, 1.0f);
    CRGBAColour oDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
-   CVector3 oPosition(0.0f, 0.0f, 0.0f);
+   CVector3 oPosition(0.0f, 0.0f, -100.0f);
    m_poLight = new CLight(GL_LIGHT0);
    m_poLight->init(oAmbient, oDiffuse, oPosition);
    m_poLight->enable();
