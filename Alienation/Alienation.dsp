@@ -93,7 +93,7 @@ SOURCE=.\IO\3ds.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\IO\3dsLoader.cpp
+SOURCE=.\3D\TextureManager.cpp
 # End Source File
 # Begin Source File
 
@@ -181,7 +181,11 @@ SOURCE=.\IO\3ds.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\IO\3dsLoader.h
+SOURCE=.\3D\3DObject.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\3D\TextureManager.h
 # End Source File
 # Begin Source File
 
