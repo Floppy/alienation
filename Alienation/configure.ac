@@ -42,6 +42,10 @@ AC_CHECK_LIB(SDL_image,IMG_Load,,exit)
 AC_CHECK_HEADER(SDL_mixer.h,,exit)
 AC_CHECK_LIB(SDL_mixer,Mix_OpenAudio,,exit)
 
+# Expat
+AC_CHECK_HEADER(expat.h,,exit)
+AC_CHECK_LIB(expat,XML_Parse,,exit)
+
 # Checks for headers
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h])
