@@ -14,19 +14,14 @@ class CAIShip : public CShip
 
 public:
 
-	CAIShip(int num, float mass);
+	CAIShip(int num, float mass, CVector3 position);
 	virtual ~CAIShip();
 	void load();
 	void simulate(float fDT);
 	void solve();
 
-	CVector3 m_vecTarget;
 	float m_fXAngle;
 	float m_fYAngle;
-	CVector3 m_vecTargetPos;
-	float m_fTargetSpeed;
-	CVector3 m_vecTargetDirection;
-
 
 
 };

@@ -9,25 +9,19 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CAIShip::CAIShip(int num, float mass) : 
+CAIShip::CAIShip(int num, float mass, CVector3 position) : 
    CShip(1, 2500.0f),
-   m_vecTarget(0.0f, 0.0f, 0.0f),
    m_fXAngle(0.0f),
-   m_fYAngle(0.0f),
-   m_vecTargetPos(0.0f, 0.0f, 0.0f),
-   m_fTargetSpeed(0),
-   m_vecTargetDirection(0.0f, 0.0f, 0.0f)
+   m_fYAngle(0.0f)
 {
-   m_ppMasses[0]->m_vecPos = CVector3(0.0f, -5.0f, -20.0f);
-
-   m_vecHeading = CVector3(0.0f, -5.0f, -21.0f);
-   m_vecUp = CVector3(0.0f, -4.0f, -20.0f);
-   m_vecRight = CVector3(1.0f, -5.0f, -20.0f);
+   m_ppMasses[0]->m_vecPos = position;
+   m_vecHeading = m_ppMasses[0]->m_vecPos + CVector3(0.0f, 0.0f, -1.0f);
+   m_vecUp = m_ppMasses[0]->m_vecPos + CVector3(0.0f, 1.0f, 0.0f);
+   m_vecRight = m_ppMasses[0]->m_vecPos + CVector3(1.0f, 0.0f, 0.0f);
    m_vecDirection = m_vecHeading;
    m_fMaxPitchRate = 80.0f;
    m_fMaxYawRate = 50.0f;
    m_fMaxRollRate = 90.0f;
-
    
    // Setup trails
    m_iNumTrails = 1;
@@ -61,7 +55,7 @@ void CAIShip::simulate(float fDT)
 	//Get normalised vector pointing to target
 
 	//vecTarget is the vector from the ai ship to the target, normalised
-	CVector3 vecTarget = m_vecTargetPos - m_ppMasses[0]->m_vecPos;
+	CVector3 vecTarget = m_poTarget->m_ppMasses[0]->m_vecPos - m_ppMasses[0]->m_vecPos;
 	vecTarget.normalise();
 
 
