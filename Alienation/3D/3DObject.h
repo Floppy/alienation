@@ -3,6 +3,7 @@
 
 #include "config.h"
 #include "Math/Vector.h"
+#include "Math/Matrix.h"
 #include "3D/BoundingSphere.h"
 
 using namespace NSDMath;
@@ -30,7 +31,15 @@ class C3DObject {
     */
    virtual ~C3DObject() {}
    
-   /**
+	void setRotation(CMatrix matRotation)
+	{
+		m_matRotation = matRotation;
+	}
+
+	const CMatrix & getRotation() const
+	{ return m_matRotation; }
+
+	/**
     * Object initialisation. 
     * This function should be overridden in derived classes to set up any data required for 
     * rendering. For instance, normal computations, display list generation, and so on. Derived 
@@ -81,6 +90,7 @@ class C3DObject {
 
  protected:
 
+	CMatrix   m_matRotation;
    /**
     * The translation of the object.
     */

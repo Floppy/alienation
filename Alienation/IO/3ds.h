@@ -73,11 +73,17 @@ namespace NSDIO {
        */
       int getString(char *pString);
          
+
       /** 
        * Read data from file into a CChunk object.
        */
       void readChunk(CChunk *);
          
+      /** 
+       * Load an bump map chunk.
+       */
+		void processNextBumpMapChunk(CMaterial& oMaterial, CChunk * pPreviousChunk);
+
       /** 
        * Load an arbitrary chunk.
        * Used for top-level stuff only.
@@ -102,7 +108,7 @@ namespace NSDIO {
       /** 
        * Load a texture chunk.
        */
-      void processNextTextureChunk(CMaterial &pModel, CChunk *pPreviousChunk);
+      void processNextTextureChunk(CMaterial& oMaterial, CChunk *pPreviousChunk);
          
       /** 
        * Read a colour from a colour chunk.
@@ -111,6 +117,11 @@ namespace NSDIO {
        */
       CRGBAColour readColorChunk(CChunk *pChunk);
          
+      /** 
+       * Read material shiny information.
+		 */
+		float readShinyChunk(CChunk *pChunk);
+
       /** 
        * Read vertex data chunk.
        */
@@ -159,7 +170,5 @@ namespace NSDIO {
       map<string,CMaterial> m_oMaterials;
          
    };
-      
 }
-
 #endif // SDS_3DS_H

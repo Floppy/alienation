@@ -4,6 +4,9 @@
 #include "config.h"
 #include "3D/Mesh.h"
 #include "Math/Vector.h"
+#include "Math/Matrix.h"
+#include <GL/glext.h>
+
 
 /**
  * A triangular mesh face.
@@ -61,12 +64,20 @@ class CFMesh : public CMesh {
     
  protected:
    
+	void renderDOT3() const;
+
    /** 
     * Calculate vertex normals.
     * Called during init().
     */
    void computeNormals();
    
+   /** 
+    * Dont know what it does, but needed
+    * for dot3 bump mapping
+    */
+	void tangentBasis(CVector3 v0, CVector3 v1, CVector3 v2, CVector2 t0, CVector2 t1, CVector2 t2, CVector3 *tangent, CVector3 *binormal);
+ 
  public:
    
    /** 
@@ -90,6 +101,16 @@ class CFMesh : public CMesh {
    CVector3 *m_pVerts;
 
    /** 
+    * Vertex tangents array
+    */
+	CVector3 *m_pTangents;
+
+   /** 
+    * Vertex binormals array
+    */
+	CVector3 *m_pBiNormals;
+
+   /** 
     * Texture coordinate array
     */
    CVector2 *m_pTexVerts;
@@ -110,6 +131,8 @@ class CFMesh : public CMesh {
     * OpenGL display list ID
     */
    unsigned int m_uiList;
+
+
 
 };
 
