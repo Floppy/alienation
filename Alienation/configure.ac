@@ -69,6 +69,7 @@ AC_OUTPUT(2D/Makefile
           Game/Makefile
           GL/Makefile
           IO/Makefile
+          GUI/Makefile
           Math/Makefile
           Physics/Makefile
           Sound/Makefile
