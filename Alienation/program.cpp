@@ -17,7 +17,7 @@
  */
 
 #include "opengl.h"
-#include "./include/fmod.h"
+#include "fmod.h"
 #include "SDL.h"
 
 #define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
@@ -60,7 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance,     // Instance
 	/*
 		LOAD SONG
 	*/
-	poMod = FSOUND_Stream_OpenFile("./media/Demo.mp3", FSOUND_LOOP_NORMAL, 0);
+	poMod = FSOUND_Stream_OpenFile("./Data/media/Demo.mp3", FSOUND_LOOP_NORMAL, 0);
 	if (!poMod)
 	{
 		return 0;

@@ -25,7 +25,7 @@ void CGLFont::load()
 	char **astrFiles = new char*[1];
 
 	astrFiles[0] = new char(16);
-	strcpy(astrFiles[0], "text.bmp");
+	strcpy(astrFiles[0], "Data/text.bmp");
 
 	m_poTexture->load("", astrFiles, 1);
 }
