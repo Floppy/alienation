@@ -35,6 +35,10 @@ CPlayerShip::CPlayerShip(float mass) :
 	m_poRadar = new CRadar();
 	m_poRadar->init();
 	m_poRadar->init2D(0.41f, 0.7f, 0.18f, 0.22f, "");
+        CRGBAColour oDiffuse = CRGBAColour(0.0f,0.0f,0.0f,1.0f);
+        CRGBAColour oAmbient = CRGBAColour(0.0f,0.0f,0.0f,1.0f);
+        CRGBAColour oEmissive = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
+        m_poRadar->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
 	m_poRadar->setRange(4000);
    m_matCamRotation.loadIdentity();
       
