@@ -22,8 +22,8 @@ CGLFont::~CGLFont()
 void CGLFont::load()
 {
    m_oMaterial.m_oEmissive = CRGBAColour(0.4f,1.0f,0.3f,0.75f);
-   m_oMaterial.m_oAmbient = CRGBAColour(0.4f,1.0f,0.3f,0.75f);
-   m_oMaterial.m_oDiffuse = CRGBAColour(0.4f,1.0f,0.3f,0.75f);
+   m_oMaterial.m_oAmbient = CRGBAColour(0.0f,0.0f,0.0f,0.75f);
+   m_oMaterial.m_oDiffuse = CRGBAColour(0.0f,0.0f,0.0f,0.75f);
    m_oMaterial.m_uiTexture = g_oTextureManager.load("text.png");
    m_oMaterial.init();
 }
