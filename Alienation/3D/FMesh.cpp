@@ -63,6 +63,14 @@ void CFMesh::init() {
    glEnd();
    // Finish the list
    glEndList();   
+
+   // Calculate bounding sphere
+   for (int i=0; i<m_iNumVertices; i++) 
+   {
+      float fLength = m_pVerts[i].length();
+      if (fLength > m_oSphere.m_fRadius) m_oSphere.m_fRadius = fLength;
+   }
+
    // Done
    CMesh::init();
    return;

@@ -17,9 +17,16 @@ CModel::~CModel()
 }
 
 void CModel::init() {
+   vector<C3DObject*>::iterator it;
+
    // Init meshes
-   for (vector<C3DObject*>::iterator it(m_oObjects.begin()); it!=m_oObjects.end(); ++it) {
+   for (it = m_oObjects.begin(); it!=m_oObjects.end(); ++it) {
       (*it)->init();
+   }
+   // Calculate bounding sphere
+   for (it = m_oObjects.begin(); it!=m_oObjects.end(); ++it) {
+      float fLength = (*it)->getTranslation().length() + (*it)->boundingRadius();
+      if (fLength > m_oSphere.m_fRadius) m_oSphere.m_fRadius = fLength;
    }
    C3DObject::init();
 }

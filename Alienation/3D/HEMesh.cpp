@@ -13,6 +13,8 @@ void CHEMesh::init() {
    // Initialise material
    m_oMaterial.init();
 
+   // Calculate bounding sphere
+
    CMesh::init();
    return;
 }
