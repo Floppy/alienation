@@ -98,6 +98,7 @@ void CTargetingComputer::render()
 		double dH = 32.0f / viewport[3];
       // Render reticle
       m_poTargetingReticle->setPosition(dX-dW, (1-dY)-dH, dW*2, dH*2);
+		m_poTargetingReticle->setTexturePercentage(100.0f);
 		m_poTargetingReticle->renderQuad();
 		// Radar imagexs
 		m_poHoloTarget->renderQuad();
@@ -111,7 +112,6 @@ void CTargetingComputer::render()
       // Velocity
       sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_fVel));
       g_oTextureManager.render(m_auiOffScreenTexture);
-      //m_po2DObject->renderQuad(37.0f, 180.0f, 135.0f, 135.0f, avecTex);
       m_poFont->print("Velocity:", CVector2(0.03f, 0.32f), 0.0075f, CVector3(0,1,0));
       m_poFont->print(strFont, CVector2(0.03f, 0.35f), 0.0075f, CVector3(0,1,0));
     }
