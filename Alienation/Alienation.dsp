@@ -125,6 +125,10 @@ SOURCE=.\GUI\CheckBox.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Equipment\Engine.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Equipment\Equipment.cpp
 # End Source File
 # Begin Source File
@@ -285,7 +289,7 @@ SOURCE=.\Equipment\ThrustInformation.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Game\Trail.cpp
+SOURCE=.\Equipment\Trail.cpp
 # End Source File
 # Begin Source File
 
@@ -342,6 +346,10 @@ SOURCE=.\GUI\CheckBox.h
 # Begin Source File
 
 SOURCE=.\config.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Equipment\Engine.h
 # End Source File
 # Begin Source File
 
@@ -517,7 +525,7 @@ SOURCE=.\Equipment\ThrustInformation.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Game\Trail.h
+SOURCE=.\Equipment\Trail.h
 # End Source File
 # Begin Source File
 
