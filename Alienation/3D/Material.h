@@ -110,6 +110,11 @@ class CMaterial
    const CMaterial& operator=(const CMaterial& material);
 
    /**
+    * Prepare material for rendering.
+    */ 
+   void init();
+
+   /**
     * Render material using GL.
     */ 
    void render() const;

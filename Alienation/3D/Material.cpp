@@ -14,10 +14,6 @@ CMaterial::CMaterial() :
 {
 }
 
-CMaterial::~CMaterial() {
-   g_oTextureManager.addReference(m_uiTexture);
-}
-
 CMaterial::CMaterial(const CMaterial& material) :
    m_oAmbient(material.m_oAmbient),
    m_oDiffuse(material.m_oDiffuse),
@@ -28,7 +24,13 @@ CMaterial::CMaterial(const CMaterial& material) :
    g_oTextureManager.addReference(m_uiTexture);
 }
 
-const CMaterial& CMaterial::operator=(const CMaterial& material) {
+CMaterial::~CMaterial() 
+{
+   g_oTextureManager.addReference(m_uiTexture);
+}
+
+const CMaterial& CMaterial::operator=(const CMaterial& material) 
+{
    // Texture
    m_uiTexture = material.m_uiTexture;
    g_oTextureManager.addReference(m_uiTexture);
@@ -41,12 +43,16 @@ const CMaterial& CMaterial::operator=(const CMaterial& material) {
    return *this;
 }
 
-void CMaterial::render() const {
+void CMaterial::init() 
+{
+   if (g_oTextureManager.texture(m_uiTexture))
+      g_oTextureManager.texture(m_uiTexture)->init();
+}
+
+void CMaterial::render() const 
+{
    // Texture
-	if (g_oTextureManager.valid(m_uiTexture))
-	{
-	   g_oTextureManager.activate(m_uiTexture);
-	}
+   g_oTextureManager.render(m_uiTexture);
    // Colours
    glMaterialfv(GL_FRONT,GL_AMBIENT,m_oAmbient.glColour());
    glMaterialfv(GL_FRONT,GL_DIFFUSE,m_oDiffuse.glColour());
