@@ -39,4 +39,15 @@
 #define DEG_TO_RAD(x)  ((x) * 0.0174532925f)
 #define RAD_TO_DEG(x)  ((x) * 57.295779513f)
 
+
+/**
+ * Mathematical support classes.
+ */
+namespace NSDMath {}
+
+/**
+ * Sound subsystems.
+ */
+namespace NSDSound {}
+
 #endif // CONFIG_H
