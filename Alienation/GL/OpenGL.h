@@ -57,6 +57,7 @@ class COpenGL {
 		CKeys m_oKeys;
 		CFrustum  m_oFrustum;
                 CModel m_pRoids[20];
+                //CModel m_oStation;
 };
 
 #endif

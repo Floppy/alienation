@@ -129,6 +129,10 @@ bool COpenGL :: initGL() {
       m_pRoids[i].setTranslation(pos);
    }
 
+   //if (oLoader.import3DS(&m_oStation,"Data/Model/station.3ds"))
+   //m_oStation.init();
+   //m_oStation.setTranslation(CVector3(1000,1000,1000));
+
    // Done
    return true;
 }
@@ -153,6 +157,7 @@ bool COpenGL::DrawGLScene(GLvoid) {
    for (int i=0; i<20; i++) {
       m_pRoids[i].render();
    }
+   //m_oStation.render();
 
    m_poShip->drawBlended();
    m_poAIShip->drawBlended();
