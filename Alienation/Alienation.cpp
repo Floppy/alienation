@@ -1,6 +1,9 @@
 #include "GL/OpenGL.h"
 #include "Sound/SoundManager.h"
 #include "IO/Input.h"
+#include "IO/Lua.h"
+#include "Math/Vector.h"
+#include "3D/Material.h"
 #include <SDL.h>
 
 #include <iostream>
@@ -27,39 +30,45 @@ int main(int argc, char* argv[])
       return 1;
    }
 
+	// Get config variables;
+	int iDepth, iDouble, iStereo, iBPP;
+	CRGBAColour colDepth(0,0,0,0);
+	CVector2 vecSize(0,0);
+	bool bFullScreen;
+	{
+		NSDIO::CLua config("config.lua");
+		if (!config.setGlobalTable("config")) {
+			cerr << "Couldn't load config file!" << endl;
+			return 1;
+		}
+		vecSize = config.getVector2("resolution");
+		iBPP = static_cast<int>(config.getNumber("bpp"));
+		bFullScreen = static_cast<int>(config.getNumber("fullscreen"));
+		colDepth = config.getColour("colours");
+		iDepth = static_cast<int>(config.getNumber("depthbuffer"));
+		iDouble = static_cast<int>(config.getNumber("doublebuffer"));
+		iStereo = static_cast<int>(config.getNumber("stereo"));
+	}
+	
+
+
    // Set video mode
-   int iFlags = SDL_OPENGL;// | SDL_FULLSCREEN;
-   // Attempt full-on SDL screen setup
-   SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
-   SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 6 );
-   SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
-   SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 5 );
-   SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
-   SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
+   int iFlags = SDL_OPENGL;
+   if (bFullScreen) iFlags |= SDL_FULLSCREEN;
+   // Attempt SDL screen setup
+   SDL_GL_SetAttribute( SDL_GL_RED_SIZE, static_cast<int>(colDepth.R()));
+   SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, static_cast<int>(colDepth.G()));
+   SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, static_cast<int>(colDepth.B()));
+   SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, static_cast<int>(colDepth.A()));
+   SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, iDepth );
+   SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, iDouble );
 #ifdef SDL_GL_STEREO
-   SDL_GL_SetAttribute( SDL_GL_STEREO, 1 );   
+   SDL_GL_SetAttribute( SDL_GL_STEREO, iStereo );   
 #endif
    // Try full settings
-   if( SDL_SetVideoMode( 1024, 768, 16, iFlags ) == 0 ) {
-      // Try without stereo
-      cerr << "Disabling stereo display: " << SDL_GetError() << endl;
-#ifdef SDL_GL_STEREO
-      SDL_GL_SetAttribute( SDL_GL_STEREO, 0 );
-#endif
-      if( SDL_SetVideoMode( 1024, 768, 16, iFlags ) == 0 ) {
-         // Try without double buffer
-         cerr << "Disabling alpha blending: " << SDL_GetError() << endl;
-         SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 0 );
-         if( SDL_SetVideoMode( 1024, 768, 16, iFlags ) == 0 ) {
-            // Try without double buffer
-            cerr << "Disabling double buffer: " << SDL_GetError() << endl;
-            SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 0 );
-            if( SDL_SetVideoMode( 1024, 768, 16, iFlags ) == 0 ) {
-               cerr << "Failed to set video mode: " << SDL_GetError() << endl;
-               return 1;
-            }
-         }
-      }
+   if( SDL_SetVideoMode( static_cast<int>(vecSize.X()), static_cast<int>(vecSize.Y()), iBPP, iFlags ) == 0 ) {
+      cerr << "Failed to set video mode: " << SDL_GetError() << endl;
+      return 1;
    }
 
    // Play sound
