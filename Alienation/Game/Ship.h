@@ -78,6 +78,9 @@ class CShip : public CSimulation
    void rotHeading(CMatrix m);
    virtual void solve();
    virtual void simulate(float dt);
+   
+   void setTarget(CShip& oShip);
+
    CShipData *m_poShips;
    CFrustum m_oFrustum;
 };

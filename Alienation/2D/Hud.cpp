@@ -303,7 +303,7 @@ void CHud::drawQuad(CVector3 *Verts, CVector2 *Tex)
 //                                         (Note: To work 100%, needs to render 
 //                                         to texture, so all work is in 2D)  
 //**************************************************************************************
-void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip)
+void CHud::drawTargetData(CShipData *poTarget, CMass **poMass, CShip *poThisShip)
 {
 
 	CVector3 vecTarget, vecTemp;
@@ -476,7 +476,6 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 
 	poTarget->m_oModel.render();
 
-
 	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -493,11 +492,13 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 
 	char strFont[20];
 
-//	sprintf(strFont,"Pitch: %.1f AI Pitch: %.1f", fPitch, poTarget->m_fPitchRate);
-//	m_poFont->print(strFont, CVector2(50.0f, 200.0f), 5.0f);
+	sprintf(strFont,"%5d m", iRange);
+	m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f);
+	m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f);
 
-	sprintf(strFont,"%dm", iRange);
-	m_poFont->print(strFont, CVector2(50.0f, 230.0f), 5.0f);
+	sprintf(strFont,"%5d m/s", static_cast<int>(poTarget->m_fVel));
+	m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f);
+	m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f);
 
 	glPopMatrix();
 

@@ -198,7 +198,8 @@ void CPlayerShip::rotateCam(float fDT)
 void CPlayerShip::drawHud()
 {
    if (m_bInsideView) {
-      m_poHud->drawHoloTarget(m_poShips[0].m_poTargetData, m_poShips[0].m_poTargetMass, this);
+      if (m_poShips[0].m_poTargetData && m_poShips[0].m_poTargetMass)
+         m_poHud->drawTargetData(m_poShips[0].m_poTargetData, m_poShips[0].m_poTargetMass, this);
       m_poHud->draw(m_poShips[0].m_fVel, 300.0f, m_poShips[0].m_fThrust, 9578.0f);
    }
 }

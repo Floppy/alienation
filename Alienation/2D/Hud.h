@@ -58,7 +58,7 @@ public:
     * @param poThisShip The player's ship
     * @bug (doc) Don't knot what poMass represents.
     */
-   void drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip);
+   void drawTargetData(CShipData *poTarget, CMass **poMass, CShip *poThisShip);
 
  protected:
 

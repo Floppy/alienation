@@ -111,6 +111,9 @@ bool COpenGL :: initGL() {
    m_poShip = new CPlayerShip();
    m_poShip->loadShip();
    
+   m_poAIShip->setTarget(*m_poShip);
+   m_poShip->setTarget(*m_poAIShip);
+
    // Load roids
    static const char* roidfiles[] = {
       "Data/Model/gold1.3ds",
@@ -153,9 +156,19 @@ bool COpenGL :: initGL() {
 //is all transparent objects are drawn last
 bool COpenGL::DrawGLScene(GLvoid) {
 
-   // Clear Screen And Depth Buffer
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-   
+   // Clear screen
+   //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   // Reset The Current Modelview Matrix
+   //glMatrixMode(GL_MODELVIEW);
+   //glLoadIdentity();					
+
+   // Perform offscreen rendering first
+   //g_oTextureManager.texture(m_oSun.getMaterial().m_uiTexture)->preRenderToTexture();
+   //m_poAIShip->draw();
+   //g_oTextureManager.texture(m_oSun.getMaterial().m_uiTexture)->postRenderToTexture();
+
+   // Clear screen
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    // Reset The Current Modelview Matrix
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();					
