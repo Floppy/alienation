@@ -1,3 +1,3 @@
 SUBDIRS = Hud
 
-EXTRA_DIST = an01.png an02.png an03.png ball.png bluepan1.png canopy01.png flare.png star.png text.png smoke.png
+EXTRA_DIST = an01.png an02.png an03.png ball.png bluepan1.png canopy01.png flare.png star.png text.png smoke.png fighter1.png
