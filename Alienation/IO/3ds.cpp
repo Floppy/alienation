@@ -365,7 +365,7 @@ CRGBAColour CLoad3DS::readColorChunk(CChunk *pChunk)
    m_pTempChunk->m_iBytesRead += fread(col, 1, m_pTempChunk->m_iLength - m_pTempChunk->m_iBytesRead, m_pFilePointer);
    pChunk->m_iBytesRead += m_pTempChunk->m_iBytesRead;
    // store
-   return CRGBAColour(col[0]/255.0,col[1]/255.0,col[2]/255.0,col[3]/255.0);
+   return CRGBAColour(col[0]/255.0,col[1]/255.0,col[2]/255.0,1-(col[3]/255.0));
 }
 
 
