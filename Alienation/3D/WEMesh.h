@@ -56,6 +56,15 @@ class CWEMesh : public CMesh {
  protected:
 
    /**
+    * Set wing information
+    * The two edges passed should share an edge. 
+    * This function will set their pointers correctly.
+    * @param pEdge1 First edge
+    * @param pEdge2 Second edge
+    */
+   void setWings(CWEEdge* pEdge1, CWEEdge* pEdge2);
+
+   /**
     * Vertex list
     */
    vector<CWEVertex*> m_lpVertices;

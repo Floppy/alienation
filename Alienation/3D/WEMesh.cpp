@@ -40,7 +40,15 @@ CWEMesh::CWEMesh(CFMesh& oMesh) {
          CWEEdge* pEdge = adjacent(m_lpVertices[iFrom],m_lpVertices[iTo]);
          if (pEdge) {
             // Edge does exist
-            // TODO: Edit existing edge
+            if (pEdge->m_pStart == m_lpVertices[iFrom] && pEdge->m_pRight == NULL) {
+               pEdge->m_pRight = pNewFace;
+            }
+            else if (pEdge->m_pLeft == NULL) {
+               pEdge->m_pLeft = pNewFace;
+            }
+            else {
+               cerr << "ERROR: Non-manifold surface" << endl;
+            }
          }
          else {
             // Edge does not exist - create it
@@ -48,10 +56,8 @@ CWEMesh::CWEMesh(CFMesh& oMesh) {
             pEdge->m_pStart = m_lpVertices[iFrom];
             pEdge->m_pEnd = m_lpVertices[iTo];
             pEdge->m_pRight = pNewFace;
-            // TODO: Deal with next and prev pointers
+            
          }
-
-
       }
    }   
    
@@ -112,4 +118,47 @@ CWEEdge* CWEMesh::adjacent(CWEVertex* pVert1, CWEVertex* pVert2) {
    } while (pEdge && pEdge != pVert1->m_pEdge);
    // failed
    return NULL;
+}
+
+void CWEMesh::setWings(CWEEdge* pEdge1, CWEEdge* pEdge2) {
+   if (pEdge1->m_pStart == pEdge2->m_pStart) {
+      if (pEdge1->m_pLeft == pEdge2->m_pRight) {
+         pEdge1->m_pNextLeft = pEdge2;
+         pEdge2->m_pPrevRight = pEdge1;
+      }
+      else if (pEdge1->m_pRight == pEdge2->m_pLeft) {
+         pEdge1->m_pPrevRight = pEdge2;
+         pEdge2->m_pNextLeft = pEdge1;
+      }      
+   }
+   else if (pEdge1->m_pStart == pEdge2->m_pEnd) {
+      if (pEdge1->m_pLeft == pEdge2->m_pLeft) {
+         pEdge1->m_pNextLeft = pEdge2;
+         pEdge2->m_pPrevLeft = pEdge1;         
+      }
+      else if (pEdge1->m_pRight == pEdge2->m_pRight) {
+         pEdge1->m_pPrevRight = pEdge2;
+         pEdge2->m_pNextRight = pEdge1;
+      }
+   }
+   else if (pEdge1->m_pEnd == pEdge2->m_pStart) {
+      if (pEdge1->m_pRight == pEdge2->m_pRight) {
+         pEdge1->m_pNextRight = pEdge2;
+         pEdge2->m_pPrevRight = pEdge1;         
+      }
+      else if (pEdge1->m_pLeft == pEdge2->m_pLeft) {
+         pEdge1->m_pPrevLeft = pEdge2;
+         pEdge2->m_pNextLeft = pEdge1;
+      }
+   }
+   else if (pEdge1->m_pEnd == pEdge2->m_pEnd) {
+      if (pEdge1->m_pRight == pEdge2->m_pLeft) {
+         pEdge1->m_pNextRight = pEdge2;
+         pEdge2->m_pPrevLeft = pEdge1;
+      }
+      else if (pEdge1->m_pLeft == pEdge2->m_pRight) {
+         pEdge1->m_pPrevLeft = pEdge2;
+         pEdge2->m_pNextRight = pEdge1;
+      }
+   }
 }
