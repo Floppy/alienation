@@ -104,9 +104,11 @@ void CPlayerShip::draw()
 		glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
 		glMultMatrixf(m_poShips[0].m_matRotation.m_afElement);
 
+                glDisable(GL_LIGHT0);
                 m_oLight.enable();
                 m_oCockpitModel.render(); //draw the cockpit
                 m_oLight.disable();
+                glEnable(GL_LIGHT0);
 		glPopMatrix();
 	}
 
