@@ -29,6 +29,7 @@ public:
 
 	CTexture *m_poTexture;
 	CGLFont  *m_poFont;
+        unsigned long m_iLastTime;
 
 };
 

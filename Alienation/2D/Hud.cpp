@@ -5,12 +5,14 @@
 #include "Hud.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <SDL.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CHud::CHud()
+CHud::CHud() :
+   m_iLastTime(SDL_GetTicks())
 {
 
 }
@@ -42,7 +44,9 @@ CHud::~CHud()
 //                                         proper 2d surface  
 //**************************************************************************************
 void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
-{
+{   
+
+
 	CMatrix matMatrix;
 	CVector3 vecTempPos;
 	float afCol[4];
@@ -183,6 +187,16 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 	sprintf(strFont,"Thrust: %.1f", fThrust);
 	m_poFont->print(strFont, CVector2(420.0f, 560.0f), 5.0f);
 
+        // Calc FPS
+        unsigned long iTime = SDL_GetTicks();
+        unsigned long iFPS = 0;
+        if (iTime != m_iLastTime) {
+           iFPS = 1000/(iTime - m_iLastTime);
+        }
+	sprintf(strFont,"%3d FPS", iFPS);
+	m_poFont->print(strFont, CVector2(900.0f, 20.0f), 5.0f);
+        m_iLastTime = iTime;
+
 	glDisable(GL_BLEND);
 	glDepthMask(GL_TRUE);
 
@@ -304,7 +318,6 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 												//////////////////////////////////////////////
 
 	vecTarget =  poMass[0]->m_vecPos - poThisShip->m_ppMasses[0]->m_vecPos;
-	printf("Here!!");
 	vecThisRight = poThisShip->m_poShips[0].m_vecRight    - poThisShip->m_ppMasses[0]->m_vecPos;
 	vecThisUp    = poThisShip->m_poShips[0].m_vecUp       - poThisShip->m_ppMasses[0]->m_vecPos;	
 	vecThisHead  = poThisShip->m_poShips[0].m_vecHeading  - poThisShip->m_ppMasses[0]->m_vecPos;	
