@@ -1,21 +1,62 @@
-AC_INIT(program.cpp)
+# Initialise
+AC_PREREQ(2.57)
+AC_INIT(Alienation,0.1)
 AM_INIT_AUTOMAKE(Alienation,0.1)
+AC_CONFIG_SRCDIR([program.cpp])
 
+# Check for programs
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_RANLIB
 
+# Enable all warnings
+CPPFLAGS="$CPPFLAGS -Wall"
+
+# Checks for libraries
+
+# OpenGL
+LIBS="$LIBS -lGL -lGLU"
+
+# SDL
 SDL_LIBS="`sdl-config --libs`"
 SDL_CFLAGS="`sdl-config --cflags`"
+CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
+LIBS="$LIBS $SDL_LIBS -lSDL_image"
+AC_CHECK_HEADER(SDL.h,,exit)
+AC_CHECK_LIB(SDL,SDL_Init,,exit)
+AC_CHECK_HEADER(SDL_image.h,,exit)
+AC_CHECK_LIB(SDL_image,IMG_Load,,exit)
 
-CPPFLAGS="$CPPFLAGS $SDL_CFLAGS -I$with_fmod/inc -Wall"
-LIBS="$LIBS $SDL_LIBS -lGL -lGLU -lSDL_image -lfmod-3.62 -L$with_fmod"
-
+# fmod
+AC_ARG_WITH(fmod,
+    [ --with-fmod=<path> path to fmod library. e.g. /usr/lib or /usr/local/lib],
+    [FMOD_PREFIX=$with_fmod],
+)
+LIBS="$LIBS -lfmod-3.62"
+if test -n "$with_fmod"; then
+  CPPFLAGS="$CPPFLAGS -I$with_fmod/inc"
+  LIBS="$LIBS -L$with_fmod"
+fi
 AC_CHECK_HEADER(fmod.h,,exit)
 AC_CHECK_LIB(fmod-3.62,FSOUND_Init,,exit)
 
-AC_CHECK_LIB(SDL,SDL_Init,,exit)
+# Checks for headers
+AC_HEADER_STDC
+AC_CHECK_HEADERS([stdlib.h string.h])
 
-AC_CHECK_LIB(SDL_image,IMG_Load,,exit)
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_CONST
 
-AC_OUTPUT(Makefile Math/Makefile IO/Makefile 3D/Makefile Physics/Makefile GL/Makefile AI/Makefile)
+# Checks for library functions.
+AC_CHECK_FUNCS([atexit memset sqrt])
+
+# Output
+AC_CONFIG_FILES([3D/Makefile
+                 AI/Makefile
+                 GL/Makefile
+                 IO/Makefile
+                 Makefile
+                 Math/Makefile
+                 Physics/Makefile])
+AC_OUTPUT
