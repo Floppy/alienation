@@ -44,6 +44,8 @@ AC_CHECK_HEADER(SDL_image.h,,exit)
 AC_CHECK_LIB(SDL_image,IMG_Load,,exit)
 AC_CHECK_HEADER(SDL_mixer.h,,exit)
 AC_CHECK_LIB(SDL_mixer,Mix_OpenAudio,,exit)
+AC_CHECK_HEADER(SDL_net.h,,exit)
+AC_CHECK_LIB(SDL_net,SDLNet_Init,,exit)
 
 # Lua
 AC_ARG_WITH(lua,"--with-lua=<dir> - Path to Lua files",
@@ -96,5 +98,6 @@ AC_OUTPUT(2D/Makefile
           GUI/Makefile
           Math/Makefile
           Physics/Makefile
+          Server/Makefile
           Sound/Makefile
           Makefile)
