@@ -38,3 +38,12 @@ http://www.math.keio.ac.jp/~matumoto/emt.html. Copyright is as follows:
    NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+Improved Perlin Noise
+---------------------
+
+This software contains code based on Ken Perlin's reference implementation of his 
+Improved Perlin Noise function, available from http://mrl.nyu.edu/~perlin/noise/,
+which is (C) 2002 Ken Perlin.
+
+
+
