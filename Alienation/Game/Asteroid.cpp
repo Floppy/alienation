@@ -53,7 +53,7 @@ void CAsteroid::load(TAsteroidType type)
    }
 
    // Load model
-   CLoad3DS oLoad3ds;
+   NSDIO::CLoad3DS oLoad3ds;
    if (oLoad3ds.import3DS(&(m_oModel), strRoidFile)) {
       m_oModel.init();
    }  

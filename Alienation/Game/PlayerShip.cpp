@@ -60,7 +60,7 @@ CPlayerShip::~CPlayerShip()
 
 void CPlayerShip::load()
 {
-   CLoad3DS oLoad3ds;
+   NSDIO::CLoad3DS oLoad3ds;
    if (oLoad3ds.import3DS(&(m_oModel), "Data/Model/shuttle.3ds")) {
       m_oModel.init();
    }

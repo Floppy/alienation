@@ -43,7 +43,7 @@ AC_CHECK_HEADER(SDL_mixer.h,,exit)
 AC_CHECK_LIB(SDL_mixer,Mix_OpenAudio,,exit)
 
 # Lua
-LIBS="-llua -llualib"
+LIBS="$LIBS -llua -llualib"
 AC_CHECK_HEADER(lua.h,,exit)
 AC_CHECK_HEADER(lualib.h,,exit)
 AC_CHECK_LIB(lualib,lua_open,,exit)

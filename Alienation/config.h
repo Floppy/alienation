@@ -54,4 +54,9 @@ namespace NSDSound {}
  */
 namespace NSD2D {}
 
+/**
+ * Input/Output classes.
+ */
+namespace NSDIO {}
+
 #endif // CONFIG_H
