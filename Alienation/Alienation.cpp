@@ -49,8 +49,8 @@ int main(int argc, char* argv[])
 	int iFlags = SDL_OPENGL;// | SDL_FULLSCREEN;
 
 	// Play sound
-        if (!g_oSoundManager.playMusicFile("demo.ogg"))
-           cerr << "Failed to open demo.ogg" << endl;
+        if (!g_oSoundManager.playMusicFile("background.ogg"))
+           cerr << "Failed to open background.ogg" << endl;
 
 	// Set the video mode
 	if( SDL_SetVideoMode( 1024, 768, 16, iFlags ) == 0 ) {
