@@ -128,7 +128,7 @@ bool COpenGL :: initGL() {
    };
    CLoad3DS oLoader;
    CRandom prng(37473);
-   for (int i=0; i<20; i++) {      
+   for (int i=0; i<40; i++) {      
       if (oLoader.import3DS(m_pRoids+i, roidfiles[prng.randInt()&0xF])) {
          m_pRoids[i].init();
       }
@@ -166,7 +166,7 @@ bool COpenGL::DrawGLScene(GLvoid) {
    m_poStars->draw(m_poShip->m_ppMasses[0]->m_vecPos);
 
    // Draw roids
-   for (int i=0; i<20; i++) {
+   for (int i=0; i<40; i++) {
       m_pRoids[i].render();
    }
    //m_oStation.render();

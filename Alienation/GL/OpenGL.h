@@ -57,7 +57,7 @@ class COpenGL {
 		bool m_bCamUp, m_bCamDown, m_bCamRight, m_bCamLeft, m_bFire;
 		CKeys m_oKeys;
 		CFrustum  m_oFrustum;
-                CModel m_pRoids[20];
+                CModel m_pRoids[40];
                 CSprite m_oSun;
                 //CModel m_oStation;
 };
