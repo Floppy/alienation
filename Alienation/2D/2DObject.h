@@ -20,10 +20,10 @@
 class C2DObject  
 {
 public:
-	void setActiveMaterial(CMaterial *oMaterial);
-	void setActiveMaterial(CRGBAColour oDiffuse, CRGBAColour oAmbient, CRGBAColour oEmissive);
-	void setActiveMaterial(CRGBAColour oDiffuse, CRGBAColour oAmbient, CRGBAColour oEmissive, unsigned int uiTexture);
-	void setAltMaterial(CMaterial *oMaterial);
+	virtual void setActiveMaterial(CMaterial *oMaterial);
+	virtual void setActiveMaterial(CRGBAColour oDiffuse, CRGBAColour oAmbient, CRGBAColour oEmissive);
+	virtual void setActiveMaterial(CRGBAColour oDiffuse, CRGBAColour oAmbient, CRGBAColour oEmissive, unsigned int uiTexture);
+	virtual void setAltMaterial(CMaterial *oMaterial);
 	void swapTextures();
 	void swapMaterials();
    unsigned int getActiveTexture();
@@ -39,8 +39,8 @@ public:
    void setPosition(float fXPos, float fYPos, float fWidth, float fHeight);
    C2DObject();
    virtual ~C2DObject();
-   void init2D(float fXPos, float fYPos, float fWidth, float fHeight, const char *sFilename);
-   void renderQuad();
+   virtual void init2D(float fXPos, float fYPos, float fWidth, float fHeight, const char *sFilename);
+   virtual void renderQuad();
 
 private:
 	float m_fPercentageWidth;
