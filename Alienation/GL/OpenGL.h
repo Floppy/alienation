@@ -14,7 +14,6 @@
 #include "config.h"
 
 #include <SDL.h>
-
 #include <stdio.h>
 #include "Game/Stars.h"
 #include "Game/Ship.h"
@@ -37,6 +36,7 @@ public:
 	bool m_abKeyDown [300];								// Holds TRUE / FALSE For Each Key
 	bool m_abStillPressed[300];
 };												// Keys
+
 
 //The main game class. This class brings it all together.
 class COpenGL {
