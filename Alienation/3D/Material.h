@@ -2,8 +2,7 @@
 #define ALIENATION_MATERIAL_H
 
 #include "config.h"
-#include <windows.h>
-#include <GL/gl.h>
+#include <SDL/SDL_opengl.h>
 #include <GL/glext.h>
 
 #include "Math/Vector.h"

@@ -2,9 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 #include "2D/2DObject.h"
-
-extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;
-extern PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB;
+#include "GL/Extensions.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

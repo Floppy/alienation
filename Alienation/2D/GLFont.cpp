@@ -8,9 +8,7 @@
 #include "2D/2DObject.h"
 #include <GL/gl.h>
 #include <GL/glext.h>
-
-extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;
-extern PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB;
+#include "GL/Extensions.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

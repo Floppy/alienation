@@ -1,34 +1,32 @@
 #include "3D/Material.h"
 #include "3D/TextureManager.h"
 #include <SDL_opengl.h>
-
-extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;
-extern PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB;
+#include "GL/Extensions.h"
 
 #include <iostream>
 using namespace std;
 
 CMaterial::CMaterial() :
+   m_bHasBumpMap(false),
    m_oAmbient(0,0,0,0),
    m_oDiffuse(0,0,0,0),
    m_oEmissive(0,0,0,0),
    m_oSpecular(0,0,0,0),
+   m_fShininess(10.0f),
    m_uiTexture(0),
-   m_uiBumpTexture(0),
-	m_fShininess(10.0f),
-	m_bHasBumpMap(false)
+   m_uiBumpTexture(0)
 {
 }
 
 CMaterial::CMaterial(const CMaterial& material) :
+   m_bHasBumpMap(material.m_bHasBumpMap),
    m_oAmbient(material.m_oAmbient),
    m_oDiffuse(material.m_oDiffuse),
    m_oEmissive(material.m_oEmissive),
    m_oSpecular(material.m_oSpecular),
-	m_fShininess(material.m_fShininess),
+   m_fShininess(material.m_fShininess),
    m_uiTexture(material.m_uiTexture),
-   m_uiBumpTexture(material.m_uiBumpTexture),
-	m_bHasBumpMap(material.m_bHasBumpMap)
+   m_uiBumpTexture(material.m_uiBumpTexture)
 {
    g_oTextureManager.addReference(m_uiTexture);
 }

@@ -1,9 +1,7 @@
 #include "3D/Sprite.h"
 #include <SDL_opengl.h>
 #include <iostream>
-
-extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;
-extern PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB;
+#include "GL/Extensions.h"
 
 using namespace std;
 
@@ -71,7 +69,6 @@ void CSprite::render() const {
       cerr << "WARNING: Mesh not initialised!" << endl;
       return;
    }
-
    
 	// Push
    glPushMatrix();

@@ -1,9 +1,8 @@
 #include "3D/FMesh.h"
 #include <SDL_opengl.h>
 #include <iostream>
+#include "GL/Extensions.h"
 
-extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;
-extern PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB;
 extern bool bNoBumps;
 
 using namespace std;
@@ -13,11 +12,11 @@ CFMesh::CFMesh() :
    m_iNumFaces(0),
    m_iNumTexVertex(0),
    m_pVerts(NULL),
+	m_pTangents(NULL),
+	m_pBiNormals(NULL),
    m_pTexVerts(NULL),
    m_pFaces(NULL),
    m_pNormals(NULL),
-	m_pBiNormals(NULL),
-	m_pTangents(NULL),
    m_uiList(0)
 {}
 
