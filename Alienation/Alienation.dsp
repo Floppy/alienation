@@ -121,7 +121,15 @@ SOURCE=.\matrix.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Material.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Mesh.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Model.cpp
 # End Source File
 # Begin Source File
 
@@ -213,7 +221,15 @@ SOURCE=.\matrix.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Material.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Mesh.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Model.h
 # End Source File
 # Begin Source File
 
