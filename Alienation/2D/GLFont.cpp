@@ -7,6 +7,10 @@
 #include "3D/Material.h"
 #include "2D/2DObject.h"
 #include <GL/gl.h>
+#include <GL/glext.h>
+
+extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;
+extern PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -99,16 +103,16 @@ void CGLFont::print(char *str, NSDMath::CVector2 vecPos, float fSize, NSDMath::C
 
 
 			//Draw the letter
-			glTexCoord2d(adCoords[2][0], adCoords[2][1]);
+			glMultiTexCoord2fARB(GL_TEXTURE1_ARB, adCoords[2][0], adCoords[2][1] );
 			glVertex2f(vecTempPos.X() + fXSize, vecTempPos.Y() - fYSize);
 			
-			glTexCoord2d(adCoords[3][0], adCoords[3][1]);
+			glMultiTexCoord2fARB(GL_TEXTURE1_ARB, adCoords[3][0], adCoords[3][1] );
 			glVertex2f(vecTempPos.X() - fXSize, vecTempPos.Y() - fYSize);
 
-			glTexCoord2d(adCoords[0][0], adCoords[0][1]);
+			glMultiTexCoord2fARB(GL_TEXTURE1_ARB, adCoords[0][0], adCoords[0][1] );
 			glVertex2f(vecTempPos.X() - fXSize, vecTempPos.Y() + fYSize);
 
-			glTexCoord2d(adCoords[1][0], adCoords[1][1]);
+			glMultiTexCoord2fARB(GL_TEXTURE1_ARB, adCoords[1][0], adCoords[1][1] );
 			glVertex2f(vecTempPos.X() + fXSize, vecTempPos.Y() + fYSize);
 
 		
