@@ -2,8 +2,6 @@
 #define SDS_WEAPONFACTORY_H
 
 #include "config.h"
-#include "Math/Vector.h"
-#include "3D/Material.h"
 #include "Game/Weapon.h"
 
 namespace NSDIO {
