@@ -36,13 +36,13 @@ namespace NSDMath {
        * Calculate 3D noise.
        * @param vecPosition 3D position of noise sample.
        */
-      float noise(CVector3& vecPosition);
+      float noise(const CVector3& vecPosition);
 
       /**
        * Calculate 2D noise.
        * @param vecPosition 2D position of noise sample.
        */
-      float noise(CVector2& vecPosition);
+      float noise(const CVector2& vecPosition);
 
       /**
        * Calculate 1D noise.
