@@ -81,10 +81,10 @@ class CSoundManager {
    /**
     * Set playback location.
     * @param vecPosition The position of the final sound output.
-    * @param vecHeading The forward vector at the sound output location.
-    * @param vecUp The up vector at the sound output location.
+    * @param vecUp The local +Y vector at the sound output location.
+    * @param vecRight The local +X vector at the sound output location.
     */
-   void setPlaybackLocation(CVector3 vecPosition, CVector3 vecHeading, CVector3 vecUp);
+   void setPlaybackLocation(CVector3 vecPosition, CVector3 vecUp, CVector3 vecRight);
 
    /**
     * Set 3D location for a particular channel.
@@ -118,14 +118,14 @@ class CSoundManager {
    CVector3 m_vecPosition;
 
    /**
-    * Playback location - heading vector.
-    */
-   CVector3 m_vecHeading;
-
-   /**
     * Playback location - up vector.
     */
    CVector3 m_vecUp;
+
+   /**
+    * Playback location - right vector.
+    */
+   CVector3 m_vecRight;
 
 };
 
