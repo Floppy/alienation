@@ -5,7 +5,9 @@
 
 #include <math.h>
 
-// 2d vector class
+/**
+ * A 2D vector
+ */
 class CVector2 
 {
 public:
