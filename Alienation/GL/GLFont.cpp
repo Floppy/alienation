@@ -31,7 +31,6 @@ void CGLFont::print(char *str, CVector3 vecPos, float fSize)
 {
 	CMatrix matMatrix;
 	CVector3 vecTempPos;
-	float afCol[4];
 	double adCoords[4][2];
 	int iCharno, iRow, iCol, iLen;
 
@@ -115,7 +114,6 @@ void CGLFont::print(char *str, CVector2 vecPos, float fSize)
 {
 	CMatrix matMatrix;
 	CVector2 vecTempPos;
-	float afCol[4];
 	double adCoords[4][2];
 	int iCharno, iRow, iCol, iLen;
 

@@ -143,7 +143,7 @@ namespace NSDSound {
          // Calculate angle between result and local right vector
          iAngle *= RAD_TO_DEG(vecDirection.angle(m_vecRight));
          // Set channel position
-         return Mix_SetPosition(iChannel,iAngle,cDistance);
+         return (Mix_SetPosition(iChannel,iAngle,cDistance) != 0);
       }
       else return false;
    }

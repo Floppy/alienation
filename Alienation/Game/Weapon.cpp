@@ -168,8 +168,6 @@ void CWeapon::createParticle(int i, CVector3 vecHead, CVector3 vecPos, float fSp
 
 void CWeapon::render(void)
 {
-	float afMaterial[4];
-
 	//Texture and blending stuff
 	glEnable(GL_BLEND);
 	glDepthMask(GL_FALSE);

@@ -44,20 +44,21 @@ namespace NSDMath {
 
    void CPerlin::permuteP(void) 
    {
+	  int i;
       // Fill array
-      for (int i=0; i<PERLIN_SIZE; i++) 
-         {
-            m_aiPermutation[i] = i;
-         }
+      for (i=0; i<PERLIN_SIZE; i++) 
+      {
+         m_aiPermutation[i] = i;
+      }
       // Permute
       unsigned char temp;
-      for (int i=0; i<PERLIN_SIZE; i++) 
-         {
-            temp = m_aiPermutation[i];
-            int j = permutation(randomInt());
-            m_aiPermutation[i] = m_aiPermutation[j];
-            m_aiPermutation[j] = temp;
-         }   
+      for (i=0; i<PERLIN_SIZE; i++) 
+      {
+         temp = m_aiPermutation[i];
+         int j = permutation(randomInt());
+         m_aiPermutation[i] = m_aiPermutation[j];
+         m_aiPermutation[j] = temp;
+      }   
    
       //for (int i=0; i<PERLIN_SIZE; i++) 
       //cout << (int)m_aiPermutation[i] << endl;

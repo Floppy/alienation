@@ -105,9 +105,6 @@ void CTrail::render(void)
 
 void CTrail::render(float fThrust, CVector3 vecOrigin)
 {
-   // Material
-   float afMaterial[4];
-
    // Enable alpha blend
    glEnable(GL_BLEND);
    glDepthMask(GL_FALSE);

@@ -15,7 +15,6 @@ int main(int argc, char* argv[])
 {
    
    bool     bDone = false;  // Bool Variable To Exit Loop
-   int      iVirtual_code;
 	unsigned long int		dTickCount;	
 	unsigned long int		dLastTickCount;
    COpenGL	oGame = COpenGL();

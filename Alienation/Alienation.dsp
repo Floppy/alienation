@@ -113,6 +113,10 @@ SOURCE=.\Game\Brake.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\3D\FMesh.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\3D\Frustum.cpp
 # End Source File
 # Begin Source File
@@ -121,11 +125,11 @@ SOURCE=.\GL\GLFont.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\2D\Hud.cpp
+SOURCE=.\3D\HEMesh.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Input.cpp
+SOURCE=.\2D\Hud.cpp
 # End Source File
 # Begin Source File
 
@@ -161,11 +165,19 @@ SOURCE=.\3D\ParticleEngine.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Math\Perlin.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Game\PlayerShip.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\Math\Quat.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Math\Random.cpp
 # End Source File
 # Begin Source File
 
@@ -198,6 +210,10 @@ SOURCE=.\Game\Trail.cpp
 # Begin Source File
 
 SOURCE=.\Game\Weapon.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\3D\WEMesh.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -233,11 +249,23 @@ SOURCE=.\config.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\3D\FMesh.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\3D\Frustum.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\GL\GLFont.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\3D\HalfEdge.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\3D\HEMesh.h
 # End Source File
 # Begin Source File
 
@@ -281,6 +309,10 @@ SOURCE=.\3D\ParticleEngine.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Math\Perlin.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Physics\Physics1.h
 # End Source File
 # Begin Source File
@@ -290,6 +322,10 @@ SOURCE=.\Game\PlayerShip.h
 # Begin Source File
 
 SOURCE=.\Math\Quat.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Math\Random.h
 # End Source File
 # Begin Source File
 
@@ -326,6 +362,14 @@ SOURCE=.\Math\Vector.h
 # Begin Source File
 
 SOURCE=.\Game\Weapon.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\3D\WEMesh.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\3D\WingedEdge.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

@@ -419,8 +419,6 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 												//operate correctly                         //
 												//////////////////////////////////////////////
 
-	char strFont[20];
-
 	CQuat quaYaw(DEG_TO_RAD(fYaw), 0.0f, 0.0f);
 	CMatrix matY(quaYaw);
 	CMatrix matM(matP * matY);
