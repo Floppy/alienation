@@ -2,6 +2,10 @@
 #define ALIENATION_MATERIAL_H
 
 #include "config.h"
+#include <windows.h>
+#include <GL/gl.h>
+#include <GL/glext.h>
+
 #include "Math/Vector.h"
 
 /**
@@ -87,6 +91,8 @@ class CMaterial
 {
    
  public:
+	 void disableDot3() const;
+	 void renderBumpMap() const;
    
    /**
     * Constructor.
@@ -124,6 +130,11 @@ class CMaterial
    void render() const;
 
    /**
+    * Boolean to say if material has bump map
+    */ 
+	bool m_bHasBumpMap;
+
+   /**
     * Colour under ambient lighting.
     */ 
    CRGBAColour m_oAmbient;
@@ -144,10 +155,19 @@ class CMaterial
    CRGBAColour m_oSpecular;
 
    /**
+    * Materials shininess value
+    */ 
+	float m_fShininess;
+
+   /**
     * Texture ID.
     */ 
    unsigned int m_uiTexture;
 
+	/**
+    * Bump map texture ID.
+    */ 
+   unsigned int m_uiBumpTexture;
 };
 
 #endif // ALIENATION_MATERIAL_H
