@@ -38,15 +38,16 @@ COpenGL :: COpenGL() :
 }
 
 bool COpenGL :: initGL() {
-	//All initialisation. Nothing rocket science here.
-	float afAmbient[4] = {0.25f, 0.25f, 0.25f, 1.0f};
-	float afDiffuse[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-	float afPosition[4] = {0.0f, 0.0f, 2.0f, 0.0f};
-
-	m_bSlowmo = false;
+        // Init lighting
+        CRGBAColour oAmbient(0.25f, 0.25f, 0.25f, 1.0f);
+        CRGBAColour oDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
+        CVector3 oPosition(0.0f, 0.0f, 2.0f);
 	m_poLight = new CLight(GL_LIGHT0);
-	m_poLight->init(afAmbient, afDiffuse, afPosition);
+	m_poLight->init(oAmbient, oDiffuse, oPosition);
         m_poLight->enable();
+
+	//All initialisation. Nothing rocket science here.
+	m_bSlowmo = false;
 	m_bCamUp = m_bCamDown = m_bCamLeft = m_bCamRight = m_bFire = false;
 	m_poGlfont = new CGLFont();
 	m_poGlfont->load();

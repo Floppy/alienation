@@ -9,35 +9,53 @@
 //////////////////////////////////////////////////////////////////////
 
 CLight::CLight(GLenum iLight) :
-   m_iLight(iLight)
+   m_oAmbient(0,0,0,1),
+   m_oDiffuse(1,1,1,1),
+   m_iLight(iLight)   
 {
+   for (int i=0; i<4; i++) 
+      m_afPosition[i] = 0;
 }
 
 CLight::~CLight()
 {
 }
 
-void CLight::init(float afAmbient[4], float afDiffuse[4], float afPosition[4])
+void CLight::init(const CRGBAColour& oAmbient, const CRGBAColour& oDiffuse, const CVector3& oPosition)
 {
    // Turn on lighting
    glEnable(GL_LIGHTING);
 
-   // Set values
-   for (int i = 0; i < 4 ; i++)
-   {
-      m_afLightAmbient[i] = afAmbient[i];
-      m_afLightDiffuse[i] = afDiffuse[i];
-      m_afLightPosition[i] = afPosition[i];
-   }
-
-   // Setup GL
-   glLightfv(m_iLight, GL_AMBIENT, m_afLightAmbient);
-   glLightfv(m_iLight, GL_DIFFUSE, m_afLightDiffuse);
-   glLightfv(m_iLight, GL_POSITION, m_afLightPosition);
-   
+   update(GL_AMBIENT,oAmbient);
+   update(GL_DIFFUSE,oDiffuse);
+   updatePosition(oPosition);
 }
 
-void CLight::update(GLenum type, float afAmount[4])
+void CLight::update(GLenum type, const CRGBAColour& oColour)
 {
-   glLightfv(m_iLight, type, afAmount);
+   switch (type) {
+
+   case GL_AMBIENT: {
+      m_oAmbient = oColour;
+      glLightfv(m_iLight, GL_AMBIENT, m_oAmbient.glColour());
+   } break;
+
+   case GL_DIFFUSE: {
+      m_oDiffuse = oColour;
+      glLightfv(m_iLight, GL_DIFFUSE, m_oDiffuse.glColour());
+      glLightfv(m_iLight, GL_SPECULAR, m_oDiffuse.glColour());
+   } break;
+
+   default:
+     break;
+   }
+}
+
+void CLight::updatePosition(const CVector3& oPosition)
+{
+   // Set values
+   for (int i = 0; i < 3 ; i++)
+      m_afPosition[i] = oPosition.glVector()[i];
+   // Position
+   glLightfv(m_iLight, GL_POSITION, m_afPosition);
 }

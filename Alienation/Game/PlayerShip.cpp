@@ -31,10 +31,10 @@ CPlayerShip::CPlayerShip() :
 	m_bLeftLook = m_bRightLook = m_bUpLook = m_bBackLook = false;
 
         // Setup cockpit light
-	float afAmbient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-	float afDiffuse[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-	float afPosition[4] = {0.0f, 0.0f, 2.0f, 0.0f};
-	m_oLight.init(afAmbient, afDiffuse, afPosition);
+        CRGBAColour oAmbient(1.0f, 1.0f, 1.0f, 1.0f);
+        CRGBAColour oDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
+        CVector3 oPosition(0.0f, 0.0f, 0.0f);
+	m_oLight.init(oAmbient, oDiffuse, oPosition);
 
 }
 

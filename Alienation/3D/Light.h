@@ -6,6 +6,8 @@
 #endif // _MSC_VER > 1000
 
 #include "config.h"
+#include "3D/Material.h"
+#include "Math/Vector.h"
 #include <GL/gl.h>
 
 /**
@@ -28,12 +30,17 @@ public:
         /**
          * Initialise.
          */
-	void init(float afAmbient[4], float afDiffuse[4], float afPosition[4]);
+	void init(const CRGBAColour& oAmbient, const CRGBAColour& oDiffuse, const CVector3& oPosition);
 
         /**
          * Change colour.
          */
-	void update(GLenum type, float afAmount[4]);
+	void update(GLenum type, const CRGBAColour& oColour);
+
+        /**
+         * Change position.
+         */
+        void updatePosition(const CVector3& position);
 
         /**
          * Turn on light.
@@ -52,17 +59,17 @@ public:
         /**
          * Ambient colour.
          */
-	float m_afLightAmbient[4];
+	CRGBAColour m_oAmbient;
 
         /**
          * Diffuse colour.
          */
-	float m_afLightDiffuse[4];
+	CRGBAColour m_oDiffuse;
 
         /**
          * Position.
          */
-	float m_afLightPosition[4];
+	float m_afPosition[4];
 
 
         /**
