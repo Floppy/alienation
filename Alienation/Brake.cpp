@@ -37,9 +37,9 @@ void CBrake::init()
 	char **astrFiles = new char*[1];
 
 	astrFiles[0] = new char(16);
-	strcpy(astrFiles[0], "smoke.bmp");
+	strcpy(astrFiles[0], "smoke.png");
 
-	m_poTexture->load("data/texture", astrFiles, 1);
+	m_poTexture->load(astrFiles, 1);
 }
 
 void CBrake::update(float fDT)

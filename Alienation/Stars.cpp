@@ -64,13 +64,13 @@ void CStars::initStars()
 	char **astrFiles = new char*[3];
 
 	astrFiles[0] = new char(16);
-	strcpy(astrFiles[0], "an01.bmp");
+	strcpy(astrFiles[0], "an01.png");
 	astrFiles[1] = new char(16);
-	strcpy(astrFiles[1], "an02.bmp");
+	strcpy(astrFiles[1], "an02.png");
 	astrFiles[2] = new char(16);
-	strcpy(astrFiles[2], "an03.bmp");
+	strcpy(astrFiles[2], "an03.png");
 
-	m_poTexture->load("data/texture", astrFiles, 3);
+	m_poTexture->load(astrFiles, 3);
 
 //	LoadGLTextures();
 }

@@ -27,9 +27,9 @@ void CGLFont::load()
 	char **astrFiles = new char*[1];
 
 	astrFiles[0] = new char(16);
-	strcpy(astrFiles[0], "Data/text.bmp");
+	strcpy(astrFiles[0], "text.png");
 
-	m_poTexture->load("", astrFiles, 1);
+	m_poTexture->load(astrFiles, 1);
 }
 
 //pos is obviously the position in world co-ordinates, size is in same co-ords

@@ -35,9 +35,9 @@ CPlayerShip::~CPlayerShip()
 //Again, not a good use of inheritance, too much duplicated code 
 void CPlayerShip::loadShip()
 {
-	m_poShips[0].m_oModel.init3ds("data/model/shuttle/shuttle.3ds");
+        m_poShips[0].m_oModel.init3ds("Data/Model/shuttle.3ds");
 	m_poShips[0].m_poTrail->init();
-	m_oCockpitModel.init3ds("data/model/canopy02.3ds");
+	m_oCockpitModel.init3ds("Data/Model/canopy02.3ds");
 	m_poShips[0].m_poWeapon->init();
 	m_poShips[0].m_poBrake->init();
 }

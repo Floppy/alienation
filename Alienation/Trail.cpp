@@ -287,9 +287,9 @@ void CTrail::init()
 	char **astrFiles = new char*[2];
 
 	astrFiles[0] = new char(16);
-	strcpy(astrFiles[0], "star.bmp");
+	strcpy(astrFiles[0], "star.png");
 	astrFiles[1] = new char(16);
-	strcpy(astrFiles[1], "flare.bmp");
+	strcpy(astrFiles[1], "flare.png");
 
-	m_poTexture->load("data", astrFiles, 2);
+	m_poTexture->load(astrFiles, 2);
 }

@@ -47,7 +47,7 @@ void C3dsLoader::init3ds(char* pFilename)
 	}
 
 	//Loads the textures :***********problem inside this routine******************
-	m_poTexture->load("Data/texture", astrFilenames, m_o3DModel.m_iNumOfMaterials);
+	m_poTexture->load(astrFilenames, m_o3DModel.m_iNumOfMaterials);
 
 	//This library didnt at first use display lists, so here I altered so it did :)
 	m_uiList = glGenLists(1);

@@ -19,8 +19,6 @@ CLoad3DS::CLoad3DS()
 
 bool CLoad3DS::import3DS(C3DModel *pModel, char *strFileName)
 {
-	char strMessage[255] = {0};
-	
 	m_pFilePointer = fopen(strFileName, "rb");
 	
 	if(!m_pFilePointer) 

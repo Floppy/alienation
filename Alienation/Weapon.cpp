@@ -236,7 +236,7 @@ void CWeapon::init()
 	char **astrFiles = new char*[1];
 
 	astrFiles[0] = new char(16);
-	strcpy(astrFiles[0], "ball.bmp");
+	strcpy(astrFiles[0], "ball.png");
 
-	m_poTex->load("data/texture", astrFiles, 1);
+	m_poTex->load(astrFiles, 1);
 }

@@ -49,7 +49,7 @@ CShip::~CShip()
 //load model, trail texture and brake texture
 void CShip::loadShip()
 {
-	m_poShips[0].m_oModel.init3ds("data/model/shuttle/shuttle.3ds");
+        m_poShips[0].m_oModel.init3ds("Data/Model/shuttle.3ds");
 	m_poShips[0].m_poTrail->init();
 	m_poShips[0].m_poBrake->init();
 }
@@ -57,8 +57,6 @@ void CShip::loadShip()
 //what it says on the tin
 void CShip::draw()
 {
-	CVector3 vecTemp;
-
 	glPushMatrix();					//Save copy of lookat rotation
 	glTranslatef(m_ppMasses[0]->m_vecPos.m_fx, m_ppMasses[0]->m_vecPos.m_fy, m_ppMasses[0]->m_vecPos.m_fz); //move to ship position
 	glMultMatrixf(m_poShips[0].m_matRotation.m_afElement); //multiply by the ships rotation matrix
