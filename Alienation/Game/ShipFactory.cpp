@@ -65,6 +65,7 @@
       for (unsigned int i=0; i<iNumBrakes; i++) {
          pBrakes[i] = state.getVector3(i);
       }
+      pShip->setBrakes(iNumBrakes,pBrakes);
       delete [] pBrakes;
       state.pop();
 

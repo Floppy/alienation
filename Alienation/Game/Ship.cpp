@@ -43,7 +43,6 @@ CShip::CShip(float mass) :
    m_quaCamOrientation.loadIdentity();
    m_matCamRotation.loadIdentity();
 
-   m_poBrake = new CBrake(100,CVector3(0.0f, 0.0f, 0.0f));
 }
 
 CShip::~CShip()
@@ -62,8 +61,6 @@ void CShip::load(const char* strShipModel, const char* strCockpitModel)
       // Prepare
       m_oCockpitModel.init();
    }
-
-   m_poBrake->init();
 }
 
 void CShip::drawBlended() {
@@ -216,4 +213,10 @@ void CShip::setTrails(unsigned int iNumTrails, const CVector3* pTrails)
       m_poTrails[i].setup(500, m_avecTrailPoints[i]);
       m_poTrails[i].init();
    }
+}
+
+void CShip::setBrakes(unsigned int iNumBrakes, const CVector3* pBrakes)
+{
+   m_poBrake = new CBrake(100,CVector3(0.0f, 0.0f, 0.0f));
+   m_poBrake->init();
 }
