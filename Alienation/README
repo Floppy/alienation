@@ -1,4 +1,4 @@
-Alienation 0.0.1
+Alienation 0.0.3
 ----------------
 
 Linux:
@@ -21,3 +21,11 @@ You will need to be in the top-level source directory to do this,
 otherwise it won't find the data files.
 
 Enjoy!
+
+
+Windows:
+--------
+
+You can build Alienation in Visual Studio, but you'll need to install 
+the SDL, SDL_image and SDL_mixer libraries into your include and library
+paths.
