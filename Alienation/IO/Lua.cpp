@@ -59,8 +59,8 @@ namespace NSDIO {
       lua_pushstring(m_pState, name);
       lua_rawget(m_pState,-2);
       if (lua_type(m_pState,-1) != type) {
-         fprintf(stderr,"ERROR: Wrong type! Expected %s, got %s\n",
-                 lua_typename(m_pState,type),lua_typename(m_pState,lua_type(m_pState,-1)));
+         fprintf(stderr,"ERROR: Wrong type accessing field %s! Expected %s, got %s\n",
+                 name, lua_typename(m_pState,type),lua_typename(m_pState,lua_type(m_pState,-1)));
          pop();
          return false;
       }
@@ -70,8 +70,8 @@ namespace NSDIO {
    bool CLua::push(unsigned int index, int type) {
       lua_rawgeti(m_pState,-1,index+1);
       if (lua_type(m_pState,-1) != type) {
-         fprintf(stderr,"ERROR: Wrong type! Expected %s, got %s\n",
-                 lua_typename(m_pState,type),lua_typename(m_pState,lua_type(m_pState,-1)));
+         fprintf(stderr,"ERROR: Wrong type accessing field %d! Expected %s, got %s\n",
+                 index, lua_typename(m_pState,type),lua_typename(m_pState,lua_type(m_pState,-1)));
          pop();
          return false;
       }
