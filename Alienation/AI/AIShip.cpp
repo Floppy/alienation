@@ -21,8 +21,6 @@ CAIShip::CAIShip(int num, float mass) :
    m_vecRight = CVector3(1.0f, -5.0f, -20.0f);
    m_vecDirection = m_vecHeading;
    m_bWeaponFire = false;
-   m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
-   m_oSphere.m_fRadius = 13.0f;
    
    m_fMaxPitchRate = 80.0f;
    m_fMaxYawRate = 50.0f;

@@ -66,11 +66,18 @@ class C3DObject {
    { m_vecTranslation = vecTranslation; }
    
    /**
-    * Get size of bounding sphere.
-    * @return Radius of bounding sphere.
+    * Get bounding sphere.
+    * @return Bounding sphere.
     */
-   float boundingRadius() const
-   { return m_oSphere.m_fRadius; }
+   CBoundingSphere& boundingSphere()
+   { return m_oSphere; }
+
+   /**
+    * Get bounding sphere.
+    * @return Bounding sphere.
+    */
+   const CBoundingSphere& boundingSphere() const
+   { return m_oSphere; }
 
  protected:
 

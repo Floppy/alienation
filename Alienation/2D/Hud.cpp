@@ -268,7 +268,7 @@ namespace NSD2D {
       // Calculate direction vector
       CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
       float fRange = vecTarget.length();
-      float fSize = m_pTarget->m_oModel.boundingRadius();
+      float fSize = m_pTarget->m_oModel.boundingSphere().m_fRadius;
       //float fAngle = RAD_TO_DEG(atan(fSize / fRange) * 2);
       
       // Set Projection Matrix

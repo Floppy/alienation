@@ -25,7 +25,7 @@ void CModel::init() {
    }
    // Calculate bounding sphere
    for (it = m_oObjects.begin(); it!=m_oObjects.end(); ++it) {
-      float fLength = (*it)->getTranslation().length() + (*it)->boundingRadius();
+      float fLength = (*it)->getTranslation().length() + (*it)->boundingSphere().m_fRadius;
       if (fLength > m_oSphere.m_fRadius) m_oSphere.m_fRadius = fLength;
    }
    C3DObject::init();

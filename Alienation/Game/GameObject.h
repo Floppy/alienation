@@ -13,7 +13,6 @@
 #include "Math/Quat.h"
 #include "Math/Matrix.h"
 #include "3D/Model.h"
-#include "3D/BoundingSphere.h"
 #include "3D/Frustum.h"
 
 class CGameObject : public CSimulation 
@@ -38,8 +37,6 @@ class CGameObject : public CSimulation
    virtual void simulate(float dt);
 
    CFrustum m_oFrustum;
-
-   CBoundingSphere m_oSphere;
 
    CGameObject*          m_poTarget;
 

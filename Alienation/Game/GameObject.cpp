@@ -12,8 +12,6 @@
 CGameObject::CGameObject(int num, float mass) : CSimulation(num, mass)
 {
    //initialise data
-   m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
-   m_oSphere.m_fRadius = 13.0f;
    m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
    m_vecHeading = CVector3(0.0f, -2.0f, -11.0f);
    m_fPitch = 0.0f;
@@ -38,8 +36,8 @@ CGameObject::~CGameObject()
 //what it says on the tin
 void CGameObject::draw(bool bTestFrustum)
 {
-   m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
-   if (bTestFrustum && !m_oFrustum.SphereInFrustum(&m_oSphere)) return;
+   m_oModel.boundingSphere().m_vecPos = m_ppMasses[0]->m_vecPos;
+   if (bTestFrustum && !m_oFrustum.SphereInFrustum(&m_oModel.boundingSphere())) return;
    
    glPushMatrix();
    glTranslatef(m_ppMasses[0]->m_vecPos.X(), 

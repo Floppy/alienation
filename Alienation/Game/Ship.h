@@ -37,7 +37,6 @@ class CShip : public CGameObject
 	CVector3		m_vecLastForce, m_vecBrakePoint;
 	bool			m_bStraffUp, m_bStraffDown, m_bStraffRight, m_bStraffLeft;
 	CVector3		m_vecCamView;
-	CQuat			m_quaOrientation;
 	CQuat			m_quaCamOrientation;
 	float			m_fCamPitch, m_fCamYaw;
 	float			m_fMaxPitchRate, m_fMaxYawRate, m_fMaxRollRate;
