@@ -3,7 +3,6 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "3D/TextureManager.h"
-#include <SDL_opengl.h>
 
 #include <iostream>
 using namespace std;
@@ -33,7 +32,7 @@ unsigned int CTextureManager::load(const char* strFilename)
    // Load
    if (pTexture->load(strFilename)) 
    {
-      unsigned int uiTexture = pTexture->ID();
+      unsigned int uiTexture = m_hTextures.size();
       // Add to hashes
       m_hTextures[uiTexture] = pTexture;
       m_hReferences[uiTexture] = 1;
@@ -56,7 +55,7 @@ unsigned int CTextureManager::create(unsigned int iX, unsigned int iY)
    // Load
    if (pTexture->create(iX,iY)) 
    {
-      unsigned int uiTexture = pTexture->ID();
+      unsigned int uiTexture = m_hTextures.size();
       // Add to hashes
       m_hTextures[uiTexture] = pTexture;
       m_hReferences[uiTexture] = 1;
@@ -90,14 +89,10 @@ void CTextureManager::removeReference(unsigned int uiTexture)
    }   
 }
 
-void CTextureManager::activate(unsigned int uiTexture) const
+void CTextureManager::render(unsigned int uiTexture)
 {
-   glBindTexture(GL_TEXTURE_2D, uiTexture);
-}
-
-bool CTextureManager::valid(unsigned int uiTexture) const 
-{
-   return glIsTexture(uiTexture);
+   CTexture* pTexture(m_hTextures[uiTexture]);
+   if (pTexture) pTexture->render();
 }
 
 CTexture* CTextureManager::texture(unsigned int uiTexture) {

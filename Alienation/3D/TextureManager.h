@@ -70,18 +70,11 @@ class CTextureManager
    void removeReference(unsigned int uiTexture);
    
    /**
-    * Activate a texture for rendering.
-    * @param uiTexture The texture ID to activate.
+    * Bind a texture for rendering.
+    * @param uiTexture The texture ID to render.
     */
-   void activate(unsigned int uiTexture) const;
+   void render(unsigned int uiTexture);
    
-   /**
-    * Can the texture be rendered?
-    * @param uiTexture The texture ID to check.
-    * @return true if the texture is ready to render.
-    */
-   bool valid(unsigned int uiTexture) const;   
-
    /**
     * Access the texture itself
     * @param uiTexture The texture ID to access.
