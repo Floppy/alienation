@@ -25,6 +25,7 @@
 #include "3D/Light.h"
 #include "3D/Frustum.h"
 #include "3D/Model.h"
+#include "3D/Sprite.h"
 #include <SDL.h>
 
 class CKeys {											// Structure For Keyboard Stuff
@@ -57,6 +58,7 @@ class COpenGL {
 		CKeys m_oKeys;
 		CFrustum  m_oFrustum;
                 CModel m_pRoids[20];
+                CSprite m_oSun;
                 //CModel m_oStation;
 };
 

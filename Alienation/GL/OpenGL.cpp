@@ -11,6 +11,7 @@
 #include "GL/OpenGL.h"
 #include "IO/3ds.h"
 #include "Math/Random.h"
+#include "3D/TextureManager.h"
 #include <GL/glu.h>
 
 // We define the joystick axes here, because they
@@ -70,11 +71,18 @@ bool COpenGL :: initGL() {
    glEnable(GL_LIGHTING);
    CRGBAColour oAmbient(0.25f, 0.25f, 0.25f, 1.0f);
    CRGBAColour oDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
-   CVector3 oPosition(0.0f, 0.0f, -100.0f);
+   CVector3 oPosition(0.0f, 0.0f, -1000.0f);
    m_poLight = new CLight(GL_LIGHT0);
    m_poLight->init(oAmbient, oDiffuse, oPosition);
    m_poLight->enable();
-   
+   // Create sun sprite
+   CMaterial oMaterial;
+   oMaterial.m_oEmissive = CRGBAColour(1.0f, 1.0f, 1.0f,0);
+   oMaterial.m_uiTexture = g_oTextureManager.load("sun.png");   
+   m_oSun = CSprite(oMaterial);
+   m_oSun.setSize(1000);
+   m_oSun.init();   
+
    //All initialisation. Nothing rocket science here.
    m_bSlowmo = false;
    m_bCamUp = m_bCamDown = m_bCamLeft = m_bCamRight = m_bFire = false;
@@ -149,6 +157,8 @@ bool COpenGL::DrawGLScene(GLvoid) {
    glLoadIdentity();					
 
    m_poShip->drawCamera();
+   m_oSun.setTranslation(CVector3(0,0,10000) + m_poShip->m_ppMasses[0]->m_vecPos);
+   m_oSun.render();
    m_poLight->render();
    m_poShip->draw();
    m_oFrustum.CalculateFrustum();
