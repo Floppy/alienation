@@ -104,6 +104,11 @@ class CTextureManager
    std::map<unsigned int, unsigned int> m_hReferences;
 
    /**
+    * Reference counts.
+    */
+   std::map<std::string, unsigned int> m_hFiles;
+
+   /**
     * Root location of textures
     */
    char m_strTextureRoot[255];

@@ -28,6 +28,11 @@ CTextureManager::~CTextureManager()
 
 unsigned int CTextureManager::load(const char* strFilename)
 {   
+   // Test if texture has already been loaded
+   std::string str(strFilename);
+   std::map<std::string, unsigned int>::iterator it = m_hFiles.find(str);
+   if (it!=m_hFiles.end()) return it->second;
+
    // Create new texture
    CTexture* pTexture = new CTexture;
    // Load
@@ -37,6 +42,8 @@ unsigned int CTextureManager::load(const char* strFilename)
       // Add to hashes
       m_hTextures[uiTexture] = pTexture;
       m_hReferences[uiTexture] = 1;
+      // Store filename
+      m_hFiles[str] = uiTexture;
       // Done
       return uiTexture;
    }
