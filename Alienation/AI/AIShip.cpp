@@ -3,27 +3,16 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "AIShip.h"
-#include "IO/3ds.h"
-#include "IO/WeaponFactory.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CAIShip::CAIShip(int num, float mass, CVector3 position) : 
-   CShip(1, 2500.0f),
+CAIShip::CAIShip(float mass) :
+   CShip(mass),
    m_fXAngle(0.0f),
    m_fYAngle(0.0f)
 {
-   m_ppMasses[0]->m_vecPos = position;
-   m_vecHeading = m_ppMasses[0]->m_vecPos + CVector3(0.0f, 0.0f, -1.0f);
-   m_vecUp = m_ppMasses[0]->m_vecPos + CVector3(0.0f, 1.0f, 0.0f);
-   m_vecRight = m_ppMasses[0]->m_vecPos + CVector3(1.0f, 0.0f, 0.0f);
-   m_vecDirection = m_vecHeading;
-   m_fMaxPitchRate = 80.0f;
-   m_fMaxYawRate = 50.0f;
-   m_fMaxRollRate = 90.0f;
-   
    // Setup trails
    m_iNumTrails = 1;
    m_avecOrigTrailPoints[0] = CVector3(0.0f, 0.0f, 5.0f);
@@ -31,24 +20,11 @@ CAIShip::CAIShip(int num, float mass, CVector3 position) :
    for (int i=0; i<m_iNumTrails; i++)
 	  m_poTrails[0].setup(500, m_avecTrailPoints[i]);
 
-   // Load weapon
-   m_poWeapon = NSDIO::CWeaponFactory::load("ter_ppc1.lua");
-
 }
 
 CAIShip::~CAIShip()
 {
 
-}
-
-void CAIShip::load()
-{
-   NSDIO::CLoad3DS oLoad3ds;
-   if (oLoad3ds.import3DS(&(m_oModel), "fighter.3ds")) {
-      m_oModel.init();
-   }
-
-   CShip::load();
 }
 
 void CAIShip::simulate(float fDT)

@@ -14,9 +14,8 @@ class CAIShip : public CShip
 
 public:
 
-	CAIShip(int num, float mass, CVector3 position);
+	CAIShip(float mass);
 	virtual ~CAIShip();
-	void load();
 	void simulate(float fDT);
 	void solve();
 
