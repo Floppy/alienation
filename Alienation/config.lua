@@ -23,6 +23,12 @@ video = {
 	                   -- 6 = GL_LINEAR_MIPMAP_LINEAR
 }
 
+sound = {
+
+	enable = 0,
+
+}
+
 game = {
 
 	playership = "ter_shuttle1.lua",
