@@ -10,11 +10,11 @@ CSoundManager::CSoundManager() :
     m_bReady = true;
 }
 
-bool CSoundManager::PlayLoopedMP3(const char* filename) 
+bool CSoundManager::playLoopedMP3(const char* strFilename) 
 {
   FSOUND_STREAM * poMod = NULL;
   // Load file
-  poMod = FSOUND_Stream_OpenFile(filename, FSOUND_LOOP_NORMAL, 0);
+  poMod = FSOUND_Stream_OpenFile(strFilename, FSOUND_LOOP_NORMAL, 0);
   // Play
   if (poMod)
   {
