@@ -59,11 +59,22 @@ bool CTexture::load(char *strDir, char **astrFnames, int iNoOfFiles)
 	
 				glGenTextures(1, &m_puiTexture[iCount]);
 
+				GLenum pixelformat;
+				switch (poTextureImage->format->BitsPerPixel)
+				{
+				case 24:
+					pixelformat = GL_RGB;
+					break;
+				default:
+					pixelformat = GL_RED;
+					break;
+				}
+
 				// Create Linear Filtered Texture
 				glBindTexture(GL_TEXTURE_2D, m_puiTexture[iCount]);
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, poTextureImage->w, poTextureImage->h, 0, GL_RED, GL_UNSIGNED_BYTE, poTextureImage->pixels);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, poTextureImage->w, poTextureImage->h, 0, pixelformat, GL_UNSIGNED_BYTE, poTextureImage->pixels);
 			}
 		}
 		// Free the SDL surface
