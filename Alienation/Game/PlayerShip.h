@@ -13,7 +13,6 @@
 
 #include "Game/Ship.h"
 #include "3D/Model.h"
-#include "3D/Light.h"
 #include "2D/Hud.h"
 
 using namespace NSD2D;
@@ -44,7 +43,6 @@ public:
 	bool  m_bInsideView;
 	bool  m_bLeftLook, m_bRightLook, m_bUpLook, m_bBackLook;
         CHud *m_poHud;
-        CLight m_oLight;
         int m_iThrustChannel;
 };
 

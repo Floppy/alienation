@@ -8,8 +8,6 @@
 
 using namespace NSDSound;
 
-#include <SDL_opengl.h>
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -25,7 +23,6 @@ CPlayerShip::CPlayerShip() :
    m_bUpLook(false),
    m_bBackLook(false),
    m_poHud(NULL),
-   m_oLight(GL_LIGHT1),
    m_iThrustChannel(0)
 {
    m_fDrag = 25.0f;
@@ -39,13 +36,7 @@ CPlayerShip::CPlayerShip() :
 
    m_poHud = new CHud(this);
    m_matCamRotation.loadIdentity();
-   
-   // Setup cockpit light
-   CRGBAColour oAmbient(1.0f, 1.0f, 1.0f, 1.0f);
-   CRGBAColour oDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
-   CVector3 oPosition(0.0f, 0.0f, 0.0f);
-   m_oLight.init(oAmbient, oDiffuse, oPosition);
-   
+      
    // Load thruster sound
    int iSample = g_oSoundManager.load("thrust.wav");
    m_iThrustChannel = g_oSoundManager.play(iSample,-1);
@@ -140,25 +131,14 @@ void CPlayerShip::drawCamera()
 void CPlayerShip::draw(bool bTestFrustum)
 {
 
-   glPushMatrix();
-   glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
-   glMultMatrixf(m_matRotation.glElements());
-   
-   //draw the cockpit
-   if (m_bInsideView)
+   if (!m_bInsideView)
    {
-      glDisable(GL_LIGHT0);
-      m_oLight.enable();
-      m_oLight.render();
-      m_oCockpitModel.render(); 
-      m_oLight.disable();
-      glEnable(GL_LIGHT0);
-   }
-   //draw the ship
-   else
+      glPushMatrix();
+      glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
+      glMultMatrixf(m_matRotation.glElements());   
       m_oModel.render(); 
-   
-   glPopMatrix();
+      glPopMatrix();
+   }
    
    // Set sound playback location
    g_oSoundManager.setPlaybackLocation(m_ppMasses[0]->m_vecPos, 
@@ -200,7 +180,12 @@ void CPlayerShip::rotateCam(float fDT)
 void CPlayerShip::drawHud()
 {
    if (m_bInsideView) {
-      m_oLight.enable();
+      glPushMatrix();
+      glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
+      glMultMatrixf(m_matRotation.glElements());   
+      //draw the cockpit
+      m_oCockpitModel.render(); 
+      glPopMatrix();
       m_poHud->render();
    }
 }
