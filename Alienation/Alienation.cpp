@@ -18,7 +18,7 @@
 
 #include "GL/OpenGL.h"
 #include "Sound/SoundManager.h"
-#include "Input.h"
+#include "IO/Input.h"
 #include <SDL.h>
 
 #include <iostream>
