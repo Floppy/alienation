@@ -16,6 +16,8 @@
 #include "3D/Light.h"
 #include "2D/Hud.h"
 
+using namespace NSD2D;
+
 //Player ship. A combination of ship and camera (pointless having them as 
 //seperate classes as there can only be one of each). Derived from the CShip class
 class CPlayerShip : public CShip  
