@@ -18,8 +18,6 @@
 #include "Particle.h"
 #include "Math/Vector.h"
 
-#define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
-
 //Nicked this and amended it a LOT. It was really desigh=ned for static particle displays.
 //It is a totally abstract class (note the pure virtuals). In later releases I may make it
 //non abstract and put a lot of the code here for the children to inherit 
