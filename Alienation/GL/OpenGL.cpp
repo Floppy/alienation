@@ -154,8 +154,8 @@ bool COpenGL :: initGL() {
 
    // Init lighting
    glEnable(GL_LIGHTING);
-   CRGBAColour oAmbient(1.0f, 1.0f, 1.0f, 1.0f);
-   CRGBAColour oDiffuse(0.65f, 0.65f, 0.65f, 1.0f);
+   CRGBAColour oAmbient(0.2f, 0.2f, 0.2f, 1.0f);
+   CRGBAColour oDiffuse(0.85f, 0.85f, 0.85f, 1.0f);
    CVector3 oPosition(0.0f, 0.0f, -1000.0f);
 
    m_poLight = new CLight(GL_LIGHT0);
