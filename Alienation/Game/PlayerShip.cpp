@@ -21,10 +21,17 @@ CPlayerShip::CPlayerShip(float mass) :
    m_bRightLook(false),
    m_bUpLook(false),
    m_bBackLook(false),
-   m_poHud(NULL),
-   m_iThrustChannel(0)
+   m_iThrustChannel(0),      
+   m_iLastTime(SDL_GetTicks()),
+   m_oLight(GL_LIGHT1)
+
 {
-   m_poHud = new CHud(this);
+   // Setup light
+   CRGBAColour oLightAmbient(1.0f, 1.0f, 1.0f, 1.0f);
+   CRGBAColour oLightDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
+   CVector3 oPosition(1000.0f, 1000.0f, -1000.0f);
+   m_oLight.init(oLightAmbient, oLightDiffuse, oPosition);
+
 	m_poRadar = new CRadar();
 	m_poRadar->init();
 	m_poRadar->init2D(0.4f, 0.7f, 0.2f, 0.2f, "");
@@ -40,7 +47,9 @@ CPlayerShip::CPlayerShip(float mass) :
 
 CPlayerShip::~CPlayerShip()
 {
-   delete m_poHud;
+   for (vector<CShield*>::iterator it = m_lShields.begin(); it != m_lShields.end(); it++) {
+      delete *it;
+   }
 }
 
 //At last!! using inheritance! Only extra thing this does is rotate the camera
@@ -157,8 +166,65 @@ void CPlayerShip::drawHud()
       //draw the cockpit
       m_oCockpitModel.render(); 
       glPopMatrix();
-      m_poHud->render();
-		m_poRadar->render();
+
+      glEnable(GL_BLEND);
+      glDisable(GL_DEPTH_TEST);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      
+      m_oLight.enable();
+      m_oLight.render();
+
+      // Render shields
+      for (vector<CShield*>::iterator it = m_lShields.begin(); it != m_lShields.end(); it++) {
+         (*it)->renderQuad();
+      }
+
+      float fMaxSpeed(300.0f);
+      float fMaxThrust(9578.0f);
+      
+      float fWidthSpeed = (m_fVel == 0.0f) ?
+         0.001f :
+         (m_fVel / fMaxSpeed) + 0.001f;
+      
+      float fWidthThrust = (m_fThrust == 0.0f) ? 
+         0.001f : 
+         (m_fThrust / fMaxThrust) + 0.001f;
+
+
+      // Draw engine info
+      m_poSpeedIndicator->setTexturePercentage(fWidthSpeed);
+      m_poSpeedIndicator->renderQuad();
+//      sprintf(strFont,"Velocity: %.1f", m_fVel);
+//      m_poFont->print(strFont, CVector2(420.0f, 210.0f), 5.0f);
+      m_poThrustIndicator->setTexturePercentage(fWidthThrust);      
+      m_poThrustIndicator->renderQuad();
+//      sprintf(strFont,"Thrust: %.1f", m_fThrust);
+//      m_poFont->print(strFont, CVector2(420.0f, 560.0f), 5.0f);
+
+      // Draw target information
+      m_poTargetingComputer->render();
+
+
+      // Calc FPS
+      char strFont[20];
+      unsigned long iTime = SDL_GetTicks();
+      unsigned long iFPS = 0;
+      if (iTime != m_iLastTime) {
+         iFPS = 1000/(iTime - m_iLastTime);
+      }
+      sprintf(strFont,"%3ld FPS", iFPS);
+//      m_poFont->print(strFont, CVector2(900.0f, 20.0f), 5.0f);
+      m_iLastTime = iTime;
+      
+      // Draw radar
+      m_poRadar->render();
+
+      m_oLight.disable();
+
+      glDisable(GL_BLEND);
+      glEnable(GL_DEPTH_TEST);
+
+
    }
 
 }
@@ -166,23 +232,27 @@ void CPlayerShip::drawHud()
 void CPlayerShip::renderOffScreen()
 {
    if (m_bInsideView) {
-      m_poHud->renderOffScreen();
-		m_poRadar->renderOffScreen(this->m_ppMasses[0]->m_vecPos);
+      m_oLight.enable();
+      m_oLight.render();
+      m_poTargetingComputer->renderOffScreen();
+      m_poRadar->renderOffScreen(this->m_ppMasses[0]->m_vecPos);
+      m_oLight.disable();
    }
 }
 
 void CPlayerShip::setTarget(CGameObject *pTarget) 
 {
-   m_poHud->setTarget(pTarget);
-	m_poRadar->setTarget(pTarget->getObjectID());
+   CGameObject::setTarget(pTarget);
+   m_poTargetingComputer->setTarget(m_poTarget);
+   m_poRadar->setTarget(m_poTarget->getObjectID());
 }
 
 void CPlayerShip::addTarget(CGameObject *pTarget)
 {
-	m_poRadar->addTarget(pTarget->getObjectID(), pTarget->getObjectType(), pTarget->m_ppMasses[0]->m_vecPos);
+   m_poRadar->addTarget(pTarget->getObjectID(), pTarget->getObjectType(), pTarget->m_ppMasses[0]->m_vecPos);
 }
 
 void CPlayerShip::clearTargetList()
 {
-	m_poRadar->clearTargetList();
+   m_poRadar->clearTargetList();
 }

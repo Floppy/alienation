@@ -11,10 +11,16 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+class CShip;
+
 #include "Game/GameObject.h"
 #include "Game/Weapon.h"
 #include "Game/Brake.h"
 #include "Game/Trail.h"
+#include "Equipment/Shield.h"
+#include "Equipment/SpeedIndicator.h"
+#include "Equipment/ThrustInformation.h"
+#include "Equipment/TargetingComputer.h"
 
 //OK the biggy. How this class eveolves is up for debate. My own view
 //is that it should hold the data for every ship available in the game, 
@@ -31,6 +37,7 @@ class CShip : public CGameObject
    virtual void load(const char* strShipModel, const char* strCockpitModel = NULL);
 
    virtual void drawBlended();
+
    virtual void solve();
    virtual void simulate(float dt);
    virtual void rotHeading(CMatrix m);
@@ -69,6 +76,11 @@ class CShip : public CGameObject
 	bool			m_bWeaponFire;
 	bool			m_bBraking;
 	CModel m_oCockpitModel;
+
+        vector<CShield*> m_lShields;
+        CSpeedIndicator * m_poSpeedIndicator;        
+        CThrustIndicator * m_poThrustIndicator;        
+        CTargetingComputer * m_poTargetingComputer;
 
 };
 

@@ -77,6 +77,53 @@
       float fThrust = state.getNumber("thrust");
       pShip->setPerformance(fPitch,fYaw,fRoll,fThrust);
       
+      CRGBAColour oDiffuse = CRGBAColour(0.0f,0.0f,0.0f,1.0f);
+      CRGBAColour oAmbient = CRGBAColour(0.0f,0.0f,0.0f,1.0f);
+      CRGBAColour oEmissive = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
+
+      // Add front shield
+      CShield* pShield = new CShield;
+      pShield->init2D(0.3f, 0.3f, 0.25f, 0.1f, "Hud/hud_fore.png");
+      pShield->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
+      pShip->m_lShields.push_back(pShield);
+
+      // Add rear shield
+      pShield = new CShield;
+      pShield->init2D(0.3f, 0.7f, 0.25f, 0.1f, "Hud/hud_aft.png");
+      pShield->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
+      pShip->m_lShields.push_back(pShield);
+
+      // Add right shield
+      pShield = new CShield;
+      pShield->init2D(0.3f, 0.2f, 0.1f, 0.25f, "Hud/hud_right.png");
+      pShield->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
+      pShip->m_lShields.push_back(pShield);
+
+      // Add left shield
+      pShield = new CShield;
+      pShield->init2D(0.7f, 0.2f, 0.1f, 0.25f, "Hud/hud_left.png");
+      pShield->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
+      pShip->m_lShields.push_back(pShield);
+
+      // Add speed indicator
+      CSpeedIndicator* pSpeed = new CSpeedIndicator;
+      pSpeed->init2D(0.3f, 0.25f, 0.25f, 0.1f, "Hud/hud_speed.png");
+      pSpeed->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
+      pSpeed->setTexturePercentage(0.1f);
+      pShip->m_poSpeedIndicator = pSpeed;
+
+      // Add thrust indicator
+      CThrustIndicator* pThrust = new CThrustIndicator;
+      pThrust->init2D(0.3f, 0.75f, 0.25f, 0.1f, "Hud/hud_thrust.png");
+      pThrust->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
+      pThrust->setTexturePercentage(0.1f);
+      pShip->m_poThrustIndicator = pThrust;
+
+      // Add targeting computer
+      CTargetingComputer* pTargetComp = new CTargetingComputer(pShip);
+      pTargetComp->init();
+      pShip->m_poTargetingComputer = pTargetComp;
+
       return pShip;
    }
    

@@ -12,7 +12,6 @@
 #include "config.h"
 
 #include "Game/Ship.h"
-#include "Game/Hud.h"
 #include "3D/Model.h"
 #include "Equipment/Radar.h"
 
@@ -43,8 +42,18 @@ public:
 	CRadar *m_poRadar;
 	bool  m_bInsideView;
 	bool  m_bLeftLook, m_bRightLook, m_bUpLook, m_bBackLook;
-        CHud *m_poHud;
         int m_iThrustChannel;
+
+      /**
+       * Time at last frame
+       */
+      unsigned long m_iLastTime;
+      
+      /**
+       * Light for radar display
+       */
+      CLight m_oLight;
+
 };
 
 #endif // !defined(AFX_PLAYERSHIP_H__037FA971_63AF_49C5_9C78_DCF151372718__INCLUDED_)
