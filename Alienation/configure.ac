@@ -28,12 +28,15 @@ esac
 # Checks for libraries
 
 # OpenGL
-LIBS="$LIBS -lGL -lGLU"
+AC_CHECK_HEADER(GL/gl.h,,exit)
+AC_CHECK_LIB(GL,glEnable,,exit)
+AC_CHECK_HEADER(GL/glu.h,,exit)
+AC_CHECK_LIB(GLU,gluProject,,exit)
 
 # SDL
 SDL_LIBS="`sdl-config --libs`"
 SDL_CFLAGS="`sdl-config --cflags`"
-LIBS="$LIBS $SDL_LIBS -lSDL_image -lSDL_mixer"
+LIBS="$LIBS $SDL_LIBS"
 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
 AC_CHECK_HEADER(SDL.h,,exit)
 AC_CHECK_LIB(SDL,SDL_Init,,exit)
@@ -43,10 +46,11 @@ AC_CHECK_HEADER(SDL_mixer.h,,exit)
 AC_CHECK_LIB(SDL_mixer,Mix_OpenAudio,,exit)
 
 # Lua
-LIBS="$LIBS -llua -llualib"
 AC_CHECK_HEADER(lua.h,,exit)
 AC_CHECK_HEADER(lualib.h,,exit)
-AC_CHECK_LIB(lualib,lua_open,,exit)
+AC_CHECK_HEADER(lauxlib.h,,exit)
+AC_CHECK_LIB(lua,lua_open,,exit)
+AC_CHECK_LIB(lualib,lua_dofile,,exit)
 
 # Checks for headers
 AC_HEADER_STDC
