@@ -10,7 +10,7 @@ namespace NSD2D {
       m_pTarget(NULL),
       m_iLastTime(SDL_GetTicks())
    {
-      for (int i=0; i<8; i++) {
+      for (int i=0; i<9; i++) {
          m_auiTextures[i] = 0;
       }
       init();
@@ -18,7 +18,7 @@ namespace NSD2D {
    
    CHud::~CHud()
    {
-      for (int i=0; i<8; i++) {
+      for (int i=0; i<9; i++) {
          g_oTextureManager.removeReference(m_auiTextures[i]);
       }
    }
@@ -45,7 +45,12 @@ namespace NSD2D {
    //**************************************************************************************
    void CHud::render()
    {   
+      double modelview[16];
+      double projection[16];
       
+      glGetDoublev(GL_MODELVIEW_MATRIX,modelview);
+      glGetDoublev(GL_PROJECTION_MATRIX,projection);
+
       float fMaxSpeed(300.0f);
       float fMaxThrust(9578.0f);
       
@@ -113,6 +118,56 @@ namespace NSD2D {
       m_oMaterial.render();
       
       //////////////////////////////////////////////
+      //Target Data                               //
+      //////////////////////////////////////////////
+
+      if (m_pTarget) {
+         // Set quad
+         avecTex[0] = CVector2( 0.0f, 0.0f);
+         avecTex[1] = CVector2( 1.0f, 0.0f);
+         avecTex[2] = CVector2( 1.0f, 1.0f);
+         avecTex[3] = CVector2( 0.0f, 1.0f);
+         // Select targeting reticle
+         g_oTextureManager.render(m_auiTextures[8]);
+         CVector3 pos = m_pTarget->m_ppMasses[0]->m_vecPos;
+         // Get viewport
+         int viewport[4];
+         glGetIntegerv(GL_VIEWPORT,viewport);
+         // Project to 2d screen coords
+         double dX, dY, dZ;
+         gluProject(pos.X(),pos.Y(),pos.Z(),
+                    modelview, projection,
+                    viewport, &dX, &dY, &dZ);
+         // If behind, invert and scale everything up lots to force it to the edge
+         // This could perhaps work better... not too happy, but it's late
+         if (dZ > 1.0f) {
+            dX = -(dX - (viewport[2]/2)) * viewport[2] + viewport[2]/2;
+            dY = -(dY - (viewport[3]/2)) * viewport[3] + viewport[3]/2;
+         }
+         // Clip
+         if (dX < 0) dX = 0;
+         else if (dX > viewport[2]) dX = viewport[2];
+         if (dY < 0) dY = 0;
+         else if (dY > viewport[3]) dY = viewport[3];
+         // Render reticle
+         m_po2DObject->renderQuad(dX-32.0f, (viewport[3]-dY)+32.0f, 64.0f, 64.0f, avecTex);
+         // Calculate range
+         CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
+         int iRange = static_cast<int>(vecTarget.length());           
+         // Range
+         sprintf(strFont,"%5d m", iRange);
+         m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f);
+         m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f);
+         // Velocity
+         sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_fVel));
+         m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f);
+         m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f);
+         // Radar image
+         g_oTextureManager.render(m_auiTextures[7]);
+         m_po2DObject->renderQuad(37.0f, 180.0f, 135.0f, 135.0f, avecTex);
+      }
+      
+      //////////////////////////////////////////////
       //Right Shield                              //
       //////////////////////////////////////////////
       
@@ -147,32 +202,6 @@ namespace NSD2D {
       
       g_oTextureManager.render(m_auiTextures[0]);
       m_po2DObject->renderQuad(415.0f, 350.0f, 200.0f, 150.0f, avecTex);
-      
-      //////////////////////////////////////////////
-      //Target Data                               //
-      //////////////////////////////////////////////
-
-      if (m_pTarget) {
-         // Set quad
-         avecTex[0] = CVector2( 0.0f, 0.0f);
-         avecTex[1] = CVector2( 1.0f, 0.0f);
-         avecTex[2] = CVector2( 1.0f, 1.0f);
-         avecTex[3] = CVector2( 0.0f, 1.0f);
-         // Calculate range
-         CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
-         int iRange = static_cast<int>(vecTarget.length());           
-         // Range
-         sprintf(strFont,"%5d m", iRange);
-         m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f);
-         m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f);
-         // Velocity
-         sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_fVel));
-         m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f);
-         m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f);
-         // Radar image
-         g_oTextureManager.render(m_auiTextures[7]);
-         m_po2DObject->renderQuad(37.0f, 180.0f, 135.0f, 135.0f, avecTex);
-      }
       
       //////////////////////////////////////////////
       //Speed Bar                                 //
@@ -243,7 +272,8 @@ namespace NSD2D {
       m_auiTextures[5] = g_oTextureManager.load("Hud/hud_thrust.png");
       m_auiTextures[6] = g_oTextureManager.load("Hud/hud_target.png");
       m_auiTextures[7] = g_oTextureManager.create(128,128);
-      for (int i=0; i<8; i++) 
+      m_auiTextures[8] = g_oTextureManager.load("Hud/hud_reticle.png");
+      for (int i=0; i<9; i++) 
       {
          g_oTextureManager.texture(m_auiTextures[i])->init();
       }
