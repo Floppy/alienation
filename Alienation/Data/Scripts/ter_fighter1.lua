@@ -6,6 +6,7 @@ ship = {
 	race    	= "terran",
 	fullname	= "Fighter Mk.1",
 	model   	= "fighter.3ds",
+	cockpit		= "canopy02.3ds",
 	pitch   	= 80,
 	yaw 		= 50,
 	roll 		= 90,
