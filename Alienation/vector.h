@@ -4,6 +4,15 @@
 #include "config.h"
 
 #include <math.h>
+
+// 2d vector class
+class CVector2 
+{
+public:
+	float m_fx, m_fy;							// 2D vector coordinates
+};
+
+
 // class Vector3D		---> An object to represent a 3D vector or a 3D point in space
 class CVector3
 {
