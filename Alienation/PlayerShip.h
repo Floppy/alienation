@@ -10,7 +10,6 @@
 #endif // _MSC_VER > 1000
 
 #include "Ship.h"
-#include "camera.h"
 
 #define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
 #define piover180 	(0.0174532925f)
