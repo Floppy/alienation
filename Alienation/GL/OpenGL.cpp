@@ -19,6 +19,7 @@
 #include "AI/AIShip.h"
 #include "IO/Lua.h"
 #include "Math/Vector.h"
+#include "Game/ShipFactory.h"
 
 #include <iostream>
 #ifndef WIN32
@@ -137,17 +138,16 @@ bool COpenGL :: initGL() {
    m_poStars->initStars();
    
    // Create player ship
-   m_poShip = new CPlayerShip();
-   m_poShip->load();
+   m_poShip = static_cast<CPlayerShip*>(CShipFactory::load("ter_shuttle1.lua",true));
+   m_poShip->setPosition(CVector3(0,0,0));
 
    // Create and load AI ships
    CRandom prng(547343);
    for (int i=0; i<3; i++) {
-      CAIShip* poAIShip = new CAIShip(1, 5000.0f,
-                                      CVector3(prng.randDouble()*1000 - 500,
-                                               prng.randDouble()*1000 - 500,
-                                               prng.randDouble()*1000 - 500));
-      poAIShip->load();      
+      CShip* poAIShip = CShipFactory::load("ter_fighter1.lua",false);
+      poAIShip->setPosition(CVector3(prng.randDouble()*1000 - 500,
+                                     prng.randDouble()*1000 - 500,
+                                     prng.randDouble()*1000 - 500));
       poAIShip->setTarget(m_poShip);
       m_opObjects.push_back(poAIShip);
    }
