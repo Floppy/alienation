@@ -83,7 +83,7 @@ bool COpenGL :: initGL() {
    oMaterial.m_oEmissive = CRGBAColour(1.0f, 1.0f, 1.0f,0);
    oMaterial.m_uiTexture = g_oTextureManager.load("sun.png");   
    m_oSun = CSprite(oMaterial);
-   m_oSun.setSize(1000);
+   m_oSun.setSize(850);
    m_oSun.init();   
 
    //All initialisation. Nothing rocket science here.
@@ -105,7 +105,7 @@ bool COpenGL :: initGL() {
    m_poStars->initStars();
    
    // Create and load ships
-	m_poAIShip = new CAIShip(1, 5000.0f);
+   m_poAIShip = new CAIShip(1, 5000.0f);
    m_poAIShip->loadShip();
    m_poShip = new CPlayerShip();
    m_poShip->loadShip();
@@ -160,7 +160,7 @@ bool COpenGL::DrawGLScene(GLvoid) {
    glLoadIdentity();					
 
    m_poShip->drawCamera();
-   m_oSun.setTranslation(CVector3(0,0,10000) + m_poShip->m_ppMasses[0]->m_vecPos);
+   m_oSun.setTranslation(CVector3(0,0,8500) + m_poShip->m_ppMasses[0]->m_vecPos);
    m_oSun.render();
    m_poLight->render();
    m_poShip->draw();
