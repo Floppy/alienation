@@ -16,7 +16,7 @@ class CPacket
 {
 public:
 
-	virtual bool sendAll();
+	virtual bool sendAll() = 0;
 	CPacket();
 	virtual ~CPacket();
 

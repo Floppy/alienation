@@ -24,4 +24,6 @@ private:
    TCPsocket m_oSocket; 
 };
 
+extern CTCPServer go_TCPServer;
+
 #endif // !defined(AFX_TCPSERVER_H__0CF9A002_310D_40AE_A563_375AB6C75DEB__INCLUDED_)

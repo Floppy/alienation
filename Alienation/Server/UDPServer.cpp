@@ -23,6 +23,7 @@ bool CUDPServer::sendAll(CUDPPacket poPacket)
 {
 	UDPsocket oSocket;
 	int i, iResult;
+	IPaddress *poIPAddress;
 
 	m_iCurrentSocket = - 1;
 	m_iCurrentChannel = - 1;
@@ -58,7 +59,8 @@ bool CUDPServer::sendAll(CUDPPacket poPacket)
 				m_arrSocket.push_back(oSocket);
 			}
 		}
-		iResult = SDLNet_UDP_Bind( poPacket, iCurrentChannel, goClientManager.getIPAddress[i] );
+		poIPAddress = goClientManager.getIPAddress(i);
+		iResult = SDLNet_UDP_Bind( m_arrSocket[m_iCurrentSocket], m_iCurrentChannel, poIPAddress );
 		if( iResult == -1 ) 
 		{
 			printf("SDLNet_UDP_Bind: %s\n", SDLNet_GetError());
@@ -68,12 +70,13 @@ bool CUDPServer::sendAll(CUDPPacket poPacket)
 
 	for (i = 0 ; i < m_arrSocket.size() ; i++ )
 	{
-		iResult = SDLNet_UDP_Send( m_arrSocket[i], 0, poPacket );
+		iResult = SDLNet_UDP_Send( m_arrSocket[i], 0, poPacket.getData() );
 		if( !iResult ) 
 		{
 		    printf("SDLNet_UDP_Send: %s\n", SDLNet_GetError());
 		    // do something because we failed to send
 		    // this may just be because no addresses are bound to the channel...
 		}
-	}		
+	}	
+	return true;
 }

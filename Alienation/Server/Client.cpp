@@ -67,7 +67,9 @@ int CClient::getNumberClients()
 	return m_arrClients.size();
 }
 
-IPaddress CClient::getIPAddress(int iIndex)
+IPaddress * CClient::getIPAddress(int iIndex)
 {
-	return m_arrClients[iIndex].oIPAddress;
+	IPaddress *oIP;
+	oIP = &m_arrClients[iIndex].oIPAddress;
+	return oIP;
 }

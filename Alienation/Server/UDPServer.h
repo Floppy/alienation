@@ -12,6 +12,7 @@
 #include <vector>
 #include "SDL.h"
 #include "SDL_net.h"
+#include "UDPPacket.h"
 using namespace std;
 
 class CUDPServer  
@@ -26,5 +27,7 @@ private:
    int m_iCurrentChannel;
    int m_iCurrentChannelIP;
 };
+
+extern CUDPServer go_UDPServer;
 
 #endif // !defined(AFX_UDPSERVER_H__F5949A9E_E088_404B_B76B_772ACFB2ACA8__INCLUDED_)

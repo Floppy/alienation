@@ -18,7 +18,7 @@ using namespace std;
 class CClient  
 {
 public:
-	IPaddress getIPAddress(int iIndex);
+	IPaddress * getIPAddress(int iIndex);
 	int getNumberClients();
 	bool get(IPaddress *poIPAddress, char * strName);
 	char * getName(long lIndex);
@@ -34,5 +34,7 @@ private:
    };
    vector <Client> m_arrClients;
 };
+
+extern CClient goClientManager;
 
 #endif // !defined(AFX_CLIENT_H__4867E43D_55CA_4C88_B525_07AB80F93683__INCLUDED_)
