@@ -13,5 +13,3 @@ CMesh::CMesh() :
    m_pFaces(NULL)
 {}
 
-CMesh::~CMesh() {
-}

@@ -18,8 +18,6 @@ class CMesh {
    
    CMesh();
    
-   ~CMesh();
-   
    // Data inherited from C3DModel
    
    int  m_iNumVertices;
