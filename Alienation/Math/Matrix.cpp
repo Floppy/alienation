@@ -186,6 +186,7 @@ namespace NSDMath {
 
    CVector3 CMatrix::operator*(const CVector3& v)
    {
+
       CVector3 temp;
    
       temp.X() = m_afElement[0] * v.X() +
@@ -224,4 +225,9 @@ namespace NSDMath {
       m_afElement[14] = -m_afElement[14];
    }
 
+	void CMatrix::setElement(int iIndex, float fValue)
+	{
+		m_afElement[iIndex] = fValue;
+	}
 }
+

@@ -180,7 +180,19 @@ namespace NSDMath {
             return *this;
          }
 
-      /**
+		void setX(float fValue) {
+			m_oVector[0] = fValue;
+		}
+
+		void setY(float fValue) {
+			m_oVector[1] = fValue;
+		}
+
+		void setZ(float fValue) {
+			m_oVector[2] = fValue;
+		}
+
+		/**
        * X Component.
        * @return Reference to X component of vector.
        */
@@ -250,6 +262,16 @@ namespace NSDMath {
       CVector3 operator+(const CVector3& vecV) const
          {
             return CVector3(m_oVector[0] + vecV.m_oVector[0], m_oVector[1] + vecV.m_oVector[1], m_oVector[2] + vecV.m_oVector[2]);
+         }
+
+      /**
+       * Vector addition by a float value
+       * @param fVal The float to add.
+       * @return A new vector equal to this + fVal
+       */ 
+      CVector3 operator+(float fVal) const
+         {
+            return CVector3(m_oVector[0] + fVal, m_oVector[1] + fVal, m_oVector[2] + fVal);
          }
 
       /**

@@ -34,8 +34,7 @@ void CTargetingComputer::init()
    m_poTargetingReticle->init2D(0.0f, 0.0f, 0.1f, 0.1f, "Hud/hud_reticle.png");
    m_poTargetingReticle->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
    
-   m_poFont = new CGLFont;
-   m_poFont->load();
+   m_poFont = g_oFontManager.getFont(1);
    
    // Create offscreen texture
    m_auiOffScreenTexture = g_oTextureManager.create(128,128);
@@ -56,12 +55,7 @@ void CTargetingComputer::init()
    m_poHoloTarget = new CFrame;
    m_poHoloTarget->init2D(0.015f, 0.02f, 0.145f, 0.1933f,"");
    m_poHoloTarget->setActiveMaterial(oDiffuse, oAmbient, oEmissive, m_auiOffScreenTexture);
-   
-   // Create font
-   m_poFont = new CGLFont;
-   m_poFont->load();
-   
-
+      
 }
 
 void CTargetingComputer::render() 
@@ -71,55 +65,55 @@ void CTargetingComputer::render()
 
    char strFont[256];
 
-      if (m_pTarget) {
-         // Calculate position of targeting reticle
-         CVector3 pos = m_pTarget->m_ppMasses[0]->m_vecPos;
-         // Get viewport
-         int viewport[4];
-         double modelview[16];
-         double projection[16];
-         glGetIntegerv(GL_VIEWPORT,viewport);
-         glGetDoublev(GL_MODELVIEW_MATRIX,modelview);
-         glGetDoublev(GL_PROJECTION_MATRIX,projection);
-         // Project to 2d screen coords
-         double dX, dY, dZ;
-         gluProject(pos.X(),pos.Y(),pos.Z(),
-                    modelview, projection,
-                    viewport, &dX, &dY, &dZ);
-         // If behind, invert and scale everything up lots to force it to the edge
-         // This could perhaps work better... not too happy, but it's late
-         if (dZ > 1.0f) {
-            dX = -(dX - (viewport[2]/2)) * viewport[2] + viewport[2]/2;
-            dY = -(dY - (viewport[3]/2)) * viewport[3] + viewport[3]/2;
-         }
-         // Clip
-         if (dX < 0) dX = 0;
-         else if (dX > viewport[2]) dX = viewport[2];
-         if (dY < 0) dY = 0;
-         else if (dY > viewport[3]) dY = viewport[3];         
-         // Rescale to 0..1
-         dX /= viewport[2];
-         dY /= viewport[3];
-	 double dW = 32.0f / viewport[2];
-	 double dH = 32.0f / viewport[3];
-         // Render reticle
-         m_poTargetingReticle->setPosition(dX-dW, (1-dY)-dH, dW*2, dH*2);
-	 m_poTargetingReticle->renderQuad();
-         // Radar imagexs
-	 m_poHoloTarget->renderQuad();
+   if (m_pTarget) {
+      // Calculate position of targeting reticle
+      CVector3 pos = m_pTarget->m_ppMasses[0]->m_vecPos;
+      // Get viewport
+      int viewport[4];
+      double modelview[16];
+      double projection[16];
+      glGetIntegerv(GL_VIEWPORT,viewport);
+      glGetDoublev(GL_MODELVIEW_MATRIX,modelview);
+      glGetDoublev(GL_PROJECTION_MATRIX,projection);
+      // Project to 2d screen coords
+      double dX, dY, dZ;
+      gluProject(pos.X(),pos.Y(),pos.Z(),
+                 modelview, projection,
+                 viewport, &dX, &dY, &dZ);
+      // If behind, invert and scale everything up lots to force it to the edge
+      // This could perhaps work better... not too happy, but it's late
+      if (dZ > 1.0f) {
+         dX = -(dX - (viewport[2]/2)) * viewport[2] + viewport[2]/2;
+         dY = -(dY - (viewport[3]/2)) * viewport[3] + viewport[3]/2;
+      }
+      // Clip
+      if (dX < 0) dX = 0;
+      else if (dX > viewport[2]) dX = viewport[2];
+      if (dY < 0) dY = 0;
+      else if (dY > viewport[3]) dY = viewport[3];         
+      // Rescale to 0..1
+      dX /= viewport[2];
+      dY /= viewport[3];
+		double dW = 32.0f / viewport[2];
+		double dH = 32.0f / viewport[3];
+      // Render reticle
+      m_poTargetingReticle->setPosition(dX-dW, (1-dY)-dH, dW*2, dH*2);
+		m_poTargetingReticle->renderQuad();
+		// Radar imagexs
+		m_poHoloTarget->renderQuad();
          // Calculate range
-	 NSDMath::CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
-         int iRange = static_cast<int>(vecTarget.length());           
-         // Range
-         sprintf(strFont,"%5d m", iRange);
-         m_poFont->print("Range:", CVector2(0.03f, 0.25f), 0.0075f, CVector3(0,1,0));
-         m_poFont->print(strFont, CVector2(0.03f, 0.28f), 0.0075f, CVector3(0,1,0));
-         // Velocity
-         sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_fVel));
-         g_oTextureManager.render(m_auiOffScreenTexture);
-         //m_po2DObject->renderQuad(37.0f, 180.0f, 135.0f, 135.0f, avecTex);
-         m_poFont->print("Velocity:", CVector2(0.03f, 0.32f), 0.0075f, CVector3(0,1,0));
-         m_poFont->print(strFont, CVector2(0.03f, 0.35f), 0.0075f, CVector3(0,1,0));
+		NSDMath::CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
+      int iRange = static_cast<int>(vecTarget.length());           
+      // Range
+      sprintf(strFont,"%5d m", iRange);
+      m_poFont->print("Range:", CVector2(0.03f, 0.25f), 0.0075f, CVector3(0,1,0));
+      m_poFont->print(strFont, CVector2(0.03f, 0.28f), 0.0075f, CVector3(0,1,0));
+      // Velocity
+      sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_fVel));
+      g_oTextureManager.render(m_auiOffScreenTexture);
+      //m_po2DObject->renderQuad(37.0f, 180.0f, 135.0f, 135.0f, avecTex);
+      m_poFont->print("Velocity:", CVector2(0.03f, 0.32f), 0.0075f, CVector3(0,1,0));
+      m_poFont->print(strFont, CVector2(0.03f, 0.35f), 0.0075f, CVector3(0,1,0));
     }
 }
  

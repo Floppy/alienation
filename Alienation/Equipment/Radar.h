@@ -31,7 +31,7 @@ public:
 	void setRange(unsigned int uiRange);
 	unsigned int m_uiRange;
 	void setTarget(int iTargetID);
-	void render();
+//	void render();
 	void renderOffScreen(CVector3 vecShipPos, const CMatrix matRotMatrix);
 	void init();
 	void addTarget(int iObjectID, int iTargetType, CVector3 vecPos);
