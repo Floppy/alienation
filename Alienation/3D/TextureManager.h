@@ -28,8 +28,9 @@ class CTextureManager
    
    /**
     * Constructor.
+    * @param strTextureRoot The location from which to load texture files.
     */
-   CTextureManager();
+   CTextureManager(const char* strTextureRoot);
 
    /**
     * Destructor.
@@ -82,6 +83,14 @@ class CTextureManager
     */
    CTexture* texture(unsigned int uiTexture);
 
+   /**
+    * Access the texture directory location
+    * @return The directory from which textures will be loaded.
+    */
+   const char* textureRoot() const 
+   { return m_strTextureRoot; }
+   
+
  protected:
    
    /**
@@ -93,6 +102,11 @@ class CTextureManager
     * Reference counts.
     */
    std::map<unsigned int, unsigned int> m_hReferences;
+
+   /**
+    * Root location of textures
+    */
+   char m_strTextureRoot[255];
 
 };
 

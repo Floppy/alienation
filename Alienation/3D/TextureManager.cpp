@@ -7,14 +7,15 @@
 #include <iostream>
 using namespace std;
 
-CTextureManager g_oTextureManager;
+CTextureManager g_oTextureManager("Data/Texture/");
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CTextureManager::CTextureManager()
+CTextureManager::CTextureManager(const char* strTextureRoot)   
 {
+   strcpy(m_strTextureRoot,strTextureRoot);
 }
 
 CTextureManager::~CTextureManager()

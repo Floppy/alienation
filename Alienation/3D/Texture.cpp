@@ -1,4 +1,5 @@
 #include "3D/Texture.h"
+#include "3D/TextureManager.h"
 
 #include <SDL_image.h>
 #include <SDL_opengl.h>
@@ -40,7 +41,7 @@ bool CTexture::load(const char* strFilename)
    if (strlen(strFilename) == 0)
       return false;
    
-   strcpy(strFile, "Data/Texture/");
+   strcpy(strFile, g_oTextureManager.textureRoot());
    strcat(strFile, strFilename);
    
    // Load the file
@@ -154,22 +155,22 @@ void CTexture::postRenderToTexture() {
    glViewport(m_aiViewport[0],m_aiViewport[1],m_aiViewport[2],m_aiViewport[3]);
 }
 
-void CTexture::setPixel(unsigned int iX, unsigned int iY, CRGBAColour colour) 
+void CTexture::setPixel(unsigned int iX, unsigned int iY, CRGBAColour oColour) 
 {
    // Check texture exists
    if (!m_pTexture) return;
    // Lock
-   SDL_LockSurface(m_pTexture);
+   if (SDL_MUSTLOCK(m_pTexture)) SDL_LockSurface(m_pTexture);
    // Calculate pixel value
    unsigned int iPixel = 
-      static_cast<unsigned int>(colour.R() * 0xFF) | 
-      static_cast<unsigned int>(colour.G() * 0xFF) << 8 | 
-      static_cast<unsigned int>(colour.B() * 0xFF) << 16 | 
-      static_cast<unsigned int>(colour.A() * 0xFF) << 24;
+      static_cast<unsigned int>(oColour.R() * 0xFF) | 
+      static_cast<unsigned int>(oColour.G() * 0xFF) << 8 | 
+      static_cast<unsigned int>(oColour.B() * 0xFF) << 16 | 
+      static_cast<unsigned int>(oColour.A() * 0xFF) << 24;
    // Set pixel
    static_cast<unsigned int*>(m_pTexture->pixels)[iY * m_pTexture->w + iX] = iPixel;
    // Unlock
-   SDL_LockSurface(m_pTexture);
+   if (SDL_MUSTLOCK(m_pTexture)) SDL_UnlockSurface(m_pTexture);
    // Done
    return;
 }
