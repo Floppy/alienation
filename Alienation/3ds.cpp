@@ -43,7 +43,7 @@ CLoad3DS::CLoad3DS()
 //		This is called by the client to open the .3ds file, read it, then clean up
 //---------------------------------- IMPORT 3DS -----------------------------------
 
-bool CLoad3DS::import3DS(C3DModel *pModel, char *strFileName)
+bool CLoad3DS::import3DS(CModel *pModel, char *strFileName)
 {
 	m_pFilePointer = fopen(strFileName, "rb");
 	
@@ -86,10 +86,10 @@ void CLoad3DS::cleanUp()
 //	This function reads the main sections of the .3DS file, then dives deeper with recursion
 //---------------------------------- PROCESS NEXT CHUNK-----------------------------------
 
-void CLoad3DS::processNextChunk(C3DModel *pModel, CChunk *pPreviousChunk)
+void CLoad3DS::processNextChunk(CModel *pModel, CChunk *pPreviousChunk)
 {
 	CMesh newObject;					 
-	CMaterialInfo newTexture;				
+	CMaterial newTexture;				
 	unsigned short iVersion = 0;					
 	int aiBuffer[50000] = {0};					
 	
@@ -121,7 +121,7 @@ void CLoad3DS::processNextChunk(C3DModel *pModel, CChunk *pPreviousChunk)
 			break;
 			
 		case MATERIAL:						
-			pModel->m_iNumOfMaterials++;
+			pModel->m_iNumMaterials++;
 			
 			pModel->m_pMaterials.push_back(newTexture);
 			
@@ -129,15 +129,15 @@ void CLoad3DS::processNextChunk(C3DModel *pModel, CChunk *pPreviousChunk)
 			break;
 			
 		case OBJECT:							
-			pModel->m_iNumOfObjects++;
+			pModel->m_iNumObjects++;
 			
 			pModel->m_pObject.push_back(newObject);
 			
-			memset(&(pModel->m_pObject[pModel->m_iNumOfObjects - 1]), 0, sizeof(CMesh));
+			memset(&(pModel->m_pObject[pModel->m_iNumObjects - 1]), 0, sizeof(CMesh));
 			
-			m_pCurrentChunk->m_iBytesRead += getString(pModel->m_pObject[pModel->m_iNumOfObjects - 1].m_strName);
+			m_pCurrentChunk->m_iBytesRead += getString(pModel->m_pObject[pModel->m_iNumObjects - 1].m_strName);
 			
-			processNextObjectChunk(pModel, &(pModel->m_pObject[pModel->m_iNumOfObjects - 1]), m_pCurrentChunk);
+			processNextObjectChunk(pModel, &(pModel->m_pObject[pModel->m_iNumObjects - 1]), m_pCurrentChunk);
 			break;
 			
 		case EDITKEYFRAME:
@@ -163,7 +163,7 @@ void CLoad3DS::processNextChunk(C3DModel *pModel, CChunk *pPreviousChunk)
 //		This function handles all the information about the objects in the file
 //---------------------------------- PROCESS NEXT OBJECT CHUNK -----------------------------------
 
-void CLoad3DS::processNextObjectChunk(C3DModel *pModel, CMesh *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::processNextObjectChunk(CModel *pModel, CMesh *pObject, CChunk *pPreviousChunk)
 {
 	int buffer[50000] = {0};					
 	
@@ -212,7 +212,7 @@ void CLoad3DS::processNextObjectChunk(C3DModel *pModel, CMesh *pObject, CChunk *
 //	This function handles all the information about the material (Texture)
 //---------------------------------- PROCESS NEXT MATERIAL CHUNK -----------------------------------
 
-void CLoad3DS::processNextMaterialChunk(C3DModel *pModel, CChunk *pPreviousChunk)
+void CLoad3DS::processNextMaterialChunk(CModel *pModel, CChunk *pPreviousChunk)
 {
 	int aiBuffer[50000] = {0};					  
 	m_pCurrentChunk = new CChunk;
@@ -224,11 +224,11 @@ void CLoad3DS::processNextMaterialChunk(C3DModel *pModel, CChunk *pPreviousChunk
 		switch (m_pCurrentChunk->m_uiID)
 		{
 		case MATNAME:						 
-			m_pCurrentChunk->m_iBytesRead += fread(pModel->m_pMaterials[pModel->m_iNumOfMaterials - 1].m_strName, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
+			m_pCurrentChunk->m_iBytesRead += fread(pModel->m_pMaterials[pModel->m_iNumMaterials - 1].m_strName, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
 			break;
 			
 		case MATDIFFUSE:					 
-			readColorChunk(&(pModel->m_pMaterials[pModel->m_iNumOfMaterials - 1]), m_pCurrentChunk);
+			readColorChunk(&(pModel->m_pMaterials[pModel->m_iNumMaterials - 1]), m_pCurrentChunk);
 			break;
 			
 		case MATMAP:						 
@@ -236,7 +236,7 @@ void CLoad3DS::processNextMaterialChunk(C3DModel *pModel, CChunk *pPreviousChunk
 			break;
 			
 		case MATMAPFILE:						 
-			m_pCurrentChunk->m_iBytesRead += fread(pModel->m_pMaterials[pModel->m_iNumOfMaterials - 1].m_strFile, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
+			m_pCurrentChunk->m_iBytesRead += fread(pModel->m_pMaterials[pModel->m_iNumMaterials - 1].m_strFile, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
 			break;
 			
 		default:  
@@ -284,7 +284,7 @@ int CLoad3DS::getString(char *pBuffer)
 //		This function reads in the RGB color data
 //---------------------------------- READ COLOR -----------------------------------
 
-void CLoad3DS::readColorChunk(CMaterialInfo *pMaterial, CChunk *pChunk)
+void CLoad3DS::readColorChunk(CMaterial *pMaterial, CChunk *pChunk)
 {
 	readChunk(m_pTempChunk);
 	m_pTempChunk->m_iBytesRead += fread(pMaterial->m_uiColor, 1, m_pTempChunk->m_iLength - m_pTempChunk->m_iBytesRead, m_pFilePointer);
@@ -353,7 +353,7 @@ void CLoad3DS::readVertices(CMesh *pObject, CChunk *pPreviousChunk)
 //	This function reads in the material name assigned to the object and sets the materialID
 //---------------------------------- READ OBJECT MATERIAL -----------------------------------
 
-void CLoad3DS::readObjectMaterial(C3DModel *pModel, CMesh *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::readObjectMaterial(CModel *pModel, CMesh *pObject, CChunk *pPreviousChunk)
 {
 	char strMaterial[255] = {0};			
 	int aiBuffer[50000] = {0};				
@@ -361,7 +361,7 @@ void CLoad3DS::readObjectMaterial(C3DModel *pModel, CMesh *pObject, CChunk *pPre
 
 	pPreviousChunk->m_iBytesRead += getString(strMaterial);
 	
-	for(int i = 0; i < pModel->m_iNumOfMaterials; i++)
+	for(int i = 0; i < pModel->m_iNumMaterials; i++)
 	{
 		if(strcmp(strMaterial, pModel->m_pMaterials[i].m_strName) == 0)
 		{
@@ -385,15 +385,15 @@ void CLoad3DS::readObjectMaterial(C3DModel *pModel, CMesh *pObject, CChunk *pPre
 //		This function computes the normals and vertex normals of the objects
 //---------------------------------- COMPUTER NORMALS -----------------------------------
 
-void CLoad3DS::computeNormals(C3DModel *pModel)
+void CLoad3DS::computeNormals(CModel *pModel)
 {
 	CVector3 vecVector1, vecVector2, vecNormal, vecPoly[3];
 	
-	if(pModel->m_iNumOfObjects <= 0)
+	if(pModel->m_iNumObjects <= 0)
 		return;
 	
 	int index, i, j;
-	for(index = 0; index < pModel->m_iNumOfObjects; index++)
+	for(index = 0; index < pModel->m_iNumObjects; index++)
 	{
 		CMesh *pObject = &(pModel->m_pObject[index]);
 		

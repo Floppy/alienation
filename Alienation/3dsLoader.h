@@ -25,7 +25,7 @@ class C3dsLoader
 		CLoad3DS m_oLoad3ds;
 		CTexture *m_poTexture;				
 //		unsigned int TextureArray3ds[MAXTEXTURE];	
-		C3DModel m_o3DModel;
+		CModel m_o3DModel;
 		unsigned int m_uiList;
 
 		void init3ds(char* filename);

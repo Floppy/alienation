@@ -17,26 +17,26 @@
 void C3dsLoader::init3ds(char* pFilename)
 {
 	char strTemp[255];
-	m_o3DModel.m_iNumOfMaterials = 0;
-	m_o3DModel.m_iNumOfObjects = 0;
+	m_o3DModel.m_iNumMaterials = 0;
+	m_o3DModel.m_iNumObjects = 0;
 
 	//Actually load the model here
 	m_oLoad3ds.import3DS(&m_o3DModel, pFilename);						
 
 	//My addition, Creates new instance of the texture class
-	m_poTexture = new CTexture(m_o3DModel.m_iNumOfMaterials);
+	m_poTexture = new CTexture(m_o3DModel.m_iNumMaterials);
 
 	//Create the list of texture files to load
-	char **astrFilenames = new char*[m_o3DModel.m_iNumOfMaterials];
+	char **astrFilenames = new char*[m_o3DModel.m_iNumMaterials];
 	int n;
-	for(n = 0; n < m_o3DModel.m_iNumOfMaterials; n++)				
+	for(n = 0; n < m_o3DModel.m_iNumMaterials; n++)				
 	{
 		astrFilenames[n] = new char[26];
 		memset ((void *) astrFilenames[n], 32, 26);
 	}
 
 	int z;
-	for(n = 0; n < m_o3DModel.m_iNumOfMaterials; n++)				
+	for(n = 0; n < m_o3DModel.m_iNumMaterials; n++)				
 	{	
 		z = strlen(m_o3DModel.m_pMaterials[n].m_strFile);
 		if ( z < 26)
@@ -47,7 +47,7 @@ void C3dsLoader::init3ds(char* pFilename)
 	}
 
 	//Loads the textures :***********problem inside this routine******************
-	m_poTexture->load(astrFilenames, m_o3DModel.m_iNumOfMaterials);
+	m_poTexture->load(astrFilenames, m_o3DModel.m_iNumMaterials);
 
 	//This library didnt at first use display lists, so here I altered so it did :)
 	m_uiList = glGenLists(1);
@@ -55,7 +55,7 @@ void C3dsLoader::init3ds(char* pFilename)
 
 	//loop through all objects
 	int i;
-	for(i = 0; i < m_o3DModel.m_iNumOfObjects; i++)
+	for(i = 0; i < m_o3DModel.m_iNumObjects; i++)
 	{
 		
 		if(m_o3DModel.m_pObject.size() <= 0) 
@@ -140,7 +140,7 @@ void C3dsLoader::render3ds()
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void C3dsLoader::unload3ds()
 {
-	for(int i = 0; i < m_o3DModel.m_iNumOfObjects; i++)	
+	for(int i = 0; i < m_o3DModel.m_iNumObjects; i++)	
 	{
 		delete [] m_o3DModel.m_pObject[i].m_pFaces;
 		delete [] m_o3DModel.m_pObject[i].m_pNormals;
