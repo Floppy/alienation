@@ -14,7 +14,7 @@
 using namespace std;
 using namespace NSDSound;
 
-bool bNoBumps = true;
+bool bNoBumps(true);
 
 /**
  * Program entry point.
@@ -53,6 +53,7 @@ int main(int argc, char* argv[])
 		iDepth = static_cast<int>(config.getNumber("depthbuffer"));
 		iDouble = static_cast<int>(config.getNumber("doublebuffer"));
 		iStereo = static_cast<int>(config.getNumber("stereo"));
+		bNoBumps = config.getNumber("bumpmapping") == 0.0f ? true : false;
 
 		if (!config.setGlobalTable("sound")) {
 			cerr << "Couldn't load config file!" << endl;
