@@ -14,6 +14,7 @@
 #include "Game/Ship.h"
 #include "3D/Model.h"
 #include "Equipment/Radar.h"
+#include "..\2D\GLFont.h"	// Added by ClassView
 
 using namespace NSD2D;
 
@@ -55,7 +56,9 @@ public:
 	 * Light for radar display
 	 */
 	CLight m_oLight;
+private:
 
+	int m_iFontID;
 };
 
 #endif // !defined(AFX_PLAYERSHIP_H__037FA971_63AF_49C5_9C78_DCF151372718__INCLUDED_)
