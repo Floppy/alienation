@@ -1,7 +1,9 @@
+#ifdef WIN32
 #include <windows.h>
+#include <conio.h>
+#endif
 #include <stdlib.h>
 #include <stdio.h>
-#include <conio.h>
 #include <string.h>
 #include <sqltypes.h>
 #include <sql.h>

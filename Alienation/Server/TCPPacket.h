@@ -9,9 +9,9 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "SDL.h"
-#include "SDL_Net.h"
-#include "Packet.h"
+#include <SDL.h>
+#include <SDL_net.h>
+#include "Server/Packet.h"
 #include <string.h>
 
 class CTCPPacket : public CPacket  
