@@ -27,7 +27,7 @@ const static int kiDeadzone(3200);
 
 // All Setup For OpenGL Goes Here
 COpenGL :: COpenGL() :
-	FullScreen(true),
+	m_bFullScreen(true),
 	m_fTimeElapsed(0.0f),
 	m_fPitch(0.0f),
 	m_fYaw(0.0f), 
@@ -38,55 +38,65 @@ COpenGL :: COpenGL() :
 }
 
 bool COpenGL :: initGL() {
-        // Init lighting
-        CRGBAColour oAmbient(0.25f, 0.25f, 0.25f, 1.0f);
-        CRGBAColour oDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
-        CVector3 oPosition(0.0f, 0.0f, 2.0f);
-	m_poLight = new CLight(GL_LIGHT0);
-	m_poLight->init(oAmbient, oDiffuse, oPosition);
-        m_poLight->enable();
 
-	//All initialisation. Nothing rocket science here.
-	m_bSlowmo = false;
-	m_bCamUp = m_bCamDown = m_bCamLeft = m_bCamRight = m_bFire = false;
-	m_poGlfont = new CGLFont();
-	m_poGlfont->load();
-	int x;
-	for (x = 0 ; x < 300 ; x++)
-	{
-		m_oKeys.m_abKeyDown[x] = false;
-		m_oKeys.m_abStillPressed[x] =  false;
-	}
-	m_poAIShip = new CAIShip(1, 5000.0f);
-	m_poAIShip->loadShip();
-	m_poShip = new CPlayerShip();
-	m_poShip->loadShip();
-	m_poStars = new CStars;
-	m_poStars->initStars();
-	m_fTimeElapsed = 0.0f;
-	m_fPitch = m_fYaw = m_fRoll = m_fThrust = 0.0f;
+   // Set up shading, lighting, and so on
    glShadeModel(GL_SMOOTH);                           // Enable Smooth Shading
    glClearColor(0.0f, 0.0f, 0.0f, 0.5f);              // Black Background
    glClearDepth(1.0f);                                // Depth Buffer Setup
    glEnable(GL_DEPTH_TEST);                           // Enables Depth Testing
    glDepthFunc(GL_LEQUAL);                            // The Type Of Depth Testing To Do
    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Really Nice Perspective Calculations
-	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);                                 
-//	glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-	glBlendFunc(GL_ONE, GL_ONE);
-	glEnable(GL_POLYGON_SMOOTH);
-	glEnable(GL_TEXTURE_2D);		
-   glViewport(0, 0, 1024, 768); // Reset The Current Viewport
+   glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);                                 
+   glBlendFunc(GL_ONE, GL_ONE);
+   glEnable(GL_POLYGON_SMOOTH);
+   glEnable(GL_TEXTURE_2D);		
 
-   glMatrixMode(GL_PROJECTION);     // Select The Projection Matrix
-   glLoadIdentity();                // Reset The Projection Matrix
+   // Set viewport
+   glViewport(0, 0, 1024, 768);
 
-   // Calculate The Aspect Ratio Of The Window
+   // Set camera
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
    gluPerspective(45.0f, (GLfloat)1024/(GLfloat)768, 0.1f, 25001.0f);
 
-   glMatrixMode(GL_MODELVIEW); // Select The Modelview Matrix
-   glLoadIdentity();           // Reset The Modelview Matrix
+   // Init modelview matrix
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
 
+   // Init lighting
+   glEnable(GL_LIGHTING);
+   CRGBAColour oAmbient(0.25f, 0.25f, 0.25f, 1.0f);
+   CRGBAColour oDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
+   CVector3 oPosition(0.0f, 0.0f, 0.0f);
+   m_poLight = new CLight(GL_LIGHT0);
+   m_poLight->init(oAmbient, oDiffuse, oPosition);
+   m_poLight->enable();
+   
+   //All initialisation. Nothing rocket science here.
+   m_bSlowmo = false;
+   m_bCamUp = m_bCamDown = m_bCamLeft = m_bCamRight = m_bFire = false;
+   m_poGlfont = new CGLFont();
+   m_poGlfont->load();
+   int x;
+   for (x = 0 ; x < 300 ; x++)
+   {
+      m_oKeys.m_abKeyDown[x] = false;
+      m_oKeys.m_abStillPressed[x] =  false;
+   }
+   m_fTimeElapsed = 0.0f;
+   m_fPitch = m_fYaw = m_fRoll = m_fThrust = 0.0f;
+   
+   // Create and load ships
+   m_poAIShip = new CAIShip(1, 5000.0f);
+   m_poAIShip->loadShip();
+   m_poShip = new CPlayerShip();
+   m_poShip->loadShip();
+   
+   // Create starfield
+   m_poStars = new CStars;
+   m_poStars->initStars();
+   
+   // Done
    return true;
 }
 

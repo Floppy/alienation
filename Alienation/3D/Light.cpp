@@ -23,9 +23,6 @@ CLight::~CLight()
 
 void CLight::init(const CRGBAColour& oAmbient, const CRGBAColour& oDiffuse, const CVector3& oPosition)
 {
-   // Turn on lighting
-   glEnable(GL_LIGHTING);
-
    update(GL_AMBIENT,oAmbient);
    update(GL_DIFFUSE,oDiffuse);
    updatePosition(oPosition);

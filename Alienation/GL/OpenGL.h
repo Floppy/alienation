@@ -37,7 +37,7 @@ public:
 class COpenGL {
    protected:
 	   bool getCommon(SDL_Event event);
-      bool      FullScreen;       // Fullscreen Flag Set To Fullscreen Mode By Default
+      bool      m_bFullScreen;       // Fullscreen Flag Set To Fullscreen Mode By Default
 		CGLFont	 *m_poGlfont;
 		float m_fTimeElapsed;
    public:
