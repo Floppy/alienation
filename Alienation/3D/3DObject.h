@@ -56,7 +56,7 @@ class C3DObject {
 
    /**
     * Set the value of the translation
-    * @param: vecTranslation The new translation value.
+    * @param vecTranslation The new translation value.
     * @sa getTranslation()
     */
    void setTranslation(CVector3 vecTranslation) 
