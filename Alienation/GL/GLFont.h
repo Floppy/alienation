@@ -21,8 +21,8 @@
 class CGLFont  
 {
 public:
-	void print(char * str, CVector3 vecPos, float fSize);
-    void CGLFont::print(char *str, CVector2 vecPos, float fSize);
+	void print(char *str, CVector3 vecPos, float fSize);
+        void print(char *str, CVector2 vecPos, float fSize);
 	void load();
 	CGLFont();
 	virtual ~CGLFont();
