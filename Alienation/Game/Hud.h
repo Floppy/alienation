@@ -114,6 +114,7 @@
 	   CShield * m_poFrontShield;
 	   CSpeedIndicator * m_poSpeedIndicator;
 	   CThrustIndicator * m_poThrustIndicator;
+	   CFrame * m_poTargetingReticle;
    };
    
 //}

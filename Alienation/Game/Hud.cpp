@@ -110,20 +110,13 @@
       glEnable(GL_BLEND);
       glDisable(GL_DEPTH_TEST);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//      m_oMaterial.render();
       
       //////////////////////////////////////////////
       //Target Data                               //
       //////////////////////////////////////////////
 
-/*      if (m_pTarget) {
-         // Set quad
-         avecTex[0] = CVector2( 0.0f, 0.0f);
-         avecTex[1] = CVector2( 1.0f, 0.0f);
-         avecTex[2] = CVector2( 1.0f, 1.0f);
-         avecTex[3] = CVector2( 0.0f, 1.0f);
-         // Select targeting reticle
-         g_oTextureManager.render(m_auiTextures[8]);
+      if (m_pTarget) {
+         // Calculate position of targeting reticle
          CVector3 pos = m_pTarget->m_ppMasses[0]->m_vecPos;
          // Get viewport
          int viewport[4];
@@ -144,29 +137,30 @@
          else if (dX > viewport[2]) dX = viewport[2];
          if (dY < 0) dY = 0;
          else if (dY > viewport[3]) dY = viewport[3];         
-         // Rescale to 1024*768
+         // Rescale to 0..1
          dX /= viewport[2];
          dY /= viewport[3];
-         dX *= 1024.0f;
-         dY *= 768.0f;
+	 double dW = 32.0f / viewport[2];
+	 double dH = 32.0f / viewport[3];
          // Render reticle
-//         m_po2DObject->renderQuad(dX-32.0f, (viewport[3]-dY)+32.0f, 64.0f, 64.0f, avecTex);
+         m_poTargetingReticle->setPosition(dX-dW, (1-dY)-dH, dW*2, dH*2);
+	 m_poTargetingReticle->renderQuad();
          // Calculate range
-		 NSDMath::CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
-         int iRange = static_cast<int>(vecTarget.length());           
+	 //NSDMath::CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
+         //int iRange = static_cast<int>(vecTarget.length());           
          // Range
-         sprintf(strFont,"%5d m", iRange);
-//         m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f);
-//         m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f);
+         //sprintf(strFont,"%5d m", iRange);
+         //m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f);
+         //m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f);
          // Velocity
          sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_fVel));
-//         m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f);
-//         m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f);
+         //m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f);
+         //m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f);
          // Radar image
-         g_oTextureManager.render(m_auiTextures[7]);
-//         m_po2DObject->renderQuad(37.0f, 180.0f, 135.0f, 135.0f, avecTex);
+         //g_oTextureManager.render(m_auiTextures[7]);
+         //m_po2DObject->renderQuad(37.0f, 180.0f, 135.0f, 135.0f, avecTex);
       }
-*/      
+      
       //////////////////////////////////////////////
       //Right Shield                              //
       //////////////////////////////////////////////
@@ -226,6 +220,7 @@
 	  m_poLeftShield = new CShield();
 	  m_poSpeedIndicator = new CSpeedIndicator;
 	  m_poThrustIndicator = new CThrustIndicator;
+	  m_poTargetingReticle = new CFrame();
 
 	  m_poFrontShield->init2D(0.3f, 0.3f, 0.25f, 0.1f, "Hud/hud_fore.png");
 	  m_poFrontShield->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
@@ -239,6 +234,8 @@
 	  m_poSpeedIndicator->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
 	  m_poThrustIndicator->init2D(0.3f, 0.75f, 0.25f, 0.1f, "Hud/hud_thrust.png");
 	  m_poThrustIndicator->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
+	  m_poTargetingReticle->init2D(0.0f, 0.1f, 0.0f, 0.1f, "Hud/hud_reticle.png");
+	  m_poTargetingReticle->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
 
 	  m_poSpeedIndicator->setTexturePercentage(0.1f);
 	  m_poThrustIndicator->setTexturePercentage(0.1f);
@@ -249,7 +246,6 @@
 	  m_auiOffScreenTexture = g_oTextureManager.create(128,128);	  
 //      m_auiTextures[6] = g_oTextureManager.load("Hud/hud_target.png");
 //      m_auiTextures[7] = g_oTextureManager.create(128,128);
-//      m_auiTextures[8] = g_oTextureManager.load("Hud/hud_reticle.png");
 //      for (int i=0; i<9; i++) 
 //      {
 //         g_oTextureManager.texture(m_auiTextures[i])->init();
