@@ -23,10 +23,10 @@ namespace NSDIO {
       CVector3 vecPosition(0.0f, -0.3f, -3.3f);
       
       // Get stats
-      float fSize = state.getFloat("size");
-      float fLifetime = state.getFloat("lifetime");
-      float fSpeed = state.getFloat("speed");
-      float fRate = state.getFloat("firerate");
+      float fSize = state.getNumber("size");
+      float fLifetime = state.getNumber("lifetime");
+      float fSpeed = state.getNumber("speed");
+      float fRate = state.getNumber("firerate");
       
       // Get sound effect info
       const char* strSound = state.getString("sound");

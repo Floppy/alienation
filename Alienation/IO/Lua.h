@@ -3,12 +3,15 @@
 
 #include "config.h"
 #include "3D/Material.h"
+#include "Math/Vector.h"
 
 extern "C" {
 #include <lua.h>
 }
 
 namespace NSDIO {
+
+   using namespace NSDMath;
 
    /**
     * Lua interpreter state.
@@ -37,11 +40,23 @@ namespace NSDIO {
       bool setGlobalTable(const char* table);
 
       /**
-       * Get float value for a field.
+       * Enter a sub-table.
+       * @param table The name of the table to enter.
+       * @return true if the table was pushed successfully.
+       */
+      bool enterTable(const char* table);
+
+      /**
+       * Exit the current sub-table.
+       */
+      void exitTable();
+
+      /**
+       * Get numerical value for a field.
        * @param field The field name to access.
        * @return The value of the field. If the field wasn't found, the value is 0.
        */
-      float getFloat(const char* field);
+      float getNumber(const char* field);
 
       /**
        * Get a string value for a field.
@@ -56,6 +71,13 @@ namespace NSDIO {
        * @return The colour of the field.
        */
       CRGBAColour getColour(const char* field);
+
+      /**
+       * Get a 3D vector from a field.
+       * @param field The field name to access.
+       * @return The vector from the field.
+       */
+      CVector3 getVector3(const char* field);
 
    private:
 

@@ -8,6 +8,8 @@ extern "C" {
 
 namespace NSDIO {
 
+   using namespace NSDMath;
+
    int panic(lua_State *state) {
       // Print error message
       fprintf(stderr,"-------------------------\n");
@@ -53,7 +55,19 @@ namespace NSDIO {
       return true;
    }
 
-   float CLua::getFloat(const char* field)
+   bool CLua::enterTable(const char* table) {
+      lua_pushstring(m_pState, table);
+      lua_gettable(m_pState,-2);
+      if (!lua_istable(m_pState,-1))
+         return false;
+      return true;      
+   }
+   
+   void CLua::exitTable() {
+      lua_pop(m_pState,1);
+   }
+
+   float CLua::getNumber(const char* field)
    {
       lua_pushstring(m_pState, field);
       lua_gettable(m_pState,-2);
@@ -77,7 +91,7 @@ namespace NSDIO {
       }
       // Copy out string
       const char* strTemp = lua_tostring(m_pState,-1);
-      char* strResult = new char[strlen(strTemp)];
+      char* strResult = new char[strlen(strTemp)+1];
       strcpy(strResult,strTemp);
       // Pop stack
       lua_pop(m_pState,1);
@@ -87,20 +101,31 @@ namespace NSDIO {
 
    CRGBAColour CLua::getColour(const char* field)
    {
-      lua_pushstring(m_pState, field);
-      lua_gettable(m_pState,-2);
-      if (!lua_istable(m_pState,-1)) {
+      if (!enterTable(field))
          return CRGBAColour(0,0,0,0);
-      }
       // Get values
-      float fRed = getFloat("r");
-      float fGreen = getFloat("g");
-      float fBlue = getFloat("b");
-      float fAlpha = getFloat("a");
+      float fRed = getNumber("r");
+      float fGreen = getNumber("g");
+      float fBlue = getNumber("b");
+      float fAlpha = getNumber("a");
       // Pop stack
-      lua_pop(m_pState,1);
+      exitTable();
       // Done
       return CRGBAColour(fRed,fGreen,fBlue,fAlpha);
+   }
+
+   CVector3 CLua::getVector3(const char* field) 
+   {
+      if (!enterTable(field))
+         return CVector3(0,0,0);
+      // Get values
+      float fX = getNumber("x");
+      float fY = getNumber("y");
+      float fZ = getNumber("z");
+      // Pop stack
+      exitTable();
+      // Done
+      return CVector3(fX,fY,fZ);
    }
 
 }
