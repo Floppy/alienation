@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 	}
 
         // Set window title
-        #ifndef VERSION
+        #ifdef VERSION
         SDL_WM_SetCaption("Alienation v" VERSION, "Alienation");
         #else
         SDL_WM_SetCaption("Alienation", "Alienation");
