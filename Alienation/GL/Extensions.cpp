@@ -2,6 +2,7 @@
 // Implementation for OpenGL extensions
 
 #include "GL/Extensions.h"
+#include <SDL.h>
 
 #ifdef WIN32
 

@@ -4,6 +4,9 @@
 #ifndef SDS_EXTENSIONS_H
 #define SDS_EXTENSIONS_H
 
+#include <SDL_opengl.h>
+#include <GL/glext.h>
+
 
 #ifdef WIN32
 
