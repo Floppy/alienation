@@ -185,12 +185,12 @@ void CPlayerShip::drawHud()
       
       float fWidthSpeed = (m_fVel == 0.0f) ?
          0.001f :
-         (m_fVel / fMaxSpeed) + 0.001f;
+         ((m_fVel / fMaxSpeed) * 100.0f) + 0.001f;
       
       float fWidthThrust = (m_ppEngines[0]->getThrust() == 0.0f) ? 
          0.001f : 
-         (m_ppEngines[0]->getThrust() / m_ppEngines[0]->getMaxThrust()) + 0.001f;
-
+         ((m_ppEngines[0]->getThrust() / m_ppEngines[0]->getMaxThrust()) * 100 ) + 0.001f;
+ 
       // Add up engine thrusts
       float fThrust(0);
       int i;
@@ -199,12 +199,12 @@ void CPlayerShip::drawHud()
 
       char strFont[20];
       // Draw engine info
-      //m_poSpeedIndicator->setTexturePercentage(fWidthSpeed);
-      //m_poSpeedIndicator->renderQuad();
+      m_poSpeedIndicator->setTexturePercentage(fWidthSpeed);
+      m_poSpeedIndicator->renderQuad();
       sprintf(strFont,"V: %.1f", m_fVel);
       oFont->print(strFont, CVector2(0.4f, 0.30f), 0.0075f, CVector3(0,1,0));
-      //m_poThrustIndicator->setTexturePercentage(fWidthThrust);      
-      //m_poThrustIndicator->renderQuad();
+      m_poThrustIndicator->setTexturePercentage(fWidthThrust);      
+      m_poThrustIndicator->renderQuad();
       sprintf(strFont,"T: %.0f", fThrust);
       oFont->print(strFont, CVector2(0.5f, 0.30f), 0.0075f, CVector3(0,1,0));
 
@@ -240,14 +240,11 @@ void CPlayerShip::drawHud()
 void CPlayerShip::renderOffScreen()
 {
    if (m_bInsideView) {
+      m_poRadar->renderOffScreen(this->m_ppMasses[0]->m_vecPos, this->m_matRotation );
       m_oLight.enable();
       m_oLight.render();
-      m_poRadar->renderOffScreen(this->m_ppMasses[0]->m_vecPos, this->m_matRotation );
       m_poTargetingComputer->renderOffScreen();
       m_oLight.disable();
-      glDisable(GL_LIGHTING);
-      m_poRadar->renderOffScreen(this->m_ppMasses[0]->m_vecPos, this->m_matRotation );
-      glEnable(GL_LIGHTING);
    }
 }
 

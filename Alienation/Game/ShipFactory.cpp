@@ -109,14 +109,14 @@
 
       // Add speed indicator
       CSpeedIndicator* pSpeed = new CSpeedIndicator;
-      pSpeed->init2D(0.3f, 0.25f, 0.25f, 0.1f, "Hud/hud_speed.png");
+      pSpeed->init2D(0.33f, 0.25f, 0.25f, 0.25f, "Hud/hud_speed.png");
       pSpeed->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
       pSpeed->setTexturePercentage(0.1f);
       pShip->m_poSpeedIndicator = pSpeed;
 
       // Add thrust indicator
       CThrustIndicator* pThrust = new CThrustIndicator;
-      pThrust->init2D(0.3f, 0.75f, 0.25f, 0.1f, "Hud/hud_thrust.png");
+      pThrust->init2D(0.33f, 0.45f, 0.25f, 0.25f, "Hud/hud_thrust.png");
       pThrust->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
       pThrust->setTexturePercentage(0.1f);
       pShip->m_poThrustIndicator = pThrust;
