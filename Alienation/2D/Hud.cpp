@@ -166,6 +166,29 @@ void CHud::render()
 //	draw2DQuad(415.0f, 350.0f, 200.0f, 150.0f, avecTex);
 	m_po2DObject->renderQuad(415.0f, 350.0f, 200.0f, 150.0f, avecTex);
 
+        // Target data
+        if (m_pTarget) {
+           // Set quad
+           avecTex[0] = CVector2( 0.0f, 0.0f);
+           avecTex[1] = CVector2( 1.0f, 0.0f);
+           avecTex[2] = CVector2( 1.0f, 1.0f);
+           avecTex[3] = CVector2( 0.0f, 1.0f);
+           // Calculate range
+           CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
+           int iRange = static_cast<int>(vecTarget.length());           
+           // Range
+           sprintf(strFont,"%5d m", iRange);
+           m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f);
+           m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f);
+           // Velocity
+           sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_poShips[0].m_fVel));
+           m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f);
+           m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f);
+           // Radar image
+           g_oTextureManager.render(m_auiTextures[7]);
+           m_po2DObject->renderQuad(37.0f, 180.0f, 135.0f, 135.0f, avecTex);
+        }
+
 												//////////////////////////////////////////////
 												//Speed Bar                                 //
 												//////////////////////////////////////////////
@@ -207,24 +230,6 @@ void CHud::render()
 	sprintf(strFont,"%3ld FPS", iFPS);
 	m_poFont->print(strFont, CVector2(900.0f, 20.0f), 5.0f);
         m_iLastTime = iTime;
-
-        // Target data
-        if (m_pTarget) {
-           CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
-           int iRange = static_cast<int>(vecTarget.length());           
-           // Range
-           sprintf(strFont,"%5d m", iRange);
-           m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f);
-           m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f);
-           // Velocity
-           sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_poShips[0].m_fVel));
-           m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f);
-           m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f);
-           // Radar image
-           g_oTextureManager.render(m_auiTextures[7]);
-           m_po2DObject->renderQuad(37.0f, 180.0f, 135.0f, 135.0f, avecTex);
-        }
-
 
 	glDisable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
@@ -308,22 +313,34 @@ void CHud::renderOffScreen()
    // Clear screen
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-   // Reset The Current Modelview Matrix
+   // Calculate direction vector
+   CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
+   float fRange = vecTarget.length();
+   float fSize = m_pTarget->m_poShips[0].m_oModel.boundingRadius() * 1.1;
+   float fAngle = RAD_TO_DEG(atan(fSize / fRange) * 2);
+
+   // Set Projection Matrix
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+   gluPerspective(fAngle,1.0f,fRange-fSize, fRange+fSize);
+
+   // Set Modelview Matrix
    glMatrixMode(GL_MODELVIEW);
-   glLoadIdentity();					
-
-   // Move to player ship location
-   glTranslatef(m_pPlayerShip->m_ppMasses[0]->m_vecPos.X(), 
-                m_pPlayerShip->m_ppMasses[0]->m_vecPos.Y(), 
-                m_pPlayerShip->m_ppMasses[0]->m_vecPos.Z());
-
-   // Rotate towards target
-   
+   glLoadIdentity();
+   gluLookAt(m_pPlayerShip->m_ppMasses[0]->m_vecPos.X(), 
+             m_pPlayerShip->m_ppMasses[0]->m_vecPos.Y(), 
+             m_pPlayerShip->m_ppMasses[0]->m_vecPos.Z(),
+             m_pTarget->m_ppMasses[0]->m_vecPos.X(), 
+             m_pTarget->m_ppMasses[0]->m_vecPos.Y(), 
+             m_pTarget->m_ppMasses[0]->m_vecPos.Z(),
+             m_pPlayerShip->m_poShips[0].m_vecUp.X() - m_pPlayerShip->m_ppMasses[0]->m_vecPos.X(),
+             m_pPlayerShip->m_poShips[0].m_vecUp.Y() - m_pPlayerShip->m_ppMasses[0]->m_vecPos.Y(),
+             m_pPlayerShip->m_poShips[0].m_vecUp.Z() - m_pPlayerShip->m_ppMasses[0]->m_vecPos.Z());
 
    // Draw
-   m_pTarget->draw();
+   m_pTarget->draw(false);
    // Finish up
-   pTexture->postRenderToTexture();
+   pTexture->postRenderToTexture(GL_LUMINANCE);
 }
 
 
