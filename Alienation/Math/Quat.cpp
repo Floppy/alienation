@@ -16,15 +16,15 @@ CQuat::CQuat(float fx, float fy, float fz, float fw) :
    m_fw(fw)
 {}
 
-CQuat::CQuat(const CVector3& vecAxis, float fTheta)
+CQuat::CQuat(const CVector3& vecAxis, float fAngle)
 {
-   float halfTheta = fTheta * 0.5f;
-   float cosHalfTheta = (float)cos(halfTheta);
-   float sinHalfTheta = (float)sin(halfTheta);
-   m_fx = vecAxis.X() * sinHalfTheta;
-   m_fy = vecAxis.Y() * sinHalfTheta;
-   m_fz = vecAxis.Z() * sinHalfTheta;
-   m_fw = cosHalfTheta;
+   float halfAngle = fAngle * 0.5f;
+   float cosHalfAngle = (float)cos(halfAngle);
+   float sinHalfAngle = (float)sin(halfAngle);
+   m_fx = vecAxis.X() * sinHalfAngle;
+   m_fy = vecAxis.Y() * sinHalfAngle;
+   m_fz = vecAxis.Z() * sinHalfAngle;
+   m_fw = cosHalfAngle;
 }
 
 CQuat::CQuat(float pitch, float yaw, float roll)

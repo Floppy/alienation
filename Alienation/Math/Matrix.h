@@ -27,10 +27,10 @@ class CMatrix
 
    /** 
     * Constructor from axis and angle.
-    * @param oAxis Axis to rotate around.
-    * @param oAngle Angle to rotate in radians.
+    * @param vecAxis Axis to rotate around.
+    * @param fAngle Angle to rotate in radians.
     */ 
-   CMatrix(const CVector3& vecAxis, float fTheta);
+   CMatrix(const CVector3& vecAxis, float fAngle);
 
    /**
     * Constructor from Quaternion.

@@ -26,10 +26,10 @@ class CQuat
 
    /**
     * Constructor from axis and angle.
-    * @param oAxis Axis to rotate around.
-    * @param oAngle Angle to rotate in radians.
+    * @param vecAxis Axis to rotate around.
+    * @param fAngle Angle to rotate in radians.
     */
-   CQuat(const CVector3& vecAxis, float fTheta);
+   CQuat(const CVector3& vecAxis, float fAngle);
 
    /**
     * Constructor from Euler angles.

@@ -5,9 +5,9 @@ CMatrix::CMatrix()
    loadIdentity();
 }
 
-CMatrix::CMatrix(const CVector3& axis, float theta)
+CMatrix::CMatrix(const CVector3& vecAxis, float fAngle)
 {
-   CQuat oQuat(axis, theta);
+   CQuat oQuat(vecAxis, fAngle);
    *this = CMatrix(oQuat);
 }
 
