@@ -169,10 +169,6 @@ SOURCE=.\Trail.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Vertices.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\Weapon.cpp
 # End Source File
 # Begin Source File
@@ -274,10 +270,6 @@ SOURCE=.\Trail.h
 # Begin Source File
 
 SOURCE=.\vector.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Vertices.h
 # End Source File
 # Begin Source File
 
