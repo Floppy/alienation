@@ -23,6 +23,10 @@ ship = {
 	},
 	weapontype	= "ter_ppc2.lua",
 	brakes		= {
-		{x=0, y=0.7, z=-2.5},
-	}
+		{x=0, y=0.7, z=-2.5}
+	},
+	shield_fore	= "ter_shield1.lua",
+	shield_aft	= "ter_shield1.lua",
+	shield_right	= "ter_shield1.lua",
+	shield_left	= "ter_shield1.lua"
 }
