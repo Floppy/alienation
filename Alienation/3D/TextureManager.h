@@ -47,6 +47,16 @@ class CTextureManager
    unsigned int load(const char* strFilename);
 
    /**
+    * Create a new texture in memory
+    * The loaded texture will have a reference count of 1. 
+    * You don't need to add a reference until you use the texture ID for more than one object.
+    * @param iX The number of pixels wide the texture should be
+    * @param iY The number of pixels high the texture should be
+    * @return The texture ID that can be used to access the loaded texture.
+    */
+   unsigned int create(unsigned int iX, unsigned int iY);
+
+   /**
     * Add a reference to the specified texture.
     * @param uiTexture The texture ID to add the reference to.
     */
@@ -71,6 +81,13 @@ class CTextureManager
     * @return true if the texture is ready to render.
     */
    bool valid(unsigned int uiTexture) const;   
+
+   /**
+    * Access the texture itself
+    * @param uiTexture The texture ID to access.
+    * @return a pointer to the CTexture requested
+    */
+   CTexture* texture(unsigned int uiTexture);
 
  protected:
    

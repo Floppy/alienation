@@ -49,6 +49,30 @@ unsigned int CTextureManager::load(const char* strFilename)
    }
 }
 
+unsigned int CTextureManager::create(unsigned int iX, unsigned int iY)
+{
+   // Create new texture
+   CTexture* pTexture = new CTexture;
+   // Load
+   if (pTexture->create(iX,iY)) 
+   {
+      unsigned int uiTexture = pTexture->ID();
+      // Add to hashes
+      m_hTextures[uiTexture] = pTexture;
+      m_hReferences[uiTexture] = 1;
+      // Done
+      return uiTexture;
+   }
+   else 
+   {
+      // Drop created texture
+      delete pTexture;
+      // Done
+      return 0;
+   }
+}
+
+
 void CTextureManager::addReference(unsigned int uiTexture) 
 {
    // Increment reference count
@@ -74,4 +98,8 @@ void CTextureManager::activate(unsigned int uiTexture) const
 bool CTextureManager::valid(unsigned int uiTexture) const 
 {
    return glIsTexture(uiTexture);
+}
+
+CTexture* CTextureManager::texture(unsigned int uiTexture) {
+   return m_hTextures[uiTexture];
 }
