@@ -25,17 +25,17 @@ CPlayerShip::CPlayerShip() :
 {
    m_ppMasses[0]->m_vecPos = CVector3(0.0f, 0.0f, 0.0f);
    m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
-   m_poShips[0].m_vecLastForce = CVector3(0.0f, 0.0f, 0.0f);
-   m_poShips[0].m_bStraffUp = m_poShips[0].m_bStraffDown = m_poShips[0].m_bStraffLeft = m_poShips[0].m_bStraffRight = false;
-   m_poShips[0].m_fDrag = 25.0f;
-   m_poShips[0].m_bWeaponFire = false;
+   m_vecLastForce = CVector3(0.0f, 0.0f, 0.0f);
+   m_bStraffUp = m_bStraffDown = m_bStraffLeft = m_bStraffRight = false;
+   m_fDrag = 25.0f;
+   m_bWeaponFire = false;
    
-   m_poShips[0].m_fMaxPitchRate = 40.0f;
-   m_poShips[0].m_fMaxYawRate = 25.0f;
-   m_poShips[0].m_fMaxRollRate = 45.0f;	
+   m_fMaxPitchRate = 40.0f;
+   m_fMaxYawRate = 25.0f;
+   m_fMaxRollRate = 45.0f;	
 
    m_poHud = new CHud(this);
-   m_poShips[0].m_matCamRotation.loadIdentity();
+   m_matCamRotation.loadIdentity();
    m_bLeftLook = m_bRightLook = m_bUpLook = m_bBackLook = false;
    
    // Setup cockpit light
@@ -50,12 +50,12 @@ CPlayerShip::CPlayerShip() :
    g_oSoundManager.setVolume(0,m_iThrustChannel);
    
    // Setup trails
-   m_poShips[0].m_iNumTrails = 2;
-   m_poShips[0].m_avecOrigTrailPoints[0] = CVector3(1.6f, -0.25f, 3.75f);
-   m_poShips[0].m_avecOrigTrailPoints[1] = CVector3(-1.6f, -0.25f, 3.75f);
-   m_poShips[0].m_poTrails = new CTrail[m_poShips[0].m_iNumTrails];
-   for (int i=0; i<m_poShips[0].m_iNumTrails; i++)
-	  m_poShips[0].m_poTrails[i].setup(250, m_poShips[0].m_avecTrailPoints[i]);
+   m_iNumTrails = 2;
+   m_avecOrigTrailPoints[0] = CVector3(1.6f, -0.25f, 3.75f);
+   m_avecOrigTrailPoints[1] = CVector3(-1.6f, -0.25f, 3.75f);
+   m_poTrails = new CTrail[m_iNumTrails];
+   for (int i=0; i<m_iNumTrails; i++)
+	  m_poTrails[i].setup(250, m_avecTrailPoints[i]);
 
 
 }
@@ -65,18 +65,18 @@ CPlayerShip::~CPlayerShip()
    delete m_poHud;
 }
 
-void CPlayerShip::loadShip()
+void CPlayerShip::load()
 {
    CLoad3DS oLoad3ds;
-   if (oLoad3ds.import3DS(&(m_poShips[0].m_oModel), "Data/Model/shuttle.3ds")) {
-      m_poShips[0].m_oModel.init();
+   if (oLoad3ds.import3DS(&(m_oModel), "Data/Model/shuttle.3ds")) {
+      m_oModel.init();
    }
    if (oLoad3ds.import3DS(&m_oCockpitModel, "Data/Model/canopy02.3ds")) {
       // Prepare
       m_oCockpitModel.init();
    }
 
-   CShip::loadShip();
+   CShip::load();
 }
 
 //At last!! using inheritance! Only extra thing this does is rotate the camera
@@ -101,9 +101,9 @@ void CPlayerShip::drawCamera()
    
    if (m_bInsideView)
    {
-      CMatrix matM(m_poShips[0].m_matRotation);
+      CMatrix matM(m_matRotation);
       matM.invert();
-      vecTemp = m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos;
+      vecTemp = m_vecUp - m_ppMasses[0]->m_vecPos;
       glLoadMatrixf(matM.glElements());
       if (m_bLeftLook)
       {
@@ -119,17 +119,17 @@ void CPlayerShip::drawCamera()
       }
       else if (m_bUpLook)
       {
-         vecTemp = m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos;
+         vecTemp = m_vecRight - m_ppMasses[0]->m_vecPos;
          glRotatef(-90.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
       }
       glTranslatef(-m_ppMasses[0]->m_vecPos.X(), -m_ppMasses[0]->m_vecPos.Y(), -m_ppMasses[0]->m_vecPos.Z()); 
    }
    else 
    {
-      CMatrix matC(m_poShips[0].m_matCamRotation);
+      CMatrix matC(m_matCamRotation);
       matC.invert();
       glLoadMatrixf(matC.glElements());
-      glTranslatef(-m_poShips[0].m_vecCamView.X(), -m_poShips[0].m_vecCamView.Y(), -m_poShips[0].m_vecCamView.Z());
+      glTranslatef(-m_vecCamView.X(), -m_vecCamView.Y(), -m_vecCamView.Z());
    }
         
 }
@@ -140,7 +140,7 @@ void CPlayerShip::draw(bool bTestFrustum)
 
    glPushMatrix();
    glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
-   glMultMatrixf(m_poShips[0].m_matRotation.glElements());
+   glMultMatrixf(m_matRotation.glElements());
    
    //draw the cockpit
    if (m_bInsideView)
@@ -154,16 +154,16 @@ void CPlayerShip::draw(bool bTestFrustum)
    }
    //draw the ship
    else
-      m_poShips[0].m_oModel.render(); 
+      m_oModel.render(); 
    
    glPopMatrix();
    
    // Set sound playback location
    g_oSoundManager.setPlaybackLocation(m_ppMasses[0]->m_vecPos, 
-                                       m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos, 
-                                       m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos);
+                                       m_vecUp - m_ppMasses[0]->m_vecPos, 
+                                       m_vecRight - m_ppMasses[0]->m_vecPos);
    // Set volume
-   g_oSoundManager.setVolume(m_poShips[0].m_fThrust/10000.0f,m_iThrustChannel);
+   g_oSoundManager.setVolume(m_fThrust/10000.0f,m_iThrustChannel);
    
 }
 
@@ -174,24 +174,24 @@ void CPlayerShip::rotateCam(float fDT)
 	CMatrix matM;
 	float fPitch = 0.0f, fYaw = 0.0f;
 
-	if (m_poShips[0].m_fCamPitch)
+	if (m_fCamPitch)
 	{
-		fPitch = fDT * m_poShips[0].m_fCamPitch;		//change in pitch rate over time
+		fPitch = fDT * m_fCamPitch;		//change in pitch rate over time
 	}
 
-	if (m_poShips[0].m_fCamYaw)
+	if (m_fCamYaw)
 	{
-		fYaw = fDT * m_poShips[0].m_fCamYaw;			//change in yaw rate over time
+		fYaw = fDT * m_fCamYaw;			//change in yaw rate over time
 	}
 
 	CQuat quaTemp(DEG_TO_RAD(fYaw), 0.0f, DEG_TO_RAD(fPitch));
-	quaTemp *= m_poShips[0].m_quaCamOrientation;
-	m_poShips[0].m_quaCamOrientation = quaTemp;
-	m_poShips[0].m_matCamRotation = CMatrix(m_poShips[0].m_quaCamOrientation);
+	quaTemp *= m_quaCamOrientation;
+	m_quaCamOrientation = quaTemp;
+	m_matCamRotation = CMatrix(m_quaCamOrientation);
 
-	matM = (m_poShips[0].m_matCamRotation);
-	m_poShips[0].m_vecCamView = matM * CVector3(0.0f, 0.0f, 20.0f);
-	m_poShips[0].m_vecCamView += m_ppMasses[0]->m_vecPos;
+	matM = (m_matCamRotation);
+	m_vecCamView = matM * CVector3(0.0f, 0.0f, 20.0f);
+	m_vecCamView += m_ppMasses[0]->m_vecPos;
 
 }
 
@@ -203,14 +203,14 @@ void CPlayerShip::drawHud()
    }
 }
 
-void CPlayerShip::drawOffScreen()
+void CPlayerShip::renderOffScreen()
 {
    if (m_bInsideView) {
       m_poHud->renderOffScreen();
    }
 }
 
-void CPlayerShip::setTarget(CShip& oShip) 
+void CPlayerShip::setTarget(CGameObject *pTarget) 
 {
-   m_poHud->setTarget(&oShip);
+   m_poHud->setTarget(pTarget);
 }

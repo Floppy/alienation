@@ -26,24 +26,18 @@ public:
    	void drawHud();
 	CPlayerShip();
 	virtual ~CPlayerShip();
-	void loadShip();
-	virtual void simulate(float fDT);
+	void load();
+	void simulate(float fDT);
 	void drawCamera();
-	void draw(bool bTestFrustum = true);
+	virtual void draw(bool bTestFrustum = true);
 	void rotateCam(float fDT);
-        void drawOffScreen();
-
-        /**
-         * Draw Trail.
-         * Overridden to add sound control.
-         */ 
-	void drawTrail();
+        void renderOffScreen();
 
         /**
          * Set target.
          * Overridden to add setting of target for HUD.
          */
-        void setTarget(CShip& oShip);
+        void setTarget(CGameObject *pTarget);
 
 
 	CModel m_oCockpitModel;
