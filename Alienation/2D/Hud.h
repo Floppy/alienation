@@ -91,7 +91,7 @@ namespace NSD2D {
       /**
        * Texture IDs
        */
-      unsigned int m_auiTextures[8];
+      unsigned int m_auiTextures[9];
       
       /**
        * Object for 2d drawing
