@@ -14,7 +14,7 @@
 #include "Game/Ship.h"
 #include "3D/Model.h"
 #include "Equipment/Radar.h"
-#include "..\2D\GLFont.h"	// Added by ClassView
+#include "2D/GLFont.h"
 
 using namespace NSD2D;
 
