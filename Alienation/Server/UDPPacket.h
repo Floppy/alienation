@@ -17,6 +17,7 @@ using namespace std;
 class CUDPPacket : public CPacket  
 {
 public:
+	void getMessageData(char * strUsername, char * strMessage);
 	int getLastMessageRecievedType();
 	void setLastMessageRecievedType(int iLastMessage);
 	int recieve(UDPsocket oSocket);

@@ -86,19 +86,23 @@ int CUDPPacket::recieve(UDPsocket oSocket)
 		iNumRecieved = SDLNet_UDP_Recv(oSocket, oPacket);
 		if ( iNumRecieved )
 		{
+			printf("%d UDP Packet(s) recieved\n", iNumRecieved);
 			iMsgType = (int)oPacket->data[0];		
 			switch (iMsgType)
 			{
 			case MSG_TEXTMESSAGE:
+				printf("Type is MSG_TEXTMESSAGE\n");
 				m_poMessage = (sMessage *)oPacket->data;
 				break;
 			}
 			m_iLastMessageRecievedType = iMsgType;
+			SDLNet_FreePacket( oPacket );
 			return iMsgType;
 		}
 		SDLNet_UDP_Unbind( oSocket, iChannel );
 	}
 	SDLNet_FreePacket( oPacket );
+	m_iLastMessageRecievedType = MSG_NOMESSAGE;
 	return MSG_NOMESSAGE;
 }
 
@@ -110,4 +114,10 @@ void CUDPPacket::setLastMessageRecievedType(int iLastMessage)
 int CUDPPacket::getLastMessageRecievedType()
 {
 	return m_iLastMessageRecievedType;
+}
+
+void CUDPPacket::getMessageData(char *strUsername, char *strMessage)
+{
+	strcpy(strUsername, m_poMessage->strUser);
+	strcpy(strMessage , m_poMessage->strMessage);
 }

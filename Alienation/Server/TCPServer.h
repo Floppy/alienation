@@ -13,6 +13,7 @@
 #include "SDL_net.h"
 #include "TCPPacket.h"
 #include "UDPPacket.h"
+#include "Pilot.h"
 #include "Globals.h"
 
 class CTCPServer  

@@ -21,6 +21,11 @@ enum eMsgType {
 #include "UDPServer.h"
 
 CTCPServer go_TCPServer;
+extern SQLHENV			 g_hEnv;				// Handle ODBC environment
+extern long				 g_lResult;			// result of functions
+extern SQLHDBC			 g_hDbc;				// Handle connection
+extern unsigned char	 g_strStatus[10];	// Status SQL
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -37,6 +42,7 @@ CTCPServer::~CTCPServer()
 
 CTCPPacket * CTCPServer::listen(Uint32 uiTimeout)
 {
+	CPilot *poPilot;
 	CTCPPacket *poPacket = new CTCPPacket();
 	CTCPPacket *poAckPacket = new CTCPPacket();
 	CUDPPacket pPlayerInformPacket;
@@ -48,6 +54,7 @@ CTCPPacket * CTCPServer::listen(Uint32 uiTimeout)
 	char strUserName[16], strPassword[16];
 
 	TCPsocket oSocket;
+	poPilot = new CPilot();
 
 	while ( SDL_GetTicks() < uiStop )
 	{
@@ -63,27 +70,58 @@ CTCPPacket * CTCPServer::listen(Uint32 uiTimeout)
 			}
 			else
 			{
-				//read packet
-				//Get Type of packet (atm, only login via TCP);
+																	//////////////////////////////////////////////
+																	//read packet. get type of packet (atm,     //
+																	//only login via TCP);                      //
+																	//////////////////////////////////////////////
+
 				iResult = poPacket->recieve(oSocket);
 				switch (iResult)
 				{
 				case MSG_LOGINREQUEST:
-					//Do login check stuff here
+																	//////////////////////////////////////////////
+																	//Get sent username and password and check  //
+																	//them against the database                 //
+																	//////////////////////////////////////////////
+
 					poPacket->getLoginRequest(strUserName, strPassword);
+					if (poPilot->findByPilotName(strUserName))
+					{
+
+																	//////////////////////////////////////////////
+																	//Pilot found in database, now check for    //
+																	//correct password                          //
+																	//////////////////////////////////////////////
+
+						if ((strcmp(strPassword, poPilot->getPassword())) != -1)
+						{
+																	//////////////////////////////////////////////
+																	//Username and password were valid, no      //
+																	//errors occured                            //
+																	//////////////////////////////////////////////
+
+							goClientManager.add( *poNewIP, strUserName, oSocket );
+																	//////////////////////////////////////////////
+																	//Send acknowledgement to player            //
+																	//////////////////////////////////////////////
+
+							poAckPacket->setLoginAcknowledgement(strUserName, "Welcome to the server!");
+							poAckPacket->send(oSocket, MSG_LOGINREPLY);
+																	//////////////////////////////////////////////
+																	//Inform other players a new player has     //
+																	//logged on                                 //
+																	//////////////////////////////////////////////
+
+							strcat(strInform, strUserName);
+							strcat(strInform, " has joined the game");
+							pPlayerInformPacket.setData(strUserName, strInform);
+							go_UDPServer.sendAll(pPlayerInformPacket);
+						}
+					}
 					break;
 				default:
 					break;
 				}
-				goClientManager.add( *poNewIP, strUserName, oSocket );
-				//Send acknowledgement to player
-				poAckPacket->setLoginAcknowledgement(strUserName, "Welcome to the server!");
-				poAckPacket->send(oSocket, MSG_LOGINREPLY);
-				//Inform other players a new player has logged on
-				strcat(strInform, strUserName);
-				strcat(strInform, " has joined the game");
-				pPlayerInformPacket.setData(strUserName, strInform);
-//				go_UDPServer.sendAll(pPlayerInformPacket);
 			}
 		}
 	}   
@@ -112,3 +150,5 @@ bool CTCPServer::createSocket()
    }
 
 }
+
+

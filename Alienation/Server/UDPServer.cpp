@@ -38,19 +38,16 @@ void CUDPServer::sendAll(CUDPPacket poPacket)
 	UDPsocket oSocket;
 	int i, iResult;
 	IPaddress *poIPAddress;
-
-
+	
 	oSocket=SDLNet_UDP_Open(0);
 	if(!oSocket) 
 	{
 		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
-		exit(2);
 	}	
-	
+
 	for ( i = 0 ; i < goClientManager.getNumberClients() ; i++ )
 	{
 		poIPAddress = goClientManager.getIPAddress(i);
-
 
 		iResult = SDLNet_UDP_Bind( oSocket, -1, poIPAddress );
 		if( iResult == -1 ) 
@@ -70,6 +67,7 @@ void CUDPServer::listen(Uint32 uiTimeout)
 	Uint32 uiStop = SDL_GetTicks() + uiTimeout;
 	CUDPPacket oPacket;
 	UDPsocket oSocket;
+	char strUsername[32], strMessage[32];
 
 	oPacket.setLastMessageRecievedType(MSG_NOMESSAGE);
 
@@ -85,6 +83,9 @@ void CUDPServer::listen(Uint32 uiTimeout)
 		oPacket.recieve(oSocket);
 		if ( oPacket.getLastMessageRecievedType() != MSG_NOMESSAGE )
 		{
+			printf("Last message recieved was %d\n", oPacket.getLastMessageRecievedType());
+			oPacket.getMessageData(strUsername, strMessage);
+			printf("Message was %s, %s\n", strUsername, strMessage);
 			//send message to other clients
 			go_UDPServer.sendAll(oPacket);
 		}
