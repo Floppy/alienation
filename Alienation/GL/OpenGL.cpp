@@ -394,15 +394,8 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 			m_poShip->m_bWeaponFire = false;
 	}
 
-	//Thrust. Note that the max thrust is hard coded (10000), Ooooo naughty
-	if (m_fThrust == 0.0f)
-	{
-		m_poShip->m_fThrust = 0.0f;
-	}																	
-	else
-	{
-		m_poShip->m_fThrust = m_fThrust * 10000.00f;
-	}
+	//Store thrust value
+        m_poShip->setThrust(m_fThrust);
 
 	//Basically these bools represent weather the hat switch/numeric key pad have been pressed.
 	//The effect of these depends on whether it is an inside or outside view.
