@@ -10,6 +10,8 @@
 
 #include "opengl.h"
 
+// We define the joystick axes here, because they
+// seem to be different in windows and linux
 #define JOYSTICK_AXIS_PITCH       1
 #define JOYSTICK_AXIS_YAW         0
 #ifdef WIN32
@@ -20,7 +22,7 @@
   #define JOYSTICK_AXIS_THROTTLE  3
 #endif
 
-#define JOYSTICK_DEADZONE 3200
+const static int kiDeadzone(3200);
 
 // All Setup For OpenGL Goes Here
 COpenGL :: COpenGL() :
@@ -418,7 +420,7 @@ bool COpenGL::jsUser(SDL_Event oEvent)
 				}
 			}
 
-			if ( ( oEvent.jaxis.value < -JOYSTICK_DEADZONE ) || (oEvent.jaxis.value > JOYSTICK_DEADZONE ) ) 
+			if ( ( oEvent.jaxis.value < -kiDeadzone ) || (oEvent.jaxis.value > kiDeadzone ) ) 
 			{
 				if( oEvent.jaxis.axis == JOYSTICK_AXIS_YAW) 
 				{
