@@ -67,7 +67,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "F:\SDL-1.2.5\include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "./" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
 # ADD RSC /l 0x809 /d "_DEBUG"
@@ -101,6 +101,10 @@ SOURCE=.\AI\AIShip.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Alienation.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Game\Brake.cpp
 # End Source File
 # Begin Source File
@@ -113,11 +117,11 @@ SOURCE=.\3D\Light.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Math\Matrix.cpp
+SOURCE=.\3D\Material.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\3D\Material.cpp
+SOURCE=.\Math\Matrix.cpp
 # End Source File
 # Begin Source File
 
@@ -138,10 +142,6 @@ SOURCE=.\3D\ParticleEngine.cpp
 # Begin Source File
 
 SOURCE=.\Game\PlayerShip.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Alienation.cpp
 # End Source File
 # Begin Source File
 
@@ -205,11 +205,11 @@ SOURCE=.\3D\Light.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Math\Matrix.h
+SOURCE=.\3D\Material.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\3D\Material.h
+SOURCE=.\Math\Matrix.h
 # End Source File
 # Begin Source File
 
