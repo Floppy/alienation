@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 		}
 		vecSize = config.getVector2("resolution");
 		iBPP = static_cast<int>(config.getNumber("bpp"));
-		bFullScreen = static_cast<bool>(config.getNumber("fullscreen"));
+		bFullScreen = config.getNumber("fullscreen") == 0.0f ? false : true;
 		colDepth = config.getColour("colours");
 		iDepth = static_cast<int>(config.getNumber("depthbuffer"));
 		iDouble = static_cast<int>(config.getNumber("doublebuffer"));
@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 			cerr << "Couldn't load config file!" << endl;
 			return 1;
 		}
-                bEnableSound = static_cast<bool>(config.getNumber("enable"));
+        bEnableSound = config.getNumber("enable") == 0.0f ? false: true;
 
 	}
 	

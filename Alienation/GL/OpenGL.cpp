@@ -83,8 +83,8 @@ bool COpenGL :: initGL() {
        return false;
      }
      m_vecScreenSize = config.getVector2("resolution");
-     bPerspCorr = static_cast<bool>(config.getNumber("perspectivecorrection"));
-     bPolygonSmooth = static_cast<bool>(config.getNumber("polygonsmooth"));
+     bPerspCorr = config.getNumber("perspectivecorrection") == 0.0f ? false : true;
+     bPolygonSmooth = config.getNumber("polygonsmooth") == 0.0f? false : true;
      texfilter = static_cast<int>(config.getNumber("texturefilter"));
 
      // Get texture filtering mode
