@@ -170,16 +170,18 @@ bool COpenGL :: initGL() {
 //is all transparent objects are drawn last
 bool COpenGL::DrawGLScene(GLvoid) {
 
+   // Perform offscreen rendering first
+   //CTexture* pTexture(g_oTextureManager.texture(m_oSun.getMaterial().m_uiTexture));
+   //pTexture->preRenderToTexture();
    // Clear screen
    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    // Reset The Current Modelview Matrix
    //glMatrixMode(GL_MODELVIEW);
    //glLoadIdentity();					
-
-   // Perform offscreen rendering first
-   //g_oTextureManager.texture(m_oSun.getMaterial().m_uiTexture)->preRenderToTexture();
-   //m_poAIShip->draw();
-   //g_oTextureManager.texture(m_oSun.getMaterial().m_uiTexture)->postRenderToTexture();
+   // Draw
+   //m_poAIShip->drawBlended();
+   // Finish up
+   //pTexture->postRenderToTexture();
 
    // Clear screen
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -204,6 +206,8 @@ bool COpenGL::DrawGLScene(GLvoid) {
 
    m_poShip->drawBlended();
    m_poAIShip->drawBlended();
+   
+   m_poLight->disable();
    m_poShip->drawHud();
    
    // Everything Went OK
