@@ -25,7 +25,6 @@ int main(int argc, char* argv[])
    bool bDone(false);  // Bool Variable To Exit Loop
    unsigned long int		dTickCount;	
    unsigned long int		dLastTickCount;
-   COpenGL oGame;
    SDL_Event oEvent;
    SDL_Joystick *poJoystick;
    bool bNoJoystick = true;
@@ -82,6 +81,9 @@ int main(int argc, char* argv[])
       cerr << "Failed to set video mode: " << SDL_GetError() << endl;
       return 1;
    }
+
+   // Create game engine
+   COpenGL oGame(vecSize);
 
    // Disable sound if apt
    if (!bEnableSound)

@@ -44,13 +44,14 @@ extern bool bNoBumps;
 const static int kiDeadzone(3200);
 
 // All Setup For OpenGL Goes Here
-COpenGL :: COpenGL() :
+COpenGL :: COpenGL(CVector2 vecScreenSize) :
 	m_bFullScreen(true),
 	m_fTimeElapsed(0.0f),
 	m_fPitch(0.0f),
 	m_fYaw(0.0f), 
 	m_fRoll(0.0f), 
-	m_fThrust(0.0f)
+	m_fThrust(0.0f),
+        m_vecScreenSize(vecScreenSize)
 {
    
 }
@@ -82,7 +83,6 @@ bool COpenGL :: initGL() {
        cerr << "Couldn't read video config!" << endl;
        return false;
      }
-     m_vecScreenSize = config.getVector2("resolution");
      bPerspCorr = config.getNumber("perspectivecorrection") == 0.0f ? false : true;
      bPolygonSmooth = config.getNumber("polygonsmooth") == 0.0f? false : true;
      texfilter = static_cast<int>(config.getNumber("texturefilter"));
@@ -819,19 +819,10 @@ void COpenGL::DrawSplashScreen()
 {
    CFrame oFrame;
 
-   glShadeModel(GL_SMOOTH);                           // Enable Smooth Shading
-   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);              // Black Background
-   glClearDepth(1.0f);                                // Depth Buffer Setup
-   glEnable(GL_DEPTH_TEST);                           // Enables Depth Testing
-   glDepthFunc(GL_LEQUAL);                            // The Type Of Depth Testing To Do
-   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Really Nice Perspective Calculations
-   glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);                                 
-   glEnable(GL_POLYGON_SMOOTH);
    glEnable(GL_TEXTURE_2D);		
-   //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
    // Set viewport
-   glViewport(0, 0, 1024, 768);
+   glViewport(0, 0, static_cast<int>(m_vecScreenSize.X()), static_cast<int>(m_vecScreenSize.Y()));
 
    // Set camera
    glMatrixMode(GL_PROJECTION);

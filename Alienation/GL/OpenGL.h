@@ -23,11 +23,8 @@
 #include "3D/Frustum.h"
 #include "3D/Model.h"
 #include "3D/Sprite.h"
-//<<<<<<< OpenGL.h
 #include "Equipment/Radar.h"
-//=======
 #include "Math/Vector.h"
-//>>>>>>> 1.15
 
 #include <vector>
 
@@ -52,7 +49,7 @@ class COpenGL {
 		CLight *m_poLight;
 		CStars  *m_poStars;
 		CPlayerShip *m_poShip;
-      COpenGL();
+      COpenGL(CVector2 vecScreenSize);
       ~COpenGL();
 		void Update (unsigned long int dMilliseconds);
       bool DrawGLScene(GLvoid);
