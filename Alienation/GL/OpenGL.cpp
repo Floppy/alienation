@@ -17,6 +17,8 @@
 #include "3D/TextureManager.h"
 #include "Game/Asteroid.h"
 #include "AI/AIShip.h"
+#include "IO/Lua.h"
+#include "Math/Vector.h"
 
 // We define the joystick axes here, because they
 // seem to be different in windows and linux
@@ -58,14 +60,26 @@ COpenGL::~COpenGL()
 
 bool COpenGL :: initGL() {
 
+	CVector2 vecSize(0,0);
+	bool bPerspCorr, bPolygonSmooth;
+	{
+		NSDIO::CLua config("config.lua");
+		if (!config.setGlobalTable("config")) {
+			cerr << "Couldn't load config file!" << endl;
+			return 1;
+		}
+		vecSize = config.getVector2("resolution");
+		bPerspCorr = static_cast<bool>(config.getNumber("perspectivecorrection"));
+		bPolygonSmooth = static_cast<bool>(config.getNumber("polygonsmooth"));
+	}
+
+
    // Set up shading, lighting, and so on
    glShadeModel(GL_SMOOTH);                           // Enable Smooth Shading
    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);              // Black Background
    glClearDepth(1.0f);                                // Depth Buffer Setup
    glEnable(GL_DEPTH_TEST);                           // Enables Depth Testing
    glDepthFunc(GL_LEQUAL);                            // The Type Of Depth Testing To Do
-   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Really Nice Perspective Calculations
-   //glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);                                 
    glEnable(GL_POLYGON_SMOOTH);
    glEnable(GL_TEXTURE_2D);		
 
@@ -73,8 +87,13 @@ bool COpenGL :: initGL() {
    glEnable(GL_CULL_FACE);
    glCullFace(GL_BACK);
 
+	if (bPerspCorr)
+	   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+   if (bPolygonSmooth)
+      glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+
    // Set viewport
-   glViewport(0, 0, 1024, 768);
+   glViewport(0, 0, static_cast<int>(vecSize.X()), static_cast<int>(vecSize.Y()));
 
    // Init lighting
    glEnable(GL_LIGHTING);
