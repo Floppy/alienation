@@ -17,7 +17,8 @@ ship = {
 		{x=-1.6, y=-0.25, z=3.75}
 	},
 	weapons		= {
-		{x=0, y=-0.7, z=-7.3},
+		{x=3, y=-0.7, z=-4},
+		{x=-3, y=-0.7, z=-4}
 	},
 	weapontype	= "ter_ppc2.lua",
 	brakes		= {
