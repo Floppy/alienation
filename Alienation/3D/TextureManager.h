@@ -13,6 +13,7 @@
 #include <map>
 #include <string>
 #include "3D/Texture.h"
+#include <SDL_opengl.h>
 
 using namespace std;
 
@@ -93,6 +94,33 @@ class CTextureManager
    const char* textureRoot() const 
    { return m_strTextureRoot; }
    
+   /**
+    * Set texture filtering mode.
+    * @param eMag Magnification filter mode.
+    * @param eMin Minification filter mode.
+    */
+   void textureFiltering(GLenum eMag, GLenum eMin);
+
+   /**
+    * Get texture magnification filter mode.
+    * @return Magnification filter mode.
+    */
+   GLenum magFilter() const
+   { return m_eMagFilter; }
+
+   /**
+    * Get texture minification filter mode.
+    * @return Minification filter mode.
+    */
+   GLenum minFilter() const
+   { return m_eMinFilter; }
+
+   /**
+    * Is mipmapping enabled for textures.
+    * @return True if mipmapping is enabled.
+    */
+   bool mipmapsEnabled() const
+   { return m_bMipmap; }
 
  protected:
    
@@ -115,6 +143,21 @@ class CTextureManager
     * Root location of textures
     */
    char m_strTextureRoot[255];
+
+   /**
+    * Is mipmapping enabled?
+    */
+   bool m_bMipmap;
+
+   /**
+    * Texture filtering mode (magnification)
+    */
+   GLenum m_eMagFilter;
+
+   /**
+    * Texture filtering mode (minification)
+    */
+   GLenum m_eMinFilter;
 
 };
 

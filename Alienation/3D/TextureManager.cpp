@@ -12,7 +12,10 @@ CTextureManager g_oTextureManager("Data/Texture/");
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CTextureManager::CTextureManager(const char* strTextureRoot)   
+CTextureManager::CTextureManager(const char* strTextureRoot) :
+   m_bMipmap(false),
+   m_eMagFilter(GL_LINEAR),
+   m_eMinFilter(GL_LINEAR)
 {
    strcpy(m_strTextureRoot,strTextureRoot);
 }
@@ -107,4 +110,19 @@ void CTextureManager::render(unsigned int uiTexture)
 
 CTexture* CTextureManager::texture(unsigned int uiTexture) {
    return m_hTextures[uiTexture];
+}
+
+void CTextureManager::textureFiltering(GLenum eMag, GLenum eMin) {
+   // Store minification filter
+   m_eMinFilter = eMin;
+   // Store magnification filter
+   if (eMag == GL_NEAREST || eMag == GL_NEAREST_MIPMAP_NEAREST || eMag == GL_NEAREST_MIPMAP_LINEAR)
+      m_eMagFilter = GL_NEAREST;
+   else
+      m_eMagFilter = GL_LINEAR;
+   // Store mipmap mode
+   if (eMin == GL_LINEAR || eMin == GL_NEAREST)
+      m_bMipmap = false;
+   else 
+      m_bMipmap = true;
 }

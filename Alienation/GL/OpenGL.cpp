@@ -67,6 +67,7 @@ COpenGL::~COpenGL()
 bool COpenGL :: initGL() {
 
    bool bPerspCorr, bPolygonSmooth;
+   int texfilter;   
    const char* strPlayerShip = NULL;
    vector<const char*> astrAIShips;
    int iNumRoids(0);
@@ -80,6 +81,31 @@ bool COpenGL :: initGL() {
      m_vecScreenSize = config.getVector2("resolution");
      bPerspCorr = static_cast<bool>(config.getNumber("perspectivecorrection"));
      bPolygonSmooth = static_cast<bool>(config.getNumber("polygonsmooth"));
+     texfilter = static_cast<int>(config.getNumber("texturefilter"));
+
+     // Get texture filtering mode
+     switch (texfilter) {
+     case 6:
+        texfilter = GL_LINEAR_MIPMAP_LINEAR;
+        break;
+     case 5:
+        texfilter = GL_NEAREST_MIPMAP_LINEAR;
+        break;
+     case 4:
+        texfilter = GL_LINEAR_MIPMAP_NEAREST;
+        break;
+     case 3:
+        texfilter = GL_NEAREST_MIPMAP_NEAREST;
+        break;
+     case 2:
+        texfilter = GL_LINEAR;
+        break;
+     case 1:
+     default:
+        texfilter = GL_NEAREST;
+        break;
+     }
+
      config.pop();
 
      if (!config.setGlobalTable("game")) {
@@ -110,8 +136,10 @@ bool COpenGL :: initGL() {
    glEnable(GL_CULL_FACE);
    glCullFace(GL_BACK);
 
-	if (bPerspCorr)
-	   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+   g_oTextureManager.textureFiltering(texfilter,texfilter);
+
+   if (bPerspCorr)
+      glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
    if (bPolygonSmooth)
       glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
@@ -178,15 +206,7 @@ bool COpenGL :: initGL() {
 
 
    // Load roids
-//<<<<<<< OpenGL.cpp
-//<<<<<<< OpenGL.cpp
-//   for (i=0; i<40; i++) {
-//=======
-//   for (int r=0; r<40; r++) {
-//>>>>>>> 1.34
-//=======
    for (int r=0; r<iNumRoids; r++) {
-//>>>>>>> 1.38
       CAsteroid* pRoid = new CAsteroid(1,50000);
       // Select type
       float fRandom = prng.randDouble();

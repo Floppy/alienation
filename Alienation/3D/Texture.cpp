@@ -11,7 +11,8 @@
 
 CTexture::CTexture() :
    m_pTexture(NULL),
-   m_uiTextureID(0)
+   m_uiTextureID(0),
+   m_bMipmap(true)
 {
 }
 
@@ -82,12 +83,6 @@ bool CTexture::load(const char* strFilename)
       else 
          m_pTexture = pNewTex;
 
-      // Get maximum texture size
-      int iTexSize(0);
-      glGetIntegerv(GL_MAX_TEXTURE_SIZE,&iTexSize);
-       
-      // Rescale?
-
    }
 
    // Done
@@ -118,27 +113,47 @@ bool CTexture::create(unsigned int iX, unsigned int iY)
 #endif
 
    m_pTexture = SDL_CreateRGBSurface(SDL_SWSURFACE, iX, iY, 32, rmask, gmask, bmask, amask);
-   
+
+   // Don't mipmap manually created textures - at least for now
+   m_bMipmap = false;
+
    return (m_pTexture != NULL);
 }
 
 unsigned int CTexture::init() 
 {
    if (m_pTexture) {
+
+      // Get maximum texture size
+      int iTexSize(0);
+      glGetIntegerv(GL_MAX_TEXTURE_SIZE,&iTexSize);
+       
+      // Rescale?
+      
       if (m_uiTextureID == 0)
-      { 
          // Allocate GL texture ID
          glGenTextures(1, &m_uiTextureID);
-      }
+
       // Bind
       glBindTexture(GL_TEXTURE_2D, m_uiTextureID);
-      // Set magnification and minification filters.
-      glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+
+      // Set minification params
+      if (m_bMipmap)
+         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, g_oTextureManager.minFilter());
+      else 
+         // If no mipmapping, use magnification mode for minification too.
+         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, g_oTextureManager.magFilter());
+
+      // Set magnification params
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, g_oTextureManager.magFilter());
+
       // Copy data to GL texture
-      //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_pTexture->w, m_pTexture->h, 0, 
-      gluBuild2DMipmaps(GL_TEXTURE_2D,4,m_pTexture->w, m_pTexture->h, 
-			GL_RGBA, GL_UNSIGNED_BYTE, m_pTexture->pixels);
+      if (g_oTextureManager.mipmapsEnabled() && m_bMipmap)
+         gluBuild2DMipmaps(GL_TEXTURE_2D,4,m_pTexture->w, m_pTexture->h, 
+                           GL_RGBA, GL_UNSIGNED_BYTE, m_pTexture->pixels);
+      else
+         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_pTexture->w, m_pTexture->h, 0, 
+                      GL_RGBA, GL_UNSIGNED_BYTE, m_pTexture->pixels);
    }
    return m_uiTextureID;
 }

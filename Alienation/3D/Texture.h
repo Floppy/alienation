@@ -113,6 +113,11 @@ class CTexture
     */
    int m_aiViewport[4];
 
+   /**
+    * Allow mipmapping of this texture?
+    */
+   bool m_bMipmap;
+
 };
 
 #endif //SDS_TEXTURE_H
