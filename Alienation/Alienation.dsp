@@ -97,6 +97,10 @@ SOURCE=.\3D\TextureManager.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\3D\Sprite.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\AI\AIShip.cpp
 # End Source File
 # Begin Source File
@@ -186,6 +190,10 @@ SOURCE=.\3D\3DObject.h
 # Begin Source File
 
 SOURCE=.\3D\TextureManager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\3D\Sprite.h
 # End Source File
 # Begin Source File
 

@@ -10,25 +10,69 @@
  */
 class CVector2 
 {
-public:
-	float m_fx, m_fy;							// 2D vector coordinates
 
-	CVector2() :								// Constructor to set x = y = z = 0
-		m_fx(0.0f),
-		m_fy(0.0f)
-	{}
+ public:
+   
+   /**
+    * Constructor.
+    * Does not set to zero by default, for efficiency.
+    */
+   CVector2()
+   {}
+   
+   /**
+    * Constructor.
+    * Sets the value of the vector
+    * @param fx X value
+    * @param fy Y value
+    */
+   CVector2(float fx, float fy)
+   {
+      m_oVector[0] = fx;
+      m_oVector[1] = fy;
+   }
+   
+   /**
+    * Assignment operator.
+    * Copies the value of the passed vector into this.
+    * @param vecV Vector to be copied.
+    * @return Reference to this vector
+    */
+   CVector2& operator= (CVector2 vecV)
+   {
+      m_oVector[0] = vecV.m_oVector[0];
+      m_oVector[1] = vecV.m_oVector[1];
+      return *this;
+   }
 
-	CVector2(float fx, float fy) :			// Constructor that initializes this Vector3D to the intended values of x, y and z
-		m_fx(fx),
-		m_fy(fy)
-	{}
+   /**
+    * X Component.
+    * @return Reference to X component of vector.
+    */
+   float& X() 
+   { return m_oVector[0]; }
 
-	CVector2& operator= (CVector2 vecV)		// operator= sets values of v to this Vector3D. example: v1 = v2 means that values of v2 are set onto v1
-	{
-		m_fx = vecV.m_fx;
-		m_fy = vecV.m_fy;
-		return *this;
-	}
+   /**
+    * Y Component.
+    * @return Reference to Y component of vector.
+    */
+   float& Y() 
+   { return m_oVector[1]; }
+
+   /**
+    * Array access
+    * @return An array suitable for using directly with glXxx2fv functions.
+    */ 
+   const float* glVector() 
+   { return m_oVector; }
+
+ protected:
+
+   /** 
+    * Vector components
+    */
+   float m_oVector[2];
+
 };
 
 // class Vector3D		---> An object to represent a 3D vector or a 3D point in space

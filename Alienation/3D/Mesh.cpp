@@ -17,6 +17,7 @@ CMesh::CMesh() :
 {}
 
 CMesh::~CMesh() {
+   glDeleteLists(m_uiList,1);
    delete [] m_pFaces;
    delete [] m_pNormals;
    delete [] m_pVerts;
@@ -26,13 +27,12 @@ CMesh::~CMesh() {
 
 void CMesh::init() {
 
-   cerr << "texture: " << m_oMaterial.m_uiTexture << endl;
-
    // Calculate normals
    computeNormals();
 
    // Allocate new list
    m_uiList = glGenLists(1);
+   glEnable(GL_TEXTURE_2D);
    // Create display list   
    glNewList(m_uiList, GL_COMPILE);   
    
@@ -53,7 +53,7 @@ void CMesh::init() {
          glNormal3f(m_pNormals[iIndex].m_fx, m_pNormals[iIndex].m_fy, m_pNormals[iIndex].m_fz);
          // Texture coordinates
          if(m_pTexVerts) {
-            glTexCoord2f(m_pTexVerts[iIndex].m_fx, m_pTexVerts[iIndex].m_fy);
+            glTexCoord2fv(m_pTexVerts[iIndex].glVector());
          }
          // Vertex coordinate
          glVertex3f(m_pVerts[ iIndex ].m_fx, m_pVerts[ iIndex ].m_fy, m_pVerts[ iIndex ].m_fz);

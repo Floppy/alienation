@@ -260,7 +260,7 @@ void CHud::drawQuad(CVector3 *Verts, CVector2 *Tex)
 
 		for ( iCount = 0 ; iCount < 4 ; iCount ++ )
 		{
-			glTexCoord2d(Tex[iCount].m_fx, Tex[iCount].m_fy);
+			glTexCoord2fv(Tex[iCount].glVector());
 			glVertex3f(Verts[iCount].m_fx, Verts[iCount].m_fy, Verts[iCount].m_fz);
 		}
 	glEnd();
@@ -519,13 +519,13 @@ void CHud::draw2DQuad(float fPosX, float fPosY, float fWidth, float fHeight, CVe
 {
 	glBegin(GL_QUADS);
 
-		glTexCoord2d(Tex[0].m_fx, Tex[0].m_fy);
+		glTexCoord2fv(Tex[0].glVector());
 		glVertex2f(fPosX, fPosY);
-		glTexCoord2d(Tex[1].m_fx, Tex[1].m_fy);
+		glTexCoord2fv(Tex[1].glVector());
 		glVertex2f(fPosX + fWidth, fPosY);
-		glTexCoord2d(Tex[2].m_fx, Tex[2].m_fy);
+		glTexCoord2fv(Tex[2].glVector());
 		glVertex2f(fPosX + fWidth, fPosY - fHeight);
-		glTexCoord2d(Tex[3].m_fx, Tex[3].m_fy);
+		glTexCoord2fv(Tex[3].glVector());
 		glVertex2f(fPosX, fPosY - fHeight);
 
 	glEnd();

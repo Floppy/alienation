@@ -62,9 +62,8 @@ class CTextureManager
    /**
     * Activate a texture for rendering.
     * @param uiTexture The texture ID to activate.
-    * @return true if the texture was activated OK.
     */
-   bool activate(unsigned int uiTexture) const;
+   void activate(unsigned int uiTexture) const;
    
    /**
     * Can the texture be rendered?

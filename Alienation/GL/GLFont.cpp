@@ -161,19 +161,19 @@ void CGLFont::print(char *str, CVector2 vecPos, float fSize)
 
 			//Draw the letter
 			glTexCoord2d(adCoords[3][0], adCoords[3][1]);
-			glVertex2f(vecTempPos.m_fx - fSize, vecTempPos.m_fy - fSize);
+			glVertex2f(vecTempPos.X() - fSize, vecTempPos.Y() - fSize);
 
 			glTexCoord2d(adCoords[2][0], adCoords[2][1]);
-			glVertex2f(vecTempPos.m_fx + fSize, vecTempPos.m_fy - fSize);
+			glVertex2f(vecTempPos.X() + fSize, vecTempPos.Y() - fSize);
 			
 			glTexCoord2d(adCoords[1][0], adCoords[1][1]);
-			glVertex2f(vecTempPos.m_fx + fSize, vecTempPos.m_fy + fSize);
+			glVertex2f(vecTempPos.X() + fSize, vecTempPos.Y() + fSize);
 
 			glTexCoord2d(adCoords[0][0], adCoords[0][1]);
-			glVertex2f(vecTempPos.m_fx - fSize, vecTempPos.m_fy + fSize);
+			glVertex2f(vecTempPos.X() - fSize, vecTempPos.Y() + fSize);
 		
 			//Move the position for the next letter
-			vecTempPos.m_fx += fSize * 2.0f;
+			vecTempPos.X() += fSize * 2.0f;
 		}
 	glEnd();
 	glPopAttrib();

@@ -66,13 +66,9 @@ void CTextureManager::removeReference(unsigned int uiTexture)
    }   
 }
 
-bool CTextureManager::activate(unsigned int uiTexture) const
+void CTextureManager::activate(unsigned int uiTexture) const
 {
-   if (valid(uiTexture)) {
-      glBindTexture(GL_TEXTURE_2D, uiTexture);
-      return true;
-   }
-   return false;
+   glBindTexture(GL_TEXTURE_2D, uiTexture);
 }
 
 bool CTextureManager::valid(unsigned int uiTexture) const 
