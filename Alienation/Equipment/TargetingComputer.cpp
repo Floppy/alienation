@@ -109,12 +109,12 @@ void CTargetingComputer::render()
          int iRange = static_cast<int>(vecTarget.length());           
          // Range
          sprintf(strFont,"%5d m", iRange);
-         m_poFont->print("Range:", CVector2(0.0f, 0.0f), 0.05f, CVector3(1,0,0));
-         //m_poFont->print(strFont, CVector2(0.0f, 0.1f), 0.05f, CVector3(1,1,1));
+         m_poFont->print("Range:", CVector2(0.03f, 0.25f), 0.0075f, CVector3(0,1,0));
+         m_poFont->print(strFont, CVector2(0.03f, 0.28f), 0.0075f, CVector3(0,1,0));
          // Velocity
          sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_fVel));
-         //m_poFont->print("Velocity:", CVector2(0.0f, 0.2f), 0.05f, CVector3(1,1,1));
-         //m_poFont->print(strFont, CVector2(0.0f, 0.3f), 0.05f, CVector3(1,1,1));
+         m_poFont->print("Velocity:", CVector2(0.03f, 0.32f), 0.0075f, CVector3(0,1,0));
+         m_poFont->print(strFont, CVector2(0.03f, 0.35f), 0.0075f, CVector3(0,1,0));
       }
 }
  
