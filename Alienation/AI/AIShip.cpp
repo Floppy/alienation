@@ -32,7 +32,7 @@ CAIShip::CAIShip(int num, float mass) :
    m_poShips[0].m_avecOrigTrailPoints[0] = CVector3(0.0f, 0.0f, 7.0f);
    m_poShips[0].m_poTrails = new CTrail[m_poShips[0].m_iNumTrails];
    for (int i=0; i<m_poShips[0].m_iNumTrails; i++)
-	  m_poShips[0].m_poTrails[0].setup(250, m_poShips[0].m_avecTrailPoints[i]);
+	  m_poShips[0].m_poTrails[0].setup(500, m_poShips[0].m_avecTrailPoints[i]);
 }
 
 CAIShip::~CAIShip()

@@ -72,6 +72,11 @@ void CShip::draw()
 	  glPopMatrix(); // Make the gluLookat matrix again active
    }
    
+
+}
+
+void CShip::drawBlended() {
+
    // Draw trail
    if (m_poShips[0].m_fThrust != 0.0f) {
       for (int i=0; i<m_poShips[0].m_iNumTrails; i++) {

@@ -72,6 +72,14 @@ namespace NSDMath {
    {
    }
 
+   CRandom::CRandom(unsigned long s) :
+      m_iLeft(1),
+      m_bInit(false),
+      m_pNext(NULL)
+   {
+      seed(s);
+   }
+
    void CRandom::seed(unsigned long s)
    {
       int j;

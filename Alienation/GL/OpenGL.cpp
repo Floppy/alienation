@@ -9,6 +9,8 @@
  ********************************************************************/
 
 #include "GL/OpenGL.h"
+#include "IO/3ds.h"
+#include "Math/Random.h"
 #include <GL/glu.h>
 
 // We define the joystick axes here, because they
@@ -97,8 +99,36 @@ bool COpenGL :: initGL() {
    m_poShip = new CPlayerShip();
    m_poShip->loadShip();
    
+   // Load roids
+   static const char* roidfiles[] = {
+      "Data/Model/gold1.3ds",
+      "Data/Model/gold2.3ds",
+      "Data/Model/gold1.3ds",
+      "Data/Model/gold2.3ds",
+      "Data/Model/ice1.3ds",
+      "Data/Model/ice1.3ds",
+      "Data/Model/redcrystal1.3ds",
+      "Data/Model/redcrystal1.3ds",
+      "Data/Model/redcrystal2.3ds",
+      "Data/Model/redcrystal3.3ds",
+      "Data/Model/roid1.3ds",
+      "Data/Model/roid1.3ds",
+      "Data/Model/roid1.3ds",
+      "Data/Model/roid1.3ds",
+      "Data/Model/roid1.3ds",
+      "Data/Model/roid1.3ds",
+   };
+   CLoad3DS oLoader;
+   CRandom prng(37473);
+   for (int i=0; i<20; i++) {      
+      if (oLoader.import3DS(m_pRoids+i, roidfiles[prng.randInt()&0xF])) {
+         m_pRoids[i].init();
+      }
+      // Set position
+      CVector3 pos((prng.randDouble()-0.5) * 5000,(prng.randDouble()-0.5) * 5000,(prng.randDouble()-0.5) * 5000);
+      m_pRoids[i].setTranslation(pos);
+   }
 
-   
    // Done
    return true;
 }
@@ -113,12 +143,21 @@ bool COpenGL::DrawGLScene(GLvoid) {
    // Reset The Current Modelview Matrix
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();					
+
    m_poShip->draw();
    m_oFrustum.CalculateFrustum();
    m_poAIShip->draw();
    m_poStars->draw(m_poShip->m_ppMasses[0]->m_vecPos);
+
+   // Draw roids
+   for (int i=0; i<20; i++) {
+      m_pRoids[i].render();
+   }
+
+   m_poShip->drawBlended();
+   m_poAIShip->drawBlended();
    m_poShip->drawHud();
-    
+   
    // Everything Went OK
    return true; 
 }

@@ -27,6 +27,7 @@ public:
 	void loadShip();
 	virtual void simulate(float fDT);
 	void draw();
+        void drawBlended();
 	void rotateCam(float fDT);
 
         /**

@@ -96,7 +96,6 @@ void CTrail::update(float fDT, float fThrust, CVector3 vecPos, CVector3 vecStart
 			m_iParticlesCreated ++;
 		}
 	}
-
 }
 
 void CTrail::render(void)

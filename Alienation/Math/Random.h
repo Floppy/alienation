@@ -86,6 +86,12 @@ namespace NSDMath {
       CRandom();
 
       /**
+       * Constructor with seed.
+       * @param ulSeed Random seed to use for initialisation.
+       */
+      CRandom(unsigned long ulSeed);
+
+      /**
        * Initialise random number generator.
        * @param ulSeed Random seed to use for initialisation.
        */
