@@ -1,5 +1,5 @@
 
-#include "3ds.h"
+#include "IO/3ds.h"
 //#include "3dmath.h"
 
 // Primary Chunk, at the beginning of each file

@@ -4,8 +4,8 @@
 
 #include "config.h"
 
-#include "Quat.h"
-#include "Vector.h"
+#include "Math/Quat.h"
+#include "Math/Vector.h"
 
 //Matrix class from Aquas workspace. Need to add operator overloading
 //Well, not NEED, but want to. Added one function which multiplies a 

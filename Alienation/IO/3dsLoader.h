@@ -4,7 +4,7 @@
 
 #include "config.h"
 
-#include "3ds.h"
+#include "IO/3ds.h"
 #include "Texture.h"
 #include <stdio.h>
 #include <string.h>

@@ -3,9 +3,9 @@
 
 #include "config.h"
 #include "Math/Vector.h"
-#include "Mesh.h"
-#include "Model.h"
-#include "Material.h"
+#include "3D/Mesh.h"
+#include "3D/Model.h"
+#include "3D/Material.h"
 
 #include <stdio.h>
 #include <string.h>

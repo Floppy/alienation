@@ -4,7 +4,7 @@
 
 #include "config.h"
 
-#include "Vector.h"
+#include "Math/Vector.h"
 
 class CQuat
 {
