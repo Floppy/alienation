@@ -80,26 +80,6 @@ void CMatrix::loadIdentity()
    m_afElement[15]=1.0f;
 }
 
-void CMatrix::CopyMatrixOut(float m[16])
-{
-   m[0] = m_afElement[0 ];
-   m[1] = m_afElement[1 ];
-   m[2] = m_afElement[2 ];
-   m[3] = m_afElement[3 ];
-   m[4] = m_afElement[4 ];
-   m[5] = m_afElement[5 ];
-   m[6] = m_afElement[6 ];
-   m[7] = m_afElement[7 ];
-   m[8] = m_afElement[8 ];
-   m[9] = m_afElement[9 ];
-   m[10] = m_afElement[10];
-   m[11] = m_afElement[11];
-   m[12] = m_afElement[12];
-   m[13] = m_afElement[13];
-   m[14] = m_afElement[14];
-   m[15] = m_afElement[15];
-}
-
 CMatrix& CMatrix::operator=(const CMatrix& oMatrix) 
 {
    for (int i=0; i<16; i++) 

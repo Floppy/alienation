@@ -39,6 +39,8 @@ class CMatrix
 
    /**
     * Constructor from OpenGL matrix.
+    * Fetches a matrix from OpenGL.
+    * @param glMatrix A GLenum identifying a GL matrix. For instance, GL_PROJECTION_MATRIX, or GL_MODELVIEW_MATRIX.
     */
    CMatrix(GLenum glMatrix);
 
@@ -52,11 +54,6 @@ class CMatrix
     */ 
    void loadIdentity();
 
-   /**
-    * Copy matrix into float array.
-    */
-   void CopyMatrixOut(float m[16]);
-   
    /** 
     * Assignment.
     */
