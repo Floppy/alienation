@@ -5,6 +5,8 @@
 #if !defined(AFX_STARS_H__32A2C3FB_4B7D_486A_9EF7_DFCF4869785B__INCLUDED_)
 #define AFX_STARS_H__32A2C3FB_4B7D_486A_9EF7_DFCF4869785B__INCLUDED_
 
+#include "config.h"
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000

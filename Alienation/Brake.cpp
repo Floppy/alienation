@@ -27,7 +27,7 @@ CBrake::CBrake(int iNumParticles, CVector3 vecOrigin)
 
 CBrake::~CBrake()
 {
-
+	delete [] m_poParticles;
 }
 
 void CBrake::init()

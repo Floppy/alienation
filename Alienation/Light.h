@@ -5,14 +5,12 @@
 #if !defined(AFX_LIGHT_H__D6293CB0_7C45_4981_8977_EA3FA1933788__INCLUDED_)
 #define AFX_LIGHT_H__D6293CB0_7C45_4981_8977_EA3FA1933788__INCLUDED_
 
+#include "config.h"
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 #include <stdio.h>
-
-#ifdef WIN32
-  #include <windows.h>
-#endif
 
 #include <GL/gl.h>
 

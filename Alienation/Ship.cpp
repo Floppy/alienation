@@ -4,9 +4,6 @@
 
 #include "Ship.h"
 
-#ifdef WIN32
-  #include <windows.h>
-#endif
 #include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////
@@ -46,7 +43,7 @@ CShip::CShip(int num, float mass) : CSimulation(num, mass)
 
 CShip::~CShip()
 {
-
+	delete [] m_poShips;
 }
 
 //load model, trail texture and brake texture

@@ -5,9 +5,6 @@
 #include "Trail.h"
 #include <stdlib.h>
 
-#ifdef WIN32
-  #include <windows.h>
-#endif
 #include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////
@@ -27,7 +24,7 @@ CTrail::CTrail(int iNumParticles, CVector3 vecOrigin)
 
 CTrail::~CTrail()
 {
-
+	delete [] m_poParticles;
 }
 
 void CTrail::update(float timepassed)

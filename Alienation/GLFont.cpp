@@ -4,10 +4,6 @@
 
 #include "GLFont.h"
 
-#ifdef WIN32
-  #include <windows.h>
-#endif
-
 #include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////
@@ -22,7 +18,7 @@ CGLFont::CGLFont()
 
 CGLFont::~CGLFont()
 {
-
+	delete [] m_poTexture;
 }
 
 void CGLFont::load()

@@ -5,6 +5,8 @@
 #if !defined(AFX_WEAPON_H__553F0233_3E95_4D98_BA91_08582498967C__INCLUDED_)
 #define AFX_WEAPON_H__553F0233_3E95_4D98_BA91_08582498967C__INCLUDED_
 
+#include "config.h"
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000

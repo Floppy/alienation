@@ -1,6 +1,8 @@
 #ifndef _3DS_H
 #define _3DS_H
 
+#include "config.h"
+
 // Primary Chunk, at the beginning of each file
 #define PRIMARY       0x4D4D
 

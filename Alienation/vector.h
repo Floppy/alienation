@@ -1,5 +1,8 @@
 #ifndef _VECTOR_H
 #define _VECTOR_H
+
+#include "config.h"
+
 #include <math.h>
 // class Vector3D		---> An object to represent a 3D vector or a 3D point in space
 class CVector3

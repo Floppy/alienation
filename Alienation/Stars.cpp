@@ -5,23 +5,19 @@
 #include "Stars.h"
 #include <stdlib.h>
 
-#ifdef WIN32
-  #include <windows.h>
-#endif
 #include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CStars::CStars()
-{
-
-}
+CStars::CStars() :
+	m_poTexture(NULL)
+{}
 
 CStars::~CStars()
 {
-
+	delete m_poTexture;
 }
 
 void CStars::initStars()

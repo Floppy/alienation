@@ -7,6 +7,9 @@
 **************************************************************************/
 #ifndef _PHYSICS1_H
 #define _PHYSICS1_H
+
+#include "config.h"
+
 #include <math.h>
 #include <stdio.h>												// Header File For Standard Input/Output
 #include "quat.h"

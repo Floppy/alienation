@@ -5,6 +5,8 @@
 #if !defined(AFX_BRAKE_H__56947D38_1F83_4127_AD3D_D52EA855FBEB__INCLUDED_)
 #define AFX_BRAKE_H__56947D38_1F83_4127_AD3D_D52EA855FBEB__INCLUDED_
 
+#include "config.h"
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000

@@ -2,6 +2,8 @@
 #ifndef _3DSLOADER_H
 #define _3DSLOADER_H
 
+#include "config.h"
+
 #include "3ds.h"
 #include "Texture.h"
 #include <stdio.h>

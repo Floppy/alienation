@@ -123,7 +123,8 @@ int main(int argc, char* argv[])
 	SDL_ShowCursor(1);
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 
-	SDL_Quit();
-	return 0;  // Exit The Program
+	// Exit The Program
+	atexit(SDL_Quit);
+	return 0;
 }
 

@@ -5,9 +5,6 @@
 #include "Texture.h"
 #include <SDL_image.h>
 
-#ifdef WIN32
-  #include <windows.h>
-#endif
 #include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////
@@ -22,7 +19,7 @@ CTexture::CTexture(int iNum)
 
 CTexture::~CTexture()
 {
-
+	delete [] m_puiTexture;
 }
 
 bool CTexture::load(char *strDir, char **astrFnames, int iNoOfFiles)

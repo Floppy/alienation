@@ -5,6 +5,8 @@
 #if !defined(AFX_TRAIL_H__0572019F_F31B_441D_AFAE_4247EB700A35__INCLUDED_)
 #define AFX_TRAIL_H__0572019F_F31B_441D_AFAE_4247EB700A35__INCLUDED_
 
+#include "config.h"
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000

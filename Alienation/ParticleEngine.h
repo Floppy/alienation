@@ -12,6 +12,8 @@
 #ifndef _Particle_Engine_h
 #define _Particle_Engine_h
 
+#include "config.h"
+
 #include "Physics1.h"
 #include "Particle.h"
 #include "vector.h"

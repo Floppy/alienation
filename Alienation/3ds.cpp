@@ -25,8 +25,7 @@ bool CLoad3DS::import3DS(C3DModel *pModel, char *strFileName)
 	
 	if(!m_pFilePointer) 
 	{
-		sprintf(strMessage, "Unable to find the file: %s!", strFileName);
-		//MessageBox(NULL, strMessage, "Error", MB_OK);
+		fprintf(stderr, "Unable to find the file: %s!\n", strFileName);
 		return false;
 	}
 	
@@ -34,8 +33,7 @@ bool CLoad3DS::import3DS(C3DModel *pModel, char *strFileName)
 	
 	if (m_pCurrentChunk->m_uiID != PRIMARY)
 	{
-		sprintf(strMessage, "Unable to load PRIMARY chuck from file: %s!", strFileName);
-		//MessageBox(NULL, strMessage, "Error", MB_OK);
+		fprintf(stderr, "Unable to load PRIMARY chuck from file: %s!\n", strFileName);
 		return false;
 	}
 	
@@ -84,7 +82,7 @@ void CLoad3DS::processNextChunk(C3DModel *pModel, CChunk *pPreviousChunk)
 			m_pCurrentChunk->m_iBytesRead += fread(&iVersion, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
 			
 			if (iVersion > 0x03) {
-				//MessageBox(NULL, "This 3DS file is over version 3 so it may load incorrectly", "Warning", MB_OK);
+				fprintf(stderr,"This 3DS file is over version 3 so it may load incorrectly\n");
 			}
 			break;
 			
@@ -375,7 +373,6 @@ void CLoad3DS::computeNormals(C3DModel *pModel)
 	{
 		C3DObject *pObject = &(pModel->m_pObject[index]);
 		
-		CVector3 *pNormals		= new CVector3 [pObject->m_iNumOfFaces];
 		CVector3 *pTempNormals	= new CVector3 [pObject->m_iNumOfFaces];
 		pObject->m_pNormals		= new CVector3 [pObject->m_iNumOfVerts];
 		
@@ -386,14 +383,13 @@ void CLoad3DS::computeNormals(C3DModel *pModel)
 			vecPoly[2] = pObject->m_pVerts[pObject->m_pFaces[i].m_iVertIndex[2]];
 			
 			
-			vecVector1 = vecPoly[0] - vecPoly[2];				
-			vecVector2 = vecPoly[2] - vecPoly[1];				
+			vecVector1 = vecPoly[0] - vecPoly[2];
+			vecVector2 = vecPoly[2] - vecPoly[1];
 			
-			vecNormal  = vecVector1.cross(vecVector2);		
+			vecNormal  = vecVector1.cross(vecVector2);
 			pTempNormals[i] = vecNormal;					
 			vecNormal.unitize();				
 			
-			pNormals[i] = vecNormal;						
 		}
 		
 		
@@ -423,7 +419,6 @@ void CLoad3DS::computeNormals(C3DModel *pModel)
 		}
 		
 		delete [] pTempNormals;
-		delete [] pNormals;
 	}
 }
 

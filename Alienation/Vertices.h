@@ -5,13 +5,11 @@
 #if !defined(AFX_VERTICES_H__A37EE639_6526_46C6_B634_779A497B166C__INCLUDED_)
 #define AFX_VERTICES_H__A37EE639_6526_46C6_B634_779A497B166C__INCLUDED_
 
+#include "config.h"
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-
-#ifdef WIN32
-  #include <windows.h>
-#endif
 
 #include <GL/gl.h>			// Header File For The OpenGL32 Library
 

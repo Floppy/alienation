@@ -5,6 +5,8 @@
 #if !defined(AFX_SHIP_H__8A1BAA92_3775_40B8_B34E_AFE14888CC50__INCLUDED_)
 #define AFX_SHIP_H__8A1BAA92_3775_40B8_B34E_AFE14888CC50__INCLUDED_
 
+#include "config.h"
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000

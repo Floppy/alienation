@@ -194,6 +194,10 @@ SOURCE=.\Brake.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\config.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\GLFont.h
 # End Source File
 # Begin Source File

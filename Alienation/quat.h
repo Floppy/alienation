@@ -1,6 +1,9 @@
 // CQuat Class
 #ifndef _QUAT_H
 #define _QUAT_H
+
+#include "config.h"
+
 #include "vector.h"
 
 class CQuat

@@ -9,6 +9,9 @@
 
 #ifndef _Particle_h
 #define _Particle_h
+
+#include "config.h"
+
 #include "vector.h"
 #include "Physics1.h"
 

@@ -5,6 +5,8 @@
 #if !defined(AFX_GLFONT_H__1F582CF0_7FA7_4B78_9D84_724C2654D02F__INCLUDED_)
 #define AFX_GLFONT_H__1F582CF0_7FA7_4B78_9D84_724C2654D02F__INCLUDED_
 
+#include "config.h"
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000

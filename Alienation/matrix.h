@@ -2,6 +2,8 @@
 #ifndef _MATRIX_H
 #define _MATRIX_H
 
+#include "config.h"
+
 #include "quat.h"
 #include "Physics1.h"
 #include "vector.h"
