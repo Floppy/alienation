@@ -30,6 +30,10 @@ CPlayerShip::CPlayerShip() :
    m_poShips[0].m_fDrag = 25.0f;
    m_poShips[0].m_bWeaponFire = false;
    
+   m_poShips[0].m_fMaxPitchRate = 40.0f;
+   m_poShips[0].m_fMaxYawRate = 25.0f;
+   m_poShips[0].m_fMaxRollRate = 45.0f;	
+
    m_poHud = new CHud();
    m_poShips[0].m_matCamRotation.loadIdentity();
    m_bLeftLook = m_bRightLook = m_bUpLook = m_bBackLook = false;

@@ -13,7 +13,6 @@ CShip::CShip(int num, float mass) : CSimulation(num, mass)
 {
    //initialise data
    m_poShips = new CShipData[1];
-   m_ppMasses[0]->m_vecPos = CVector3(-5.0f, -0.0f, -20.0f);
    m_poShips[0].m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
    m_poShips[0].m_oSphere.m_fRadius = 13.0f;
    m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
@@ -26,9 +25,6 @@ CShip::CShip(int num, float mass) : CSimulation(num, mass)
    m_poShips[0].m_fPitchRate = 0.0f;
    m_poShips[0].m_fYawRate = 0.0f;
    m_poShips[0].m_fRollRate = 0.0f;	
-   m_poShips[0].m_fMaxPitchRate = 40.0f;
-   m_poShips[0].m_fMaxYawRate = 25.0f;
-   m_poShips[0].m_fMaxRollRate = 45.0f;	
    m_poShips[0].m_quaOrientation.loadIdentity();
    m_poShips[0].m_quaCamOrientation.loadIdentity();
    m_poShips[0].m_fDrag = 0.025f;
