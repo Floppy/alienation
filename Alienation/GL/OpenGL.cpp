@@ -90,12 +90,11 @@ bool COpenGL :: initGL() {
 // Here's Where We Do All The Drawing. Nothing hard here. Only thing to note
 //is all transparent objects are drawn last
 bool COpenGL :: DrawGLScene(GLvoid) {
-	char str[40];
-	sprintf(str, "Speed: %.2f", m_poShip->m_poShips[0].m_fVel);
 
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear Screen And Depth Buffer
-   glLoadIdentity();					// Reset The Current Modelview Matrix
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear Screen And Depth Buffer
+    glLoadIdentity();					// Reset The Current Modelview Matrix
 	m_poShip->draw();
+    m_oFrustum.CalculateFrustum();
 	m_poAIShip->draw();
 	m_poStars->draw(m_poShip->m_ppMasses[0]->m_vecPos);
 	m_poShip->drawTrail();
@@ -103,29 +102,9 @@ bool COpenGL :: DrawGLScene(GLvoid) {
 	m_poShip->drawWeapons();
 	m_poAIShip->drawWeapons();
 	m_poShip->drawBrake();
-	glEnable(GL_BLEND);
-	glColor4f(0.0f, 1.0f, 1.0f, 0.7f);
-	m_poGlfont->print(str, CVector3(-0.5f, 0.35f, -1.0f), 0.01f);
-	if (m_poShip->m_poShips[0].m_iFlightMode == 1)
-		sprintf(str, "Flight Mode: Normal");
-	else
-		if (m_poShip->m_poShips[0].m_iFlightMode == 2)
-			sprintf(str, "Flight Mode: Turret");
-		else
-			sprintf(str, "Flight Mode: Straf");
-		
-	m_poGlfont->print(str, CVector3(-0.5f, 0.3f, -1.0f), 0.01f);
-	sprintf(str,"Thrust: %.2f", m_poShip->m_poShips[0].m_fThrust);
-	m_poGlfont->print(str, CVector3(-0.5f, 0.25f, -1.0f), 0.01f);
+	m_poShip->drawHud();
+	printf("Here!!");
 
-	sprintf(str,"A.I. Speed: %.2f", m_poAIShip->m_poShips[0].m_fVel);
-	m_poGlfont->print(str, CVector3(-0.1f, 0.35f, -1.0f), 0.01f);
-	sprintf(str,"Target: %.2f, %.2f, %.2f", m_poAIShip->m_vecTarget.m_fx, m_poAIShip->m_vecTarget.m_fy, m_poAIShip->m_vecTarget.m_fz);
-	m_poGlfont->print(str, CVector3(-0.1f, 0.3f, -1.0f), 0.01f);
-	sprintf(str,"PAngle: %.2f YAngle: %.2f", m_poAIShip->m_fXAngle, m_poAIShip->m_fYAngle);
-	m_poGlfont->print(str, CVector3(-0.1f, 0.25f, -1.0f), 0.01f);
-	
-	glDisable(GL_BLEND);
    return true; // Everything Went OK
 }
 
@@ -382,6 +361,8 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 	for (a = 0; a < iNumOfIterations; ++a)					// We Need To Iterate Simulations "numOfIterations" Times
 	{
 		m_poAIShip->m_vecTargetPos = m_poShip->m_ppMasses[0]->m_vecPos;
+		m_poAIShip->m_vecTargetDirection = m_poShip->m_poShips[0].m_vecDirection;
+		m_poAIShip->m_fTargetSpeed = m_poShip->m_poShips[0].m_fVel;
 		m_poAIShip->operate(fDT);
 		m_poShip->operate(fDT);							// Iterate constantVelocity Simulation By dt Seconds
 	}

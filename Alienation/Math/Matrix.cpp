@@ -262,3 +262,17 @@ CVector3 CMatrix::MultMatrixVector(CVector3 v)
 
 	return temp;
 }
+
+CMatrix CMatrix::operator * (CMatrix matM)
+{
+	CMatrix matResult;
+
+	matResult.CopyMatrix(this->m_afElement);
+	matResult.MultMatrix(matM.m_afElement);
+	return matResult;
+}
+
+void CMatrix::operator = (CMatrix matM)
+{
+	this->CopyMatrix(matM.m_afElement);
+}

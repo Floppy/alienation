@@ -20,6 +20,8 @@
 #include "Math/Matrix.h"
 #include "Weapon.h"
 #include "Brake.h"
+#include "3D/Frustum.h"
+#include "3D/BoundingSphere.h"
 
 #define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
 #define piover180 	(0.0174532925f)
@@ -28,6 +30,9 @@
 class CShipData
 {
 public:
+	CBoundingSphere m_oSphere;
+	CShipData	*m_poTargetData;
+	CMass			**m_poTargetMass;
 	C3dsLoader	m_oModel;
 	CVector3		m_vecForce;
 	CVector3		m_vecHeading, m_vecUp, m_vecRight, m_vecDirection;
@@ -57,7 +62,6 @@ public:
 	bool			m_bWeaponFire;
 	bool			m_bBraking;
 };
-
 //OK the biggy. How this class eveolves is up for debate. My own view
 //is that it should hold the data for every ship available in the game, 
 //and a child/friend class should hold data for ships in sector/visible.
@@ -79,7 +83,7 @@ public:
 	virtual void solve();
 	virtual void simulate(float dt);
 	CShipData *m_poShips;
-
+    CFrustum m_oFrustum;
 };
 
 #endif // !defined(AFX_SHIP_H__8A1BAA92_3775_40B8_B34E_AFE14888CC50__INCLUDED_)

@@ -24,6 +24,7 @@
 #include "Game/PlayerShip.h"
 #include "AI/AIShip.h"
 #include "3D/Light.h"
+#include "3D/Frustum.h "
 #include <SDL.h>
 
 class CKeys {											// Structure For Keyboard Stuff
@@ -55,6 +56,7 @@ class COpenGL {
 		bool m_bSlowmo;
 		bool m_bCamUp, m_bCamDown, m_bCamRight, m_bCamLeft, m_bFire;
 		CKeys m_oKeys;
+		CFrustum  m_oFrustum;
 };
 
 #endif

@@ -20,6 +20,8 @@ CAIShip::CAIShip(int num, float mass) :
 	m_poShips[0].m_vecRight = CVector3(1.0f, -5.0f, -20.0f);
 	m_poShips[0].m_vecDirection = m_poShips[0].m_vecHeading;
 	m_poShips[0].m_bWeaponFire = false;
+	m_poShips[0].m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
+    m_poShips[0].m_oSphere.m_fRadius = 13.0f;
 
 	m_poShips[0].m_matCamRotation.LoadIdentity();
 	m_vecTargetPos = CVector3(0.0f, 0.0f, 0.0f);

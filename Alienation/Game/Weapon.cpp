@@ -67,7 +67,6 @@ void CWeapon::update(float fDT, CVector3 vecHeading, CVector3 vecPos, float fSpe
 {
 	CVector3 vecVel, vecTemp1;
 	int iEmp = -1;
-	FILE *fp;
 
 
 	if (!bFireHeld && m_iParticlesCreated == 0)
@@ -165,21 +164,7 @@ void CWeapon::createParticle(int i, CVector3 vecHead, CVector3 vecPos, float fSp
 
 void CWeapon::render(void)
 {
-	CMatrix mat;
-	float afVec[4];
-	CVector3 vecUp, vecRight, Billboard1, Billboard2, vecTemp, vecTemp2, avecPlane[4];
-
-	//First set up billboarding of the particles
-	glGetFloatv(GL_MODELVIEW_MATRIX, mat.m_afElement);
-	vecRight.m_fx = mat.m_afElement[0];
-	vecRight.m_fy = mat.m_afElement[4];
-	vecRight.m_fz = mat.m_afElement[8];
-	vecUp.m_fx    = mat.m_afElement[1];
-	vecUp.m_fy    = mat.m_afElement[5];
-	vecUp.m_fz    = mat.m_afElement[9];
-
-	Billboard1 = vecRight + vecUp;
-	Billboard2 = vecRight - vecUp;
+	float afMaterial[4];
 
 	//Texture and blending stuff
 	m_poTex->setActive(0);
@@ -192,38 +177,17 @@ void CWeapon::render(void)
 		int iCount;
 		for (iCount = 0 ; iCount < m_iParticlesCreated ; iCount++)
 		{
-			avecPlane[0] = m_poParticles[iCount].m_vecPosition - Billboard2 * m_poParticles[iCount].m_fSize;
-			avecPlane[1] = m_poParticles[iCount].m_vecPosition + Billboard1 * m_poParticles[iCount].m_fSize;
-			avecPlane[2] = m_poParticles[iCount].m_vecPosition + Billboard2 * m_poParticles[iCount].m_fSize;
-			avecPlane[3] = m_poParticles[iCount].m_vecPosition - Billboard1 * m_poParticles[iCount].m_fSize;
-
-			vecTemp = avecPlane[1] - avecPlane[0];
-			vecTemp2 = avecPlane[3] - avecPlane[0];
-
-			vecTemp2.cross(vecTemp);
-			vecTemp2.unitize();
-
-			glNormal3f(vecTemp2.m_fx, vecTemp2.m_fy, vecTemp2.m_fz);
-
-			afVec[0] = m_poParticles[iCount].m_fr;
-			afVec[1] = m_poParticles[iCount].m_fg;
-			afVec[2] = m_poParticles[iCount].m_fb;
-			afVec[3] = 0.06f;
-			glMaterialfv(GL_FRONT, GL_AMBIENT, afVec); 
-			glColor4f(m_poParticles[iCount].m_fr, m_poParticles[iCount].m_fg, m_poParticles[iCount].m_fb, 0.6f);	
-
-			glTexCoord2f(0.0f, 1.0f);
-			glVertex3f(avecPlane[0].m_fx, avecPlane[0].m_fy, avecPlane[0].m_fz);
-
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex3f(avecPlane[1].m_fx, avecPlane[1].m_fy, avecPlane[1].m_fz);
-			
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(avecPlane[2].m_fx, avecPlane[2].m_fy, avecPlane[2].m_fz);
-
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex3f(avecPlane[3].m_fx, avecPlane[3].m_fy, avecPlane[3].m_fz);
-		
+			if (m_oFrustum.PointInFrustum(m_poParticles[iCount].m_vecPosition.m_fx, 
+									m_poParticles[iCount].m_vecPosition.m_fy, 
+									m_poParticles[iCount].m_vecPosition.m_fz))
+			{
+			   afMaterial[0] = m_poParticles[iCount].m_fr;
+			   afMaterial[1] = m_poParticles[iCount].m_fg;
+			   afMaterial[2] = m_poParticles[iCount].m_fb;
+			   afMaterial[3] = 0.03f;
+			   // Render
+			   renderBillboard(m_poParticles[iCount].m_vecPosition, m_poParticles[iCount].m_fSize,afMaterial);
+			}
 		}
 	glEnd();
 	glPopAttrib();
@@ -239,4 +203,52 @@ void CWeapon::init()
 	strcpy(astrFiles[0], "ball.png");
 
 	m_poTex->load(astrFiles, 1);
+}
+
+void CWeapon::renderBillboard(CVector3 oPos, float fSize, float* pfMaterial)
+{
+   // Save matrix state
+   glPushMatrix();
+   // Move to particle position
+   glTranslatef(oPos.m_fx, oPos.m_fy, oPos.m_fz);
+   
+   // Get matrix
+   float afMatrix[16];
+   glGetFloatv(GL_MODELVIEW_MATRIX, afMatrix);
+
+   // Get normal
+   CVector3 vecNormal;
+   vecNormal.m_fx = -afMatrix[2];
+   vecNormal.m_fy = -afMatrix[6];
+   vecNormal.m_fz = -afMatrix[10];
+
+   // Remove rotation from model/view matrix
+   afMatrix[0] = afMatrix[5] = afMatrix[10] = afMatrix[11] = 1.0f;
+   afMatrix[1] = afMatrix[2] = afMatrix[3] = afMatrix[4] = 0.0f;
+   afMatrix[6] = afMatrix[7] = afMatrix[8] = afMatrix[9] = 0.0f;
+   glLoadMatrixf(afMatrix);
+   
+   // Draw billboard
+   glBegin(GL_QUADS);      
+
+   // Material
+   glMaterialfv(GL_FRONT, GL_AMBIENT, pfMaterial);
+   // Normal
+   glNormal3f(vecNormal.m_fx, vecNormal.m_fy, vecNormal.m_fz);
+
+   // Vertices
+   for (int i=0; i<2; i++) 
+   {
+      for (int j=0; j<2; j++) 
+      {
+         glTexCoord2f( ( i==j ? 0.0f : 1.0f ) , ( i==0 ? 1.0f : 0.0f ) );
+         glVertex3f( ( i==j ? -fSize : fSize ) , ( i==0 ? fSize : -fSize ), 0.0f );
+      }
+   }
+   // Finish quad
+   glEnd();
+   // Restore matrix state
+   glPopMatrix();
+   // Done
+   return;
 }

@@ -15,6 +15,8 @@ CShip::CShip(int num, float mass) : CSimulation(num, mass)
 	//initialise data
 	m_poShips = new CShipData[1];
 	m_ppMasses[0]->m_vecPos = CVector3(-5.0f, -0.0f, -20.0f);
+	m_poShips[0].m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
+    m_poShips[0].m_oSphere.m_fRadius = 13.0f;
 	m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
 	m_poShips[0].m_avecTrailPoints[0] = CVector3(0.0f, 0.0f, 7.0f);
 	m_poShips[0].m_vecHeading = CVector3(0.0f, -2.0f, -11.0f);
@@ -49,6 +51,9 @@ CShip::~CShip()
 //load model, trail texture and brake texture
 void CShip::loadShip()
 {
+	m_poShips[0].m_poTargetData = new CShipData;
+	m_poShips[0].m_poTargetMass = new CMass*[1];
+	m_poShips[0].m_poTargetMass[0] = new CMass;
 	m_poShips[0].m_oModel.init3ds("Data/Model/shuttle.3ds");
 	m_poShips[0].m_poTrail->init();
 	m_poShips[0].m_poBrake->init();
@@ -58,13 +63,16 @@ void CShip::loadShip()
 //what it says on the tin
 void CShip::draw()
 {
-	glPushMatrix();					//Save copy of lookat rotation
-	glTranslatef(m_ppMasses[0]->m_vecPos.m_fx, m_ppMasses[0]->m_vecPos.m_fy, m_ppMasses[0]->m_vecPos.m_fz); //move to ship position
-	glMultMatrixf(m_poShips[0].m_matRotation.m_afElement); //multiply by the ships rotation matrix
-	m_poShips[0].m_oModel.render3ds(); //draw the ship
+   m_poShips[0].m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
+   if (m_oFrustum.SphereInFrustum(&m_poShips[0].m_oSphere))
+   {
+	  glPushMatrix();					//Save copy of lookat rotation
+	  glTranslatef(m_ppMasses[0]->m_vecPos.m_fx, m_ppMasses[0]->m_vecPos.m_fy, m_ppMasses[0]->m_vecPos.m_fz); //move to ship position
+	  glMultMatrixf(m_poShips[0].m_matRotation.m_afElement); //multiply by the ships rotation matrix
+	  m_poShips[0].m_oModel.render3ds(); //draw the ship
 
-	glPopMatrix(); // Make the gluLookat matrix again active
-
+	  glPopMatrix(); // Make the gluLookat matrix again active
+   }
 }
 
 //This function calculates the force acting on the ship

@@ -33,6 +33,9 @@ public:
 	   m_fMass(fMass)
 	{}
 
+	CMass()
+	{}
+	
 	/*
 	  void applyForce(Vector3D force) method is used to add external force to the mass. 
 	  At an instance in time, several sources of force might affect the mass. The vector sum 

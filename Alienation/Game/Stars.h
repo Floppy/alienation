@@ -15,6 +15,7 @@
 #include "Math/Matrix.h"
 #include "Math/Vector.h"
 #include "3D/Texture.h"
+#include "3D/Frustum.h"
 
 #define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
 #define piover180 	(0.0174532925f)
@@ -38,6 +39,9 @@ public:
 	CTexture *m_poTexture;
 	void initStars();
 	void draw(CVector3 vecPos);
+private:
+	CFrustum m_oFrustum;
+    inline void renderBillboard(CVector3 oPos, float fSize);
 };
 
 #endif // !defined(AFX_STARS_H__32A2C3FB_4B7D_486A_9EF7_DFCF4869785B__INCLUDED_)

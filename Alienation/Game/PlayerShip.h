@@ -12,6 +12,7 @@
 #include "config.h"
 
 #include "Game/Ship.h"
+#include "2D/Hud.h"
 
 #define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
 #define piover180 	(0.0174532925f)
@@ -21,6 +22,7 @@
 class CPlayerShip : public CShip  
 {
 public:
+   	void drawHud();
 	CPlayerShip();
 	virtual ~CPlayerShip();
 	void loadShip();
@@ -31,6 +33,7 @@ public:
 	C3dsLoader m_oCockpitModel;
 	bool	m_bInsideView;
 	bool  m_bLeftLook, m_bRightLook, m_bUpLook, m_bBackLook;
+    CHud *m_poHud;
 };
 
 #endif // !defined(AFX_PLAYERSHIP_H__037FA971_63AF_49C5_9C78_DCF151372718__INCLUDED_)

@@ -112,20 +112,21 @@ void CTrail::render(float fThrust, CVector3 vecOrigin)
    glPushAttrib(GL_COLOR_MATERIAL);
 
    // Draw exhaust flare
-
-   // Bind Texture
-   m_poTexture->setActive(1);
-   // Get material
-   afMaterial[0] = 1.0f;
-   afMaterial[1] = 1.0f;
-   afMaterial[2] = 1.0f;
-   afMaterial[3] = 0.05f;
-   // Calculate engine flare size
-   float fSize = fThrust * 0.0005f;
-   if (fSize > 2.5f) fSize = 2.5f;
-   // Render
-   renderBillboard(vecOrigin,fSize,afMaterial);
-
+   if (m_oFrustum.PointInFrustum(vecOrigin.m_fx, vecOrigin.m_fy, vecOrigin.m_fz))
+   {
+	  // Bind Texture
+      m_poTexture->setActive(1);
+	  // Get material
+	  afMaterial[0] = 1.0f;
+	  afMaterial[1] = 1.0f;
+	  afMaterial[2] = 1.0f;
+	  afMaterial[3] = 0.05f;
+	  // Calculate engine flare size
+	  float fSize = fThrust * 0.0005f;
+	  if (fSize > 2.5f) fSize = 2.5f;
+	  // Render
+	  renderBillboard(vecOrigin,fSize,afMaterial);
+   }
    // Draw trail
 
    // Bind Texture
@@ -134,12 +135,17 @@ void CTrail::render(float fThrust, CVector3 vecOrigin)
    for (int iCount = 0 ; iCount < m_iParticlesCreated ; iCount++)
    {
       // Get material
-      afMaterial[0] = m_poParticles[iCount].m_fr;
-      afMaterial[1] = m_poParticles[iCount].m_fg;
-      afMaterial[2] = m_poParticles[iCount].m_fb;
-      afMaterial[3] = 0.03f;
-      // Render
-      renderBillboard(m_poParticles[iCount].m_vecPosition, m_poParticles[iCount].m_fSize,afMaterial);
+      if (m_oFrustum.PointInFrustum(m_poParticles[iCount].m_vecPosition.m_fx, 
+									m_poParticles[iCount].m_vecPosition.m_fy, 
+									m_poParticles[iCount].m_vecPosition.m_fz))
+	  {
+		 afMaterial[0] = m_poParticles[iCount].m_fr;
+		 afMaterial[1] = m_poParticles[iCount].m_fg;
+		 afMaterial[2] = m_poParticles[iCount].m_fb;
+		 afMaterial[3] = 0.03f;
+		 // Render
+		 renderBillboard(m_poParticles[iCount].m_vecPosition, m_poParticles[iCount].m_fSize,afMaterial);
+	  }
    }
 
    // Restore state

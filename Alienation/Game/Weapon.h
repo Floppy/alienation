@@ -15,6 +15,7 @@
 #include "3D/ParticleEngine.h"
 #include "3D/Texture.h"
 #include "Math/Matrix.h"
+#include "3D/Frustum.h"
 
 class CWeapon : public CParticleEngine  
 {
@@ -33,6 +34,10 @@ public:
 	float m_fFireRate;
 	float m_fTimeSinceLast;
 	bool m_abEmpty[100];
+private:
+   CFrustum m_oFrustum;
+   inline void renderBillboard(CVector3 oPos, float fSize, float* pfMaterial);
+
 };
 
 #endif // !defined(AFX_WEAPON_H__553F0233_3E95_4D98_BA91_08582498967C__INCLUDED_)

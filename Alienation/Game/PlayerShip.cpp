@@ -23,6 +23,7 @@ CPlayerShip::CPlayerShip() : CShip(1, 5000.0f)
 	m_poShips[0].m_fDrag = 25.0f;
 	m_poShips[0].m_bWeaponFire = false;
 
+	m_poHud = new CHud();
 	m_poShips[0].m_matCamRotation.LoadIdentity();
 	m_bLeftLook = m_bRightLook = m_bUpLook = m_bBackLook = false;
 }
@@ -35,7 +36,11 @@ CPlayerShip::~CPlayerShip()
 //Again, not a good use of inheritance, too much duplicated code 
 void CPlayerShip::loadShip()
 {
-        m_poShips[0].m_oModel.init3ds("Data/Model/shuttle.3ds");
+    m_poHud->init();
+	m_poShips[0].m_poTargetData = new CShipData;
+	m_poShips[0].m_poTargetMass = new CMass*[1];
+	m_poShips[0].m_poTargetMass[0] = new CMass;
+    m_poShips[0].m_oModel.init3ds("Data/Model/shuttle.3ds");
 	m_poShips[0].m_poTrail->init();
 	m_oCockpitModel.init3ds("Data/Model/canopy02.3ds");
 	m_poShips[0].m_poWeapon->init();
@@ -144,4 +149,10 @@ void CPlayerShip::rotateCam(float fDT)
 	m_poShips[0].m_vecCamView = matM.MultMatrixVector(CVector3(0.0f, 0.0f, 20.0f));	
 	m_poShips[0].m_vecCamView += m_ppMasses[0]->m_vecPos;
 
+}
+
+void CPlayerShip::drawHud()
+{
+	m_poHud->drawHoloTarget(m_poShips[0].m_poTargetData, m_poShips[0].m_poTargetMass, this);
+	m_poHud->draw(m_poShips[0].m_fVel, 300.0f, m_poShips[0].m_fThrust, 9578.0f);
 }

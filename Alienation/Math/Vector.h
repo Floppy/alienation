@@ -10,8 +10,24 @@ class CVector2
 {
 public:
 	float m_fx, m_fy;							// 2D vector coordinates
-};
 
+	CVector2() :								// Constructor to set x = y = z = 0
+		m_fx(0.0f),
+		m_fy(0.0f)
+	{}
+
+	CVector2(float fx, float fy) :			// Constructor that initializes this Vector3D to the intended values of x, y and z
+		m_fx(fx),
+		m_fy(fy)
+	{}
+
+	CVector2& operator= (CVector2 vecV)		// operator= sets values of v to this Vector3D. example: v1 = v2 means that values of v2 are set onto v1
+	{
+		m_fx = vecV.m_fx;
+		m_fy = vecV.m_fy;
+		return *this;
+	}
+};
 
 // class Vector3D		---> An object to represent a 3D vector or a 3D point in space
 class CVector3

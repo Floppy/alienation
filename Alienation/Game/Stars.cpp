@@ -77,19 +77,6 @@ void CStars::initStars()
 
 void CStars::draw(CVector3 vecPos)
 {
-	CMatrix mat;
-	CVector3 vecRight, vecUp, vecBillboard1, vecBillboard2, vecTemp;
-
-	glGetFloatv(GL_MODELVIEW_MATRIX, mat.m_afElement);
-	vecRight.m_fx = mat.m_afElement[0];
-	vecRight.m_fy = mat.m_afElement[4];
-	vecRight.m_fz = mat.m_afElement[8];
-	vecUp.m_fx    = mat.m_afElement[1];
-	vecUp.m_fy    = mat.m_afElement[5];
-	vecUp.m_fz    = mat.m_afElement[9];
-
-	vecBillboard1 = vecRight + vecUp;
-	vecBillboard2 = vecRight - vecUp;
 
 	glPushMatrix();
 	glTranslatef(vecPos.m_fx, vecPos.m_fy, vecPos.m_fz);
@@ -103,31 +90,14 @@ void CStars::draw(CVector3 vecPos)
 	glBegin(GL_QUADS);
 		for (iCount = 0 ; iCount < m_iNumStars ; iCount++)
 		{
-			glColor4f(m_aoStars[iCount].m_vecColor.m_fx, m_aoStars[iCount].m_vecColor.m_fy, m_aoStars[iCount].m_vecColor.m_fz, 0.3f);
-			vecTemp = m_aoStars[iCount].m_vecPos;
-			vecTemp.unitize();
+		    if (m_oFrustum.PointInFrustum(m_aoStars[iCount].m_vecPos.m_fx,
+										  m_aoStars[iCount].m_vecPos.m_fy,
+										  m_aoStars[iCount].m_vecPos.m_fz))
+			{
+			   glColor4f(m_aoStars[iCount].m_vecColor.m_fx, m_aoStars[iCount].m_vecColor.m_fy, m_aoStars[iCount].m_vecColor.m_fz, 0.3f);
+			   renderBillboard(m_aoStars[iCount].m_vecPos, m_aoStars[iCount].m_fSize);		
 
-			vecTemp += m_aoStars[iCount].m_vecPos;
-			vecTemp *= -1;
-
-			glNormal3f(vecTemp.m_fx, vecTemp.m_fy, vecTemp.m_fz);
-
-			vecTemp = m_aoStars[iCount].m_vecPos - vecBillboard2 * m_aoStars[iCount].m_fSize;
-			glTexCoord2f(0.0f, 1.0f);
-			glVertex3f(vecTemp.m_fx, vecTemp.m_fy, vecTemp.m_fz);
-
-			vecTemp = m_aoStars[iCount].m_vecPos + vecBillboard1 * m_aoStars[iCount].m_fSize;
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex3f(vecTemp.m_fx, vecTemp.m_fy, vecTemp.m_fz);
-			
-			vecTemp = m_aoStars[iCount].m_vecPos + vecBillboard2 * m_aoStars[iCount].m_fSize;
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(vecTemp.m_fx, vecTemp.m_fy, vecTemp.m_fz);
-
-			vecTemp = m_aoStars[iCount].m_vecPos - vecBillboard1 * m_aoStars[iCount].m_fSize;
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex3f(vecTemp.m_fx, vecTemp.m_fy, vecTemp.m_fz);
-		
+			}
 		}
 	glEnd();
 	
@@ -136,3 +106,48 @@ void CStars::draw(CVector3 vecPos)
 	glDisable(GL_BLEND);
 }
 
+void CStars::renderBillboard(CVector3 oPos, float fSize)
+{
+   // Save matrix state
+   glPushMatrix();
+   // Move to particle position
+   glTranslatef(oPos.m_fx, oPos.m_fy, oPos.m_fz);
+   
+   // Get matrix
+   float afMatrix[16];
+   glGetFloatv(GL_MODELVIEW_MATRIX, afMatrix);
+
+   // Get normal
+   CVector3 vecNormal;
+   vecNormal.m_fx = -afMatrix[2];
+   vecNormal.m_fy = -afMatrix[6];
+   vecNormal.m_fz = -afMatrix[10];
+
+   // Remove rotation from model/view matrix
+   afMatrix[0] = afMatrix[5] = afMatrix[10] = afMatrix[11] = 1.0f;
+   afMatrix[1] = afMatrix[2] = afMatrix[3] = afMatrix[4] = 0.0f;
+   afMatrix[6] = afMatrix[7] = afMatrix[8] = afMatrix[9] = 0.0f;
+   glLoadMatrixf(afMatrix);
+   
+   // Draw billboard
+   glBegin(GL_QUADS);      
+
+   // Normal
+   glNormal3f(vecNormal.m_fx, vecNormal.m_fy, vecNormal.m_fz);
+
+   // Vertices
+   for (int i=0; i<2; i++) 
+   {
+      for (int j=0; j<2; j++) 
+      {
+         glTexCoord2f( ( i==j ? 0.0f : 1.0f ) , ( i==0 ? 1.0f : 0.0f ) );
+         glVertex3f( ( i==j ? -fSize : fSize ) , ( i==0 ? fSize : -fSize ), 0.0f );
+      }
+   }
+   // Finish quad
+   glEnd();
+   // Restore matrix state
+   glPopMatrix();
+   // Done
+   return;
+}
