@@ -83,7 +83,6 @@ bool COpenGL :: initGL() {
    CVector3 oPosition(0.0f, 0.0f, -1000.0f);
    m_poLight = new CLight(GL_LIGHT0);
    m_poLight->init(oAmbient, oDiffuse, oPosition);
-   m_poLight->enable();
    // Create sun sprite
    CMaterial oMaterial;
    oMaterial.m_oEmissive = CRGBAColour(1.0f, 1.0f, 1.0f,0);
@@ -183,9 +182,10 @@ bool COpenGL::DrawGLScene(GLvoid) {
    glLoadIdentity();
 
    m_poShip->drawCamera();
+   m_poLight->enable();
+   m_poLight->render();
    m_oSun.setTranslation(CVector3(0,0,8500) + m_poShip->m_ppMasses[0]->m_vecPos);
    m_oSun.render();
-   m_poLight->render();
    m_poShip->draw();
    m_oFrustum.CalculateFrustum();
    m_poStars->draw(m_poShip->m_ppMasses[0]->m_vecPos);
@@ -202,8 +202,8 @@ bool COpenGL::DrawGLScene(GLvoid) {
       (*it)->drawBlended();
    }
    
-   m_poLight->disable();
    m_poShip->drawHud();
+   m_poLight->disable();
    
    // Everything Went OK
    return true; 
