@@ -8,14 +8,14 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CEquipment::CEquipment(int iNum, float fMass)
+CEquipment::CEquipment(int iNum, float fMass) :
+   CGameObject(iNum, fMass)
 {
-   CGameObject(iNum, fMass);
 }
 
-CEquipment::CEquipment()
+CEquipment::CEquipment() :
+   CGameObject(1,1)
 {
-
 }
 
 
