@@ -105,7 +105,7 @@ void C3dsLoader::init3ds(char* pFilename)
 				if(pObject->m_bHasTexture) {
 					
 					if(pObject->m_pTexVerts) {
-						glTexCoord2f(pObject->m_pTexVerts[ iIndex ].m_fx, pObject->m_pTexVerts[ iIndex ].m_fy);
+						glTexCoord2f(pObject->m_pTexVerts[ iIndex ].m_fx, 1 - pObject->m_pTexVerts[ iIndex ].m_fy);
 					}
 				} else {
 					

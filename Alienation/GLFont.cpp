@@ -69,11 +69,11 @@ void CGLFont::print(char *str, CVector3 vecPos, float fSize)
 			iCharno = str[iCount];
 			iRow = (int)(iCharno / 16);
 			iCol = (iCharno - (iRow * 16));
-			iRow = 16 - iRow - 1;
+		//	iRow = 16 - iRow - 1;
 
 			//work out the u,v coordinates of the texture for the letter
 			//uses double precision as float didnt seem accurate enought
-			adCoords[0][0] = 1.0 /(256.0/(double)(iCol * 16)); 
+			adCoords[3][0] = 1.0 /(256.0/(double)(iCol * 16)); 
 			adCoords[0][1] = 1.0 /(256.0/(double)(iRow * 16 + 16)); 
 
 			adCoords[1][0] = 1.0 /(256.0/(double)(iCol * 16 + 16));
@@ -82,21 +82,21 @@ void CGLFont::print(char *str, CVector3 vecPos, float fSize)
 			adCoords[2][0] = 1.0 /(256.0/(double)(iCol * 16 + 16)); 
 			adCoords[2][1] = 1.0 /(256.0/(double)(iRow * 16)); 
 
-			adCoords[3][0] = 1.0 /(256.0/(double)(iCol * 16)); 
+			adCoords[0][0] = 1.0 /(256.0/(double)(iCol * 16)); 
 			adCoords[3][1] = 1.0 /(256.0/(double)(iRow * 16)); 
 
 
 			//Draw the letter
-			glTexCoord2d(adCoords[0][0], adCoords[0][1]);
+			glTexCoord2d(adCoords[3][0], adCoords[3][1]);
 			glVertex3f(vecTempPos.m_fx - fSize, vecTempPos.m_fy + fSize, vecTempPos.m_fz);
 
-			glTexCoord2d(adCoords[1][0], adCoords[1][1]);
+			glTexCoord2d(adCoords[2][0], adCoords[2][1]);
 			glVertex3f(vecTempPos.m_fx + fSize, vecTempPos.m_fy + fSize, vecTempPos.m_fz);
 			
-			glTexCoord2d(adCoords[2][0], adCoords[2][1]);
+			glTexCoord2d(adCoords[1][0], adCoords[1][1]);
 			glVertex3f(vecTempPos.m_fx + fSize, vecTempPos.m_fy - fSize, vecTempPos.m_fz);
 
-			glTexCoord2d(adCoords[3][0], adCoords[3][1]);
+			glTexCoord2d(adCoords[0][0], adCoords[0][1]);
 			glVertex3f(vecTempPos.m_fx - fSize, vecTempPos.m_fy - fSize, vecTempPos.m_fz);
 		
 			//Move the position for the next letter
