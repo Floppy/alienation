@@ -14,6 +14,7 @@
 #include <time.h>
 #include "3D/ParticleEngine.h"
 #include "3D/Texture.h"
+#include "3D/Sprite.h"
 #include "Math/Matrix.h"
 //Draws (badly) a brake trail at the front of the ship. Was done in 10 minutes flat
 //and need far more time. For this reason didnt make the demo. Works similary to the 
@@ -32,6 +33,7 @@ public:
 	void reset();
 private:
 	unsigned int m_uiTexture;
+        CSprite m_oSprite;
 };
 
 #endif // !defined(AFX_BRAKE_H__56947D38_1F83_4127_AD3D_D52EA855FBEB__INCLUDED_)

@@ -36,7 +36,12 @@ CBrake::~CBrake()
 
 void CBrake::init()
 {
-   m_uiTexture = g_oTextureManager.load("smoke.png");
+   // Create sprite
+   CMaterial oMaterial;
+   oMaterial.m_oDiffuse = CRGBAColour(0.5f, 0.5f, 0.5f,0);
+   oMaterial.m_uiTexture = g_oTextureManager.load("smoke.png");   
+   m_oSprite = CSprite(oMaterial);
+   m_oSprite.init();   
 }
 
 void CBrake::update(float fDT)
@@ -121,61 +126,20 @@ void CBrake::createParticle(int i, CVector3 vecHead, CVector3 vecOrigin)
 
 void CBrake::render()
 {
-	CMatrix mat;
-	CVector3 vecBillboard1, vecBillboard2, vecTemp, vecTemp2, avecPlane[4];
-
-	//First set up billboarding of the particles
-	glGetFloatv(GL_MODELVIEW_MATRIX, mat.m_afElement);
-        
-        CVector3 vecRight(mat.m_afElement[0],mat.m_afElement[4],mat.m_afElement[8]);
-        CVector3 vecUp(mat.m_afElement[1],mat.m_afElement[5],mat.m_afElement[9]);
-
-	vecBillboard1 = vecRight + vecUp;
-	vecBillboard2 = vecRight - vecUp;
-
 	//Texture and blending stuff
-	g_oTextureManager.activate(m_uiTexture);
 	glEnable(GL_BLEND);
 	glDepthMask(GL_FALSE);
 
-	glPushAttrib(GL_COLOR_MATERIAL);
-	//then draw the particles
-	glBegin(GL_QUADS);
-		int iCount;
-		for (iCount = 0 ; iCount < m_iParticlesCreated ; iCount++)
-		{
-			avecPlane[0] = m_poParticles[iCount].m_vecPosition - vecBillboard2 * m_poParticles[iCount].m_fSize;
-			avecPlane[1] = m_poParticles[iCount].m_vecPosition + vecBillboard1 * m_poParticles[iCount].m_fSize;
-			avecPlane[2] = m_poParticles[iCount].m_vecPosition + vecBillboard2 * m_poParticles[iCount].m_fSize;
-			avecPlane[3] = m_poParticles[iCount].m_vecPosition - vecBillboard1 * m_poParticles[iCount].m_fSize;
+        for (int iCount = 0 ; iCount < m_iParticlesCreated ; iCount++)
+        {
+           // Set size
+           m_oSprite.setSize(m_poParticles[iCount].m_fSize);
+           // Set position
+           m_oSprite.setTranslation(m_poParticles[iCount].m_vecPosition);
+           // Render
+           m_oSprite.render();
+        }
 
-			vecTemp = avecPlane[1] - avecPlane[0];
-			vecTemp2 = avecPlane[3] - avecPlane[0];
-
-			vecTemp2.cross(vecTemp);
-			vecTemp2.normalise();
-
-			glNormal3fv(vecTemp2.glVector());
-
-			CRGBAColour colour(m_poParticles[iCount].m_fr,m_poParticles[iCount].m_fg,m_poParticles[iCount].m_fb,0.4f);
-			glMaterialfv(GL_FRONT, GL_AMBIENT, colour.glColour()); 
-			glColor4f(m_poParticles[iCount].m_fr, m_poParticles[iCount].m_fg, m_poParticles[iCount].m_fb, 0.3f);	
-
-			glTexCoord2f(0.0f, 1.0f);
-			glVertex3fv(avecPlane[0].glVector());
-
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex3fv(avecPlane[1].glVector());
-			
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3fv(avecPlane[2].glVector());
-
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex3fv(avecPlane[3].glVector());
-		
-		}
-	glEnd();
-	glPopAttrib();
 	glDepthMask(GL_TRUE); 
 	glDisable(GL_BLEND);
 }
