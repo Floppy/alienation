@@ -5,13 +5,15 @@
 #include "Game/Weapon.h"
 #include "Physics/Physics1.h"
 #include "3D/TextureManager.h"
+#include "Sound/SoundManager.h"
 #include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CWeapon::CWeapon(int iNumParticles, CVector3 vecOrigin)
+CWeapon::CWeapon(int iNumParticles, CVector3 vecOrigin) :
+   m_uiSoundEffect(-1)
 {
 	m_iNumParticles = iNumParticles;               // Set number of particles
 	m_vecOrigin = vecOrigin;                           // Set origin of particles
@@ -23,6 +25,9 @@ CWeapon::CWeapon(int iNumParticles, CVector3 vecOrigin)
 	int i;
 	for (i = 0; i < 100 ; i++)
 		m_abEmpty[i] = true;
+        
+        // Load sound
+        m_uiSoundEffect = g_oSoundManager.load("weapon.wav");
 }
 
 CWeapon::~CWeapon()
@@ -159,6 +164,10 @@ void CWeapon::createParticle(int i, CVector3 vecHead, CVector3 vecPos, float fSp
 	m_poParticles[i].m_fAge = 0.0f;
 
 	m_poParticles[i].m_fSpeed = 235.0f;
+        
+        //Play sound whenever we create a particle
+        g_oSoundManager.play(m_uiSoundEffect);
+
 }
 
 void CWeapon::render(void)

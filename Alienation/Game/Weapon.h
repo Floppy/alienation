@@ -38,6 +38,7 @@ public:
 private:
         CSprite m_oSprite;
    CFrustum m_oFrustum;
+   unsigned int m_uiSoundEffect;
 
 };
 
