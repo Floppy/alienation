@@ -12,8 +12,8 @@
 #include "config.h"
 
 #include "Game/Ship.h"
+#include "Game/Hud.h"
 #include "3D/Model.h"
-#include "2D/Hud.h"
 #include "Equipment/Radar.h"
 
 using namespace NSD2D;
