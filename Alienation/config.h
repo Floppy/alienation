@@ -19,6 +19,16 @@
  * of how to document your code can be found 
  * <a href="http://www.stack.nl/~dimitri/doxygen/manual.html">online</a>, or just look at some 
  * that's already been done! Enjoy!
+ * 
+ * <h3>External Libraries</h3>
+ *
+ * Documentation for the external libraries we are using can be found below:
+ *
+ * <ul>
+ * <li>SDL - <a href="http://sdldoc.csn.ul.ie/">http://sdldoc.csn.ul.ie/</a>
+ * <li>SDL_image - <a href="http://jcatki.no-ip.org/SDL_image/">http://jcatki.no-ip.org/SDL_image/</a>
+ * <li>SDL_mixer - <a href="http://jcatki.no-ip.org/SDL_mixer/">http://jcatki.no-ip.org/SDL_mixer/</a>
+ * </ul>
  */
 
 #ifndef NULL
