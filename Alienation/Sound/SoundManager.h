@@ -1,7 +1,7 @@
 #ifndef SOUNDMANAGER_H
 #define SOUNDMANAGER_H
 
-#include <SDL/SDL_mixer.h>
+#include <SDL_mixer.h>
 #include "Math/Vector.h"
 #include <vector>
 
