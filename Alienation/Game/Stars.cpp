@@ -79,8 +79,6 @@ void CStars::draw(CVector3 vecPos)
 	glPushMatrix();
 	glTranslatef(vecPos.X(), vecPos.Y(), vecPos.Z());
 
-	glEnable(GL_BLEND);
-
 	g_oTextureManager.activate(m_auiTextures[0]);
 
         for (int iCount = 0 ; iCount < m_iNumStars ; iCount++)
@@ -97,7 +95,5 @@ void CStars::draw(CVector3 vecPos)
         }
 	
 	glPopMatrix();
-	
-	glDisable(GL_BLEND);
 }
 
