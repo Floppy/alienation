@@ -66,10 +66,35 @@ void CWEMesh::init() {
 }
 
 void CWEMesh::render() const {
+   // We're not using a display list for this, as it could change at any time.
    if (!m_bInitialised) {
       cerr << "WARNING: Mesh not initialised!" << endl;
       return;
    }
+
+   // Set material
+   m_oMaterial.render();
+   
+   // Draw faces
+   glBegin(GL_TRIANGLES);
+   // For each face
+   for(vector<CWEFace*>::const_iterator it(m_lpFaces.begin()); it != m_lpFaces.end(); it++)
+   {
+      // Get starting edge
+      CWEEdge* pFirst = (*it)->m_pEdge;
+      CWEEdge* pCurrent = pFirst;
+      // Traverse edges
+      do {
+         // Vertex coordinate
+         glVertex3fv(pCurrent->m_pStart->m_vecPosition.glVector());
+         // Done
+      } while (pCurrent != pFirst);
+   } 
+   // Done drawing
+   glEnd();
+
+   
+
 }
 
 CWEEdge* CWEMesh::adjacent(CWEVertex* pVert1, CWEVertex* pVert2) {
@@ -77,8 +102,7 @@ CWEEdge* CWEMesh::adjacent(CWEVertex* pVert1, CWEVertex* pVert2) {
    CWEEdge* pEdge = pVert1->m_pEdge;
    if (!pEdge) return pEdge;
    // Search all attached edges 
-   do 
-   {
+   do {
       // Get other vertex
       CWEVertex* pOther = (pEdge->m_pStart == pVert1) ? pEdge->m_pEnd : pEdge->m_pStart;
       // Check if we've found what we want
