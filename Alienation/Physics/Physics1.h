@@ -98,7 +98,7 @@ public:
            for (a = 0; a < m_iNumOfMasses; ++a)		// We will step to every pointer in the array
               m_ppMasses[a] = new CMass(fMass);				// Create a Mass as a pointer and put it in the array
 	}
-
+	CSimulation() {}
 	virtual ~CSimulation()									// Destructor
 	{
 		release();
