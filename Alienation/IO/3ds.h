@@ -34,50 +34,120 @@ public:
 	unsigned int m_iBytesRead;					
 };
 
-//DAMN, complex stuff not touched it, but it works, so best left alone ;)
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// This class handles all of the loading code
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Load a CModel from a 3DS file.
+ */
 class CLoad3DS
 {
-public:
-	CLoad3DS();								
+ public:
+   
+   /** 
+    * Constructor.
+    */
+   CLoad3DS();								
 
-	bool import3DS(CModel *pModel, const char *strFileName);
+   /** 
+    * Load a CModel from a .3DS file. 
+    * @param pModel A valid CModel to load into.
+    * @param strFileName The filename to load.
+    * @return true if tile loaded OK.
+    */
+   bool import3DS(CModel *pModel, const char *strFileName);
 
 private:
-	int getString(char *);
+        
+   /** 
+    * Get a string from the current chunk.
+    * @param pString A buffer to load the string into.
+    * @return The length of the string loaded
+    */
+   int getString(char *pString);
 
-	void readChunk(CChunk *);
+   /** 
+    * Read data from file into a CChunk object.
+    */
+   void readChunk(CChunk *);
 
-	void processNextChunk(CModel *pModel, CChunk *);
-
-	void processNextObjectChunk(CModel *pModel, CChunk *);
-	void processNextObjectChunk2(CMesh *pMesh, CChunk *);
-
-	void processNextMaterialChunk(CModel *pModel, CChunk *);
-	void processNextMaterialChunk2(CMaterial &pModel, CChunk *);
-
-	void readColorChunk(CMaterial *pMaterial, CChunk *pChunk);
-
-	void readVertices(CMesh *pObject, CChunk *);
-
-	void readVertexIndices(CMesh *pObject, CChunk *);
-
-	void readUVCoordinates(CMesh *pObject, CChunk *);
-
-	void readObjectMaterial(CMesh *pObject, CChunk *pPreviousChunk);
-	
-	void cleanUp();
-	
-	FILE *m_pFilePointer;
-	
-	CChunk* m_pCurrentChunk;
-	CChunk* m_pTempChunk;
-
-        map<string,CMaterial> m_oMaterials;
-
+   /** 
+    * Load an arbitrary chunk.
+    * Used for top-level stuff only.
+    */
+   void processNextChunk(CModel *pModel, CChunk *);
+   
+   /** 
+    * Load an object chunk.
+    */
+   void processNextObjectChunk(CModel *pModel, CChunk *);
+   
+   /** 
+    * Load a mesh chunk.
+    */
+   void processNextMeshChunk(CMesh *pMesh, CChunk *);
+   
+   /** 
+    * Load a material chunk.
+    */
+   void loadMaterialChunk(CChunk *pPreviousChunk);
+   
+   /** 
+    * Load a texture chunk.
+    */
+   void processNextTextureChunk(CMaterial &pModel, CChunk *pPreviousChunk);
+   
+   /** 
+    * Read a colour from a colour chunk.
+    * @param pChunk A chunk of type _3DS_MATERIAL_AMBIENT, _3DS_MATERIAL_DIFFUSE or _3DS_MATERIAL_SPECULAR.
+    * @return The colour in the chunk.
+    */
+   CRGBAColour readColorChunk(CChunk *pChunk);
+   
+   /** 
+    * Read vertex data chunk.
+    */
+   void readVertices(CMesh *pObject, CChunk *);
+   
+   /** 
+    * Read face data chunk.
+    */
+   void readFaces(CMesh *pObject, CChunk *);
+   
+   /** 
+    * Read texture coordinates.
+    */
+   void readTexCoords(CMesh *pObject, CChunk *);
+   
+   /** 
+    * Read object material chunk.
+    */
+   void readObjectMaterial(CMesh *pObject, CChunk *pPreviousChunk);
+   
+   /** 
+    * Swallow unwanted chunk data.
+    * @param pChunk The chunk to discard.
+    */
+   void swallowChunk(CChunk * pChunk);
+   
+   /** 
+    * Clean up all temporary data.
+    */
+   void cleanUp();
+   
+ protected:
+   
+   FILE *m_pFilePointer;
+   
+   CChunk* m_pCurrentChunk;
+   
+   CChunk* m_pTempChunk;
+   
+   /**
+    * Currently-loaded materials.
+    * Materials are identified by name, and stored separately from objects, so 
+    * we need a map from names to materials so that we can identify the correct 
+    * CMaterial for a mesh.
+    */
+   map<string,CMaterial> m_oMaterials;
+   
 };
 
 

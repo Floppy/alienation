@@ -3,31 +3,38 @@
 #include "3D/TextureManager.h"
 
 // Primary Chunk, at the beginning of each file
-#define _3DS_PRIMARY       0x4D4D
+#define _3DS_PRIMARY                0x4D4D
 
 // Main Chunks
-#define _3DS_OBJECTINFO    0x3D3D				 
-#define _3DS_VERSION       0x0002				
-#define _3DS_EDITKEYFRAME  0xB000				
+#define _3DS_EDITOR                 0x3D3D				 
+#define _3DS_VERSION                0x0002				
+#define _3DS_EDITKEYFRAME           0xB000				
 
-// Sub defines of OBJECTINFO
-#define _3DS_MATERIAL	   0xAFFF				
-#define _3DS_OBJECT	   0x4000				
+// Sub defines of EDITOR
+#define _3DS_MATERIAL	            0xAFFF				
+#define _3DS_OBJECT_BLOCK           0x4000				
 
 // Sub defines of MATERIAL
-#define _3DS_MATNAME       0xA000				
-#define _3DS_MATDIFFUSE    0xA020				
-#define _3DS_MATMAP        0xA200				
-#define _3DS_MATMAPFILE    0xA300				
+#define _3DS_MATERIAL_NAME          0xA000				
+#define _3DS_MATERIAL_AMBIENT       0xA010
+#define _3DS_MATERIAL_DIFFUSE       0xA020				
+#define _3DS_MATERIAL_SPECULAR      0xA030
+#define _3DS_MATERIAL_TEXTUREMAP    0xA200
+#define _3DS_MATERIAL_REFLECTIONMAP 0xA220
+#define _3DS_MATERIAL_BUMPMAP       0xA230
+#define _3DS_MATERIAL_MAP_FILE      0xA300
+#define _3DS_MATERIAL_MAP_PARM      0xA351
 
-#define _3DS_OBJECT_MESH   0x4100				
+// Sub defines of OBJECT_BLOCK
+#define _3DS_OBJECT_MESH            0x4100				
 
 // Sub defines of OBJECT_MESH
-#define _3DS_OBJECT_VERTICES     0x4110			
-#define _3DS_OBJECT_FACES	 0x4120			
-#define _3DS_OBJECT_MATERIAL	 0x4130			
-#define _3DS_OBJECT_UV		 0x4140			
-
+#define _3DS_MESH_VERTICES          0x4110			
+#define _3DS_MESH_FACES	            0x4120			
+#define _3DS_MESH_MATERIAL	    0x4130			
+#define _3DS_MESH_UV		    0x4140			
+#define _3DS_MESH_SMOOTHING         0x4150
+#define _3DS_MESH_LOCAL_COORD_FRAME 0x4160
 
 //-------------------------------- CLOADS3DS ------------------------------------
 //	This constructor initializes the tChunk data
@@ -91,8 +98,7 @@ void CLoad3DS::cleanUp()
 
 void CLoad3DS::processNextChunk(CModel *pModel, CChunk *pPreviousChunk)
 {
-   unsigned short iVersion = 0;
-   int aiBuffer[50000] = {0};
+   unsigned int iVersion = 0;
    
    m_pCurrentChunk = new CChunk;
    
@@ -106,12 +112,12 @@ void CLoad3DS::processNextChunk(CModel *pModel, CChunk *pPreviousChunk)
             // Read version
             m_pCurrentChunk->m_iBytesRead += fread(&iVersion, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
             // Check version
-            if (iVersion > 0x03) {
+            if (iVersion > 3) {
                fprintf(stderr,"This 3DS file is over version 3 so it may load incorrectly\n");
             }
          } break;
          
-         case _3DS_OBJECTINFO: {
+         case _3DS_EDITOR: {
             // Read chunk
             readChunk(m_pTempChunk);                   
             m_pTempChunk->m_iBytesRead += fread(&iVersion, 1, m_pTempChunk->m_iLength - m_pTempChunk->m_iBytesRead, m_pFilePointer);
@@ -120,16 +126,16 @@ void CLoad3DS::processNextChunk(CModel *pModel, CChunk *pPreviousChunk)
          } break;
          
          case _3DS_MATERIAL: {
-            processNextMaterialChunk(pModel, m_pCurrentChunk);
+            loadMaterialChunk(m_pCurrentChunk);
          } break;
          
-         case _3DS_OBJECT: {
+         case _3DS_OBJECT_BLOCK: {
             processNextObjectChunk(pModel, m_pCurrentChunk);
          } break;
          
          case _3DS_EDITKEYFRAME:
          default: {
-            m_pCurrentChunk->m_iBytesRead += fread(aiBuffer, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
+            swallowChunk(m_pCurrentChunk);
          } break;
       }
       
@@ -150,9 +156,9 @@ void CLoad3DS::processNextObjectChunk(CModel *pModel, CChunk *pPreviousChunk)
    CMesh* pMesh = new CMesh;
    
    // Read name
-   char buffer[50000];
-   memset(buffer,0,50000);
-   m_pCurrentChunk->m_iBytesRead += getString(buffer);
+   char strName[256];
+   memset(strName,0,256);
+   m_pCurrentChunk->m_iBytesRead += getString(strName);
 	
    m_pCurrentChunk = new CChunk;
 	
@@ -164,14 +170,11 @@ void CLoad3DS::processNextObjectChunk(CModel *pModel, CChunk *pPreviousChunk)
       {
 
       case _3DS_OBJECT_MESH: {
-         processNextObjectChunk2(pMesh, m_pCurrentChunk);
+         processNextMeshChunk(pMesh, m_pCurrentChunk);
       } break;
 
       default: {
-         m_pCurrentChunk->m_iBytesRead += fread(buffer, 
-                                                1, 
-                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
-                                                m_pFilePointer);
+         swallowChunk(m_pCurrentChunk);
       } break;
       }
 
@@ -186,11 +189,9 @@ void CLoad3DS::processNextObjectChunk(CModel *pModel, CChunk *pPreviousChunk)
    m_pCurrentChunk = pPreviousChunk;
 }
 
-void CLoad3DS::processNextObjectChunk2(CMesh *pMesh, CChunk *pPreviousChunk)
+void CLoad3DS::processNextMeshChunk(CMesh *pMesh, CChunk *pPreviousChunk)
 {
    	
-   char buffer[50000];
-   memset(buffer,0,50000);
    m_pCurrentChunk = new CChunk;
 	
    while (pPreviousChunk->m_iBytesRead < pPreviousChunk->m_iLength)
@@ -200,27 +201,24 @@ void CLoad3DS::processNextObjectChunk2(CMesh *pMesh, CChunk *pPreviousChunk)
       switch (m_pCurrentChunk->m_uiID)
       {
 
-      case _3DS_OBJECT_VERTICES: {
+      case _3DS_MESH_VERTICES: {
          readVertices(pMesh, m_pCurrentChunk);
       } break;
 
-      case _3DS_OBJECT_FACES: {
-         readVertexIndices(pMesh, m_pCurrentChunk);
+      case _3DS_MESH_FACES: {
+         readFaces(pMesh, m_pCurrentChunk);
       } break;
 
-      case _3DS_OBJECT_MATERIAL: {
+      case _3DS_MESH_MATERIAL: {
          readObjectMaterial(pMesh, m_pCurrentChunk);			
       } break;
 
-      case _3DS_OBJECT_UV: {
-         readUVCoordinates(pMesh, m_pCurrentChunk);
+      case _3DS_MESH_UV: {
+         readTexCoords(pMesh, m_pCurrentChunk);
       } break;
 
       default: {
-         m_pCurrentChunk->m_iBytesRead += fread(buffer, 
-                                                1, 
-                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
-                                                m_pFilePointer);
+         swallowChunk(m_pCurrentChunk);
       } break;
       }
 		
@@ -237,7 +235,7 @@ void CLoad3DS::processNextObjectChunk2(CMesh *pMesh, CChunk *pPreviousChunk)
 //	This function handles all the information about the material (Texture)
 //---------------------------------- PROCESS NEXT MATERIAL CHUNK -----------------------------------
 
-void CLoad3DS::processNextMaterialChunk(CModel *pModel, CChunk *pPreviousChunk)
+void CLoad3DS::loadMaterialChunk(CChunk *pPreviousChunk)
 {
    CMaterial newMaterial;   
    char strMaterialName[128];
@@ -251,30 +249,29 @@ void CLoad3DS::processNextMaterialChunk(CModel *pModel, CChunk *pPreviousChunk)
    
       switch (m_pCurrentChunk->m_uiID)
       {
-      case _3DS_MATDIFFUSE: {
-         // Read colour into material
-         readColorChunk(&newMaterial, m_pCurrentChunk);
+      case _3DS_MATERIAL_AMBIENT:  {
+         newMaterial.m_oAmbient = readColorChunk(m_pCurrentChunk);
+      }	break;
+
+      case _3DS_MATERIAL_DIFFUSE:  {
+         newMaterial.m_oDiffuse = readColorChunk(m_pCurrentChunk);
+      }	break;
+
+      case _3DS_MATERIAL_SPECULAR: {
+         newMaterial.m_oSpecular = readColorChunk(m_pCurrentChunk);
       }	break;
 			
-      case _3DS_MATNAME: {         
+      case _3DS_MATERIAL_NAME: {         
          // Read material name
-         m_pCurrentChunk->m_iBytesRead += fread(strMaterialName,
-                                                1, 
-                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
-                                                m_pFilePointer);
+         m_pCurrentChunk->m_iBytesRead += getString(strMaterialName);
       } break;
 			
-      case _3DS_MATMAP: {
-         processNextMaterialChunk2(newMaterial, m_pCurrentChunk);
+      case _3DS_MATERIAL_TEXTUREMAP: {
+         processNextTextureChunk(newMaterial, m_pCurrentChunk);
       }	break;
 			
       default: {
-         // Eat chunk
-         char aiBuffer[50000] = {0};
-         m_pCurrentChunk->m_iBytesRead += fread(aiBuffer, 
-                                                1, 
-                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
-                                                m_pFilePointer);
+         swallowChunk(m_pCurrentChunk);
       } break;
       
       }
@@ -289,10 +286,8 @@ void CLoad3DS::processNextMaterialChunk(CModel *pModel, CChunk *pPreviousChunk)
    m_pCurrentChunk = pPreviousChunk;
 }
 
-void CLoad3DS::processNextMaterialChunk2(CMaterial& oMaterial, CChunk *pPreviousChunk)
+void CLoad3DS::processNextTextureChunk(CMaterial& oMaterial, CChunk *pPreviousChunk)
 {
-   char strMaterialName[128];
-
    // Read new chunk
    m_pCurrentChunk = new CChunk;
    // Read contents of previous chunk
@@ -302,24 +297,19 @@ void CLoad3DS::processNextMaterialChunk2(CMaterial& oMaterial, CChunk *pPrevious
    
       switch (m_pCurrentChunk->m_uiID)
       {
-      case _3DS_MATMAPFILE: {
-         // Get filename
-         char strFilename[64];
-         m_pCurrentChunk->m_iBytesRead += fread(strFilename, 
-                                                1, 
-                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
-                                                m_pFilePointer);         
+      case _3DS_MATERIAL_MAP_FILE: {
+
+         // Get filename         
+         char strFilename[64];         
+         m_pCurrentChunk->m_iBytesRead += getString(strFilename);
+
          // Load texture and store ID
          oMaterial.m_uiTexture = g_oTextureManager.load(strFilename);
+
       }	break;
 			
       default: {
-         // Eat chunk
-         char aiBuffer[50000] = {0};
-         m_pCurrentChunk->m_iBytesRead += fread(aiBuffer, 
-                                                1, 
-                                                m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, 
-                                                m_pFilePointer);
+         swallowChunk(m_pCurrentChunk);
       } break;
       
       }
@@ -366,7 +356,7 @@ int CLoad3DS::getString(char *pBuffer)
 //		This function reads in the RGB color data
 //---------------------------------- READ COLOR -----------------------------------
 
-void CLoad3DS::readColorChunk(CMaterial *pMaterial, CChunk *pChunk)
+CRGBAColour CLoad3DS::readColorChunk(CChunk *pChunk)
 {
    // Allocate colour storage
    unsigned char col[4] = {0,0,0,0};
@@ -375,8 +365,7 @@ void CLoad3DS::readColorChunk(CMaterial *pMaterial, CChunk *pChunk)
    m_pTempChunk->m_iBytesRead += fread(col, 1, m_pTempChunk->m_iLength - m_pTempChunk->m_iBytesRead, m_pFilePointer);
    pChunk->m_iBytesRead += m_pTempChunk->m_iBytesRead;
    // store
-   pMaterial->m_oDiffuse = CRGBAColour(col[0]/255.0,col[1]/255.0,col[2]/255.0,col[3]/255.0);
-   pMaterial->m_oAmbient = pMaterial->m_oDiffuse;
+   return CRGBAColour(col[0]/255.0,col[1]/255.0,col[2]/255.0,col[3]/255.0);
 }
 
 
@@ -384,7 +373,7 @@ void CLoad3DS::readColorChunk(CMaterial *pMaterial, CChunk *pChunk)
 //		This function reads in the indices for the vertex array
 //---------------------------------- READ VERTEX INDECES -----------------------------------
 
-void CLoad3DS::readVertexIndices(CMesh *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::readFaces(CMesh *pObject, CChunk *pPreviousChunk)
 {
 	unsigned short iIndex = 0;					 
 	pPreviousChunk->m_iBytesRead += fread(&pObject->m_iNumFaces, 1, 2, m_pFilePointer);
@@ -412,7 +401,7 @@ void CLoad3DS::readVertexIndices(CMesh *pObject, CChunk *pPreviousChunk)
 //		This function reads in the UV coordinates for the object
 //---------------------------------- READ UV COORDINATES -----------------------------------
 
-void CLoad3DS::readUVCoordinates(CMesh *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::readTexCoords(CMesh *pObject, CChunk *pPreviousChunk)
 {
 	pPreviousChunk->m_iBytesRead += fread(&pObject->m_iNumTexVertex, 1, 2, m_pFilePointer);
 	
@@ -451,14 +440,25 @@ void CLoad3DS::readObjectMaterial(CMesh *pObject, CChunk *pPreviousChunk)
 {
 	char strMaterial[255];	
         memset(strMaterial,0,255);
-	int aiBuffer[50000] = {0};
 
 	pPreviousChunk->m_iBytesRead += getString(strMaterial);
 	
         pObject->setMaterial(m_oMaterials[strMaterial]);
 	
-	pPreviousChunk->m_iBytesRead += fread(aiBuffer, 1, pPreviousChunk->m_iLength - pPreviousChunk->m_iBytesRead, m_pFilePointer);
-}			
+        //Eat any remaining chunk data
+        swallowChunk(pPreviousChunk);
+}
+
+void CLoad3DS::swallowChunk(CChunk* pChunk) {
+   // Calculate length
+   int iLength = pChunk->m_iLength - pChunk->m_iBytesRead;
+   // Allocate storage
+   char* pBuffer = new char[iLength];
+   // Read data
+   pChunk->m_iBytesRead += fread(pBuffer, 1, iLength, m_pFilePointer);
+   // Dump data
+   delete [] pBuffer;
+}
 
 
 
