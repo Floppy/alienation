@@ -194,15 +194,13 @@ void CShip::setPerformance(float fPitchRate, float fYawRate, float fRollRate, fl
    m_fThrust = fThrust;
 }
 
-bool CShip::loadWeapon(const char* strWeapon) {
+void CShip::setWeapons(unsigned int iNumWeapons, const CVector3* pWeapons, const char* strWeapon) {
    // Load weapon
    CWeapon* pWeapon(CWeaponFactory::load(strWeapon));
    if (pWeapon) {
       m_poWeapon = pWeapon;
       m_poWeapon->init();
-      return true;
    }
-   return false;
 }
 
 void CShip::setTrails(unsigned int iNumTrails, const CVector3* pTrails) 

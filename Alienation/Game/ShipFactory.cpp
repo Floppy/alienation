@@ -43,7 +43,7 @@
       for (unsigned int i=0; i<iNumWeapons; i++) {
          pWeapons[i] = state.getVector3(i);
       }
-      pShip->loadWeapon(strWeapon);
+      pShip->setWeapons(iNumWeapons,pWeapons,strWeapon);
       delete [] pWeapons;
       state.pop();
 

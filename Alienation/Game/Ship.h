@@ -39,7 +39,7 @@ class CShip : public CGameObject
 
    virtual void setPerformance(float fPitchRate, float fYawRate, float fRollRate, float fThrust);
    
-   virtual bool loadWeapon(const char* strWeapon);
+   virtual void setWeapons(unsigned int iNumWeapons, const CVector3* pWeapons, const char* strWeapon);
 
    void setTrails(unsigned int iNumTrails, const CVector3* pTrails);
 
