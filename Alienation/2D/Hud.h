@@ -6,6 +6,7 @@
 #endif // _MSC_VER > 1000
 
 #include "GL/GLFont.h"
+#include "Game/GameObject.h"
 #include "Game/Ship.h"
 #include "2D/2DObject.h"
 #include "config.h"
@@ -57,7 +58,7 @@ namespace NSD2D {
        * Set the current target object.
        * @param poTarget The current target
        */
-      void setTarget(CShip *poTarget)
+      void setTarget(CGameObject *poTarget)
       { m_pTarget = poTarget; }
       
    protected:
@@ -70,7 +71,7 @@ namespace NSD2D {
       /**
        * The current target.
        */
-      CShip* m_pTarget;
+      CGameObject* m_pTarget;
       
       /**
        * Font for drawing

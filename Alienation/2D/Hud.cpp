@@ -63,22 +63,22 @@ namespace NSD2D {
       //like this (Shields armor etc)             //
       //////////////////////////////////////////////
       
-      if (m_pPlayerShip->m_poShips[0].m_fVel == 0.0f)
+      if (m_pPlayerShip->m_fVel == 0.0f)
       {
          fWidthSpeed = 0.001f;
       }
       else
       {
-         fWidthSpeed = (m_pPlayerShip->m_poShips[0].m_fVel / fMaxSpeed) + 0.001f;
+         fWidthSpeed = (m_pPlayerShip->m_fVel / fMaxSpeed) + 0.001f;
       }
       
-      if (m_pPlayerShip->m_poShips[0].m_fThrust == 0.0f)
+      if (m_pPlayerShip->m_fThrust == 0.0f)
       {
          fWidthThrust = 0.001f;
       }
       else
       {
-         fWidthThrust = (m_pPlayerShip->m_poShips[0].m_fThrust / fMaxThrust) + 0.001f;
+         fWidthThrust = (m_pPlayerShip->m_fThrust / fMaxThrust) + 0.001f;
       }
 
       //////////////////////////////////////////////
@@ -166,7 +166,7 @@ namespace NSD2D {
          m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f);
          m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f);
          // Velocity
-         sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_poShips[0].m_fVel));
+         sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_fVel));
          m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f);
          m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f);
          // Radar image
@@ -198,10 +198,10 @@ namespace NSD2D {
       g_oTextureManager.render(m_auiTextures[5]);
       m_po2DObject->renderQuad(415.0f, 550.0f, 200.0f * fWidthThrust, 200.0f, avecTex);
       
-      sprintf(strFont,"Velocity: %.1f", m_pPlayerShip->m_poShips[0].m_fVel);
+      sprintf(strFont,"Velocity: %.1f", m_pPlayerShip->m_fVel);
       m_poFont->print(strFont, CVector2(420.0f, 210.0f), 5.0f);
       
-      sprintf(strFont,"Thrust: %.1f", m_pPlayerShip->m_poShips[0].m_fThrust);
+      sprintf(strFont,"Thrust: %.1f", m_pPlayerShip->m_fThrust);
       m_poFont->print(strFont, CVector2(420.0f, 560.0f), 5.0f);
       
       // Calc FPS
@@ -268,7 +268,7 @@ namespace NSD2D {
       // Calculate direction vector
       CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
       float fRange = vecTarget.length();
-      float fSize = m_pTarget->m_poShips[0].m_oModel.boundingRadius();
+      float fSize = m_pTarget->m_oModel.boundingRadius();
       //float fAngle = RAD_TO_DEG(atan(fSize / fRange) * 2);
       
       // Set Projection Matrix
@@ -286,9 +286,9 @@ namespace NSD2D {
                 m_pTarget->m_ppMasses[0]->m_vecPos.X(), 
                 m_pTarget->m_ppMasses[0]->m_vecPos.Y(), 
                 m_pTarget->m_ppMasses[0]->m_vecPos.Z(),
-                m_pPlayerShip->m_poShips[0].m_vecUp.X() - m_pPlayerShip->m_ppMasses[0]->m_vecPos.X(),
-                m_pPlayerShip->m_poShips[0].m_vecUp.Y() - m_pPlayerShip->m_ppMasses[0]->m_vecPos.Y(),
-                m_pPlayerShip->m_poShips[0].m_vecUp.Z() - m_pPlayerShip->m_ppMasses[0]->m_vecPos.Z());
+                m_pPlayerShip->m_vecUp.X() - m_pPlayerShip->m_ppMasses[0]->m_vecPos.X(),
+                m_pPlayerShip->m_vecUp.Y() - m_pPlayerShip->m_ppMasses[0]->m_vecPos.Y(),
+                m_pPlayerShip->m_vecUp.Z() - m_pPlayerShip->m_ppMasses[0]->m_vecPos.Z());
       
       // Draw
       glDisable(GL_TEXTURE_2D);
