@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = Math Physics 3D IO Game AI GL 
+SUBDIRS = Data Math Physics 3D IO Game AI GL
 
 bin_PROGRAMS = Alienation
 

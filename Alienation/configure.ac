@@ -54,6 +54,10 @@ AC_CHECK_FUNCS([atexit memset sqrt])
 # Output
 AC_OUTPUT(3D/Makefile
           AI/Makefile
+          Data/Makefile
+          Data/Audio/Makefile
+          Data/Model/Makefile
+          Data/Texture/Makefile
           Game/Makefile
           GL/Makefile
           IO/Makefile
