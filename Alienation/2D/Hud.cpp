@@ -249,9 +249,9 @@ namespace NSD2D {
       }
       
       // Set material
-      m_oMaterial.m_oDiffuse = CRGBAColour(1.0f,1.0f,1.0f,0.9f);
-      m_oMaterial.m_oAmbient = CRGBAColour(1.0f,1.0f,1.0f,0.9f);
-      m_oMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f,0.9f);
+      m_oMaterial.m_oDiffuse = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
+      m_oMaterial.m_oAmbient = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
+      m_oMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
       m_oMaterial.init();
       
       m_po2DObject = new C2DObject;
@@ -291,9 +291,11 @@ namespace NSD2D {
                 m_pPlayerShip->m_poShips[0].m_vecUp.Z() - m_pPlayerShip->m_ppMasses[0]->m_vecPos.Z());
       
       // Draw
+      glDisable(GL_TEXTURE_2D);
       m_pTarget->draw(false);
+      glEnable(GL_TEXTURE_2D);
       // Finish up
-      pTexture->postRenderToTexture(GL_RGBA);
+      pTexture->postRenderToTexture(GL_LUMINANCE_ALPHA);
    }
    
 }
