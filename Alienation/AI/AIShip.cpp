@@ -73,7 +73,7 @@ void CAIShip::simulate(float fDT)
 	float fAPitch = vecTHead.dot(vecTemp);
 
 	//Calculate the final pitchrate
-	m_poShips[0].m_fPitchRate = acos(fAPitch) * todegrees;
+	m_poShips[0].m_fPitchRate = RAD_TO_DEG(acos(fAPitch));
 
 	//Limit the pitchrate to max values
 	if (m_poShips[0].m_fPitchRate > m_poShips[0].m_fMaxPitchRate)
@@ -94,7 +94,7 @@ void CAIShip::simulate(float fDT)
 	float fAYaw = vecTHead.dot(vecTemp);
 
 
-	m_poShips[0].m_fYawRate = acos(fAYaw) * todegrees;
+	m_poShips[0].m_fYawRate = RAD_TO_DEG(acos(fAYaw));
 	fThrust += m_poShips[0].m_fYawRate;
 	if (m_poShips[0].m_fYawRate > m_poShips[0].m_fMaxYawRate)
 		m_poShips[0].m_fYawRate = m_poShips[0].m_fMaxYawRate;
