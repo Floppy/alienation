@@ -23,7 +23,7 @@ namespace NSD2D {
       
       /**
        * Constructor.
-       * @param poThisShip The player's ship
+       * @param pPlayerShip The player's ship
        */
       CHud(CShip *pPlayerShip);
       

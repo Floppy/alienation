@@ -49,4 +49,9 @@ namespace NSDMath {}
  */
 namespace NSDSound {}
 
+/**
+ * 2D rendering.
+ */
+namespace NSD2D {}
+
 #endif // CONFIG_H
