@@ -41,15 +41,16 @@ bool COpenGL :: initGL() {
 
    // Set up shading, lighting, and so on
    glShadeModel(GL_SMOOTH);                           // Enable Smooth Shading
-   glClearColor(0.0f, 0.0f, 0.0f, 0.5f);              // Black Background
+   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);              // Black Background
    glClearDepth(1.0f);                                // Depth Buffer Setup
    glEnable(GL_DEPTH_TEST);                           // Enables Depth Testing
    glDepthFunc(GL_LEQUAL);                            // The Type Of Depth Testing To Do
    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Really Nice Perspective Calculations
    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);                                 
-   glBlendFunc(GL_ONE, GL_ONE);
    glEnable(GL_POLYGON_SMOOTH);
    glEnable(GL_TEXTURE_2D);		
+   //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+   glBlendFunc(GL_ONE,GL_ONE);
 
    // Set viewport
    glViewport(0, 0, 1024, 768);
