@@ -11,7 +11,7 @@ CPPFLAGS = -Wall
 
 INC = -I/usr/include/SDL/
 
-LIBS = -lGL -lGLU -lSDL -lpthread -lSDL_image
+LIBS = -lGL -lGLU -lSDL -lpthread -lSDL_image -lfmod-3.62
 
 OBJS = 3ds.o 3dsLoader.o AIShip.o Brake.o \
 	GLFont.o GUI.o Light.o matrix.o opengl.o \
