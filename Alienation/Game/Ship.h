@@ -45,7 +45,7 @@ class CShip : public CGameObject
 
    void setBrakes(unsigned int iNumBrakes, const CVector3* pBrakes);
 
-	CVector3		m_vecLastForce, m_vecBrakePoint;
+	CVector3		m_vecLastForce;
 	bool			m_bStraffUp, m_bStraffDown, m_bStraffRight, m_bStraffLeft;
 	CVector3		m_vecCamView;
 	CQuat			m_quaCamOrientation;
@@ -56,10 +56,13 @@ class CShip : public CGameObject
 	CVector3*		m_avecTrailPoints;
 	CVector3*		m_avecOrigTrailPoints;
 	CVector3		m_avecWeaponPoints[4];
+	CVector3*		m_avecBrakePoints;
+	CVector3*		m_avecOrigBrakePoints;
         int              m_iNumTrails;
+        int              m_iNumBrakes;
 	CTrail		*m_poTrails;
 	CWeapon		*m_poWeapon;
-	CBrake		*m_poBrake;
+	CBrake**	 m_ppBrakes;
 	int			m_iFlightMode;
 	bool			m_bWeaponFire;
 	bool			m_bBraking;

@@ -13,7 +13,6 @@
 CShip::CShip(float mass) : 
    CGameObject(1, mass),
    m_vecLastForce(0.0f,0.0f,0.0f),
-   m_vecBrakePoint(0.0f,0.0f,0.0f),
    m_bStraffUp(false),
    m_bStraffDown(false),
    m_bStraffRight(false),
@@ -27,9 +26,13 @@ CShip::CShip(float mass) :
    m_fThrust(0.0f),
    m_avecTrailPoints(NULL),
    m_avecOrigTrailPoints(NULL),
+   m_avecBrakePoints(NULL),
+   m_avecOrigBrakePoints(NULL),
+   m_iNumTrails(0),
+   m_iNumBrakes(0),
    m_poTrails(NULL),
    m_poWeapon(NULL),
-   m_poBrake(NULL),
+   m_ppBrakes(NULL),
    m_iFlightMode(1),
    m_bWeaponFire(false),
    m_bBraking(false)
@@ -47,6 +50,14 @@ CShip::CShip(float mass) :
 
 CShip::~CShip()
 {
+   delete [] m_avecBrakePoints;
+   delete [] m_avecOrigBrakePoints;
+   for (int i=0; i<m_iNumBrakes; i++) 
+      delete m_ppBrakes[i];
+   delete [] m_ppBrakes;
+   delete [] m_avecTrailPoints;
+   delete [] m_avecOrigTrailPoints;
+   delete [] m_poTrails;
 }
 
 //load model, trail texture and brake texture
@@ -64,26 +75,28 @@ void CShip::load(const char* strShipModel, const char* strCockpitModel)
 }
 
 void CShip::drawBlended() {
+   int i;
 
    // Draw trail
    if (m_fThrust != 0.0f) {
-      for (int i=0; i<m_iNumTrails; i++) {
+      for (i=0; i<m_iNumTrails; i++) {
          m_poTrails[i].render();
       }
    }
 
    // Draw weapons fire
    m_poWeapon->render();
-
-   // Draw brake exhaust
-   m_poBrake->render();
-
+   
+   // Draw brake exhausts
+   for (i=0; i<m_iNumBrakes; i++)
+      m_ppBrakes[i]->render();
+   
 }
 
 //This function calculates the force acting on the ship
 void CShip::solve()
 {
-	CVector3 vecForce, vecDragForce, vecBrakeForce;
+        CVector3 vecForce, vecDragForce, vecBrakeForce;
 
 	if (m_iFlightMode == 1)
 	{
@@ -148,29 +161,33 @@ void CShip::solve()
 void CShip::simulate(float fDT)
 {
 	CVector3	vecDistanceMoved, vecGunHead;
-
+        int i;
 	CGameObject::simulate (fDT);
-
+        
 	//get the amount of movement to calculate speed
 	vecDistanceMoved = m_ppMasses[0]->m_vecPos - m_ppMasses[0]->m_vecOldPos;
-
+        
 	//update trail, weapons and heading
-        for (int i=0; i<m_iNumTrails; i++) 
+        for (i=0; i<m_iNumTrails; i++) 
            m_poTrails[i].update(fDT, m_fThrust, m_ppMasses[0]->m_vecPos, m_avecTrailPoints[i], vecDistanceMoved, 
-                                             m_vecUp - m_ppMasses[0]->m_vecPos, m_vecRight - m_ppMasses[0]->m_vecPos, 1.5f, 0.5f);
+                                m_vecUp - m_ppMasses[0]->m_vecPos, m_vecRight - m_ppMasses[0]->m_vecPos, 1.5f, 0.5f);
 	vecGunHead = m_vecHeading - m_ppMasses[0]->m_vecPos;
 	m_poWeapon->update(fDT, vecGunHead, m_avecWeaponPoints[0], m_fVel, m_bWeaponFire);
-	m_poBrake->update(fDT, m_ppMasses[0]->m_vecPos, m_vecDirection, m_vecBrakePoint, m_bBraking);
+        // Update brakes
+        for (i=0; i<m_iNumBrakes; i++) 
+           m_ppBrakes[i]->update(fDT, m_ppMasses[0]->m_vecPos, m_vecDirection, m_avecBrakePoints[i], m_bBraking);
 }
 
 
 void CShip::rotHeading(CMatrix mat)
 {
    CGameObject::rotHeading(mat);
+   int i;
    m_avecWeaponPoints[0] = mat * CVector3( 0.0f,-0.7f,-7.3f) + m_ppMasses[0]->m_vecPos;
-   for (int i=0; i<m_iNumTrails; i++)
+   for (i=0; i<m_iNumTrails; i++)
       m_avecTrailPoints[i]  = mat * m_avecOrigTrailPoints[i] + m_ppMasses[0]->m_vecPos;
-   m_vecBrakePoint       = mat * CVector3( 0.0f, 0.7f,-2.5f) + m_ppMasses[0]->m_vecPos;
+   for (i=0; i<m_iNumBrakes; i++)
+      m_avecBrakePoints[i] = mat * m_avecOrigBrakePoints[i] + m_ppMasses[0]->m_vecPos;
    m_vecCamView         += m_ppMasses[0]->m_vecPos;
 }
 
@@ -217,6 +234,15 @@ void CShip::setTrails(unsigned int iNumTrails, const CVector3* pTrails)
 
 void CShip::setBrakes(unsigned int iNumBrakes, const CVector3* pBrakes)
 {
-   m_poBrake = new CBrake(100,CVector3(0.0f, 0.0f, 0.0f));
-   m_poBrake->init();
+   // Store thruster locations
+   m_ppBrakes = new CBrake*[iNumBrakes];
+   m_avecBrakePoints = new CVector3[iNumBrakes];
+   m_avecOrigBrakePoints = new CVector3[iNumBrakes];
+   // Copy data and setup
+   m_iNumBrakes = iNumBrakes;
+   for (int i=0; i<m_iNumBrakes; i++) {
+      m_avecBrakePoints[i] = m_avecOrigBrakePoints[i] = pBrakes[i];
+      m_ppBrakes[i] = new CBrake(100,m_avecBrakePoints[i]);
+      m_ppBrakes[i]->init();
+   }
 }
