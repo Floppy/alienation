@@ -69,6 +69,11 @@ CShip::~CShip()
    delete [] m_avecTrailPoints;
    delete [] m_avecOrigTrailPoints;
    delete [] m_poTrails;
+
+   for (vector<CShield*>::iterator it = m_lShields.begin(); it != m_lShields.end(); it++) {
+      delete *it;
+   }
+
 }
 
 //load model, trail texture and brake texture

@@ -47,9 +47,6 @@ CPlayerShip::CPlayerShip(float mass) :
 
 CPlayerShip::~CPlayerShip()
 {
-   for (vector<CShield*>::iterator it = m_lShields.begin(); it != m_lShields.end(); it++) {
-      delete *it;
-   }
 }
 
 //At last!! using inheritance! Only extra thing this does is rotate the camera
