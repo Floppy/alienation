@@ -89,91 +89,83 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\3ds.cpp
+SOURCE=.\IO\3ds.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\3dsLoader.cpp
+SOURCE=.\IO\3dsLoader.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\AIShip.cpp
+SOURCE=.\AI\AIShip.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Brake.cpp
+SOURCE=.\Game\Brake.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\GLFont.cpp
+SOURCE=.\GL\GLFont.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\GUI.cpp
+SOURCE=.\3D\Light.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Light.cpp
+SOURCE=.\Math\Matrix.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\matrix.cpp
+SOURCE=.\3D\Material.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Material.cpp
+SOURCE=.\3D\Mesh.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Mesh.cpp
+SOURCE=.\3D\Model.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Model.cpp
+SOURCE=.\GL\OpenGL.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opengl.cpp
+SOURCE=.\3D\ParticleEngine.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ParticleEngine.cpp
+SOURCE=.\Game\PlayerShip.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\PlayerShip.cpp
+SOURCE=.\Alienation.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\program.cpp
+SOURCE=.\Math\Quat.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\quat.cpp
+SOURCE=.\Game\Ship.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Ship.cpp
+SOURCE=.\Game\Stars.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Stars.cpp
+SOURCE=.\3D\Texture.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Texture.cpp
+SOURCE=.\Game\Trail.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Trail.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Weapon.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Widgit.cpp
+SOURCE=.\Game\Weapon.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -181,19 +173,19 @@ SOURCE=.\Widgit.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\3ds.h
+SOURCE=.\IO\3ds.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\3dsLoader.h
+SOURCE=.\IO\3dsLoader.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\AIShip.h
+SOURCE=.\AI\AIShip.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Brake.h
+SOURCE=.\Game\Brake.h
 # End Source File
 # Begin Source File
 
@@ -201,83 +193,75 @@ SOURCE=.\config.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\GLFont.h
+SOURCE=.\GL\GLFont.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\GUI.h
+SOURCE=.\3D\Light.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Light.h
+SOURCE=.\Math\Matrix.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\matrix.h
+SOURCE=.\3D\Material.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Material.h
+SOURCE=.\3D\Mesh.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Mesh.h
+SOURCE=.\3D\Model.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Model.h
+SOURCE=.\GL\OpenGL.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opengl.h
+SOURCE=.\3D\Particle.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Particle.h
+SOURCE=.\3D\ParticleEngine.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ParticleEngine.h
+SOURCE=.\Physics\Physics1.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Physics1.h
+SOURCE=.\Game\PlayerShip.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\PlayerShip.h
+SOURCE=.\Math\Quat.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\quat.h
+SOURCE=.\Game\Ship.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Ship.h
+SOURCE=.\Game\Stars.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Stars.h
+SOURCE=.\3D\Texture.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Texture.h
+SOURCE=.\Game\Trail.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Trail.h
+SOURCE=.\Math\Vector.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vector.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Weapon.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Widgit.h
+SOURCE=.\Game\Weapon.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
