@@ -32,6 +32,14 @@ void CLight::init(const CRGBAColour& oAmbient, const CRGBAColour& oDiffuse, cons
    setTranslation(oPosition);
 }
 
+void CLight::init(const CRGBAColour& oAmbient, const CRGBAColour& oDiffuse, const CRGBAColour& oSpecular, const CVector3& oPosition)
+{
+   update(GL_AMBIENT,oAmbient);
+   update(GL_DIFFUSE,oDiffuse);
+	update(GL_SPECULAR, oSpecular);
+   setTranslation(oPosition);
+}
+
 void CLight::update(GLenum type, const CRGBAColour& oColour)
 {
    switch (type) {
@@ -44,9 +52,12 @@ void CLight::update(GLenum type, const CRGBAColour& oColour)
    case GL_DIFFUSE: {
       m_oDiffuse = oColour;
       glLightfv(m_iLight, GL_DIFFUSE, m_oDiffuse.glColour());
-      glLightfv(m_iLight, GL_SPECULAR, m_oDiffuse.glColour());
    } break;
 
+   case GL_SPECULAR: {
+      m_oSpecular = oColour;
+      glLightfv(m_iLight, GL_SPECULAR, m_oDiffuse.glColour());
+   } break;
    default:
      break;
    }
@@ -66,3 +77,8 @@ void CLight::setTranslation(CVector3 oPosition)
    C3DObject::setTranslation(oPosition);
 }
 
+
+void CLight::setLightModel(GLenum eLightModel)
+{
+//	glLightModelfv(eLightModel, m_oAmbient);
+}

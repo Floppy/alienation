@@ -21,6 +21,7 @@ using namespace NSDMath;
 class CLight : public C3DObject
 {
 public:
+	void setLightModel(GLenum eLightModel);
         /**
          * Constructor.
          * @param iLight An OpenGL light identifier, e.g. GL_LIGHT0. 
@@ -34,8 +35,13 @@ public:
          */
 	virtual ~CLight();
 
-        /**
+			/**
          * Initialisation.
+         */
+	void init(const CRGBAColour& oAmbient, const CRGBAColour& oDiffuse, const CRGBAColour& oSpecular, const CVector3& oPosition);
+
+			/**
+         * Overridden Initialisation.
          */
 	void init(const CRGBAColour& oAmbient, const CRGBAColour& oDiffuse, const CVector3& oPosition);
 
@@ -93,6 +99,11 @@ public:
 	CRGBAColour m_oDiffuse;
 
         /**
+         * Specular colour.
+         */
+	CRGBAColour m_oSpecular;
+
+			/**
          * Position.
          * GL requires a 4D vector for this.
          */

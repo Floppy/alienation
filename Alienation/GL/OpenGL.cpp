@@ -542,6 +542,15 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 		m_poShip->m_bBraking = false;
 	}
 
+	if (m_oKeys.m_abKeyDown[SDLK_a])
+	{
+		m_poShip->increaseRadarRange();
+	}
+	if (m_oKeys.m_abKeyDown[SDLK_z])
+	{
+		m_poShip->decreaseRadarRange();
+	}
+
 	// dt Is The Time Interval (As Seconds) From The Previous Frame To The Current Frame.
 	// dt Will Be Used To Iterate Simulation Values Such As Velocity And Position Of Masses.
 
@@ -828,4 +837,12 @@ void COpenGL::DrawSplashScreen()
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    oFrame.renderQuad();
 
+}
+
+void COpenGL::stopShipMovement()
+{
+	m_fYaw = 0.0f;
+	m_fPitch = 0.0f;
+	m_fRoll = 0.0f;
+	m_bCamUp = m_bCamDown = m_bCamRight = m_bCamLeft = false;
 }

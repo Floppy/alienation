@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Equipment/Radar.h"
+#include "IO/3ds.h"
 
 
 
@@ -40,45 +41,16 @@ void CRadar::addTarget(int iObjectID, int iTargetType, CVector3 vecPos)
 //**************************************************************************************
 void CRadar::init()
 {
-	unsigned int uiTexture;
+	NSDIO::CLoad3DS loader;
 
-												//////////////////////////////////////////////
-												//Create the quadric                        //
-												//////////////////////////////////////////////
-	
-	m_poQuadric = gluNewQuadric();
-												//////////////////////////////////////////////
-												//Create smooth normals for the quadric     //
-												//////////////////////////////////////////////
+	m_poModel = new CGameObject(1, 0.0f);
 
-	gluQuadricNormals(m_poQuadric, GLU_SMOOTH);
-	gluQuadricTexture(m_poQuadric, GL_TRUE);
+	if (loader.import3DS(&m_poModel->m_oModel, "radar.3ds"))
+	{
+		m_poModel->m_oModel.init();
+	}
 
-												//////////////////////////////////////////////
-												//Create the various materials for          //
-												//texturing the radar images                //
-												//////////////////////////////////////////////
-
-	uiTexture = g_oTextureManager.load("OuterSphere.png");
-	m_oOuterSphereTexture.m_oEmissive = CRGBAColour(1.0f, 1.0f, 1.0f, 0.5f);
-	m_oOuterSphereTexture.m_oAmbient = CRGBAColour(1.0f, 1.0f, 1.0f, 0.5f);
-	m_oOuterSphereTexture.m_oDiffuse = CRGBAColour(1.0f, 1.0f, 1.0f, 0.5f);
-	m_oOuterSphereTexture.m_uiTexture = uiTexture;
-	m_oOuterSphereTexture.init();
-
-	uiTexture = g_oTextureManager.load("MidSphere.png");
-	m_oMidSphereTexture.m_oEmissive = CRGBAColour(1.0f, 1.0f, 1.0f, 0.4f);
-	m_oMidSphereTexture.m_oAmbient = CRGBAColour(1.0f, 1.0f, 1.0f, 0.4f);
-	m_oMidSphereTexture.m_oDiffuse = CRGBAColour(1.0f, 1.0f, 1.0f, 0.4f);
-	m_oMidSphereTexture.m_uiTexture = uiTexture;
-	m_oMidSphereTexture.init();
-
-	uiTexture = g_oTextureManager.load("InnerSphere.png");
-	m_oInnerSphereTexture.m_oEmissive = CRGBAColour(1.0f, 1.0f, 1.0f, 0.3f);
-	m_oInnerSphereTexture.m_oAmbient = CRGBAColour(1.0f, 1.0f, 1.0f, 0.3f);
-	m_oInnerSphereTexture.m_oDiffuse = CRGBAColour(1.0f, 1.0f, 1.0f, 0.3f);
-	m_oInnerSphereTexture.m_uiTexture = uiTexture;
-	m_oInnerSphereTexture.init();
+	m_poModel->m_ppMasses[0]->m_vecPos = CVector3(0.0f, -3.0f, -15.0);
 
 												//////////////////////////////////////////////
 												//Create the off screen texture to copy to  //
@@ -91,12 +63,15 @@ void CRadar::init()
 												//Create the light to view the radar with   //
 												//////////////////////////////////////////////
 
-   CRGBAColour oLightAmbient(0.25f, 0.25f, 0.25f, 1.0f);
-   CRGBAColour oLightDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
-	CVector3 oPosition(100.0f, 100.0f, -100.0f);
+   CRGBAColour oLightAmbient(0.4f, 0.4f, 0.4f, 1.0f);
+   CRGBAColour oLightDiffuse(0.5f, 0.5f, 0.5f, 1.0f);
+   CRGBAColour oLightSpecular(0.55f, 0.55f, 0.55f, 1.0f);
+	CVector3 oPosition(-4.43553f, -2.0f, 20.0f);
 
+	float ambient[] = {0.4f, 0.4f, 0.4f, 1.0f};
 	m_oLight = new CLight(GL_LIGHT2);
-   m_oLight->init(oLightAmbient, oLightDiffuse, oPosition);
+   m_oLight->init(oLightAmbient, oLightDiffuse, oLightSpecular, oPosition);
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
 }
 
 
@@ -107,122 +82,82 @@ void CRadar::init()
 // Date Created     : 31/10/2003
 // Description      : Performs the rendering that is copied to a texture  
 //**************************************************************************************
-void CRadar::renderOffScreen(CVector3 vecShipPos)
+void CRadar::renderOffScreen(CVector3 vecShipPos, const CMatrix matRotMatrix)
 { 
 
-
-	// Perform offscreen rendering
 	int i;
-	CMaterial oMaterial;
 	CVector3 vecDistance;
 	CVector3 vecDisplayDistance;
 	float fDistance;
-	CTexture *poTexture = g_oTextureManager.texture(m_uiOffScreenTexture);
-	unsigned int uiID = poTexture->init();
+	CMatrix mat = matRotMatrix;
+	CMaterial oMaterial;
 	
 												//////////////////////////////////////////////
-												//Create a material to draw the radar       //
+												//Matrix to account for ship rotation       //
 												//////////////////////////////////////////////
 
+	mat.invert();
 
 												//////////////////////////////////////////////
-												//Change the view port to the textures      //
-												//size                                      //
+												//Distance of radar to camera               //
 												//////////////////////////////////////////////
 
-	poTexture->preRenderToTexture();
-												//////////////////////////////////////////////
-												//Clear screen                              //
-												//////////////////////////////////////////////
+	float fRange = m_poModel->m_ppMasses[0]->m_vecPos.length();
+   
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-     
-												//////////////////////////////////////////////
-												//Set Projection Matrix                     //
-												//////////////////////////////////////////////
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-												//////////////////////////////////////////////
-												//Setup the projection view                 //
-												//////////////////////////////////////////////
-
-	glOrtho(-5.0f, 5.0f, -5.0f, 5.0f, 1.0f, -200.0f);
+   CTexture* pTexture = g_oTextureManager.texture(m_uiOffScreenTexture);
+	pTexture->init();
 
 												//////////////////////////////////////////////
-												//Set Modelview Matrix                      //
+												//Prepare the texture                       //
 												//////////////////////////////////////////////
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+   pTexture->preRenderToTexture();
 
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   
 												//////////////////////////////////////////////
-												//Smooth is probably the default option,    //
-												//but specifying it to be sure              //
-												//////////////////////////////////////////////
-
-	glShadeModel(GL_SMOOTH);
-												//////////////////////////////////////////////
-												//Turn the light on                         //
+												//Setup the rendering area (Camera at       //
+												//origin, ortho screen where the radar is   //
 												//////////////////////////////////////////////
 
+   float fSize = m_poModel->m_oModel.boundingSphere().m_fRadius;
+   
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+
+   glOrtho(-fSize,fSize,-fSize,fSize,fRange-fSize,fRange+fSize);
+   
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
+   
+												//////////////////////////////////////////////
+												//look "down" on radar                      //
+												//////////////////////////////////////////////
+
+	gluLookAt(0.0f, 0.0f, 0.0f,
+				m_poModel->m_ppMasses[0]->m_vecPos.X(),
+				m_poModel->m_ppMasses[0]->m_vecPos.Y(),
+				m_poModel->m_ppMasses[0]->m_vecPos.Z(),
+				0.0f, 1.0f, 0.0f);
+
+
+	glLineWidth(2.0f);
+
+												//////////////////////////////////////////////
+												//draw the model                            //
+												//////////////////////////////////////////////
+
+	glPushAttrib(GL_POLYGON_BIT);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glEnable( GL_BLEND );
+	glDisable( GL_DEPTH_TEST );
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+   glDisable( GL_TEXTURE_2D );
+   glShadeModel( GL_SMOOTH );
 	m_oLight->enable();
 	m_oLight->render();
-												//////////////////////////////////////////////
-												//I want to view the radar from slightly    //
-												//above                                     //
-												//////////////////////////////////////////////
-
-	gluLookAt(0.0f, 3.0f, 0.0f,
-				 0.0f, 0.0f, -5.0f,
-				 0.0f, 0.0f, 1.0f);
-
-	glLineWidth(2.0);
-	glTranslatef(0.0f, 0.0f, -5.0f);
-												//////////////////////////////////////////////
-												//Blending stuff                            //
-												//////////////////////////////////////////////
-
-   glEnable(GL_BLEND);
-//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBlendFunc(GL_SRC_ALPHA_SATURATE, GL_ONE);
-
-												//////////////////////////////////////////////
-												//Apply the material and move the object    //
-												//////////////////////////////////////////////
-
-
-	m_oInnerSphereTexture.render();
-												//////////////////////////////////////////////
-												//Draw the first sphere (Smallest one       //
-												//first for the depth testing)              //
-												//////////////////////////////////////////////
-
-	gluSphere(m_poQuadric, 5.0f, 64, 64);
-												
-												//////////////////////////////////////////////
-												//Alter the material for the next sphere    //
-												//////////////////////////////////////////////
-
-	m_oMidSphereTexture.render();
-	gluSphere(m_poQuadric, 6.0f, 64, 64);
-
-												//////////////////////////////////////////////
-												//And the last sphere                       //
-												//////////////////////////////////////////////
-
-	m_oOuterSphereTexture.render();
-	gluSphere(m_poQuadric, 7.0f, 64, 64);
-												//////////////////////////////////////////////
-												//Light off!                                //
-												//////////////////////////////////////////////
-
-	m_oLight->disable();
-												//////////////////////////////////////////////
-												//Blending off                              //
-												//////////////////////////////////////////////
-
-   glDisable(GL_BLEND);
+   m_poModel->draw( false );
 
 												//////////////////////////////////////////////
 												//draw the radar "blips"                    //
@@ -230,42 +165,81 @@ void CRadar::renderOffScreen(CVector3 vecShipPos)
 
 	for (i = 0 ; i < m_arrTarget.size() ; i++)
 	{
+												//////////////////////////////////////////////
+												//target distance from ship                 //
+												//////////////////////////////////////////////
+
 		vecDistance = m_arrTarget[i].vecPos - vecShipPos;
 		fDistance = vecDistance.length();
 		if (fDistance <= (float)m_uiRange)
 		{
-			vecDisplayDistance = vecDistance * (5.0f / (float)m_uiRange);
+												//////////////////////////////////////////////
+												//Scale to radar width and range            //
+												//////////////////////////////////////////////
+
+			vecDisplayDistance = vecDistance * (fSize / (float)m_uiRange);
+			
+												//////////////////////////////////////////////
+												//account for ship rotation                 //
+												//////////////////////////////////////////////
+
+			vecDisplayDistance = (mat * vecDisplayDistance) * -1.0f;
+
+												//////////////////////////////////////////////
+												//translate the vectors                     //
+												//////////////////////////////////////////////
+
+			vecDisplayDistance += m_poModel->m_ppMasses[0]->m_vecPos;
+
+												//////////////////////////////////////////////
+												//Colour depending if ship or asteroid      //
+												//////////////////////////////////////////////
+
 			if (m_arrTarget[i].iTargetType = TGT_ASTEROID)
 			{
-				oMaterial.m_oAmbient = CRGBAColour(0.5f,0.5f,0.5f,1.0f);
-				oMaterial.m_oDiffuse = CRGBAColour(0.5f,0.5f,0.5f,1.0f);
-				oMaterial.m_oEmissive = CRGBAColour(0.5f,0.5f,0.5f,1.0f);
-				oMaterial.render();	
+				oMaterial.m_oAmbient = CRGBAColour(0.5f,0.5f,0.5f,0.99f);
+				oMaterial.m_oDiffuse = CRGBAColour(0.5f,0.5f,0.5f,0.99f);
+				oMaterial.m_oEmissive = CRGBAColour(0.5f,0.5f,0.5f,0.99f);
+				oMaterial.render();
 			}
 			else
 			{
-				oMaterial.m_oAmbient = CRGBAColour(1.0f,0.2f,0.1f,1.0f);
-				oMaterial.m_oDiffuse = CRGBAColour(1.0f,0.2f,0.1f,1.0f);
-				oMaterial.m_oEmissive = CRGBAColour(1.0f,0.2f,0.1f,1.0f);
+				oMaterial.m_oAmbient = CRGBAColour(1.0f,0.2f,0.1f,0.99f);
+				oMaterial.m_oDiffuse = CRGBAColour(1.0f,0.2f,0.1f,0.99f);
+				oMaterial.m_oEmissive = CRGBAColour(1.0f,0.2f,0.1f,0.99f);
 				oMaterial.render();	
 			}
 
+												//////////////////////////////////////////////
+												//draw the blips                            //
+												//////////////////////////////////////////////
+
 			glBegin(GL_LINES);
+				glVertex3f(vecDisplayDistance.X() + 0.2f,
+							  vecDisplayDistance.Y(),
+							  vecDisplayDistance.Z());
 				glVertex3f(vecDisplayDistance.X(),
 							  vecDisplayDistance.Y(),
 							  vecDisplayDistance.Z());
-				glVertex3f(vecDisplayDistance.X() + 2.5f,//Silly big value, still no lines tho
+				glVertex3f(vecDisplayDistance.X(),
 							  vecDisplayDistance.Y(),
+							  vecDisplayDistance.Z());
+				glVertex3f(vecDisplayDistance.X(),
+							  m_poModel->m_ppMasses[0]->m_vecPos.Y(),
 							  vecDisplayDistance.Z());
 			glEnd();
 		}
 	}
-
+	m_oLight->disable();
+   glEnable( GL_TEXTURE_2D );
+	glDisable( GL_BLEND );
+	glEnable( GL_DEPTH_TEST );
+	glPopAttrib();
 												//////////////////////////////////////////////
 												//Copy to the texture                       //
 												//////////////////////////////////////////////
+   pTexture->postRenderToTexture(GL_RGB);
 
-	poTexture->postRenderToTexture(GL_RGBA);   
 }
 
 
@@ -279,6 +253,8 @@ void CRadar::renderOffScreen(CVector3 vecShipPos)
 void CRadar::render()
 {
 
+
+
 	CTexture *poTexture = g_oTextureManager.texture(m_uiOffScreenTexture);
 
 	CMaterial *poMaterial;
@@ -288,9 +264,9 @@ void CRadar::render()
 												//texture                                   //
 												//////////////////////////////////////////////
 
-	poMaterial->m_oAmbient = CRGBAColour(1.0f,1.0f,1.0f,0.9f);
-	poMaterial->m_oDiffuse = CRGBAColour(1.0f,1.0f,1.0f,0.9f);
-	poMaterial->m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f,0.9f);
+	poMaterial->m_oAmbient = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
+	poMaterial->m_oDiffuse = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
+	poMaterial->m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
 	poMaterial->m_uiTexture = m_uiOffScreenTexture;
 
 												//////////////////////////////////////////////
@@ -303,23 +279,23 @@ void CRadar::render()
 												//Blending stuff                            //
 												//////////////////////////////////////////////
 
-	glEnable(GL_BLEND);
-	glDisable(GL_DEPTH_TEST);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+	this->renderQuad();
 												//////////////////////////////////////////////
 												//Draw the quad (using the 2D parent        //
 												//function                                  //
 												//////////////////////////////////////////////
 
-	this->renderQuad();
 												//////////////////////////////////////////////
 												//Blending off                              //
 												//////////////////////////////////////////////
 
 	glDisable(GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
-
 }
 
 void CRadar::setTarget(int iTargetID)
@@ -335,4 +311,9 @@ void CRadar::setRange(unsigned int uiRange)
 void CRadar::clearTargetList()
 {
 	m_arrTarget.clear();
+}
+
+unsigned int CRadar::getRange()
+{
+	return m_uiRange;
 }

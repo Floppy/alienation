@@ -125,7 +125,10 @@ int main(int argc, char* argv[])
       
       if (oGame.DrawGLScene()) SDL_GL_SwapBuffers( );
       else bDone = true; // ESC or DrawGLScene Signalled A Quit
-
+		if (bNoJoystick)
+		{
+			oGame.stopShipMovement();
+		}
    }
    
    // Shutdown

@@ -34,6 +34,9 @@ void CTargetingComputer::init()
    m_poTargetingReticle->init2D(0.0f, 0.0f, 0.1f, 0.1f, "Hud/hud_reticle.png");
    m_poTargetingReticle->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
    
+   m_poFont = new CGLFont;
+   m_poFont->load();
+   
    // Create offscreen texture
    m_auiOffScreenTexture = g_oTextureManager.create(128,128);
 
@@ -113,9 +116,11 @@ void CTargetingComputer::render()
          m_poFont->print(strFont, CVector2(0.03f, 0.28f), 0.0075f, CVector3(0,1,0));
          // Velocity
          sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_fVel));
+         g_oTextureManager.render(m_auiOffScreenTexture);
+         //m_po2DObject->renderQuad(37.0f, 180.0f, 135.0f, 135.0f, avecTex);
          m_poFont->print("Velocity:", CVector2(0.03f, 0.32f), 0.0075f, CVector3(0,1,0));
          m_poFont->print(strFont, CVector2(0.03f, 0.35f), 0.0075f, CVector3(0,1,0));
-      }
+    }
 }
  
   void CTargetingComputer::renderOffScreen()

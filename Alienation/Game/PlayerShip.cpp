@@ -34,8 +34,8 @@ CPlayerShip::CPlayerShip(float mass) :
 
 	m_poRadar = new CRadar();
 	m_poRadar->init();
-	m_poRadar->init2D(0.4f, 0.7f, 0.2f, 0.2f, "");
-	m_poRadar->setRange(25000);
+	m_poRadar->init2D(0.4f, 0.7f, 0.18f, 0.22f, "");
+	m_poRadar->setRange(4000);
    m_matCamRotation.loadIdentity();
       
    // Load thruster sound
@@ -232,7 +232,7 @@ void CPlayerShip::renderOffScreen()
       m_oLight.enable();
       m_oLight.render();
       m_poTargetingComputer->renderOffScreen();
-      m_poRadar->renderOffScreen(this->m_ppMasses[0]->m_vecPos);
+      m_poRadar->renderOffScreen(this->m_ppMasses[0]->m_vecPos, this->m_matRotation );
       m_oLight.disable();
    }
 }
@@ -252,4 +252,15 @@ void CPlayerShip::addTarget(CGameObject *pTarget)
 void CPlayerShip::clearTargetList()
 {
    m_poRadar->clearTargetList();
+}
+
+void CPlayerShip::increaseRadarRange()
+{
+	m_poRadar->setRange(m_poRadar->getRange() + (unsigned int)50 );
+}
+
+void CPlayerShip::decreaseRadarRange()
+{
+	m_poRadar->setRange(m_poRadar->getRange() - (unsigned int)50 );
+
 }

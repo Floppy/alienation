@@ -22,37 +22,39 @@ using namespace NSD2D;
 class CPlayerShip : public CShip  
 {
 public:
+	void increaseRadarRange();
+	void decreaseRadarRange();
 	void clearTargetList();
 	void addTarget(CGameObject *pTarget);
-   	void drawHud();
+   void drawHud();
 	CPlayerShip(float mass);
 	virtual ~CPlayerShip();
 	void simulate(float fDT);
 	void drawCamera();
 	virtual void draw(bool bTestFrustum = true);
 	void rotateCam(float fDT);
-        void renderOffScreen();
+	void renderOffScreen();
 
-        /**
-         * Set target.
-         * Overridden to add setting of target for HUD.
-         */
-        void setTarget(CGameObject *pTarget);
+	/**
+	* Set target.
+	* Overridden to add setting of target for HUD.
+	*/
+	void setTarget(CGameObject *pTarget);
 
 	CRadar *m_poRadar;
 	bool  m_bInsideView;
 	bool  m_bLeftLook, m_bRightLook, m_bUpLook, m_bBackLook;
         int m_iThrustChannel;
 
-      /**
-       * Time at last frame
-       */
-      unsigned long m_iLastTime;
+	/**
+	 * Time at last frame
+	 */
+	unsigned long m_iLastTime;
       
-      /**
-       * Light for radar display
-       */
-      CLight m_oLight;
+	/**
+	 * Light for radar display
+	 */
+	CLight m_oLight;
 
 };
 
