@@ -28,7 +28,7 @@ CTextureManager::~CTextureManager()
    }
 }
 
-unsigned int CTextureManager::load(const char* strFilename)
+unsigned int CTextureManager::load(const char* strFilename, bool bMipmap)
 {   
    // Test if texture has already been loaded
    string str(strFilename);
@@ -38,7 +38,7 @@ unsigned int CTextureManager::load(const char* strFilename)
    // Create new texture
    CTexture* pTexture = new CTexture;
    // Load
-   if (pTexture->load(strFilename)) 
+   if (pTexture->load(strFilename,bMipmap)) 
    {
       unsigned int uiTexture = m_hTextures.size();
       // Add to hashes

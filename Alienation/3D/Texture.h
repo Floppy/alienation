@@ -28,9 +28,10 @@ class CTexture
    /**
     * Load texture from file.
     * @param strFilename The filename to load. This is relative to the texture root directory, set in the texture manager.
+    * @param bMipmap Generate mipmaps for the texture.
     * @return true if the file was loaded successfully.
     */
-   bool load(const char *strFilename);
+   bool load(const char *strFilename, bool bMipmap = true);
 
    /**
     * Create a blank texture.

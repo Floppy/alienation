@@ -47,9 +47,10 @@ class CTextureManager
     * The loaded texture will have a reference count of 1. 
     * You don't need to add a reference until you use the texture ID for more than one object.
     * @param strFilename The texture filename to load.
+    * @param bMipmap Generate mipmaps for the texture.
     * @return The texture ID that can be used to access the loaded texture.
     */
-   unsigned int load(const char* strFilename);
+   unsigned int load(const char* strFilename, bool bMipmap = true);
 
    /**
     * Create a new texture in memory

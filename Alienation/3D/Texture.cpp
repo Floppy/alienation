@@ -24,8 +24,10 @@ CTexture::~CTexture()
    if (m_uiTextureID) glDeleteTextures(1, &m_uiTextureID);
 }
 
-bool CTexture::load(const char* strFilename)
+bool CTexture::load(const char* strFilename, bool bMipmap)
 {
+   m_bMipmap = bMipmap;
+
    // Free any existing SDL surface
    if (m_pTexture) 
    {
