@@ -28,11 +28,11 @@ public:
 	void resetParticle(int i);										// Resets specific particle (with index i)
 	void update(float fDT, CVector3 vecPos, CVector3 vecHead, CVector3 vecStart, bool bKeyDown);
 	void update(float fDT);                        // Updates particle system
-	void render(void);                                    // Render particles to the screen
+	void render(void) const;                                    // Render particles to the screen
 	void createParticle(int i, CVector3 vecHead, CVector3 vecPos);
 private:
 	unsigned int m_uiTexture;
-        CSprite m_oSprite;
+        mutable CSprite m_oSprite;
 };
 
 #endif // !defined(AFX_BRAKE_H__56947D38_1F83_4127_AD3D_D52EA855FBEB__INCLUDED_)

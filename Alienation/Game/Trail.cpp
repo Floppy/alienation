@@ -43,7 +43,13 @@ void CTrail::update(float fDT, float fThrust, CVector3 vecPos, CVector3 vecStart
 	CVector3 vecSpeed, vecTemp;
 
 	m_vecOrigin = vecStart;
-	m_fThrust = fThrust;
+
+        // Calculate engine flare size
+        float fSize = fThrust * 0.0005f;
+        if (fSize > 3.0f) fSize = 3.0f;
+        // Set flare details
+        m_oFlare.setSize(fSize);
+        m_oFlare.setTranslation(m_vecOrigin);
 
 	//Create a heading for any new particles created this update
 	//The start vector is the position of the of the origin of the 
@@ -96,22 +102,14 @@ void CTrail::update(float fDT, float fThrust, CVector3 vecPos, CVector3 vecStart
 	}
 }
 
-void CTrail::render(void) {
+void CTrail::render(void) const {
    // Enable alpha blend
    glEnable(GL_BLEND);
    glDepthMask(GL_FALSE);
    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-   // Calculate engine flare size
-   float fSize = m_fThrust * 0.0005f;
-   if (fSize > 3.0f) fSize = 3.0f;
-   //m_oTrail.setSize(fSize);
-
    // Draw engine flare
    if (m_oFrustum.PointInFrustum(m_vecOrigin)) {
-      m_oFlare.setSize(fSize);
-      // Set location
-      m_oFlare.setTranslation(m_vecOrigin);
       // Draw exhaust flare
       m_oFlare.render();
    }

@@ -112,7 +112,7 @@ void CBrake::createParticle(int i, CVector3 vecHead, CVector3 vecOrigin)
 }
 
 
-void CBrake::render()
+void CBrake::render() const
 {
 	//Texture and blending stuff
 	glEnable(GL_BLEND);

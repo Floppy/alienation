@@ -9,16 +9,16 @@
 
 // Empty constructor
 CParticleEngine::CParticleEngine(void) :
-   m_iNumParticles(0),
    m_iParticlesCreated(0),
+   m_iNumParticles(0),
    m_poParticles(NULL)
 {
 }
 
 // Constructor
 CParticleEngine::CParticleEngine(int iNumParticles, CVector3 vecOrigin) :
-   m_iNumParticles(0),
    m_iParticlesCreated(0),
+   m_iNumParticles(0),
    m_poParticles(NULL)
 {
    setup(iNumParticles,vecOrigin);

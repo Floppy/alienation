@@ -1,3 +1,4 @@
+
 // Weapon.cpp: implementation of the CWeapon class.
 //
 //////////////////////////////////////////////////////////////////////
@@ -167,7 +168,7 @@ void CWeapon::createParticle(int i, CVector3 vecHead, CVector3 vecPos, float fSp
 
 }
 
-void CWeapon::render(void)
+void CWeapon::render(void) const
 {
 	//Texture and blending stuff
 	glEnable(GL_BLEND);

@@ -27,7 +27,7 @@ public:
 	void resetParticle(int i);              // Resets specific particle (with index i)
 	void update(float fDT);           // Updates particle system
 	void update(float fDT, CVector3 vecHeading, CVector3 vecPos, float fSpeed, bool bFireHeld);           // Updates particle system
-	void render(void);                      // Render particles to the screen
+	void render(void) const;                      // Render particles to the screen
 	void createParticle(int i, CVector3 vecHead, CVector3 vecPos, float fSpeed);
 	void init();
         unsigned int m_uiTexture;
@@ -38,8 +38,8 @@ public:
 	float m_fTimeSinceLast;
 	bool m_abEmpty[100];
 private:
-        CSprite m_oSprite;
-   CFrustum m_oFrustum;
+        mutable CSprite m_oSprite;
+   mutable CFrustum m_oFrustum;
    unsigned int m_uiSoundEffect;
 
 };
