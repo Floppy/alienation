@@ -13,7 +13,7 @@
 #include "config.h"
 
 #include "Math/Vector.h"
-#include "Physics1.h"
+#include "Physics/Physics1.h"
 
 //Should actually be called tParticle and be a struct rather than a class.
 //Will do this soon. Handles all particle data. Used by the abstract

@@ -14,7 +14,7 @@
 
 #include "config.h"
 
-#include "Physics1.h"
+#include "Physics/Physics1.h"
 #include "Particle.h"
 #include "Math/Vector.h"
 

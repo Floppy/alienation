@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Weapon.h"
-#include "Physics1.h"
+#include "Physics/Physics1.h"
 
 #include <GL/gl.h>
 
