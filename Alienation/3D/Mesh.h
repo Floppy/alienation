@@ -101,12 +101,6 @@ class CMesh : public C3DObject {
    int  m_iNumTexVertex;
 
    /** 
-    * Indices?
-    * @bug Not sure what this is...
-    */
-   unsigned int *m_pIndices;
-
-   /** 
     * Vertex array
     */
    CVector3 *m_pVerts;

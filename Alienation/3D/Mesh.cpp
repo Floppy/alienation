@@ -8,7 +8,6 @@ CMesh::CMesh() :
    m_iNumVertices(0),
    m_iNumFaces(0),
    m_iNumTexVertex(0),
-   m_pIndices(NULL),
    m_pVerts(NULL),
    m_pNormals(NULL),
    m_pTexVerts(NULL),
@@ -22,7 +21,6 @@ CMesh::~CMesh() {
    delete [] m_pNormals;
    delete [] m_pVerts;
    delete [] m_pTexVerts;
-   delete [] m_pIndices;
 }
 
 void CMesh::init() {
