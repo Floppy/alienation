@@ -4,7 +4,6 @@
 
 #include "3D/Frustum.h"
 #include "Math/Matrix.h"
-#include <GL/gl.h>
 
 float CFrustum::m_Frustum[6][4];
 

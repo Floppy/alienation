@@ -4,7 +4,7 @@
 
 #include "3D/Texture.h"
 #include <SDL_image.h>
-#include <GL/gl.h>
+#include <SDL_opengl.h>
 
 #include <iostream>
 using namespace std;

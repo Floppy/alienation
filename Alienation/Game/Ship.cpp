@@ -4,7 +4,6 @@
 
 #include "Game/Ship.h"
 #include "IO/3ds.h"
-#include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

@@ -6,10 +6,12 @@
 #endif // _MSC_VER > 1000
 
 #include "config.h"
+
+#include <SDL_opengl.h>
+
 #include "3D/3DObject.h"
 #include "3D/Material.h"
 #include "Math/Vector.h"
-#include <GL/gl.h>
 
 using namespace NSDMath;
 

@@ -9,11 +9,12 @@
  * GROUP....: Jogos Brasil
  ********************************************************************/
 
+#include <SDL_opengl.h>
+
 #include "GL/OpenGL.h"
 #include "IO/3ds.h"
 #include "Math/Random.h"
 #include "3D/TextureManager.h"
-#include <GL/glu.h>
 
 // We define the joystick axes here, because they
 // seem to be different in windows and linux

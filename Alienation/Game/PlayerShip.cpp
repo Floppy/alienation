@@ -8,7 +8,7 @@
 
 using namespace NSDSound;
 
-#include <GL/gl.h>
+#include <SDL_opengl.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

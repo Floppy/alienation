@@ -6,7 +6,7 @@
 #include "3D/TextureManager.h"
 #include "Math/Random.h"
 #include <stdlib.h>
-#include <GL/gl.h>
+#include <SDL_opengl.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

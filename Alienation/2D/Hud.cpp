@@ -3,9 +3,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Hud.h"
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include <SDL.h>
+#include <SDL_opengl.h>
 #include "3D/TextureManager.h"
 
 #include <iostream>

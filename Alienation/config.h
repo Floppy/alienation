@@ -4,7 +4,6 @@
 #define CONFIG_H
 
 #ifdef WIN32
-  #include <windows.h>
   #pragma warning( disable : 4786 ) // Disable stupid debugger warning
 #endif
 

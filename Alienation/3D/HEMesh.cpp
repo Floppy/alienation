@@ -1,5 +1,4 @@
 #include "3D/HEMesh.h"
-#include <GL/gl.h>
 #include <iostream>
 
 using namespace std;

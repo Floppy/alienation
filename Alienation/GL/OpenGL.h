@@ -11,10 +11,9 @@
 #ifndef OPENGL_H
 #define OPENGL_H
 
-#define WIN32_LEAN_AND_MEAN
 #include "config.h"
 
-#include <GL/gl.h>
+#include <SDL.h>
 
 #include <stdio.h>
 #include "Game/Stars.h"
@@ -26,7 +25,6 @@
 #include "3D/Frustum.h"
 #include "3D/Model.h"
 #include "3D/Sprite.h"
-#include <SDL.h>
 
 class CKeys {											// Structure For Keyboard Stuff
 public:

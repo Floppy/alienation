@@ -2,6 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 #include "2DObject.h"
+#include <SDL_opengl.h>
 
 int C2DObject::m_iWidth;
 int C2DObject::m_iHeight;

@@ -6,7 +6,7 @@
 #include "Physics/Physics1.h"
 #include "3D/TextureManager.h"
 #include "Sound/SoundManager.h"
-#include <GL/gl.h>
+#include <SDL_opengl.h>
 
 using namespace NSDSound;
 

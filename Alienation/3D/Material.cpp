@@ -1,6 +1,6 @@
 #include "3D/Material.h"
 #include "3D/TextureManager.h"
-#include <GL/gl.h>
+#include <SDL_opengl.h>
 
 #include <iostream>
 using namespace std;

@@ -1,5 +1,5 @@
 #include "3D/Model.h"
-#include <GL/gl.h>
+#include <SDL_opengl.h>
 #include <iostream>
 
 using namespace std;

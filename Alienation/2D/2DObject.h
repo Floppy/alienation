@@ -9,7 +9,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 #include "config.h"
-#include <GL/gl.h>
 #include "Math/Vector.h"
 
 using namespace NSDMath;
