@@ -11,7 +11,7 @@
 
 #include "3D/Light.h"
 #include "Equipment/Equipment.h"
-#include "Math/vector.h"
+#include "Math/Vector.h"
 #include "3D/Texture.h"
 #include "3D/Model.h"
 #include <GL/glu.h>
