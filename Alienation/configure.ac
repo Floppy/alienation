@@ -18,4 +18,4 @@ AC_CHECK_LIB(SDL,SDL_Init,,exit)
 
 AC_CHECK_LIB(SDL_image,IMG_Load,,exit)
 
-AC_OUTPUT(Makefile Math/Makefile IO/Makefile 3D/Makefile Physics/Makefile GL/Makefile)
+AC_OUTPUT(Makefile Math/Makefile IO/Makefile 3D/Makefile Physics/Makefile GL/Makefile AI/Makefile)

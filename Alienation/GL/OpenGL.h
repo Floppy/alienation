@@ -19,10 +19,10 @@
 #include <stdio.h>
 #include "Stars.h"
 #include "Ship.h"
-#include "GLFont.h"
+#include "GL/GLFont.h"
 #include "Skybox.h"
 #include "PlayerShip.h"
-#include "AIShip.h"
+#include "AI/AIShip.h"
 #include "3D/Light.h"
 #include <SDL.h>
 
