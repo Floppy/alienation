@@ -26,8 +26,8 @@ public:
 	virtual ~CPlayerShip();
 	void loadShip();
 	virtual void simulate(float fDT);
+	void drawCamera();
 	void draw();
-        void drawBlended();
 	void rotateCam(float fDT);
 
         /**

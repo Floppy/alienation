@@ -89,75 +89,77 @@ void CPlayerShip::simulate(float fDT)
 }
 
 //Needs to be over-ridden in this case. The use of external views means a lot more code
-void CPlayerShip::draw()
+void CPlayerShip::drawCamera()
 {
 
-	CVector3 vecTemp;
-
-	CMatrix matM(m_poShips[0].m_matRotation);
-	matM.invert();
-	CMatrix matC(m_poShips[0].m_matCamRotation);
-	matC.invert();
-
-	if (m_bInsideView)
-	{
-		vecTemp = m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos;
-		glLoadMatrixf(matM.glElements());
-		if (m_bLeftLook)
-		{
-			glRotatef(-90.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
-		}
-		else if (m_bRightLook)
-                {
-                   glRotatef(90.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
-                }
-                else if (m_bBackLook)
-                {
-                   glRotatef(180.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
-                }
-		else if (m_bUpLook)
-                {
-                   vecTemp = m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos;
-                   glRotatef(-90.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
-                }
-		glTranslatef(-m_ppMasses[0]->m_vecPos.X(), -m_ppMasses[0]->m_vecPos.Y(), -m_ppMasses[0]->m_vecPos.Z()); 
-		glPushMatrix();
-		glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
-		glMultMatrixf(m_poShips[0].m_matRotation.glElements());
-
-                glDisable(GL_LIGHT0);
-                m_oLight.enable();
-                m_oCockpitModel.render(); //draw the cockpit
-                m_oLight.disable();
-                glEnable(GL_LIGHT0);
-		glPopMatrix();
-	}
-
-	
-	if (!m_bInsideView)
-	{
-		glLoadMatrixf(matC.glElements());
-		glTranslatef(-m_poShips[0].m_vecCamView.X(), -m_poShips[0].m_vecCamView.Y(), -m_poShips[0].m_vecCamView.Z());
-		glPushMatrix();
-		glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
-		glMultMatrixf(m_poShips[0].m_matRotation.glElements());
-		m_poShips[0].m_oModel.render(); //draw the ship
-		glPopMatrix();
-	}
-        
-        // Set sound playback location
-        g_oSoundManager.setPlaybackLocation(m_ppMasses[0]->m_vecPos, 
-                                            m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos, 
-                                            m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos);
+   CVector3 vecTemp;
+   
+   
+   if (m_bInsideView)
+   {
+      CMatrix matM(m_poShips[0].m_matRotation);
+      matM.invert();
+      vecTemp = m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos;
+      glLoadMatrixf(matM.glElements());
+      if (m_bLeftLook)
+      {
+         glRotatef(-90.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
+      }
+      else if (m_bRightLook)
+      {
+         glRotatef(90.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
+      }
+      else if (m_bBackLook)
+      {
+         glRotatef(180.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
+      }
+      else if (m_bUpLook)
+      {
+         vecTemp = m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos;
+         glRotatef(-90.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
+      }
+      glTranslatef(-m_ppMasses[0]->m_vecPos.X(), -m_ppMasses[0]->m_vecPos.Y(), -m_ppMasses[0]->m_vecPos.Z()); 
+   }
+   else 
+   {
+      CMatrix matC(m_poShips[0].m_matCamRotation);
+      matC.invert();
+      glLoadMatrixf(matC.glElements());
+      glTranslatef(-m_poShips[0].m_vecCamView.X(), -m_poShips[0].m_vecCamView.Y(), -m_poShips[0].m_vecCamView.Z());
+   }
         
 }
 
-void CPlayerShip::drawBlended() {
+//Needs to be over-ridden in this case. The use of external views means a lot more code
+void CPlayerShip::draw()
+{
 
+   glPushMatrix();
+   glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
+   glMultMatrixf(m_poShips[0].m_matRotation.glElements());
+   
+   //draw the cockpit
+   if (m_bInsideView)
+   {
+      glDisable(GL_LIGHT0);
+      m_oLight.enable();
+      m_oLight.render();
+      m_oCockpitModel.render(); 
+      m_oLight.disable();
+      glEnable(GL_LIGHT0);
+   }
+   //draw the ship
+   else
+      m_poShips[0].m_oModel.render(); 
+   
+   glPopMatrix();
+   
+   // Set sound playback location
+   g_oSoundManager.setPlaybackLocation(m_ppMasses[0]->m_vecPos, 
+                                       m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos, 
+                                       m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos);
    // Set volume
    g_oSoundManager.setVolume(m_poShips[0].m_fThrust/10000.0f,m_iThrustChannel);
-   // Draw
-   CShip::drawBlended();
    
 }
 

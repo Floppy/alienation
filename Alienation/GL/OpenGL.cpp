@@ -148,6 +148,8 @@ bool COpenGL::DrawGLScene(GLvoid) {
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();					
 
+   m_poShip->drawCamera();
+   m_poLight->render();
    m_poShip->draw();
    m_oFrustum.CalculateFrustum();
    m_poAIShip->draw();
