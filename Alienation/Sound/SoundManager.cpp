@@ -5,7 +5,10 @@ CSoundManager g_oSoundManager;
 
 CSoundManager::CSoundManager() :
    m_bReady(false),
-   m_pMusic(NULL)
+   m_pMusic(NULL),
+   m_vecPosition(0,0,0),
+   m_vecHeading(0,0,1),
+   m_vecUp(0,1,0)
 {
    if (!Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,1024)) {
       m_bReady = true;
@@ -102,3 +105,20 @@ void CSoundManager::stop(int iChannel, int iFadeOut)
    }
 }
 
+void CSoundManager::setPlaybackLocation(CVector3 vecPosition, CVector3 vecHeading, CVector3 vecUp)
+{
+   // Store arguments
+   m_vecPosition = vecPosition;
+   m_vecHeading = vecHeading;
+   m_vecUp = vecUp;
+}
+
+bool CSoundManager::setChannelLocation(int iChannel, CVector3 vecPosition) 
+{
+   // Calculate angle
+   int iAngle = 0;
+   // Calculate distance
+   unsigned char cDistance = static_cast<unsigned char>((m_vecPosition - vecPosition).length());
+   // Set channel position
+   return Mix_SetPosition(iChannel,iAngle,cDistance);
+}

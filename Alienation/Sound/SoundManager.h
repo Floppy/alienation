@@ -2,6 +2,7 @@
 #define SOUNDMANAGER_H
 
 #include <SDL/SDL_mixer.h>
+#include "Math/Vector.h"
 #include <vector>
 
 using namespace std;
@@ -77,6 +78,23 @@ class CSoundManager {
     */
    void stop(int iChannel, int iFadeOut = 0);
 
+   /**
+    * Set playback location.
+    * @param vecPosition The position of the final sound output.
+    * @param vecHeading The forward vector at the sound output location.
+    * @param vecUp The up vector at the sound output location.
+    */
+   void setPlaybackLocation(CVector3 vecPosition, CVector3 vecHeading, CVector3 vecUp);
+
+   /**
+    * Set 3D location for a particular channel.
+    * @param iChannel The channel ID to spatialise, obtained from play().
+    * @param vecPosition The 3D position that the channel should come from.
+    * @return false if an error occurred.
+    * @bug Does not perform angle calculations yet, as I haven't bothered to work the maths out.
+    */
+   bool setChannelLocation(int iChannel, CVector3 vecPosition);
+
  protected:
    
    /**
@@ -93,6 +111,21 @@ class CSoundManager {
     * Background music
     */
    Mix_Music* m_pMusic;
+
+   /**
+    * Playback location
+    */
+   CVector3 m_vecPosition;
+
+   /**
+    * Playback location - heading vector.
+    */
+   CVector3 m_vecHeading;
+
+   /**
+    * Playback location - up vector.
+    */
+   CVector3 m_vecUp;
 
 };
 
