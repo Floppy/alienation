@@ -15,29 +15,29 @@ CAIShip::CAIShip(int num, float mass) :
    m_fYAngle(0.0f)
 {
    m_ppMasses[0]->m_vecPos = CVector3(0.0f, -5.0f, -20.0f);
-   m_poShips[0].m_bStraffUp = m_poShips[0].m_bStraffDown = m_poShips[0].m_bStraffLeft = m_poShips[0].m_bStraffRight = false;
-   m_poShips[0].m_vecHeading = CVector3(0.0f, -5.0f, -21.0f);
-   m_poShips[0].m_vecUp = CVector3(0.0f, -4.0f, -20.0f);
-   m_poShips[0].m_vecRight = CVector3(1.0f, -5.0f, -20.0f);
-   m_poShips[0].m_vecDirection = m_poShips[0].m_vecHeading;
-   m_poShips[0].m_bWeaponFire = false;
-   m_poShips[0].m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
-   m_poShips[0].m_oSphere.m_fRadius = 13.0f;
+   m_bStraffUp = m_bStraffDown = m_bStraffLeft = m_bStraffRight = false;
+   m_vecHeading = CVector3(0.0f, -5.0f, -21.0f);
+   m_vecUp = CVector3(0.0f, -4.0f, -20.0f);
+   m_vecRight = CVector3(1.0f, -5.0f, -20.0f);
+   m_vecDirection = m_vecHeading;
+   m_bWeaponFire = false;
+   m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
+   m_oSphere.m_fRadius = 13.0f;
    
-   m_poShips[0].m_fMaxPitchRate = 80.0f;
-   m_poShips[0].m_fMaxYawRate = 50.0f;
-   m_poShips[0].m_fMaxRollRate = 90.0f;	
+   m_fMaxPitchRate = 80.0f;
+   m_fMaxYawRate = 50.0f;
+   m_fMaxRollRate = 90.0f;	
 
 
-   m_poShips[0].m_matCamRotation.loadIdentity();
+   m_matCamRotation.loadIdentity();
    m_vecTargetPos = CVector3(0.0f, 0.0f, 0.0f);
    
    // Setup trails
-   m_poShips[0].m_iNumTrails = 1;
-   m_poShips[0].m_avecOrigTrailPoints[0] = CVector3(0.0f, 0.0f, 5.0f);
-   m_poShips[0].m_poTrails = new CTrail[m_poShips[0].m_iNumTrails];
-   for (int i=0; i<m_poShips[0].m_iNumTrails; i++)
-	  m_poShips[0].m_poTrails[0].setup(500, m_poShips[0].m_avecTrailPoints[i]);
+   m_iNumTrails = 1;
+   m_avecOrigTrailPoints[0] = CVector3(0.0f, 0.0f, 5.0f);
+   m_poTrails = new CTrail[m_iNumTrails];
+   for (int i=0; i<m_iNumTrails; i++)
+	  m_poTrails[0].setup(500, m_avecTrailPoints[i]);
 }
 
 CAIShip::~CAIShip()
@@ -45,21 +45,21 @@ CAIShip::~CAIShip()
 
 }
 
-void CAIShip::loadShip()
+void CAIShip::load()
 {
    CLoad3DS oLoad3ds;
-   if (oLoad3ds.import3DS(&(m_poShips[0].m_oModel), "Data/Model/fighter.3ds")) {
-      m_poShips[0].m_oModel.init();
+   if (oLoad3ds.import3DS(&(m_oModel), "Data/Model/fighter.3ds")) {
+      m_oModel.init();
    }
 
-   CShip::loadShip();
+   CShip::load();
 }
 
 void CAIShip::simulate(float fDT)
 {
-	CVector3 vecTHead = m_poShips[0].m_vecHeading - m_ppMasses[0]->m_vecPos;
-	CVector3 vecTRight = m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos;
-	CVector3 vecTUp = m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos;
+	CVector3 vecTHead = m_vecHeading - m_ppMasses[0]->m_vecPos;
+	CVector3 vecTRight = m_vecRight - m_ppMasses[0]->m_vecPos;
+	CVector3 vecTUp = m_vecUp - m_ppMasses[0]->m_vecPos;
 
 	//Get normalised vector pointing to target
 
@@ -77,18 +77,18 @@ void CAIShip::simulate(float fDT)
 	float fAPitch = vecTHead.dot(vecTemp);
 
 	//Calculate the final pitchrate
-	m_poShips[0].m_fPitchRate = RAD_TO_DEG(acos(fAPitch));
+	m_fPitchRate = RAD_TO_DEG(acos(fAPitch));
 
 	//Limit the pitchrate to max values
-	if (m_poShips[0].m_fPitchRate > m_poShips[0].m_fMaxPitchRate)
-		m_poShips[0].m_fPitchRate = m_poShips[0].m_fMaxPitchRate;
-	fThrust = m_poShips[0].m_fPitchRate;
-	if (m_poShips[0].m_fPitchRate < 3.0f)
-		m_poShips[0].m_fPitchRate = 0.0f;
+	if (m_fPitchRate > m_fMaxPitchRate)
+		m_fPitchRate = m_fMaxPitchRate;
+	fThrust = m_fPitchRate;
+	if (m_fPitchRate < 3.0f)
+		m_fPitchRate = 0.0f;
 	//Is it a positive or negative angle? 
 	float fPAngle = vecTUp.dot(vecTemp);
 	if (fPAngle >= 0.0f)
-		m_poShips[0].m_fPitchRate = -m_poShips[0].m_fPitchRate;
+		m_fPitchRate = -m_fPitchRate;
 
 	//same now for yaw angle
 	vecTemp = vecTarget;
@@ -98,22 +98,22 @@ void CAIShip::simulate(float fDT)
 	float fAYaw = vecTHead.dot(vecTemp);
 
 
-	m_poShips[0].m_fYawRate = RAD_TO_DEG(acos(fAYaw));
-	fThrust += m_poShips[0].m_fYawRate;
-	if (m_poShips[0].m_fYawRate > m_poShips[0].m_fMaxYawRate)
-		m_poShips[0].m_fYawRate = m_poShips[0].m_fMaxYawRate;
-	if (m_poShips[0].m_fYawRate < 3.0f)
-		m_poShips[0].m_fYawRate = 0.0f;
+	m_fYawRate = RAD_TO_DEG(acos(fAYaw));
+	fThrust += m_fYawRate;
+	if (m_fYawRate > m_fMaxYawRate)
+		m_fYawRate = m_fMaxYawRate;
+	if (m_fYawRate < 3.0f)
+		m_fYawRate = 0.0f;
 
 	float fYAngle = vecTRight.dot(vecTemp);
 	if (fYAngle <= 0.0f)
-		m_poShips[0].m_fYawRate = -m_poShips[0].m_fYawRate;
+		m_fYawRate = -m_fYawRate;
 
-	m_poShips[0].m_fThrust = (360.00 - fThrust) * 28.0f;
+	m_fThrust = (360.00 - fThrust) * 28.0f;
 	if (fThrust < 7.0f)
-		m_poShips[0].m_bWeaponFire = true;
+		m_bWeaponFire = true;
 	else
-		m_poShips[0].m_bWeaponFire = false;
+		m_bWeaponFire = false;
 
 
 	CShip::simulate(fDT);
@@ -125,11 +125,11 @@ void CAIShip::solve()
 	CVector3 vecForce, vecDragForce;
 
 	//Normal flight, forces are thrust, drag and braking (if applied)
-	vecForce = (m_poShips[0].m_vecHeading - m_ppMasses[0]->m_vecPos) * m_poShips[0].m_fThrust;
-	vecDragForce = (m_poShips[0].m_vecDirection * -1 ) * (m_poShips[0].m_fDrag * m_poShips[0].m_fVel);
-	m_poShips[0].m_vecForce = vecForce + vecDragForce;
+	vecForce = (m_vecHeading - m_ppMasses[0]->m_vecPos) * m_fThrust;
+	vecDragForce = (m_vecDirection * -1 ) * (m_fDrag * m_fVel);
+	m_vecForce = vecForce + vecDragForce;
 
 	//apply the force to the ship
-	m_ppMasses[0]->applyForce(m_poShips[0].m_vecForce);
+	m_ppMasses[0]->applyForce(m_vecForce);
 }
 
