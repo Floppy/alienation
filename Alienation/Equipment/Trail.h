@@ -35,6 +35,16 @@ public:
 	void render(void) const;                                    // Render particles to the screen
 	void createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vecOrigin, CVector3 vecUp, CVector3 vecRight,
 					CVector3 vecPos, float fWidth, float fHeight);
+        /**
+         * Initialise engine flare sprite.
+         */ 
+        void setFlare(const char* strTexture, CRGBAColour oCol, float fSize);
+
+        /**
+         * Initialise trail sprite.
+         */
+        void setTrail(const char* strTexture, CRGBAColour oCol, float fSize);
+
 private:
 
 	void update(float fDT) {}                        // Updates particle system
@@ -58,6 +68,11 @@ private:
          * Texture IDs
          */
 	unsigned int m_auiTextures[2];
+
+        /** 
+         * Maximum flare size.
+         */
+        float m_fMaxFlareSize;
 
 };
 

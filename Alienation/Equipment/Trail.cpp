@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "Game/Trail.h"
+#include "Equipment/Trail.h"
 #include "3D/TextureManager.h"
 #include "Math/Random.h"
 #include <stdlib.h>
@@ -13,13 +13,15 @@
 //////////////////////////////////////////////////////////////////////
 
 CTrail::CTrail() :
-   CParticleEngine()
+   CParticleEngine(),
+   m_fMaxFlareSize(0)
 {
    randomSeed( (unsigned)time( NULL ) );
 }
 
 CTrail::CTrail(int iNumParticles, CVector3 vecOrigin) :
-   CParticleEngine(iNumParticles,vecOrigin)
+   CParticleEngine(iNumParticles,vecOrigin),
+   m_fMaxFlareSize(0)
 {
    randomSeed( (unsigned)time( NULL ) );
 }
@@ -46,7 +48,7 @@ void CTrail::update(float fDT, float fThrust, CVector3 vecPos, CVector3 vecStart
 
         // Calculate engine flare size
         float fSize = fThrust * 0.0005f;
-        if (fSize > 3.0f) fSize = 3.0f;
+        if (fSize > m_fMaxFlareSize) fSize = m_fMaxFlareSize;
         // Set flare details
         m_oFlare.setSize(fSize);
         m_oFlare.setTranslation(m_vecOrigin);
@@ -106,17 +108,17 @@ void CTrail::render(void) const {
    // Enable alpha blend
    glEnable(GL_BLEND);
    glDepthMask(GL_FALSE);
-   glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
    // Draw engine flare
+   glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
    if (m_oFrustum.PointInFrustum(m_vecOrigin)) {
       // Draw exhaust flare
       m_oFlare.render();
    }
 
-   glBlendFunc(GL_SRC_ALPHA,GL_ONE);
 
    // Draw trail
+   glBlendFunc(GL_SRC_ALPHA,GL_ONE);
    for (int iCount = 0 ; iCount < m_iParticlesCreated ; iCount++)
    {
       if (m_oFrustum.PointInFrustum(m_poParticles[iCount].m_vecPosition)) {
@@ -205,23 +207,35 @@ void CTrail::createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vec
 
 }
 
-void CTrail::init()
+void CTrail::setTrail(const char* strTexture, CRGBAColour oCol, float fSize)
 {
-   // Create trail particle geometry
+   // Store size
+   
+   // Create material 
    CMaterial oTrailMaterial;
-   oTrailMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,0.25f,0.75f);
-   oTrailMaterial.m_oDiffuse = CRGBAColour(1.0f,1.0f,0.25f,0.75f);
-   oTrailMaterial.m_oAmbient = CRGBAColour(1.0f,1.0f,0.25f,0.75f);
-   oTrailMaterial.m_uiTexture = g_oTextureManager.load("star.png");   
+   oTrailMaterial.m_oEmissive = oCol;
+   oTrailMaterial.m_oDiffuse = oCol;
+   oTrailMaterial.m_oAmbient = oCol;
+   oTrailMaterial.m_uiTexture = g_oTextureManager.load(strTexture);   
+
+   // Create trail geometry
    m_oTrail = CSprite(oTrailMaterial);
    m_oTrail.init();
+}
 
-   // Create engine flare
+void CTrail::setFlare(const char* strTexture, CRGBAColour oCol, float fSize) 
+{
+   // Store size
+   m_fMaxFlareSize = fSize;
+   
+   // Create material
    CMaterial oFlareMaterial;
-   oFlareMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
-   oFlareMaterial.m_oAmbient = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
-   oFlareMaterial.m_oDiffuse = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
-   oFlareMaterial.m_uiTexture = g_oTextureManager.load("flare.png");
+   oFlareMaterial.m_oEmissive = oCol;
+   oFlareMaterial.m_oAmbient = oCol;
+   oFlareMaterial.m_oDiffuse = oCol;
+   oFlareMaterial.m_uiTexture = g_oTextureManager.load(strTexture);
+   
+   // Create flare
    m_oFlare = CSprite(oFlareMaterial);
    m_oFlare.init();
 }
