@@ -26,10 +26,9 @@ public:
 	CVector3 m_vecOldPos;
 	CVector3 m_vecForce;								// Force applied on this mass at an instance
 
-	CMass(float fMass)								// Constructor
-	{
-		this->m_fMass = fMass;
-	}
+	CMass(float fMass) :     // Constructor
+	   m_fMass(fMass)
+	{}
 
 	/*
 	  void applyForce(Vector3D force) method is used to add external force to the mass. 
@@ -78,7 +77,10 @@ public:
 	CQuat m_quaOrientation;
 	float m_fDelta_x, m_fDelta_y, m_fDelta_z;
 	
-	CSimulation(int iNumOfMasses, float fMass)			// Constructor creates some masses with mass values m
+	CSimulation(int iNumOfMasses, float fMass) :      // Constructor creates some masses with mass values m
+		m_fDelta_x(0.0f),
+		m_fDelta_y(0.0f),
+		m_fDelta_z(0.0f)
 	{
 		this->m_iNumOfMasses = iNumOfMasses;
 		

@@ -8,7 +8,10 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CAIShip::CAIShip(int num, float mass)  : CShip(1, 5000.0f)
+CAIShip::CAIShip(int num, float mass) : 
+	CShip(1, 5000.0f),
+	m_fXAngle(0.0f),
+	m_fYAngle(0.0f)
 {
 	m_poShips = new CShipData[1];
 	m_ppMasses[0]->m_vecPos = CVector3(0.0f, -5.0f, -20.0f);

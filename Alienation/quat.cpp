@@ -2,18 +2,13 @@
 #include "math.h"
 
 
-CQuat::CQuat(float fsx, float fsy, float fsz, float fsw)
-{
-	m_fx = fsx;
-	m_fy = fsy;
-	m_fz = fsz;
-	m_fw = fsw;
-}
+CQuat::CQuat(float fsx, float fsy, float fsz, float fsw) :
+	m_fx(fsx),
+	m_fy(fsy),
+	m_fz(fsz),
+	m_fw(fsw)
+{}
 
-
-CQuat::~CQuat()
-{
-}
 
 void CQuat::reset()
 {

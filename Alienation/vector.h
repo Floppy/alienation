@@ -9,21 +9,19 @@ public:
 	float m_fy;									// the y value of this Vector3D
 	float m_fz;									// the z value of this Vector3D
 
-	CVector3()									// Constructor to set x = y = z = 0
-	{
-		m_fx = 0;
-		m_fy = 0;
-		m_fz = 0;
-	}
+	CVector3() :								// Constructor to set x = y = z = 0
+		m_fx(0.0f),
+		m_fy(0.0f),
+		m_fz(0.0f)
+	{}
 
-	CVector3(float fx, float fy, float fz)			// Constructor that initializes this Vector3D to the intended values of x, y and z
-	{
-		this->m_fx = fx;
-		this->m_fy = fy;
-		this->m_fz = fz;
-	}
+	CVector3(float fx, float fy, float fz) :			// Constructor that initializes this Vector3D to the intended values of x, y and z
+		m_fx(fx),
+		m_fy(fy),
+		m_fz(fz)
+	{}
 
-	CVector3& operator= (CVector3 vecV)			// operator= sets values of v to this Vector3D. example: v1 = v2 means that values of v2 are set onto v1
+	CVector3& operator= (CVector3 vecV)		// operator= sets values of v to this Vector3D. example: v1 = v2 means that values of v2 are set onto v1
 	{
 		m_fx = vecV.m_fx;
 		m_fy = vecV.m_fy;

@@ -23,7 +23,6 @@ public:
 	
 	CVertices();
 	CVertices(float fNew_x, float fNew_y, float fNew_z);
-	virtual ~CVertices();
 	// overload + operator so that we easier can add vectors
 	CVertices operator+(CVertices oVert);
 	// overload - operator that we easier can subtract vectors

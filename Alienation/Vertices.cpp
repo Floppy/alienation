@@ -8,21 +8,18 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CVertices::CVertices()
-{
+CVertices::CVertices() :
+  m_fx(0.0f),
+  m_fy(0.0f),
+  m_fz(0.0f)
+{}
 
-}
+CVertices::CVertices(float fNew_x, float fNew_y, float fNew_z) :
+  m_fx(fNew_x),
+  m_fy(fNew_y),
+  m_fz(fNew_z)
+{}
 
-CVertices::CVertices(float fNew_x, float fNew_y, float fNew_z)
-{
-	m_fx = fNew_x; m_fy = fNew_y; m_fz = fNew_z;
-
-}
-
-CVertices::~CVertices()
-{
-
-}
 
 	// overload + operator so that we easier can add vectors
 CVertices CVertices::operator+(CVertices oVert)

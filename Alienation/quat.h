@@ -7,7 +7,6 @@ class CQuat
 {
 	public:
   		CQuat(float m_fx = 0, float m_fy = 0, float m_fz = 0, float m_fw = 1);
-  		~CQuat();
 
 		void reset();
 		void copyQuat(CQuat quaQ);
