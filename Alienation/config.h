@@ -28,6 +28,8 @@
  * <li>SDL - <a href="http://sdldoc.csn.ul.ie/">http://sdldoc.csn.ul.ie/</a>
  * <li>SDL_image - <a href="http://jcatki.no-ip.org/SDL_image/">http://jcatki.no-ip.org/SDL_image/</a>
  * <li>SDL_mixer - <a href="http://jcatki.no-ip.org/SDL_mixer/">http://jcatki.no-ip.org/SDL_mixer/</a>
+ * <li>Lua - <a href="http://www.lua.org/docs.html">http://www.lua.org/docs.html</a>
+ * <li>ODE - <a href="http://opende.sourceforge.net/ode-0.039-userguide.html">http://opende.sourceforge.net/ode-0.039-userguide.html</a>
  * </ul>
  */
 
