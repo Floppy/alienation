@@ -42,7 +42,7 @@ class COpenGL {
 		CGLFont	 *m_poGlfont;
 		float m_fTimeElapsed;
    public:
-	   bool mouseUser(SDL_Event oEvent);
+	   void DrawSplashScreen();	   bool mouseUser(SDL_Event oEvent);
 	   bool jsUser(SDL_Event oEvent);
 		CLight *m_poLight;
 		CStars  *m_poStars;

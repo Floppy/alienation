@@ -2,10 +2,11 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <SDL_opengl.h>
-
 #include "GL/GLFont.h"
 #include "3D/TextureManager.h"
+#include "3D/Material.h"
+#include "2D/2DObject.h"
+#include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -17,22 +18,19 @@ CGLFont::CGLFont()
 
 CGLFont::~CGLFont()
 {
+   g_oTextureManager.removeReference(m_uiTexture);
 }
 
 void CGLFont::load()
 {
-   m_oMaterial.m_oEmissive = CRGBAColour(0.4f,1.0f,0.3f,0.75f);
-   m_oMaterial.m_oAmbient = CRGBAColour(0.0f,0.0f,0.0f,0.75f);
-   m_oMaterial.m_oDiffuse = CRGBAColour(0.0f,0.0f,0.0f,0.75f);
-   m_oMaterial.m_uiTexture = g_oTextureManager.load("text.png");
-   m_oMaterial.init();
+   m_uiTexture = g_oTextureManager.load("text.png");
 }
 
 //pos is obviously the position in world co-ordinates, size is in same co-ords
-void CGLFont::print(char *str, CVector3 vecPos, float fSize)
+void CGLFont::print(char *str, NSDMath::CVector3 vecPos, float fSize)
 {
-	CMatrix matMatrix;
-	CVector3 vecTempPos;
+    NSDMath::CMatrix matMatrix;
+	NSDMath::CVector3 vecTempPos;
 	double adCoords[4][2];
 	int iCharno, iRow, iCol, iLen;
 
@@ -42,9 +40,12 @@ void CGLFont::print(char *str, CVector3 vecPos, float fSize)
 	iLen = strlen(str);
 	glPushMatrix();
 	glLoadIdentity();
-        
-        // Set material
-        m_oMaterial.render();
+
+	//manually sets the material properties. Hard coded, shouldnt be really
+        CMaterial oMaterial;
+        oMaterial.m_oEmissive = CRGBAColour(0.4f,1.0f,0.3f,0.06f);
+        oMaterial.m_uiTexture = m_uiTexture;
+        oMaterial.render();
 
 	//then draw the particles
 	glBegin(GL_QUADS);
@@ -58,17 +59,17 @@ void CGLFont::print(char *str, CVector3 vecPos, float fSize)
 
 			//work out the u,v coordinates of the texture for the letter
 			//uses double precision as float didnt seem accurate enought
-			adCoords[3][0] = static_cast<double>(iCol * 16)/256.0; 
-			adCoords[0][1] = static_cast<double>(iRow * 16 + 16)/256.0; 
+			adCoords[3][0] = 1.0 /(256.0/(double)(iCol * 16)); 
+			adCoords[0][1] = 1.0 /(256.0/(double)(iRow * 16 + 16)); 
 
-			adCoords[1][0] = static_cast<double>(iCol * 16 + 16)/256.0; 
-			adCoords[1][1] = adCoords[0][1];
+			adCoords[1][0] = 1.0 /(256.0/(double)(iCol * 16 + 16));
+			adCoords[1][1] = 1.0 /(256.0/(double)(iRow * 16 + 16)); 
 
-			adCoords[2][0] = adCoords[1][0]; 
-		 	adCoords[2][1]= static_cast<double>(iRow * 16)/256.0; 
-                        
-			adCoords[0][0] = adCoords[3][0]; 
-			adCoords[3][1] = adCoords[2][1]; 
+			adCoords[2][0] = 1.0 /(256.0/(double)(iCol * 16 + 16)); 
+			adCoords[2][1] = 1.0 /(256.0/(double)(iRow * 16)); 
+
+			adCoords[0][0] = 1.0 /(256.0/(double)(iCol * 16)); 
+			adCoords[3][1] = 1.0 /(256.0/(double)(iRow * 16)); 
 
 
 			//Draw the letter
@@ -109,21 +110,40 @@ void CGLFont::print(char *str, CVector3 vecPos, float fSize)
 //   =======         ====         ===      ===========
 //     1.0           26/05/2003   GI       Initial Version
 //**************************************************************************************
-void CGLFont::print(char *str, CVector2 vecPos, float fSize)
+void CGLFont::print(char *str, NSDMath::CVector2 vecPos, float fSize, NSDMath::CVector3 vecColour)
 {
-	CMatrix matMatrix;
-	CVector2 vecTempPos;
+   NSDMath::CMatrix matMatrix;
+   NSDMath::CVector2 vecTempPos;
 	double adCoords[4][2];
 	int iCharno, iRow, iCol, iLen;
-
+	C2DObject p2DObject;
 
 	//Store the initial position
 	vecTempPos = vecPos;
 	iLen = strlen(str);
 
-        // Set material
-        m_oMaterial.render();
+	//manually sets the material properties. Hard coded, shouldnt be really
+   CMaterial oMaterial;
+   oMaterial.m_oEmissive = CRGBAColour(vecColour.X(),vecColour.Y(),vecColour.Z(),0.16f);
+   oMaterial.m_oDiffuse =  CRGBAColour(vecColour.X(),vecColour.Y(),vecColour.Z(),0.16f);
+   oMaterial.m_oAmbient =  CRGBAColour(vecColour.X(),vecColour.Y(),vecColour.Z(),0.16f);
+   oMaterial.m_oSpecular = CRGBAColour(vecColour.X(),vecColour.Y(),vecColour.Z(),0.16f);
+   oMaterial.m_uiTexture = m_uiTexture;
+   oMaterial.render();
 
+   glEnable(GL_BLEND);
+   glDepthMask(GL_FALSE);
+
+   g_oTextureManager.render(m_uiTexture);
+   glMatrixMode(GL_MODELVIEW);
+   glPushMatrix();
+   glLoadIdentity();
+   glMatrixMode(GL_PROJECTION); 
+   glPushMatrix(); 
+   glLoadIdentity(); 
+   glEnable(GL_TEXTURE_2D);
+//   glColor4f( vecColour.X(), vecColour.Y(), vecColour.Z(), 0.5f );
+   glOrtho(0.0f, p2DObject.getScreenWidth(), p2DObject.getScreenHeight(), 0.0f, 0.0f, 1.0f);
 	//then draw the particles
 	glBegin(GL_QUADS);
 		int iCount;
@@ -135,17 +155,17 @@ void CGLFont::print(char *str, CVector2 vecPos, float fSize)
 
 			//work out the u,v coordinates of the texture for the letter
 			//uses double precision as float didnt seem accurate enought
-			adCoords[3][0] = static_cast<double>(iCol * 16)/256.0; 
-			adCoords[0][1] = static_cast<double>(iRow * 16 + 16)/256.0; 
+			adCoords[3][0] = 1.0 /(256.0/(double)(iCol * 16)); 
+			adCoords[0][1] = 1.0 /(256.0/(double)(iRow * 16 + 16)); 
 
-			adCoords[1][0] = static_cast<double>(iCol * 16 + 16)/256.0; 
-			adCoords[1][1] = adCoords[0][1];
+			adCoords[1][0] = 1.0 /(256.0/(double)(iCol * 16 + 16));
+			adCoords[1][1] = 1.0 /(256.0/(double)(iRow * 16 + 16)); 
 
-			adCoords[2][0] = adCoords[1][0]; 
-		 	adCoords[2][1]= static_cast<double>(iRow * 16)/256.0; 
-                        
-			adCoords[0][0] = adCoords[3][0]; 
-			adCoords[3][1] = adCoords[2][1]; 
+			adCoords[2][0] = 1.0 /(256.0/(double)(iCol * 16 + 16)); 
+			adCoords[2][1] = 1.0 /(256.0/(double)(iRow * 16)); 
+
+			adCoords[0][0] = 1.0 /(256.0/(double)(iCol * 16)); 
+			adCoords[3][1] = 1.0 /(256.0/(double)(iRow * 16)); 
 
 
 			//Draw the letter
@@ -165,6 +185,21 @@ void CGLFont::print(char *str, CVector2 vecPos, float fSize)
 			//Move the position for the next letter
 			vecTempPos.X() += fSize * 2.0f;
 		}
-	glEnd();
-	glPopAttrib();
+   glEnd();
+   glPopAttrib();
+   glPopMatrix();
+   glMatrixMode(GL_MODELVIEW);
+   glPopMatrix();
+   glDepthMask(GL_TRUE);
+   glDisable(GL_BLEND);
+}
+
+void CGLFont::setID(int iID)
+{
+	m_iID = iID;
+}
+
+int CGLFont::getID()
+{
+	return m_iID;
 }

@@ -67,7 +67,7 @@ COpenGL::~COpenGL()
 bool COpenGL :: initGL() {
 
    bool bPerspCorr, bPolygonSmooth;
-   const char* strPlayerShip(NULL);
+   const char* strPlayerShip = NULL;
    vector<const char*> astrAIShips;
    int iNumRoids(0);
    {
@@ -754,4 +754,39 @@ bool COpenGL::getCommon(SDL_Event oEvent)
 	}
 
 	return bDone;
+}
+
+void COpenGL::DrawSplashScreen()
+{
+   CFrame oFrame;
+
+   glShadeModel(GL_SMOOTH);                           // Enable Smooth Shading
+   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);              // Black Background
+   glClearDepth(1.0f);                                // Depth Buffer Setup
+   glEnable(GL_DEPTH_TEST);                           // Enables Depth Testing
+   glDepthFunc(GL_LEQUAL);                            // The Type Of Depth Testing To Do
+   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Really Nice Perspective Calculations
+   glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);                                 
+   glEnable(GL_POLYGON_SMOOTH);
+   glEnable(GL_TEXTURE_2D);		
+   //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+   glBlendFunc(GL_ONE,GL_ONE);
+
+   // Set viewport
+   glViewport(0, 0, 1024, 768);
+
+   // Set camera
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+   gluPerspective(45.0f, (GLfloat)1024/(GLfloat)768, 0.1f, 25001.0f);
+
+   // Init modelview matrix
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
+   
+   oFrame.init(0.0f, 0.0f, 1.0f, 1.0f, "loadscreen.png");
+
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   oFrame.renderQuad();
+
 }
