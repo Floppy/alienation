@@ -5,7 +5,6 @@
 
 #include <iostream>
 using namespace std;
-using namespace NSDMath;
 using namespace NSDSound;
 
 /**
