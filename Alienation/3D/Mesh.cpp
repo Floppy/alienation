@@ -30,7 +30,6 @@ void CMesh::init() {
 
    // Allocate new list
    m_uiList = glGenLists(1);
-   glEnable(GL_TEXTURE_2D);
    // Create display list   
    glNewList(m_uiList, GL_COMPILE);   
    
