@@ -80,23 +80,27 @@
       // Add front shield
       const char* strShield = state.getString("shield_fore");
       CShield* pShield = CShield::load(strShield,SHIELD_FORE);
-      pShip->m_lShields.push_back(pShield);
+      if (pShield)
+	pShip->m_lShields.push_back(pShield);
 
       // Add rear shield
       strShield = state.getString("shield_aft");
       pShield = CShield::load(strShield,SHIELD_AFT);
-      pShip->m_lShields.push_back(pShield);
+      if (pShield)
+	pShip->m_lShields.push_back(pShield);
 
       // Add right shield
       strShield = state.getString("shield_right");
       pShield = CShield::load(strShield,SHIELD_RIGHT);
-      pShip->m_lShields.push_back(pShield);
+      if (pShield)
+	pShip->m_lShields.push_back(pShield);
 
       // Add left shield
       strShield = state.getString("shield_left");
       pShield = CShield::load(strShield,SHIELD_LEFT);
-      pShip->m_lShields.push_back(pShield);
-
+      if (pShield)
+	pShip->m_lShields.push_back(pShield);
+      
 
       CRGBAColour oDiffuse = CRGBAColour(0.0f,0.0f,0.0f,1.0f);
       CRGBAColour oAmbient = CRGBAColour(0.0f,0.0f,0.0f,1.0f);
