@@ -23,6 +23,12 @@ class CMesh : public C3DObject {
     */
    virtual ~CMesh();
    
+   /**
+    * Perform one-time initialisation.
+    * Should be called once the mesh is completely loaded/created.
+    */
+   void init();
+
    /** 
     * Access the mesh material properties.
     * @return A reference to the material.

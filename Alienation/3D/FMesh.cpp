@@ -61,7 +61,7 @@ void CFMesh::init() {
    // Finish the list
    glEndList();   
    // Done
-   C3DObject::init();
+   CMesh::init();
    return;
 }
 
