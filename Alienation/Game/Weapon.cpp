@@ -166,7 +166,9 @@ void CWeapon::createParticle(int i, CVector3 vecHead, CVector3 vecPos, float fSp
 	m_poParticles[i].m_fSpeed = 235.0f;
         
         //Play sound whenever we create a particle
-        g_oSoundManager.play(m_uiSoundEffect);
+        int iChannel = g_oSoundManager.play(m_uiSoundEffect);
+        if (iChannel != -1) g_oSoundManager.setChannelLocation(iChannel,vecPos);
+        
 
 }
 
