@@ -3,55 +3,18 @@
 //////////////////////////////////////////////////////////////////////
 #include "2D/2DObject.h"
 
+extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;
+extern PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB;
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-//<<<<<<< 2DObject.cpp
-//   int C2DObject::m_iWidth(0);
-//   int C2DObject::m_iHeight(0);
    
-   C2DObject::C2DObject()
-   {
-   }
+C2DObject::C2DObject()
+{
+}
    
-//   C2DObject::~C2DObject()
-//   {
-//   }
-   
-//   void C2DObject::renderQuad(float fPosX, float fPosY, float fWidth, float fHeight, NSDMath::CVector2* vecTex)
-//   {
-//      glBegin(GL_QUADS);
-      
-//      glTexCoord2fv(vecTex[0].glVector());
-//      glVertex2f(fPosX, fPosY);
-//      glTexCoord2fv(vecTex[1].glVector());
-//      glVertex2f(fPosX + fWidth, fPosY);
-//      glTexCoord2fv(vecTex[2].glVector());
-//      glVertex2f(fPosX + fWidth, fPosY - fHeight);
-//      glTexCoord2fv(vecTex[3].glVector());
-//      glVertex2f(fPosX, fPosY - fHeight);
-      
-//      glEnd();
-//   }
-   
-//   void C2DObject::setPosition(int iXPos, int iYPos)
-//   {
-//      m_iXPos = iXPos;
-//      m_iYPos = iYPos;
-//   }
-   
-//   void C2DObject::setScreen(int iWidth, int iHeight)
-//   {
-//      m_iWidth  = iWidth;
-//      m_iHeight = iHeight;
-//   }
-//=======
-//C2DObject::C2DObject()
-//{
-//>>>>>>> 1.5
-
-//}
 
 C2DObject::~C2DObject()
 {
@@ -60,7 +23,6 @@ C2DObject::~C2DObject()
 
 void C2DObject::renderQuad()
 {
-//   g_oTextureManager.render(m_uiActiveTexture);
    glMatrixMode(GL_MODELVIEW);
    glPushMatrix();
    glLoadIdentity();
@@ -71,16 +33,21 @@ void C2DObject::renderQuad()
    glOrtho(0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
 
    m_oActiveMaterial.render();
+	m_oActiveMaterial.disableDot3();
 
    glBegin(GL_QUADS);
 
-	  glTexCoord2fv(m_vecTex[0].glVector());
+	  glMultiTexCoord2fARB(GL_TEXTURE0_ARB, m_vecTex[0].X(), m_vecTex[0].Y());
+	  glMultiTexCoord2fARB(GL_TEXTURE1_ARB, m_vecTex[0].X(), m_vecTex[0].Y());
 	  glVertex2f(m_fXPos, m_fYPos + m_fHeight);
-	  glTexCoord2fv(m_vecTex[1].glVector());
+	  glMultiTexCoord2fARB(GL_TEXTURE0_ARB, m_vecTex[1].X(), m_vecTex[1].Y());
+	  glMultiTexCoord2fARB(GL_TEXTURE1_ARB, m_vecTex[1].X(), m_vecTex[1].Y());
 	  glVertex2f(m_fXPos + m_fWidth, m_fYPos + m_fHeight);
-	  glTexCoord2fv(m_vecTex[2].glVector());
+	  glMultiTexCoord2fARB(GL_TEXTURE0_ARB, m_vecTex[2].X(), m_vecTex[2].Y());
+	  glMultiTexCoord2fARB(GL_TEXTURE1_ARB, m_vecTex[2].X(), m_vecTex[2].Y());
 	  glVertex2f(m_fXPos + m_fWidth, m_fYPos);
-	  glTexCoord2fv(m_vecTex[3].glVector());
+	  glMultiTexCoord2fARB(GL_TEXTURE0_ARB, m_vecTex[3].X(), m_vecTex[3].Y());
+	  glMultiTexCoord2fARB(GL_TEXTURE1_ARB, m_vecTex[3].X(), m_vecTex[3].Y());
 	  glVertex2f(m_fXPos, m_fYPos);
 
    glEnd();
@@ -114,7 +81,6 @@ void C2DObject::init2D(float fXPos, float fYPos, float fWidth, float fHeight, co
 
    m_vecTex[3] = NSDMath::CVector2(0.0f, 0.0f);
 
-//   m_oActiveMaterial = CMaterial();
 	int iFileExists = strcmp(strFilename, strNullString);
 	if ( iFileExists )
 	{

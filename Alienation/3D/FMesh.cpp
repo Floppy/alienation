@@ -2,6 +2,10 @@
 #include <SDL_opengl.h>
 #include <iostream>
 
+extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;
+extern PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB;
+extern bool bNoBumps;
+
 using namespace std;
 
 CFMesh::CFMesh() :
@@ -12,6 +16,8 @@ CFMesh::CFMesh() :
    m_pTexVerts(NULL),
    m_pFaces(NULL),
    m_pNormals(NULL),
+	m_pBiNormals(NULL),
+	m_pTangents(NULL),
    m_uiList(0)
 {}
 
@@ -21,13 +27,48 @@ CFMesh::~CFMesh() {
    delete [] m_pNormals;
    delete [] m_pVerts;
    delete [] m_pTexVerts;
+	delete [] m_pTangents;
+	delete [] m_pBiNormals;
 }
 
 void CFMesh::init() {
 
+	int i, j;
+	int iFaceIndex = 0;
+	CVector3 *tangent, *binormal;
+
    // Initialise material
    m_oMaterial.init();
 
+	tangent = new CVector3();
+	binormal = new CVector3();
+	m_pTangents  = new CVector3[m_iNumVertices];
+	m_pBiNormals = new CVector3[m_iNumVertices];
+
+												//////////////////////////////////////////////
+												//Calculating the tangent space (Should be  //
+												//done eventually for every model, so is    //
+												//now)                                      //
+												//////////////////////////////////////////////
+
+	if (m_oMaterial.m_bHasBumpMap)
+	{
+		for ( j = 0 ; j < m_iNumFaces ; j++)
+		{
+			tangentBasis(m_pVerts[m_pFaces[j].m_iVertIndex[0]], 
+							 m_pVerts[m_pFaces[j].m_iVertIndex[1]], 
+							 m_pVerts[m_pFaces[j].m_iVertIndex[2]],
+							 m_pTexVerts[m_pFaces[j].m_iVertIndex[0]],
+							 m_pTexVerts[m_pFaces[j].m_iVertIndex[1]], 
+							 m_pTexVerts[m_pFaces[j].m_iVertIndex[2]],
+							 tangent, binormal);
+			for ( i = 0 ; i < 3 ; i++ )
+			{
+				m_pTangents [ m_pFaces[j].m_iVertIndex[i] ] = CVector3(tangent->X(), tangent->Y(), tangent->Z());
+				m_pBiNormals[ m_pFaces[j].m_iVertIndex[i] ] = CVector3(binormal->X(), binormal->Y(), binormal->Z());
+			}
+		}
+	}
    // Calculate normals
    computeNormals();
 
@@ -38,11 +79,12 @@ void CFMesh::init() {
    
    // Set material
    m_oMaterial.render();
-   
+//   m_oMaterial.disableDot3();
+
    // Draw faces
    glBegin(GL_TRIANGLES);										
    // For each face
-   for(int j = 0; j < m_iNumFaces; j++)
+   for(j = 0; j < m_iNumFaces; j++)
    {
       // For each vertex in the face
       for(int iWhichVertex = 0; iWhichVertex < 3; iWhichVertex++)
@@ -53,7 +95,8 @@ void CFMesh::init() {
          glNormal3fv(m_pNormals[iIndex].glVector());
          // Texture coordinates
          if(m_pTexVerts) {
-            glTexCoord2fv(m_pTexVerts[iIndex].glVector());
+				glMultiTexCoord2fARB(GL_TEXTURE0_ARB, m_pTexVerts[iIndex].X(), m_pTexVerts[iIndex].Y());
+				glMultiTexCoord2fARB(GL_TEXTURE1_ARB, m_pTexVerts[iIndex].X(), m_pTexVerts[iIndex].Y());
          }
          // Vertex coordinate
          glVertex3fv(m_pVerts[iIndex].glVector());
@@ -65,7 +108,7 @@ void CFMesh::init() {
    glEndList();   
 
    // Calculate bounding sphere
-   for (int i=0; i<m_iNumVertices; i++) 
+   for (i=0; i<m_iNumVertices; i++) 
    {
       float fLength = m_pVerts[i].length();
       if (fLength > m_oSphere.m_fRadius) m_oSphere.m_fRadius = fLength;
@@ -76,20 +119,92 @@ void CFMesh::init() {
    return;
 }
 
+void CFMesh::renderDOT3() const
+{
+	int i, j;
+	CVector3 lightpos = CVector3(0.0f, 0.0f, -1000.0f);
+	CVector3 lightVector;
+	CVector3 colour;
+	CMatrix  mat, rotMat;
+
+	m_oMaterial.renderBumpMap();
+
+	m_oMaterial.render();
+	rotMat = CMatrix(this->getRotation());
+	lightVector = rotMat * lightVector;
+
+	glBegin(GL_TRIANGLES);
+   for(i = 0; i < m_iNumFaces; i++)
+	{
+		for(j=0;j<3;j++)
+		{
+         // Get vertex number
+         int iIndex = m_pFaces[i].m_iVertIndex[j];
+
+			lightVector = lightpos - m_pVerts[iIndex];
+
+			if(lightVector.length() != 0.0f)
+			{
+				lightVector.normalise();
+			}
+
+//			colour = CVector3(lightVector.dot(m_pTangents [iIndex]),
+//									lightVector.dot(m_pBiNormals[iIndex]),
+//									lightVector.dot(m_pNormals  [iIndex]));
+
+			mat.loadIdentity();
+			mat.setElement(0,  m_pTangents[iIndex].X());
+			mat.setElement(1,  m_pBiNormals[iIndex].X());
+			mat.setElement(2,  m_pNormals[iIndex].X());
+			mat.setElement(4,  m_pTangents[iIndex].Y());
+			mat.setElement(5,  m_pBiNormals[iIndex].Y());
+			mat.setElement(6,  m_pNormals[iIndex].Y());
+			mat.setElement(8,  m_pTangents[iIndex].Z());
+			mat.setElement(9,  m_pBiNormals[iIndex].Z());
+			mat.setElement(10, m_pNormals[iIndex].Z());
+
+			colour = mat * lightVector;
+
+			colour = (colour * 0.5f) + 0.5f;
+
+			glMultiTexCoord2fARB(GL_TEXTURE0_ARB, m_pTexVerts[iIndex].X(), m_pTexVerts[iIndex].Y());
+			glMultiTexCoord2fARB(GL_TEXTURE1_ARB, m_pTexVerts[iIndex].X(), m_pTexVerts[iIndex].Y());
+			glColor3fv(colour.glVector());
+         glNormal3fv(m_pNormals[iIndex].glVector());
+         glVertex3fv(m_pVerts[iIndex].glVector());
+		}
+	}
+	glEnd();
+
+	m_oMaterial.disableDot3();
+}
+
 void CFMesh::render() const {
+
+	GLboolean bTexEnabled;
+
    if (!m_bInitialised) {
       cerr << "WARNING: Mesh not initialised!" << endl;
       return;
    }
-   // Push
-   glPushMatrix();
-   // Translate
-   glTranslatef(m_vecTranslation.X(),m_vecTranslation.Y(),m_vecTranslation.Z());
-   // Render
-   if (m_uiList)
-      glCallList(m_uiList);
-   // Pop
-   glPopMatrix();
+
+	glGetBooleanv(GL_TEXTURE_2D, &bTexEnabled);
+	if (m_oMaterial.m_bHasBumpMap && bTexEnabled && !bNoBumps)
+	{
+		renderDOT3();
+	}
+	else
+	{
+		// Push
+		glPushMatrix();
+		// Translate
+		glTranslatef(m_vecTranslation.X(),m_vecTranslation.Y(),m_vecTranslation.Z());
+		// Render
+		if (m_uiList)
+			glCallList(m_uiList);
+		// Pop
+		glPopMatrix();
+	}
 }
 
 void CFMesh::computeNormals() {
@@ -134,4 +249,56 @@ void CFMesh::computeNormals() {
 
    // Dump face normals - don't need them
    delete [] pFaceNormals;   
+}
+
+void CFMesh::tangentBasis(CVector3 v0, CVector3 v1, CVector3 v2, CVector2 t0, CVector2 t1, CVector2 t2, CVector3 *tangent, CVector3 *binormal)
+{
+	CVector3 cp;
+	float fTangentX, fTangentY, fTangentZ;
+	float fBiNormalX, fBiNormalY, fBiNormalZ;
+
+	CVector3 e0 = CVector3(v1.X() - v0.X(), t1.X() - t0.X(), t1.Y() - t0.Y() );
+	CVector3 e1 = CVector3(v2.X() - v0.X(), t2.X() - t0.X(), t2.Y() - t0.Y() );
+
+	cp = e0.cross(e1);
+
+	if(fabs(cp.X())>0.00001f)
+	{
+		fTangentX  = -cp.Y() / cp.X();
+		fBiNormalX = -cp.Z() / cp.X();
+	}
+
+	e0 = CVector3(v1.Y() - v0.Y(), t1.X() - t0.X(), t1.Y() - t0.Y() );
+	e1 = CVector3(v2.Y() - v0.Y(), t2.X() - t0.X(), t2.Y() - t0.Y() );
+
+	cp = e0.cross(e1);
+
+	if(fabs(cp.X())>0.00001f)
+	{
+		fTangentY  = -cp.Y() / cp.X();
+		fBiNormalY = -cp.Z() / cp.X();
+	}
+
+	e0 = CVector3(v1.Z() - v0.Z(), t1.X() - t0.X(), t1.Y() - t0.Y() );
+	e1 = CVector3(v2.Z() - v0.Z(), t2.X() - t0.X(), t2.Y() - t0.Y() );
+
+	cp = e0.cross(e1);
+
+	if(fabs(cp.X())>0.00001f)
+	{
+		fTangentZ  = -cp.Y() / cp.X();
+		fBiNormalZ = -cp.Z() / cp.X();
+	}
+
+	binormal->setX(fBiNormalX);
+	binormal->setY(fBiNormalY);
+	binormal->setZ(fBiNormalZ);
+
+	tangent->setX(fTangentX);
+	tangent->setY(fTangentY);
+	tangent->setZ(fTangentZ);
+
+	binormal->normalise();
+	tangent->normalise();
+
 }

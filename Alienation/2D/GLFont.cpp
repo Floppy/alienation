@@ -61,7 +61,7 @@ void CGLFont::print(char *str, NSDMath::CVector2 vecPos, float fSize, NSDMath::C
    
    //manually sets the material properties. Hard coded, shouldnt be really
    m_oMaterial.m_oEmissive = CRGBAColour(vecColour.X(),vecColour.Y(),vecColour.Z(),0.5f);
-   m_oMaterial.m_oDiffuse =  CRGBAColour(0,0,0,0.5f);
+   m_oMaterial.m_oDiffuse =  CRGBAColour(vecColour.X(),vecColour.Y(),vecColour.Z(),0.5f);
    m_oMaterial.m_oAmbient =  CRGBAColour(0,0,0,0.5f);
    m_oMaterial.render();
 
@@ -74,7 +74,6 @@ void CGLFont::print(char *str, NSDMath::CVector2 vecPos, float fSize, NSDMath::C
    glEnable(GL_TEXTURE_2D);
 //   glColor4f( vecColour.X(), vecColour.Y(), vecColour.Z(), 0.5f );
    glOrtho(0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
-	//then draw the particles
 	glBegin(GL_QUADS);
 		int iCount;
 		for (iCount = 0 ; iCount < iLen ; iCount++)

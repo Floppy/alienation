@@ -4,6 +4,7 @@
 #include "config.h"
 #include "3D/3DObject.h"
 #include "3D/Material.h"
+#include <GL/glext.h>
 
 /**
  * A billboarded sprite.
