@@ -6,4 +6,4 @@ bin_PROGRAMS = Alienation
 
 Alienation_SOURCES = config.h Alienation.cpp
 
-Alienation_LDADD = GL/libAlienationGL.a AI/libAlienationAI.a Game/libAlienationGame.a IO/libAlienationIO.a Sound/libAlienationSound.a 3D/libAlienation3D.a Physics/libAlienationPhysics.a Math/libAlienationMath.a
+Alienation_LDADD = GL/libAlienationGL.a AI/libAlienationAI.a Game/libAlienationGame.a IO/libAlienationIO.a Sound/libAlienationSound.a 3D/libAlienation3D.a Physics/libAlienationPhysics.a Math/libAlienationMath.a $(FMOD_LIBS)

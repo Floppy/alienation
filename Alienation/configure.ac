@@ -34,11 +34,19 @@ AC_ARG_WITH(fmod,
 LIBS="$LIBS -lfmod-3.62"
 if test "$with_fmod"; then
   echo Using fmod API from $with_fmod
-  CPPFLAGS="$CPPFLAGS -I$with_fmod/include"
-  LIBS="$LIBS -L$with_fmod/lib"
+  FMOD_CPPFLAGS="-I$with_fmod/include"
+  FMOD_LIBS="-L$with_fmod/lib"
 fi
+_OLD_CPPFLAGS="$CPPFLAGS"
+_OLD_LIBS="$LIBS"
+CPPFLAGS="$CPPFLAGS $FMOD_CPPFLAGS"
+LIBS="$LIBS $FMOD_LIBS"
 AC_CHECK_HEADER(fmod.h,,exit)
 AC_CHECK_LIB(fmod-3.62,FSOUND_Init,,exit)
+AC_SUBST(FMOD_CPPFLAGS)
+AC_SUBST(FMOD_LIBS)
+CPPFLAGS="$_OLD_CPPFLAGS"
+LIBS="$_OLD_LIBS"
 
 # Checks for headers
 AC_HEADER_STDC
