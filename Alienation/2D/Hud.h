@@ -11,6 +11,7 @@
 #include "2D/2DObject.h"
 #include "config.h"
 #include "3D/Material.h"
+#include "3D/Light.h"
 
 namespace NSD2D {
 
@@ -97,6 +98,12 @@ namespace NSD2D {
        * Object for 2d drawing
        */
       C2DObject *m_po2DObject;
+
+      /**
+       * Light for radar display
+       */
+      CLight m_oLight;
+  
    };
    
 }

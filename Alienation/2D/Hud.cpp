@@ -8,7 +8,8 @@ namespace NSD2D {
    CHud::CHud(CShip* pPlayerShip) :
       m_pPlayerShip(pPlayerShip),
       m_pTarget(NULL),
-      m_iLastTime(SDL_GetTicks())
+      m_iLastTime(SDL_GetTicks()),
+      m_oLight(GL_LIGHT1)
    {
       for (int i=0; i<9; i++) {
          m_auiTextures[i] = 0;
@@ -279,11 +280,17 @@ namespace NSD2D {
       }
       
       // Set material
-      m_oMaterial.m_oDiffuse = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
-      m_oMaterial.m_oAmbient = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
+      m_oMaterial.m_oDiffuse = CRGBAColour(0.0f,0.0f,0.0f,1.0f);
+      m_oMaterial.m_oAmbient = CRGBAColour(0.0f,0.0f,0.0f,1.0f);
       m_oMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
       m_oMaterial.init();
       
+      // Setup light
+      CRGBAColour oAmbient(1.0f, 1.0f, 1.0f, 1.0f);
+      CRGBAColour oDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
+      CVector3 oPosition(1000.0f, 1000.0f, -1000.0f);
+      m_oLight.init(oAmbient, oDiffuse, oPosition);
+
       m_po2DObject = new C2DObject;
    }
 
@@ -299,7 +306,6 @@ namespace NSD2D {
       CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
       float fRange = vecTarget.length();
       float fSize = m_pTarget->m_oModel.boundingSphere().m_fRadius;
-      //float fAngle = RAD_TO_DEG(atan(fSize / fRange) * 2);
       
       // Set Projection Matrix
       glMatrixMode(GL_PROJECTION);
@@ -310,6 +316,8 @@ namespace NSD2D {
       // Set Modelview Matrix
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
+      m_oLight.enable();
+      m_oLight.render();
       gluLookAt(m_pPlayerShip->m_ppMasses[0]->m_vecPos.X(), 
                 m_pPlayerShip->m_ppMasses[0]->m_vecPos.Y(), 
                 m_pPlayerShip->m_ppMasses[0]->m_vecPos.Z(),
@@ -322,7 +330,10 @@ namespace NSD2D {
       
       // Draw
       glDisable(GL_TEXTURE_2D);
+      glShadeModel(GL_FLAT);
       m_pTarget->draw(false);
+      m_oLight.disable();
+      glShadeModel(GL_SMOOTH);
       glEnable(GL_TEXTURE_2D);
       // Finish up
       pTexture->postRenderToTexture(GL_LUMINANCE_ALPHA);
