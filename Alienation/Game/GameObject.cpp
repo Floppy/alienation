@@ -27,6 +27,8 @@ CGameObject::CGameObject(int num, float mass) :
    m_matRotation.loadIdentity();
 }
 
+CGameObject::CGameObject(){} 
+
 CGameObject::~CGameObject()
 {
 }

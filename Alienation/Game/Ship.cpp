@@ -53,15 +53,16 @@ CShip::CShip(float mass) :
 
 CShip::~CShip()
 {
+   int i;
    delete [] m_avecBrakePoints;
    delete [] m_avecOrigBrakePoints;
-   for (int i=0; i<m_iNumBrakes; i++) 
+   for (i=0; i<m_iNumBrakes; i++) 
       delete m_ppBrakes[i];
    delete [] m_ppBrakes;
 
    delete [] m_avecWeaponPoints;
    delete [] m_avecOrigWeaponPoints;
-   for (int i=0; i<m_iNumWeapons; i++) 
+   for (i=0; i<m_iNumWeapons; i++) 
       delete m_ppWeapons[i];
    delete [] m_ppWeapons;
 

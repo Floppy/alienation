@@ -20,6 +20,7 @@ class CGameObject : public CSimulation
  public:
    
    CGameObject(int num, float mass);
+   CGameObject();
 
    virtual ~CGameObject();
 

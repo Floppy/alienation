@@ -10,7 +10,8 @@
    using namespace NSDIO;
 
    CShip* CShipFactory::load(const char *strFileName, bool bPlayer) {
-      
+	  
+	  unsigned int i;      
       // Make filename
       char pcFilename[255] = "Data/Scripts/";
       strcat(pcFilename,strFileName);
@@ -40,7 +41,7 @@
       state.push("weapons");
       unsigned int iNumWeapons = state.tableSize();
       CVector3* pWeapons = new CVector3[iNumWeapons];
-      for (unsigned int i=0; i<iNumWeapons; i++) {
+      for (i=0; i<iNumWeapons; i++) {
          pWeapons[i] = state.getVector3(i);
       }
       pShip->setWeapons(iNumWeapons,pWeapons,strWeapon);
@@ -51,7 +52,7 @@
       state.push("trails");
       unsigned int iNumTrails = state.tableSize();
       CVector3* pTrails = new CVector3[iNumTrails];
-      for (unsigned int i=0; i<iNumTrails; i++) {
+      for (i=0; i<iNumTrails; i++) {
          pTrails[i] = state.getVector3(i);
       }
       pShip->setTrails(iNumTrails,pTrails);
@@ -62,7 +63,7 @@
       state.push("brakes");
       unsigned int iNumBrakes = state.tableSize();
       CVector3* pBrakes = new CVector3[iNumBrakes];
-      for (unsigned int i=0; i<iNumBrakes; i++) {
+      for (i=0; i<iNumBrakes; i++) {
          pBrakes[i] = state.getVector3(i);
       }
       pShip->setBrakes(iNumBrakes,pBrakes);
