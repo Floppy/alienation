@@ -131,7 +131,7 @@ void CPlayerShip::draw()
 	}
         
         // Set sound playback location
-        g_oSoundManager.setPlaybackLocation(m_ppMasses[0]->m_vecPos, m_poShips[0].m_vecHeading, m_poShips[0].m_vecUp);
+        g_oSoundManager.setPlaybackLocation(m_ppMasses[0]->m_vecPos, m_poShips[0].m_vecUp, m_poShips[0].m_vecRight);
         
 
 }
