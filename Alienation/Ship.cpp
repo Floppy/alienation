@@ -25,6 +25,7 @@ CShip::CShip(int num, float mass) : CSimulation(num, mass)
 	m_poShips[0].m_fPitch = 0.0f;
 	m_poShips[0].m_fYaw = 0.0f;
 	m_poShips[0].m_fRoll = 0.0f;
+	m_poShips[0].m_fVel = 0.0f;
 	m_poShips[0].m_fPitchRate = 0.0f;
 	m_poShips[0].m_fYawRate = 0.0f;
 	m_poShips[0].m_fRollRate = 0.0f;	

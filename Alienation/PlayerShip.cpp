@@ -20,35 +20,13 @@
 CPlayerShip::CPlayerShip() : CShip(1, 5000.0f)
 {
 	m_bInsideView = true;
-	m_poShips = new CShipData[1];
 	m_ppMasses[0]->m_vecPos = CVector3(0.0f, 0.0f, 0.0f);
 	m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
 	m_poShips[0].m_vecLastForce = CVector3(0.0f, 0.0f, 0.0f);
 	m_poShips[0].m_bStraffUp = m_poShips[0].m_bStraffDown = m_poShips[0].m_bStraffLeft = m_poShips[0].m_bStraffRight = false;
-	m_poShips[0].m_avecTrailPoints[0] = CVector3(0.0f, 0.0f, 7.0f);
-	m_poShips[0].m_vecHeading = CVector3(0.0f, -2.0f, -11.0f);
-	m_poShips[0].m_vecDirection = m_poShips[0].m_vecHeading;
-	m_poShips[0].m_fThrust = 0.0f;
-	m_poShips[0].m_fPitch = 0.0f;
-	m_poShips[0].m_fYaw = 0.0f;
-	m_poShips[0].m_fRoll = 0.0f;
-	m_poShips[0].m_fPitchRate = 0.0f;
-	m_poShips[0].m_fYawRate = 0.0f;
-	m_poShips[0].m_fRollRate = 0.0f;	
-	m_poShips[0].m_fMaxPitchRate = 40.0f;
-	m_poShips[0].m_fMaxYawRate = 25.0f;
-	m_poShips[0].m_fMaxRollRate = 45.0f;	
-	m_poShips[0].m_quaOrientation.reset();
-	m_poShips[0].m_quaCamOrientation.reset();
 	m_poShips[0].m_fDrag = 25.0f;
-	m_poShips[0].m_iFlightMode = 1;
 	m_poShips[0].m_bWeaponFire = false;
 
-	m_poShips[0].m_poWeapon = new CWeapon(100, CVector3(0.0f, -0.3f, -3.3f)); 
-	m_poShips[0].m_poTrail = new CTrail(1000, CVector3(0.0f, -0.5f, 7.2f));
-	m_poShips[0].m_poBrake = new CBrake(100, CVector3(0.0f, 0.0f, 0.0f));
-
-	m_poShips[0].m_matRotation.LoadIdentity();
 	m_poShips[0].m_matCamRotation.LoadIdentity();
 	m_bLeftLook = m_bRightLook = m_bUpLook = m_bBackLook = false;
 }
