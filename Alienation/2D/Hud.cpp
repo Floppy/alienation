@@ -121,11 +121,14 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 //   oMaterial.render();
 //	glEnable(GL_BLEND);
 //=======
-        CMaterial oMaterial;
-        oMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f,0.5f);
-        oMaterial.render();
         glEnable(GL_BLEND);
-//        glDepthMask(GL_FALSE);
+        glDisable(GL_DEPTH_TEST);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        CMaterial oMaterial;
+        oMaterial.m_oDiffuse = CRGBAColour(1.0f,1.0f,1.0f,0.9f);
+        oMaterial.m_oAmbient = CRGBAColour(1.0f,1.0f,1.0f,0.9f);
+        oMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f,0.9f);
+        oMaterial.render();
 //>>>>>>> 1.11
 
 												//////////////////////////////////////////////
@@ -214,7 +217,7 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
         m_iLastTime = iTime;
 
 	glDisable(GL_BLEND);
-//	glDepthMask(GL_TRUE);
+        glEnable(GL_DEPTH_TEST);
 
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);

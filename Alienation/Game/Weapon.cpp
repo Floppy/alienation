@@ -161,6 +161,7 @@ void CWeapon::render(void)
 	//Texture and blending stuff
 	glEnable(GL_BLEND);
 	glDepthMask(GL_FALSE);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//then draw the particles
         for (int iCount = 0 ; iCount < m_iParticlesCreated ; iCount++)
@@ -182,7 +183,9 @@ void CWeapon::render(void)
 void CWeapon::init()
 {
    CMaterial oMaterial;
-   oMaterial.m_oEmissive = CRGBAColour(1.0f,0.2f,0.4f,0.03f);
+   oMaterial.m_oEmissive = CRGBAColour(1.0f,0.2f,0.4f,1.0f);
+   oMaterial.m_oAmbient = CRGBAColour(1.0f,0.2f,0.4f,1.0f);
+   oMaterial.m_oDiffuse = CRGBAColour(1.0f,0.2f,0.4f,1.0f);
    oMaterial.m_uiTexture = g_oTextureManager.load("ball.png");
    m_oSprite.setMaterial(oMaterial);
    m_oSprite.init();

@@ -47,8 +47,8 @@ CPlayerShip::CPlayerShip() :
    
    // Setup trails
    m_poShips[0].m_iNumTrails = 2;
-   m_poShips[0].m_avecOrigTrailPoints[0] = CVector3(1.6f, 0.6f, 6.4f);
-   m_poShips[0].m_avecOrigTrailPoints[1] = CVector3(-1.6f, 0.6f, 6.4f);
+   m_poShips[0].m_avecOrigTrailPoints[0] = CVector3(1.6f, -0.25f, 3.75f);
+   m_poShips[0].m_avecOrigTrailPoints[1] = CVector3(-1.6f, -0.25f, 3.75f);
    m_poShips[0].m_poTrails = new CTrail[m_poShips[0].m_iNumTrails];
    for (int i=0; i<m_poShips[0].m_iNumTrails; i++)
 	  m_poShips[0].m_poTrails[i].setup(250, m_poShips[0].m_avecTrailPoints[i]);

@@ -34,7 +34,7 @@ void CBrake::init()
 {
    // Create sprite
    CMaterial oMaterial;
-   oMaterial.m_oDiffuse = CRGBAColour(0.5f, 0.5f, 0.5f,0);
+   oMaterial.m_oDiffuse = CRGBAColour(0.5f, 0.5f, 0.5f,1.0f);
    oMaterial.m_uiTexture = g_oTextureManager.load("smoke.png");   
    m_oSprite = CSprite(oMaterial);
    m_oSprite.init();   
@@ -121,6 +121,7 @@ void CBrake::render()
 	//Texture and blending stuff
 	glEnable(GL_BLEND);
 	glDepthMask(GL_FALSE);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         for (int iCount = 0 ; iCount < m_iParticlesCreated ; iCount++)
         {

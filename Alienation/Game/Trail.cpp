@@ -100,6 +100,7 @@ void CTrail::render(void) {
    // Enable alpha blend
    glEnable(GL_BLEND);
    glDepthMask(GL_FALSE);
+   glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
    // Calculate engine flare size
    float fSize = m_fThrust * 0.0005f;
@@ -114,6 +115,8 @@ void CTrail::render(void) {
       // Draw exhaust flare
       m_oFlare.render();
    }
+
+   glBlendFunc(GL_SRC_ALPHA,GL_ONE);
 
    // Draw trail
    for (int iCount = 0 ; iCount < m_iParticlesCreated ; iCount++)
@@ -208,14 +211,18 @@ void CTrail::init()
 {
    // Create trail particle geometry
    CMaterial oTrailMaterial;
-   oTrailMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,0.25f,0);
+   oTrailMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,0.25f,0.75f);
+   oTrailMaterial.m_oDiffuse = CRGBAColour(1.0f,1.0f,0.25f,0.75f);
+   oTrailMaterial.m_oAmbient = CRGBAColour(1.0f,1.0f,0.25f,0.75f);
    oTrailMaterial.m_uiTexture = g_oTextureManager.load("star.png");   
    m_oTrail = CSprite(oTrailMaterial);
    m_oTrail.init();
 
    // Create engine flare
    CMaterial oFlareMaterial;
-   oFlareMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f, 0);
+   oFlareMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
+   oFlareMaterial.m_oAmbient = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
+   oFlareMaterial.m_oDiffuse = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
    oFlareMaterial.m_uiTexture = g_oTextureManager.load("flare.png");
    m_oFlare = CSprite(oFlareMaterial);
    m_oFlare.init();
