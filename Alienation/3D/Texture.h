@@ -34,7 +34,7 @@ class CTexture
    /**
     * Create a blank texture.
     * @param iX The width of the new texture.
-    * @param iX The height of the new texture.
+    * @param iY The height of the new texture.
     * @return true if the texture was created successfully.
     */
    bool create(unsigned int iX, unsigned int iY);
