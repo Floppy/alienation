@@ -32,20 +32,27 @@ void CTargetingComputer::init()
 
    m_poTargetingReticle = new CFrame;
    
-   m_poTargetingReticle->init2D(0.0f, 0.1f, 0.0f, 0.1f, "Hud/hud_reticle.png");
+   m_poTargetingReticle->init2D(0.0f, 0.0f, 0.1f, 0.1f, "Hud/hud_reticle.png");
    m_poTargetingReticle->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
    
    m_poFont = new CGLFont;
    m_poFont->load();
    
-   m_auiOffScreenTexture = g_oTextureManager.create(128,128);	  
-   //m_auiTextures[6] = g_oTextureManager.load("Hud/hud_target.png");
+   m_auiOffScreenTexture = g_oTextureManager.create(128,128);
+   
+   oEmissive = CRGBAColour(0.0f,1.0f,0.0f,1.0f);
+   init2D(0.0f, 0.0f, 0.175f, 0.6f,"Hud/hud_target.png");
+   setActiveMaterial(oDiffuse, oAmbient, oEmissive);
 
 }
 
 void CTargetingComputer::render() 
 {
-      
+   // Display surround
+   renderQuad();
+
+   char strFont[256];
+
       if (m_pTarget) {
          // Calculate position of targeting reticle
          CVector3 pos = m_pTarget->m_ppMasses[0]->m_vecPos;
@@ -81,21 +88,20 @@ void CTargetingComputer::render()
          m_poTargetingReticle->setPosition(dX-dW, (1-dY)-dH, dW*2, dH*2);
 	 m_poTargetingReticle->renderQuad();
          // Calculate range
-	 //NSDMath::CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
-         //int iRange = static_cast<int>(vecTarget.length());           
+	 NSDMath::CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
+         int iRange = static_cast<int>(vecTarget.length());           
          // Range
-         //sprintf(strFont,"%5d m", iRange);
-         //m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f);
-         //m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f);
+         sprintf(strFont,"%5d m", iRange);
+         //m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f, CVector3(1,1,1));
+         //m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f, CVector3(1,1,1));
          // Velocity
-         //sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_fVel));
-         //m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f);
-         //m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f);
+         sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_fVel));
+         //m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f, CVector3(1,1,1));
+         //m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f, CVector3(1,1,1));
          // Radar image
-         //g_oTextureManager.render(m_auiTextures[7]);
+         //g_oTextureManager.render(m_auiOffScreenTexture);
          //m_po2DObject->renderQuad(37.0f, 180.0f, 135.0f, 135.0f, avecTex);
       }
-      
 }
  
   void CTargetingComputer::renderOffScreen()
