@@ -18,7 +18,7 @@ class CTexture
 {
 public:
 	void setActive(unsigned int t);
-	bool load(char *strDir, char **astrFnames, int iNoOfFiles);
+	bool load(char **astrFnames, int iNoOfFiles);
 	CTexture(int iNum);
 	virtual ~CTexture();
 	void loadImage(char *strFilename);				// Loads A Bitmap Image

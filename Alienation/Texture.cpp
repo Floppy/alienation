@@ -22,10 +22,10 @@ CTexture::~CTexture()
 	delete [] m_puiTexture;
 }
 
-bool CTexture::load(char *strDir, char **astrFnames, int iNoOfFiles)
+bool CTexture::load(char **astrFnames, int iNoOfFiles)
 {
 	bool bGood = false;
-	char strFile[200];
+	char strFile[200] = "Data/Texture/";
 
 	int iCount;
 	for ( iCount = 0 ; iCount < iNoOfFiles ; iCount++ )
@@ -35,15 +35,6 @@ bool CTexture::load(char *strDir, char **astrFnames, int iNoOfFiles)
 
 		if (strlen(astrFnames[iCount]) > 0)
 		{
-			if (strlen(strDir) > 0)
-			{
-				strcpy(strFile, strDir);
-				strcat(strFile, "/");
-			}
-			else
-			{
-				strcpy(strFile, "");
-			}
 			strcat(strFile, astrFnames[iCount]);
 
 			// Load the file
