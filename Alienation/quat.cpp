@@ -1,4 +1,3 @@
-#include <windows.h>
 #include "quat.h"
 #include "math.h"
 

@@ -106,7 +106,7 @@ void C3dsLoader::init3ds(char* pFilename)
 					
 					if(m_o3DModel.m_pMaterials.size() < pObject->m_iMaterialID) 
 					{
-						BYTE *pColor = m_o3DModel.m_pMaterials[pObject->m_iMaterialID].m_uiColor;
+						unsigned char *pColor = m_o3DModel.m_pMaterials[pObject->m_iMaterialID].m_uiColor;
 						
 						glColor3ub(pColor[0], pColor[1], pColor[2]);
 					}

@@ -8,7 +8,6 @@
 #ifndef _PHYSICS1_H
 #define _PHYSICS1_H
 #include <math.h>
-//#include <windows.h>											// Header File For Windows
 #include <stdio.h>												// Header File For Standard Input/Output
 #include "quat.h"
 #include "vector.h"
@@ -90,7 +89,7 @@ public:
 			m_ppMasses[a] = new CMass(fMass);				// Create a Mass as a pointer and put it in the array
 	}
 
-	~CSimulation()									// Destructor
+	virtual ~CSimulation()									// Destructor
 	{
 		release();
 	}

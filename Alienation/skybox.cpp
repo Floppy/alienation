@@ -1,6 +1,6 @@
 #include "Skybox.h"
 #include <stdio.h>
-
+#include <SDL_image.h>
 
 CSkybox::CSkybox()
 {
@@ -13,7 +13,7 @@ CSkybox::~CSkybox()
 void CSkybox::DrawSB(CVector3 pos)
 {
 	glPushMatrix();
-	glTranslatef(pos.x, pos.y, pos.z);
+	glTranslatef(pos.m_fx, pos.m_fy, pos.m_fz);
 	glScalef(2000.0f, 2000.0f, 2000.0f);
 	glCallList(list);
 	glPopMatrix();
@@ -97,26 +97,6 @@ void CSkybox::initSB()
 //	model.Init_3ds("Data/model/Sphere01.3ds");
 }
 
-AUX_RGBImageRec * CSkybox::LoadBMP(char *Filename)				// Loads A Bitmap Image
-{
-	FILE *File=NULL;									// File Handle
-
-	if (!Filename)										// Make Sure A Filename Was Given
-	{
-		return NULL;									// If Not Return NULL
-	}
-
-	File=fopen(Filename,"r");							// Check To See If The File Exists
-
-	if (File)											// Does The File Exist?
-	{
-		fclose(File);									// Close The Handle
-		return auxDIBImageLoad(Filename);				// Load The Bitmap And Return A Pointer
-	}
-
-	return NULL;										// If Load Failed Return NULL
-}
-
 bool CSkybox::LoadGLTextures()
 {
 	bool Status=false;						// Status Indicator
@@ -128,7 +108,7 @@ bool CSkybox::LoadGLTextures()
 	"Data/clouds07.bmp",
 	"Data/clouds08.bmp"};
 
-	AUX_RGBImageRec *TextureImage[1];					// Create Storage Space For The Texture
+	SDL_Surface *TextureImage[1];					// Create Storage Space For The Texture
 
 	for ( int count = 0 ; count < 6 ; count++ )
 	{
@@ -136,7 +116,7 @@ bool CSkybox::LoadGLTextures()
 		memset(TextureImage,0,sizeof(void *)*1);           	// Set The Pointer To NULL
 
 		// Load The Bitmap, Check For Errors, If Bitmap's Not Found Quit
-		if (TextureImage[0]=LoadBMP((char *)fileArr[count]))
+		if (TextureImage[0]=IMG_Load((char *)fileArr[count]))
 		{
 			Status=true;									// Set The Status To TRUE
 
@@ -146,19 +126,11 @@ bool CSkybox::LoadGLTextures()
 			glBindTexture(GL_TEXTURE_2D, texture[count]);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-			glTexImage2D(GL_TEXTURE_2D, 0, 3, TextureImage[0]->sizeX, TextureImage[0]->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureImage[0]->data);
+			glTexImage2D(GL_TEXTURE_2D, 0, 3, TextureImage[0]->w, TextureImage[0]->h, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureImage[0]->pixels);
 		}
 	}
 
-	if (TextureImage[0])								// If Texture Exists
-	{
-		if (TextureImage[0]->data)						// If Texture Image Exists
-		{
-			free(TextureImage[0]->data);				// Free The Texture Image Memory
-		}
-
-		free(TextureImage[0]);							// Free The Image Structure
-	}
+	SDL_FreeSurface(TextureImage[0]);
 
 	return Status;										// Return The Status
 }

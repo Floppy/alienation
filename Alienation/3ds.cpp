@@ -26,7 +26,7 @@ bool CLoad3DS::import3DS(C3DModel *pModel, char *strFileName)
 	if(!m_pFilePointer) 
 	{
 		sprintf(strMessage, "Unable to find the file: %s!", strFileName);
-		MessageBox(NULL, strMessage, "Error", MB_OK);
+		//MessageBox(NULL, strMessage, "Error", MB_OK);
 		return false;
 	}
 	
@@ -35,7 +35,7 @@ bool CLoad3DS::import3DS(C3DModel *pModel, char *strFileName)
 	if (m_pCurrentChunk->m_uiID != PRIMARY)
 	{
 		sprintf(strMessage, "Unable to load PRIMARY chuck from file: %s!", strFileName);
-		MessageBox(NULL, strMessage, "Error", MB_OK);
+		//MessageBox(NULL, strMessage, "Error", MB_OK);
 		return false;
 	}
 	
@@ -84,7 +84,7 @@ void CLoad3DS::processNextChunk(C3DModel *pModel, CChunk *pPreviousChunk)
 			m_pCurrentChunk->m_iBytesRead += fread(&iVersion, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);
 			
 			if (iVersion > 0x03)
-				MessageBox(NULL, "This 3DS file is over version 3 so it may load incorrectly", "Warning", MB_OK);
+				//MessageBox(NULL, "This 3DS file is over version 3 so it may load incorrectly", "Warning", MB_OK);
 			break;
 			
 		case OBJECTINFO:						
@@ -198,7 +198,7 @@ void CLoad3DS::processNextMaterialChunk(C3DModel *pModel, CChunk *pPreviousChunk
 	{
 		readChunk(m_pCurrentChunk);
 		
-		switch (pModel, m_pCurrentChunk->m_uiID)
+		switch (m_pCurrentChunk->m_uiID)
 		{
 		case MATNAME:						 
 			m_pCurrentChunk->m_iBytesRead += fread(pModel->m_pMaterials[pModel->m_iNumOfMaterials - 1].m_strName, 1, m_pCurrentChunk->m_iLength - m_pCurrentChunk->m_iBytesRead, m_pFilePointer);

@@ -11,9 +11,8 @@
 
 #include "3dsLoader.h"
 #include "Vertices.h"
-#include <gl\gl.h>			// Header File For The OpenGL32 Library
-#include <gl\glu.h>			// Header File For The GLu32 Library
-#include <gl\glaux.h>		// Header File For The Glaux Library
+#include <GL/gl.h>			// Header File For The OpenGL32 Library
+#include <GL/glu.h>			// Header File For The GLu32 Library
 
 class CSkybox  
 {
@@ -26,7 +25,6 @@ public:
 	virtual ~CSkybox();
 	void DrawSB(CVector3 pos);
 	void initSB();
-	AUX_RGBImageRec * LoadBMP(char *Filename);
 	bool LoadGLTextures();
 };
 

@@ -33,7 +33,7 @@ CShip::CShip(int num, float mass) : CSimulation(num, mass)
 
 	m_poShips[0].m_poTrail = new CTrail(1000, CVector3(0.0f, -0.5f, 7.2f));
 	m_poShips[0].m_poWeapon = new CWeapon(100, CVector3(0.0f, -0.3f, -3.3f)); 
-	m_poShips[0].m_poBrake = new CBrake(100, CVector3(.0.f, 0.0f, 0.0f));
+	m_poShips[0].m_poBrake = new CBrake(100, CVector3(0.0f, 0.0f, 0.0f));
 
 	m_poShips[0].m_matRotation.LoadIdentity();
 }

@@ -28,10 +28,8 @@
 #define OBJECT_UV			0x4140			
 
 #include "vector.h"
-#include <windows.h>
-#include <gl\gl.h>
-#include <gl\glu.h>
-#include <gl\glaux.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include <stdio.h>
 #include <string.h>
 #include <fstream>
@@ -62,7 +60,7 @@ class CMaterialInfo
 public:
 	char  m_strName[255];							
 	char  m_strFile[255];							
-	BYTE  m_uiColor[3];								
+	unsigned char  m_uiColor[3];								
 	int   m_iTexureId;								
 	float m_fUTile;								
 	float m_fVTile;								
@@ -82,7 +80,7 @@ public:
 	int  m_iMaterialID;			
 	bool m_bHasTexture;			
 	char m_strName[255];			
-	UINT      *m_pIndices;		
+	unsigned int     *m_pIndices;		
 	CVector3  *m_pVerts;			
 	CVector3  *m_pNormals;		
 	CVector2  *m_pTexVerts;		

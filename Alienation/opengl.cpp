@@ -535,6 +535,8 @@ bool COpenGL::mouseUser(SDL_Event oEvent)
 
 					m_fRoll -= 1.0;
 					break;
+				default:
+					break;
 			}
 			break;
 

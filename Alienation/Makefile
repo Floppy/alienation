@@ -9,23 +9,21 @@ DEPEND = .depend
 
 CPPFLAGS = -Wall
 
-INC = -I/usr/include/SDL
+INC = -I/usr/include/SDL/
 
-LIBS =
+LIBS = -lGL -lGLU -lSDL -lpthread -lSDL_image
 
-OBJS = 3ds.o GLFont.o ParticleEngine.o skybox.o Weapon.o \
-	3dsLoader.o GUI.o PlayerShip.o Stars.o Widgit.o \
-	AIShip.o Light.o program.o Texture.o \
-	Brake.o matrix.o quat.o Trail.o \
-	Cpp1.o opengl.o Ship.o Vertices.o
+OBJS = 3ds.o 3dsLoader.o AIShip.o Brake.o \
+	GLFont.o GUI.o Light.o main.o matrix.o opengl.o \
+        ParticleEngine.o PlayerShip.o quat.o Ship.o \
+	skybox.o Stars.o Texture.o Trail.o Vertices.o \
+        Weapon.o Widgit.o
 
-SRCS = 3ds.cpp GLFont.cpp ParticleEngine.cpp skybox.cpp Weapon.cpp \
-        3dsLoader.cpp GUI.cpp PlayerShip.cpp Stars.cpp Widgit.cpp \
-        AIShip.cpp Light.cpp program.cpp Texture.cpp \
-        Brake.cpp matrix.cpp quat.cpp Trail.cpp \
-        Cpp1.cpp opengl.cpp Ship.cpp Vertices.cpp
-
-all: demo
+SRCS = 3ds.cpp 3dsLoader.cpp AIShip.cpp Brake.cpp \
+        GLFont.cpp GUI.cpp Light.cpp main.cpp matrix.cpp opengl.cpp \
+        ParticleEngine.cpp PlayerShip.cpp quat.cpp Ship.cpp \
+        skybox.cpp Stars.cpp Texture.cpp Trail.cpp Vertices.cpp \
+        Weapon.cpp Widgit.cpp 
 
 demo: $(OBJS)
 	$(CPP) -o $(EXE) $(LIBS) $(OBJS)
@@ -35,7 +33,7 @@ demo: $(OBJS)
 
 depend: $(DEPEND)
 $(DEPEND):
-	g++ -MM $(SRCS) > $(DEPEND)
+	g++ -MM $(INC) $(CPPFLAGS) $(SRCS) > $(DEPEND)
 
 include $(DEPEND)
 

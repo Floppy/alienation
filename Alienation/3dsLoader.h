@@ -6,14 +6,11 @@
 
 #include "3ds.h"
 #include "Texture.h"
-#include <windows.h>
-#include <windowsx.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <gl\gl.h>
-#include <gl\glu.h>
-#include <gl\glaux.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #define MAXTEXTURE 100
 
 
