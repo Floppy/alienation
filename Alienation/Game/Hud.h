@@ -16,7 +16,7 @@
 #include "Equipment/SpeedIndicator.h"
 #include "Equipment/ThrustInformation.h"
 
-namespace NSD2D {
+//namespace NSD2D {
 
    /** 
     * Head-Up Display. 
@@ -116,6 +116,6 @@ namespace NSD2D {
 	   CThrustIndicator * m_poThrustIndicator;
    };
    
-}
+//}
 
 #endif // HUD_H

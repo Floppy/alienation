@@ -16,6 +16,7 @@
       /** 
        * Load a CShip from a Lua script.
        * @param strFileName The filename to load.
+       * @param bPlayer Create a ship for the local player?
        * @return A pointer to the loaded ship. NULL if the ship could not be loaded.
        */
       static CShip* load(const char *strFileName, bool bPlayer=false);

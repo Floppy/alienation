@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 
-namespace NSD2D {
+//namespace NSD2D {
 
    CHud::CHud(CShip* pPlayerShip) :
       m_pPlayerShip(pPlayerShip),
@@ -315,4 +315,4 @@ namespace NSD2D {
       pTexture->postRenderToTexture(GL_LUMINANCE_ALPHA);
    }
    
-}
+//}

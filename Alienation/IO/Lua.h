@@ -49,7 +49,7 @@ namespace NSDIO {
 
       /**
        * Push an indexed value onto the stack.
-       * @param name The index of the object to push.
+       * @param index The index of the object to push.
        * @param type The type of the object expected. These types are defined in lua.h.
        * @return true if the table was pushed successfully and was the correct type.
        */
