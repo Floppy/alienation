@@ -12,9 +12,9 @@
 #endif // _MSC_VER > 1000
 
 
-#include "3D/texture.h"
-#include "GL/glfont.h"
-#include "Game/ship.h"
+#include "3D/Texture.h"
+#include "GL/GLFont.h"
+#include "Game/Ship.h"
 
 class CHud  
 {

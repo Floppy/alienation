@@ -24,7 +24,7 @@
 #include "Game/PlayerShip.h"
 #include "AI/AIShip.h"
 #include "3D/Light.h"
-#include "3D/Frustum.h "
+#include "3D/Frustum.h"
 #include <SDL.h>
 
 class CKeys {											// Structure For Keyboard Stuff
