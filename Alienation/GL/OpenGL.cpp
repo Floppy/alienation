@@ -156,9 +156,9 @@ bool COpenGL :: initGL() {
    m_poLight->init(oAmbient, oDiffuse, oPosition);
    // Create sun sprite
    CMaterial oMaterial;
-   oMaterial.m_oEmissive = CRGBAColour(1.0f, 1.0f, 1.0f,0);
-   oMaterial.m_oDiffuse  = CRGBAColour(0.0f, 0.0f, 0.0f,0);
-   oMaterial.m_oSpecular = CRGBAColour(0.0f, 0.0f, 0.0f,0);
+   oMaterial.m_oEmissive = CRGBAColour(1.0f, 1.0f, 1.0f,1.0f);
+   oMaterial.m_oDiffuse  = CRGBAColour(0.0f, 0.0f, 0.0f,1.0f);
+   oMaterial.m_oSpecular = CRGBAColour(0.0f, 0.0f, 0.0f,1.0f);
    // Load sun textures
    oMaterial.m_uiTexture = g_oTextureManager.load("sun.png");
    // Set material
