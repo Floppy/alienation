@@ -14,4 +14,8 @@ LIBS="$LIBS $SDL_LIBS -lGL -lGLU -lSDL_image -lfmod-3.62 -L$with_fmod"
 AC_CHECK_HEADER(fmod.h,,exit)
 AC_CHECK_LIB(fmod-3.62,FSOUND_Init,,exit)
 
+AC_CHECK_LIB(SDL,SDL_Init,,exit)
+
+AC_CHECK_LIB(SDL_image,IMG_Load,,exit)
+
 AC_OUTPUT(Makefile Math/Makefile IO/Makefile 3D/Makefile Physics/Makefile GL/Makefile)
