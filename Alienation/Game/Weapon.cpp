@@ -166,14 +166,10 @@ void CWeapon::render(void)
 	float afMaterial[4];
 
 	//Texture and blending stuff
-	//g_oTextureManager.activate(m_uiTexture);
 	glEnable(GL_BLEND);
 	glDepthMask(GL_FALSE);
-	glPushAttrib(GL_COLOR_MATERIAL);
 
 	//then draw the particles
-	//glBegin(GL_QUADS);
-        //int iCount;
         for (int iCount = 0 ; iCount < m_iParticlesCreated ; iCount++)
         {
            if (m_oFrustum.PointInFrustum(m_poParticles[iCount].m_vecPosition))
@@ -184,8 +180,8 @@ void CWeapon::render(void)
               m_oSprite.render();
            }
         }
-	//glEnd();
-	glPopAttrib();
+
+        // Tidy up
 	glDepthMask(GL_TRUE); 
 	glDisable(GL_BLEND);
 }
@@ -193,7 +189,7 @@ void CWeapon::render(void)
 void CWeapon::init()
 {
    CMaterial oMaterial;
-   oMaterial.m_oDiffuse = CRGBAColour(255,51,102,8);
+   oMaterial.m_oEmissive = CRGBAColour(1.0f,0.2f,0.4f,0.03f);
    oMaterial.m_uiTexture = g_oTextureManager.load("ball.png");
    m_oSprite.setMaterial(oMaterial);
    m_oSprite.init();

@@ -6,7 +6,7 @@
 
 /**
  * Colour with Red, Green, Blue and Alpha components.
- * Designed to be easy to use as a GL colour. Values are stored as bytes 0..255
+ * Designed to be easy to use as a GL colour. Values are stored as floating-point values 0..1
  */ 
 class CRGBAColour 
 {
@@ -15,61 +15,61 @@ public:
 
    /**
     * Constructor
-    * Arguments are byte colour values to set this colour to.
-    * @param cRed The red value.
-    * @param cGreen The green value.
-    * @param cBlue The blue value.
-    * @param cAlpha The alpha value.
+    * Arguments are float colour values to set this colour to.
+    * @param fRed The red value.
+    * @param fGreen The green value.
+    * @param fBlue The blue value.
+    * @param fAlpha The alpha value.
     */ 
-   CRGBAColour(unsigned char cRed, unsigned char cGreen, unsigned char cBlue, unsigned char cAlpha) 
+   CRGBAColour(float fRed, float fGreen, float fBlue, float fAlpha) 
    {
-      m_acColour[0] = cRed;
-      m_acColour[1] = cGreen;
-      m_acColour[2] = cBlue;
-      m_acColour[3] = cAlpha;
+      m_afColour[0] = fRed;
+      m_afColour[1] = fGreen;
+      m_afColour[2] = fBlue;
+      m_afColour[3] = fAlpha;
    }
 
    /**
     * Component access.
     * @return The red value.
     */ 
-   unsigned char R() 
-      { return m_acColour[0]; }
+   float R() const
+      { return m_afColour[0]; }
 
    /**
     * Component access.
     * @return The green value.
     */ 
-   unsigned char G() 
-      { return m_acColour[1]; }
+   float G() const
+      { return m_afColour[1]; }
    
    /**
     * Component access.
     * @return The blue value.
     */ 
-   unsigned char B() 
-      { return m_acColour[2]; }
+   float B() const
+      { return m_afColour[2]; }
    
    /**
     * Component access.
     * @return The alpha value.
     */ 
-   unsigned char A() 
-      { return m_acColour[3]; }
+   float A() const
+      { return m_afColour[3]; }
    
    /**
     * Array access
-    * @return An array suitable for using directly with glColor4ubv()
+    * @return An array suitable for using directly with glColor4fv() and other similar functions.
     */ 
-   const unsigned char* glColour() const
-   { return m_acColour; }
+   const float* glColour() const
+   { return m_afColour; }
 
  protected:
 
    /**
     * Component array.
     */ 
-   unsigned char m_acColour[4];
+   float m_afColour[4];
 
 };
 
@@ -118,6 +118,11 @@ class CMaterial
     * Diffuse Colour.
     */ 
    CRGBAColour m_oDiffuse;
+
+   /**
+    * Emissive Colour.
+    */ 
+   CRGBAColour m_oEmissive;
 
    /**
     * Texture ID.

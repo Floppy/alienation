@@ -7,6 +7,7 @@ using namespace std;
 
 CMaterial::CMaterial() :
    m_oDiffuse(0,0,0,0),
+   m_oEmissive(0,0,0,0),
    m_uiTexture(0)
 {
 }
@@ -17,6 +18,7 @@ CMaterial::~CMaterial() {
 
 CMaterial::CMaterial(const CMaterial& material) :
    m_oDiffuse(material.m_oDiffuse),
+   m_oEmissive(material.m_oEmissive),
    m_uiTexture(material.m_uiTexture)
 {
    g_oTextureManager.addReference(m_uiTexture);
@@ -26,8 +28,9 @@ const CMaterial& CMaterial::operator=(const CMaterial& material) {
    // Texture
    m_uiTexture = material.m_uiTexture;
    g_oTextureManager.addReference(m_uiTexture);
-   // Colour
+   // Colours
    m_oDiffuse = material.m_oDiffuse;
+   m_oEmissive = material.m_oEmissive;
    // Done
    return *this;
 }
@@ -36,7 +39,8 @@ void CMaterial::render() const {
    // Texture
    g_oTextureManager.activate(m_uiTexture);
    // Diffuse colour
-   //glColor4ubv(m_oDiffuse.glColour());
+   glMaterialfv(GL_FRONT,GL_DIFFUSE,m_oDiffuse.glColour());
+   glMaterialfv(GL_FRONT,GL_EMISSION,m_oEmissive.glColour());
    // Done
    return;
 }

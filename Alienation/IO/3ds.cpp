@@ -251,6 +251,11 @@ void CLoad3DS::processNextMaterialChunk(CModel *pModel, CChunk *pPreviousChunk)
    
       switch (m_pCurrentChunk->m_uiID)
       {
+      case _3DS_MATDIFFUSE: {
+         // Read colour into material
+         readColorChunk(&newMaterial, m_pCurrentChunk);
+      }	break;
+			
       case _3DS_MATNAME: {         
          // Read material name
          m_pCurrentChunk->m_iBytesRead += fread(strMaterialName,
@@ -297,11 +302,6 @@ void CLoad3DS::processNextMaterialChunk2(CMaterial& oMaterial, CChunk *pPrevious
    
       switch (m_pCurrentChunk->m_uiID)
       {
-      case _3DS_MATDIFFUSE: {
-         // Read colour into material
-         readColorChunk(&oMaterial, m_pCurrentChunk);
-      }	break;
-			
       case _3DS_MATMAPFILE: {
          // Get filename
          char strFilename[64];
@@ -375,7 +375,7 @@ void CLoad3DS::readColorChunk(CMaterial *pMaterial, CChunk *pChunk)
    m_pTempChunk->m_iBytesRead += fread(col, 1, m_pTempChunk->m_iLength - m_pTempChunk->m_iBytesRead, m_pFilePointer);
    pChunk->m_iBytesRead += m_pTempChunk->m_iBytesRead;
    // store
-   pMaterial->m_oDiffuse = CRGBAColour(col[0],col[1],col[2],col[3]);
+   pMaterial->m_oDiffuse = CRGBAColour(col[0]/255.0,col[1]/255.0,col[2]/255.0,col[3]/255.0);
 }
 
 

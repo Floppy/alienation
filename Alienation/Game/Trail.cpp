@@ -111,14 +111,11 @@ void CTrail::render(float fThrust, CVector3 vecOrigin)
    glEnable(GL_BLEND);
    glDepthMask(GL_FALSE);
 
-   // Save state
-   glPushAttrib(GL_COLOR_MATERIAL);
-
    // Draw engine flare
    if (m_oFrustum.PointInFrustum(vecOrigin)) {
       // Calculate engine flare size
       float fSize = fThrust * 0.0005f;
-      if (fSize > 2.5f) fSize = 2.5f;
+      if (fSize > 3.0f) fSize = 3.0f;
       m_oFlare.setSize(fSize);
       // Set location
       m_oFlare.setTranslation(vecOrigin);
@@ -137,9 +134,6 @@ void CTrail::render(float fThrust, CVector3 vecOrigin)
       }
    }
    
-   // Restore state
-   glPopAttrib();
-
    // Disable alpha blend
    glDepthMask(GL_TRUE); 
    glDisable(GL_BLEND);
@@ -235,14 +229,14 @@ void CTrail::init()
 {
    // Create trail particle geometry
    CMaterial oTrailMaterial;
-   oTrailMaterial.m_oDiffuse = CRGBAColour(255,255,64,0);
+   oTrailMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,0.25f,0);
    oTrailMaterial.m_uiTexture = g_oTextureManager.load("star.png");   
    m_oTrail = CSprite(oTrailMaterial);
    m_oTrail.init();
 
    // Create engine flare
    CMaterial oFlareMaterial;
-   oFlareMaterial.m_oDiffuse = CRGBAColour(255, 255, 255, 0);
+   oFlareMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f, 0);
    oFlareMaterial.m_uiTexture = g_oTextureManager.load("flare.png");
    m_oFlare = CSprite(oFlareMaterial);
    m_oFlare.init();
