@@ -79,6 +79,13 @@ namespace NSDIO {
        */
       CVector3 getVector3(const char* field);
 
+      /**
+       * Get a 2D vector from a field.
+       * @param field The field name to access.
+       * @return The vector from the field.
+       */
+      CVector2 getVector2(const char* field);
+
    private:
 
       /**

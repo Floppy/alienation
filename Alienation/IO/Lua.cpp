@@ -128,4 +128,17 @@ namespace NSDIO {
       return CVector3(fX,fY,fZ);
    }
 
+   CVector2 CLua::getVector2(const char* field) 
+   {
+      if (!enterTable(field))
+         return CVector2(0,0);
+      // Get values
+      float fX = getNumber("x");
+      float fY = getNumber("y");
+      // Pop stack
+      exitTable();
+      // Done
+      return CVector2(fX,fY);
+   }
+
 }
