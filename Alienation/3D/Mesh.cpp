@@ -9,9 +9,9 @@ CMesh::CMesh() :
    m_iNumFaces(0),
    m_iNumTexVertex(0),
    m_pVerts(NULL),
-   m_pNormals(NULL),
    m_pTexVerts(NULL),
    m_pFaces(NULL),
+   m_pNormals(NULL),
    m_uiList(0)
 {}
 

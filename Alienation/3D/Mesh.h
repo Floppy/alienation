@@ -9,7 +9,6 @@
 /**
  * A triangular mesh face.
  * Contains vertex and texture coordinate indices.
- * \ingroup libAlienation3D
  */
 class CFace
 {
@@ -106,11 +105,6 @@ class CMesh : public C3DObject {
    CVector3 *m_pVerts;
 
    /** 
-    * Vertex normal array
-    */
-   CVector3 *m_pNormals;
-
-   /** 
     * Texture coordinate array
     */
    CVector2 *m_pTexVerts;
@@ -121,6 +115,11 @@ class CMesh : public C3DObject {
    CFace *m_pFaces;
    
  protected:
+
+   /** 
+    * Vertex normal array
+    */
+   CVector3 *m_pNormals;
 
    /** 
     * Mesh material
