@@ -112,7 +112,7 @@ bool COpenGL :: DrawGLScene(GLvoid) {
 
 //Called from main, this funnction gives time based movement. Needs seperating into seperate 
 //function calls for readability
-void COpenGL::Update (DWORD dMilliseconds)								
+void COpenGL::Update (unsigned int dMilliseconds)								
 {
 
 

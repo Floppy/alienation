@@ -27,8 +27,8 @@ int main(int argc, char* argv[])
 {
    bool     bDone = false;  // Bool Variable To Exit Loop
    int      iVirtual_code;
-	DWORD		dTickCount;	
-	DWORD		dLastTickCount;
+	unsigned int		dTickCount;	
+	unsigned int		dLastTickCount;
    COpenGL	oGame = COpenGL();
 	SDL_Event oEvent;
 	SDL_Joystick *poJoystick;
