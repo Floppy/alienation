@@ -363,7 +363,7 @@ class CVector3
     */
    float angle(const CVector3& vec) const
    {
-      return acos(this->dot(vec) / (length() * vec.length()));
+      return static_cast<float>(acos(this->dot(vec) / (length() * vec.length())));
    }
 
  protected:
