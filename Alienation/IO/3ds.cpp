@@ -418,6 +418,12 @@ void CLoad3DS::readUVCoordinates(CMesh *pObject, CChunk *pPreviousChunk)
 	pObject->m_pTexVerts = new CVector2 [pObject->m_iNumTexVertex];
 	
 	pPreviousChunk->m_iBytesRead += fread(pObject->m_pTexVerts, 1, pPreviousChunk->m_iLength - pPreviousChunk->m_iBytesRead, m_pFilePointer);
+        
+        //Invert V
+        for (int i=0; i<pObject->m_iNumTexVertex; i++) {
+           pObject->m_pTexVerts[i].Y() = -pObject->m_pTexVerts[i].Y();
+        }
+
 }
 
 
