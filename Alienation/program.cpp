@@ -20,6 +20,7 @@
 #include <fmod.h>
 #include <SDL.h>
 
+
 #define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
 #define piover180 	(0.0174532925f)
 
@@ -82,7 +83,7 @@ int main(int argc, char* argv[])
 
 	oGame.initGL();
 
-	dLastTickCount = GetTickCount();
+	dLastTickCount = SDL_GetTicks();
 
 	FSOUND_Stream_Play(FSOUND_FREE, poMod);   
 
@@ -104,7 +105,7 @@ int main(int argc, char* argv[])
 		}
 
 		// Draw The Scene
-		dTickCount = GetTickCount ();				// Get The Tick Count
+		dTickCount = SDL_GetTicks ();				// Get The Tick Count
 		oGame.Update (dTickCount - dLastTickCount);	// Update The Counter
 		dLastTickCount = dTickCount;			// Set Last Count To Current Count
 
