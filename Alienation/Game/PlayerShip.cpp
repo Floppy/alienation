@@ -142,7 +142,7 @@ void CPlayerShip::draw()
         g_oSoundManager.setVolume(m_poShips[0].m_fThrust/10000.0f,m_iThrustChannel);
         if (m_poShips[0].m_fThrust != 0.0f) {
            for (int i=0; i<m_poShips[0].m_iNumTrails; i++) {
-              m_poShips[0].m_poTrails[i].render(m_poShips[0].m_fThrust, m_poShips[0].m_avecTrailPoints[0]);
+              m_poShips[0].m_poTrails[i].render(m_poShips[0].m_fThrust, m_poShips[0].m_avecTrailPoints[i]);
            }
         }
         
@@ -152,7 +152,6 @@ void CPlayerShip::draw()
         // Draw brake exhaust
         m_poShips[0].m_poBrake->render();
         
-
 }
 
 //Calcuates the external view camera

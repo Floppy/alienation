@@ -30,7 +30,6 @@ public:
 	void update(float fDT);                        // Updates particle system
 	void render(void);                                    // Render particles to the screen
 	void createParticle(int i, CVector3 vecHead, CVector3 vecPos);
-	void reset();
 private:
 	unsigned int m_uiTexture;
         CSprite m_oSprite;

@@ -24,7 +24,6 @@ public:
 	CWeapon(int iNumParticles, CVector3 vecOrigin);
 	virtual ~CWeapon();
 
-	void reset(void);                           // Resets entire particle system
 	void resetParticle(int i);              // Resets specific particle (with index i)
 	void update(float fDT);           // Updates particle system
 	void update(float fDT, CVector3 vecHeading, CVector3 vecPos, float fSpeed, bool bFireHeld);           // Updates particle system

@@ -12,11 +12,18 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+CTrail::CTrail() :
+   CParticleEngine()
+{
+   randomSeed( (unsigned)time( NULL ) );
+}
+
 CTrail::CTrail(int iNumParticles, CVector3 vecOrigin) :
    CParticleEngine(iNumParticles,vecOrigin)
 {
    randomSeed( (unsigned)time( NULL ) );
 }
+
 
 CTrail::~CTrail()
 {
@@ -41,7 +48,7 @@ void CTrail::update(float fDT, float fThrust, CVector3 vecPos, CVector3 vecStart
 	CVector3 vecSpeed, vecTemp;
 
 	//Create a heading for any new particles created this update
-	// The start vector is the position of the of the origin of the 
+	//The start vector is the position of the of the origin of the 
 	//particles on the ship itself. It is rotated along with the ships
 	//heading vector (in fact created from it.And as you can see, the 
 	//particles always start from the correct position, so it should be
@@ -103,11 +110,13 @@ void CTrail::render(float fThrust, CVector3 vecOrigin)
    glEnable(GL_BLEND);
    glDepthMask(GL_FALSE);
 
+   // Calculate engine flare size
+   float fSize = fThrust * 0.0005f;
+   if (fSize > 3.0f) fSize = 3.0f;
+   //m_oTrail.setSize(fSize);
+
    // Draw engine flare
    if (m_oFrustum.PointInFrustum(vecOrigin)) {
-      // Calculate engine flare size
-      float fSize = fThrust * 0.0005f;
-      if (fSize > 3.0f) fSize = 3.0f;
       m_oFlare.setSize(fSize);
       // Set location
       m_oFlare.setTranslation(vecOrigin);
@@ -134,17 +143,8 @@ void CTrail::render(float fThrust, CVector3 vecOrigin)
 
 void CTrail::resetParticle(int i)
 {
-
+	memset (m_poParticles+i, 0, sizeof(CParticle));	
 }
-
-void CTrail::reset()
-{
-	memset ((void *)m_poParticles, 0, sizeof(CParticle) * m_iParticlesCreated);
-	m_iParticlesCreated = 0;
-}
-
-
-
 
 void CTrail::createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vecOrigin, CVector3 vecUp, CVector3 vecRight,
 					CVector3 vecPos, float fWidth, float fHeight)

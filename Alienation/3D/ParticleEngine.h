@@ -40,9 +40,10 @@ public:
 	
 
 
+	virtual void setup(int iNumParticles, CVector3 vecOrigin);
 	virtual void reset(void);                           // Resets entire particle system
 	virtual void resetParticle(int i) = 0;              // Resets specific particle (with index i)
-	virtual void update(float fDT) = 0;		    // Updates particle system
+	virtual void update(float fDT) = 0;					// Updates particle system
 	virtual void render(void) = 0;                      // Render particles to the screen
 
 };

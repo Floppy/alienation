@@ -18,7 +18,8 @@ CShip::CShip(int num, float mass) : CSimulation(num, mass)
    m_poShips[0].m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
    m_poShips[0].m_oSphere.m_fRadius = 13.0f;
    m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
-   m_poShips[0].m_avecTrailPoints[0] = CVector3(0.0f, 0.0f, 7.0f);
+   m_poShips[0].m_avecTrailPoints[0] = CVector3(-10.0f, 0.0f, 7.0f);
+   m_poShips[0].m_avecTrailPoints[1] = CVector3(10.0f, 0.0f, 7.0f);
    m_poShips[0].m_vecHeading = CVector3(0.0f, -2.0f, -11.0f);
    m_poShips[0].m_fThrust = 0.0f;
    m_poShips[0].m_fPitch = 0.0f;
@@ -37,9 +38,9 @@ CShip::CShip(int num, float mass) : CSimulation(num, mass)
    m_poShips[0].m_iFlightMode = 1;
 
    m_poShips[0].m_iNumTrails = 2;
-   m_poShips[0].m_poTrails = new CTrail[m_poShips[0].m_iNumTrails](0,CVector3(0,0,0));
-   m_poShips[0].m_poTrails[0] = CTrail(500, CVector3(1.0f, -0.5f, 7.2f));
-   m_poShips[0].m_poTrails[1] = CTrail(500, CVector3(-1.0f, -0.5f, 7.2f));
+   m_poShips[0].m_poTrails = new CTrail[m_poShips[0].m_iNumTrails];
+   for (int i=0; i<m_poShips[0].m_iNumTrails; i++)
+	  m_poShips[0].m_poTrails[0].setup(250, CVector3(0,0,0));
 
    m_poShips[0].m_poWeapon = new CWeapon(100, CVector3(0.0f, -0.3f, -3.3f)); 
    m_poShips[0].m_poBrake = new CBrake(100, CVector3(0.0f, 0.0f, 0.0f));
@@ -192,7 +193,7 @@ void CShip::simulate(float fDT)
 
 	//update trail, weapons and heading
         for (int i=0; i<m_poShips[0].m_iNumTrails; i++) 
-           m_poShips[0].m_poTrails[i].update(fDT, m_poShips[0].m_fThrust, m_ppMasses[0]->m_vecPos, m_poShips[0].m_avecTrailPoints[0], vecDistanceMoved, 
+           m_poShips[0].m_poTrails[i].update(fDT, m_poShips[0].m_fThrust, m_ppMasses[0]->m_vecPos, m_poShips[0].m_avecTrailPoints[i], vecDistanceMoved, 
 								  m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos, m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos, 1.5f, 0.5f);
 	vecGunHead = m_poShips[0].m_vecHeading - m_ppMasses[0]->m_vecPos;
 	m_poShips[0].m_poWeapon->update(fDT, vecGunHead, m_poShips[0].m_avecWeaponPoints[0], m_poShips[0].m_fVel, m_poShips[0].m_bWeaponFire);
@@ -234,19 +235,12 @@ void CShip::rotate(int iShip, float fDT)
 
 void CShip::rotHeading(CMatrix mat)
 {
-
-	m_poShips[0].m_vecHeading = mat * CVector3(0.0f, 0.0f, -1.0f);
-	m_poShips[0].m_vecUp = mat * CVector3(0.0f, 1.0f, 0.0f);
-	m_poShips[0].m_vecRight = mat * CVector3(1.0f, 0.0f, 0.0f);
-	m_poShips[0].m_avecWeaponPoints[0] = mat * CVector3(0.0f, -0.7f, -7.3f);
-	m_poShips[0].m_avecTrailPoints[0] = (m_poShips[0].m_vecHeading * -6.7f) + ((m_poShips[0].m_vecUp * -1) * 0.37f);
-	m_poShips[0].m_vecBrakePoint = mat * CVector3(0.0f, 0.7f, -2.5f);
-
-	m_poShips[0].m_vecHeading += m_ppMasses[0]->m_vecPos;
-	m_poShips[0].m_vecUp += m_ppMasses[0]->m_vecPos;
-	m_poShips[0].m_vecRight += m_ppMasses[0]->m_vecPos;
-	m_poShips[0].m_avecTrailPoints[0] += m_ppMasses[0]->m_vecPos;
-	m_poShips[0].m_vecCamView += m_ppMasses[0]->m_vecPos;
-	m_poShips[0].m_avecWeaponPoints[0] += m_ppMasses[0]->m_vecPos;
-	m_poShips[0].m_vecBrakePoint += m_ppMasses[0]->m_vecPos;
+	m_poShips[0].m_vecHeading          = mat * CVector3( 0.0f, 0.0f,-1.0f) + m_ppMasses[0]->m_vecPos;
+	m_poShips[0].m_vecUp               = mat * CVector3( 0.0f, 1.0f, 0.0f) + m_ppMasses[0]->m_vecPos;
+	m_poShips[0].m_vecRight            = mat * CVector3( 1.0f, 0.0f, 0.0f) + m_ppMasses[0]->m_vecPos;
+	m_poShips[0].m_avecWeaponPoints[0] = mat * CVector3( 0.0f,-0.7f,-7.3f) + m_ppMasses[0]->m_vecPos;
+	m_poShips[0].m_avecTrailPoints[0]  = mat * CVector3( 1.6f, 0.6f, 6.4f) + m_ppMasses[0]->m_vecPos;
+	m_poShips[0].m_avecTrailPoints[1]  = mat * CVector3(-1.6f, 0.6f, 6.4f) + m_ppMasses[0]->m_vecPos;
+	m_poShips[0].m_vecBrakePoint       = mat * CVector3( 0.0f, 0.7f,-2.5f) + m_ppMasses[0]->m_vecPos;
+	m_poShips[0].m_vecCamView         += m_ppMasses[0]->m_vecPos;
 }

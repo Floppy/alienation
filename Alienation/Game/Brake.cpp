@@ -138,12 +138,5 @@ void CBrake::render()
 
 void CBrake::resetParticle(int i)
 {
-
+	memset (m_poParticles+i, 0, sizeof(CParticle));
 }
-
-void CBrake::reset()
-{
-	memset ((void *)m_poParticles, 0, sizeof(CParticle) * m_iParticlesCreated);
-	m_iParticlesCreated = 0;
-}
-

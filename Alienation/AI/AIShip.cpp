@@ -114,9 +114,9 @@ void CAIShip::simulate(float fDT)
 	//Then rotate
 	rotate(0, fDT);
 
-        for (int i=0; i<m_poShips[0].m_iNumTrails; i++) 
-           m_poShips[0].m_poTrails[i].update(fDT, m_poShips[0].m_fThrust, m_ppMasses[0]->m_vecPos, m_poShips[0].m_avecTrailPoints[0], vecDistanceMoved, 
-								  m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos, m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos, 1.5f, 0.5f);
+    for (int i=0; i<m_poShips[0].m_iNumTrails; i++) 
+       m_poShips[0].m_poTrails[i].update(fDT, m_poShips[0].m_fThrust, m_ppMasses[0]->m_vecPos, m_poShips[0].m_avecTrailPoints[i], vecDistanceMoved, 
+	                                     m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos, m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos, 1.5f, 0.5f);
 	CVector3 vecGunHead = m_poShips[0].m_vecHeading - m_ppMasses[0]->m_vecPos;
 	m_poShips[0].m_poWeapon->update(fDT, vecGunHead, m_poShips[0].m_avecWeaponPoints[0], m_poShips[0].m_fVel, m_poShips[0].m_bWeaponFire);
 }

@@ -21,20 +21,24 @@ CParticleEngine::CParticleEngine(int iNumParticles, CVector3 vecOrigin) :
    m_iParticlesCreated(0),
    m_poParticles(NULL)
 {
-    m_iNumParticles = iNumParticles;               // Set number of particles
-    vecOrigin = vecOrigin;                           // Set origin of particles
+   setup(iNumParticles,vecOrigin);
+}
 
+void CParticleEngine::setup(int iNumParticles, CVector3 vecOrigin)
+{
+	delete [] m_poParticles;
+	m_poParticles = NULL;
+    m_iNumParticles = iNumParticles;               // Set number of particles
+    m_vecOrigin = vecOrigin;                           // Set origin of particles
     m_poParticles = new CParticle[m_iNumParticles];     // Create particle list
+	m_iParticlesCreated = 0;
 }
 
 // Destructor
 CParticleEngine::~CParticleEngine(void)
 {
-    if (m_poParticles)                              // If particle list exists...
-    {
-        delete[] m_poParticles;                     // Delete it
-        m_poParticles = NULL;
-    }
+    delete[] m_poParticles;                     // Delete it
+    m_poParticles = NULL;
 }
 
 // Reset entire particle system

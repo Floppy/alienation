@@ -33,12 +33,6 @@ CWeapon::~CWeapon()
    g_oTextureManager.removeReference(m_uiTexture);
 }
 
-void CWeapon::reset(void)
-{
-	memset((void *)m_poParticles, 0, sizeof(CParticle) * m_iNumParticles);
-	m_iParticlesCreated = 0;
-}
-
 void CWeapon::resetParticle(int i)
 {
 	m_poParticles[i].m_vecPosition = CVector3(0.0f, 0.0f, 0.0f);
