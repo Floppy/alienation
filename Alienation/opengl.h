@@ -19,11 +19,9 @@
 #include <gl\glu.h>   // Header File For The GLu32 Library
 #include <gl\glaux.h> // Header File For The GLaux Library
 #include "stars.h"
-#include "camera.h"
 #include "ship.h"
 #include "glfont.h"
 #include "skybox.h"
-#include "planet.h"
 #include "playership.h"
 #include "aiship.h"
 #include "light.h"
@@ -54,7 +52,6 @@ class COpenGL {
 		CPlayerShip *m_poShip;
 		CSkybox *m_poSkybox;
 		CAIShip *m_poAIShip;
-		CPlanet *m_poEarth;
       COpenGL(HINSTANCE hinstance);
 		void Update (DWORD dMilliseconds);
       bool DrawGLScene(GLvoid);
