@@ -33,14 +33,14 @@ void C2DObject::renderQuad()
 
    glBegin(GL_QUADS);
 
-	  glTexCoord2fv(m_vecTex[0].glVector());
-	  glVertex2f(m_fXPos, m_fYPos);
-	  glTexCoord2fv(m_vecTex[1].glVector());
-	  glVertex2f(m_fXPos + m_fWidth, m_fYPos);
-	  glTexCoord2fv(m_vecTex[2].glVector());
-	  glVertex2f(m_fXPos + m_fWidth, m_fYPos + m_fHeight);
 	  glTexCoord2fv(m_vecTex[3].glVector());
 	  glVertex2f(m_fXPos, m_fYPos + m_fHeight);
+	  glTexCoord2fv(m_vecTex[2].glVector());
+	  glVertex2f(m_fXPos + m_fWidth, m_fYPos + m_fHeight);
+	  glTexCoord2fv(m_vecTex[1].glVector());
+	  glVertex2f(m_fXPos + m_fWidth, m_fYPos);
+	  glTexCoord2fv(m_vecTex[0].glVector());
+	  glVertex2f(m_fXPos, m_fYPos);
 
    glEnd();
    glPopMatrix();
