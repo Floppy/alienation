@@ -23,16 +23,13 @@
 #define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
 #define piover180 	(0.0174532925f)
 
-int WINAPI WinMain(HINSTANCE hInstance,     // Instance
-                   HINSTANCE hPrevInstance, // Previous Instance
-                   LPSTR     lpCmdLine,     // Command Line Parameters
-                   int       nCmdShow)      // Window Show State
+int main(int argc, char* argv[])
 {
    bool     bDone = false;  // Bool Variable To Exit Loop
    int      iVirtual_code;
 	DWORD		dTickCount;	
 	DWORD		dLastTickCount;
-   COpenGL	oGame = COpenGL(hInstance);
+   COpenGL	oGame = COpenGL();
 	SDL_Event oEvent;
 	SDL_Joystick *poJoystick;
 	FSOUND_STREAM * poMod = NULL;
@@ -57,9 +54,7 @@ int WINAPI WinMain(HINSTANCE hInstance,     // Instance
 	}
 
   
-	/*
-		LOAD SONG
-	*/
+	// LOAD SONG
 	poMod = FSOUND_Stream_OpenFile("./Data/media/Demo.mp3", FSOUND_LOOP_NORMAL, 0);
 	if (!poMod)
 	{
@@ -67,10 +62,8 @@ int WINAPI WinMain(HINSTANCE hInstance,     // Instance
 	}
 
 
-	/*
-	* Set the video mode
-	*/
-   if( SDL_SetVideoMode( 1024, 768, 16, iFlags ) == 0 ) {
+	// Set the video mode
+	if( SDL_SetVideoMode( 1024, 768, 16, iFlags ) == 0 ) {
 		return 0;
 	}
 
@@ -93,8 +86,8 @@ int WINAPI WinMain(HINSTANCE hInstance,     // Instance
 
 	FSOUND_Stream_Play(FSOUND_FREE, poMod);   
 
-   // Loop That Runs While done=false   
-   while (!bDone) {
+	// Loop That Runs While done=false   
+	while (!bDone) {
 
       // Is There A Message Waiting?
 		while (SDL_PollEvent(&oEvent))
@@ -110,26 +103,26 @@ int WINAPI WinMain(HINSTANCE hInstance,     // Instance
 
 		}
 
-      // Draw The Scene
+		// Draw The Scene
 		dTickCount = GetTickCount ();				// Get The Tick Count
 		oGame.Update (dTickCount - dLastTickCount);	// Update The Counter
 		dLastTickCount = dTickCount;			// Set Last Count To Current Count
 
-      if (oGame.DrawGLScene()) 
+		if (oGame.DrawGLScene()) 
 		{
-	     SDL_GL_SwapBuffers( );
-      }
-      else 
+			 SDL_GL_SwapBuffers( );
+		}
+		else 
 		{
-         bDone = true; // ESC or DrawGLScene Signalled A Quit
-      }
-   } //while
+			bDone = true; // ESC or DrawGLScene Signalled A Quit
+		}
+	} //while
 
-   // Shutdown
+	// Shutdown
 	SDL_ShowCursor(1);
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 
 	SDL_Quit();
-   return(0);  // Exit The Program
+	return 0;  // Exit The Program
 }
 

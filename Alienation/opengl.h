@@ -39,10 +39,6 @@ class COpenGL {
    protected:
 	   bool getCommon(SDL_Event event);
       bool      FullScreen;       // Fullscreen Flag Set To Fullscreen Mode By Default
-      HDC       hDC;              // Private GDI Device Context
-      HGLRC     hRC;              // Permanent Rendering Context
-      HWND      hWnd;             // Holds Our Window Handle
-      HINSTANCE hInstance;        // Holds The Instance Of The Application
 		CGLFont	 *m_poGlfont;
 		float m_fTimeElapsed;
    public:
@@ -53,10 +49,9 @@ class COpenGL {
 		CPlayerShip *m_poShip;
 		CSkybox *m_poSkybox;
 		CAIShip *m_poAIShip;
-      COpenGL(HINSTANCE hinstance);
+      COpenGL();
 		void Update (DWORD dMilliseconds);
       bool DrawGLScene(GLvoid);
-      friend LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
       bool      initGL();
 		float m_fPitch, m_fYaw, m_fRoll, m_fThrust;
 		bool m_bSlowmo;

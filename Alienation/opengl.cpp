@@ -11,13 +11,9 @@
 #include "opengl.h"
 
 // All Setup For OpenGL Goes Here
-COpenGL :: COpenGL(HINSTANCE hinstance) {
+COpenGL :: COpenGL() {
 	//Actually redundant now I'm using SDL, mmmmm
    FullScreen = true;
-   hInstance  = hinstance;
-   hDC        = NULL;        // Private GDI Device Context
-   hRC        = NULL;        // Permanent Rendering Context
-   hWnd       = NULL;        // Holds Our Window Handle
 }
 
 bool COpenGL :: initGL() {
