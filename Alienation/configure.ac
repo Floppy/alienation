@@ -11,6 +11,17 @@ AC_PROG_RANLIB
 # Enable all warnings
 CPPFLAGS="$CPPFLAGS -Wall"
 
+# Profiling
+AC_ARG_ENABLE(profiling,
+    [ --enable-profiling=<type> - Enable profiling, either prof or gprof],
+)
+case "$enable_profiling" in
+  prof) AC_CHECK_TOOL(PROF,prof)
+        CPPFLAGS="$CPPFLAGS -p" ;;
+  gprof) AC_CHECK_TOOL(GPROF,gprof)
+         CPPFLAGS="$CPPFLAGS -pg" ;;
+esac
+
 # Checks for libraries
 
 # OpenGL
@@ -29,7 +40,7 @@ AC_CHECK_LIB(SDL_image,IMG_Load,,exit)
 # fmod
 AC_ARG_WITH(fmod,
     [ --with-fmod=<path> path to fmod. e.g. /usr or /usr/local],
-    [FMOD_PREFIX=$with_fmod],
+    [FMOD_PREFIX=$with_fmod]
 )
 LIBS="$LIBS -lfmod-3.62"
 if test "$with_fmod"; then
