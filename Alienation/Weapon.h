@@ -12,8 +12,8 @@
 #endif // _MSC_VER > 1000
 
 #include <stdio.h>
-#include "ParticleEngine.h"
-#include "Texture.h"
+#include "3D/ParticleEngine.h"
+#include "3D/Texture.h"
 #include "Math/Matrix.h"
 
 class CWeapon : public CParticleEngine  

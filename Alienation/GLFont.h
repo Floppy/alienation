@@ -11,7 +11,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 #include <stdio.h>
-#include "Texture.h"
+#include "3D/Texture.h"
 #include "Math/Vector.h"
 #include "Math/Matrix.h"
 

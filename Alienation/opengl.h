@@ -23,7 +23,7 @@
 #include "Skybox.h"
 #include "PlayerShip.h"
 #include "AIShip.h"
-#include "Light.h"
+#include "3D/Light.h"
 #include <SDL.h>
 
 class CKeys {											// Structure For Keyboard Stuff

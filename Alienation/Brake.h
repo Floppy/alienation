@@ -12,8 +12,8 @@
 #endif // _MSC_VER > 1000
 
 #include <time.h>
-#include "ParticleEngine.h"
-#include "Texture.h"
+#include "3D/ParticleEngine.h"
+#include "3D/Texture.h"
 #include "Math/Matrix.h"
 //Draws (badly) a brake trail at the front of the ship. Was done in 10 minutes flat
 //and need far more time. For this reason didnt make the demo. Works similary to the 

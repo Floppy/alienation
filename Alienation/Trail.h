@@ -11,11 +11,11 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "ParticleEngine.h"
+#include "3D/ParticleEngine.h"
 #include <stdio.h>
 #include <time.h>
 #include "Math/Vector.h"
-#include "Texture.h"
+#include "3D/Texture.h"
 #include "Math/Matrix.h"
 
 class CTrail : public CParticleEngine  
