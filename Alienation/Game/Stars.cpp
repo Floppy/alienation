@@ -79,8 +79,6 @@ void CStars::draw(CVector3 vecPos)
 	glPushMatrix();
 	glTranslatef(vecPos.X(), vecPos.Y(), vecPos.Z());
 
-	g_oTextureManager.activate(m_auiTextures[0]);
-
         for (int iCount = 0 ; iCount < m_iNumStars ; iCount++)
 	{
            if (m_oFrustum.PointInFrustum(m_aoStars[iCount].m_vecPos))
