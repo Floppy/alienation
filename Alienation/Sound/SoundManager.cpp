@@ -48,14 +48,14 @@ bool CSoundManager::playMusicFile(const char* strFilename)
    return false;
 }
 
-void CSoundManager::setMasterVolume(float fVolume) 
+void CSoundManager::setVolume(float fVolume, int iChannel) 
 {
-   Mix_Volume(-1,static_cast<int>(MIX_MAX_VOLUME*fVolume));
+   Mix_Volume(iChannel,static_cast<int>(MIX_MAX_VOLUME*fVolume));
 }
 
-float CSoundManager::getMasterVolume()
+float CSoundManager::getVolume(int iChannel)
 {
-   return Mix_Volume(-1,-1);
+   return Mix_Volume(iChannel,-1);
 }
 
 int CSoundManager::load(const char* strFilename)
@@ -77,14 +77,28 @@ int CSoundManager::load(const char* strFilename)
    return id;
 }
 
-void CSoundManager::play(int iSample, int iNumRepeats) 
+int CSoundManager::play(int iSample, int iNumRepeats, int iFadeIn, int iCutoff) 
 {
-   if (m_bReady && iSample >= 0)
-      Mix_PlayChannel(-1, m_oSamples[iSample], iNumRepeats);
+   if (m_bReady && iSample >= 0) {
+      if (iFadeIn) {
+         return Mix_FadeInChannelTimed(-1, m_oSamples[iSample], iNumRepeats, iFadeIn, iCutoff);
+      }
+      else {
+         return Mix_PlayChannelTimed(-1, m_oSamples[iSample], iNumRepeats, iCutoff);
+      }
+   }
+   return -1;
 }
 
-void CSoundManager::playTime(int iSample, int iTime)
+void CSoundManager::stop(int iChannel, int iFadeOut) 
 {
-   if (m_bReady && iSample >= 0)
-      Mix_PlayChannelTimed(-1, m_oSamples[iSample], -1, iTime);
+   if (m_bReady) {
+      if (iFadeOut) {
+         Mix_FadeOutChannel(iChannel, iFadeOut);
+      }
+      else {
+         Mix_HaltChannel(iChannel);
+      }
+   }
 }
+

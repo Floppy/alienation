@@ -41,16 +41,18 @@ class CSoundManager {
    bool playMusicFile(const char* strFilename);
 
    /**
-    * Set master volume.
+    * Set channel volume.
+    * @param iChannel The channel to change the volume on, obtained from play(). If -1, all channels are changed.
     * @param fVolume A float between 0 (lowest volume) and 1 (highest volume).
     */
-   void setMasterVolume(float fVolume);
+   void setVolume(float fVolume, int iChannel = -1);
 
    /**
-    * Get master volume.
+    * Get channel volume.
+    * @param iChannel The channel to get the volume from, obtained from play(). If -1, the average volume is returned.
     * @return A float between 0 (lowest volume) and 1 (highest volume).
     */
-   float getMasterVolume();
+   float getVolume(int iChannel = -1);
 
    /**
     * Load a sample from disk
@@ -61,18 +63,21 @@ class CSoundManager {
    /**
     * Play a sample
     * @param iSample The sample ID to play.
-    * @param iNumRepeats How many times to repeat the sample. A value of 1 will play the sample twice.
+    * @param iNumRepeats How many times to repeat the sample. A value of 1 will play the sample twice. A value of -1 will play forever until stopped.
+    * @param iFadeIn The sample will fade in over this many milliseconds.
+    * @param iCutoff Playback will be stopped after this many milliseconds.
+    * @return A channel ID which can be used to stop the sample playing or change volume.
     */
-   void play(int iSample, int iNumRepeats = 0);
+   int play(int iSample, int iNumRepeats = 0, int iFadeIn = 0, int iCutoff = -1);
 
    /**
-    * Play a sample, looping for a particular time.
-    * @param iSample The sample ID to play.
-    * @param iTime How many milliseconds to play the sample for.
+    * Stop sample playback.
+    * @param iChannel The channel ID to stop playing, obtained from play().
+    * @param iFadeOut Fade out over this many milliseconds.
     */
-   void playTime(int iSample, int iTime);
+   void stop(int iChannel, int iFadeOut = 0);
 
- private:
+ protected:
    
    /**
     * Is the sound system ready to go?
