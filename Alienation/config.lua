@@ -1,7 +1,7 @@
 -- config.lua
 -- Config file for Alienation
 
-config = {
+video = {
 
 	-- Video mode
 	resolution = {x=1024, y=768},
@@ -16,4 +16,15 @@ config = {
 	polygonsmooth = 0;
 	perspectivecorrection = 1;
 
+}
+
+game = {
+
+	playership = "ter_shuttle1.lua",
+	aiships = {
+		"ter_fighter1.lua",
+		"ter_fighter1.lua",
+		"ter_shuttle1.lua"
+	},
+	numroids = 40
 }

@@ -67,48 +67,106 @@ namespace NSDIO {
       void pop();
 
       /**
-       * Get numerical value for a field.
-       * @param field The field name to access.
-       * @return The value of the field. If the field wasn't found, the value is 0.
+       * Get numerical value for a table.
+       * @param table The table name to access.
+       * @return The value of the table. If the table wasn't found, the value is 0.
        */
-      float getNumber(const char* field);
+      float getNumber(const char* table);
 
       /**
-       * Get a string value for a field.
-       * @param field The field name to access.
-       * @return The contents of the field. It's the users responsibility to delete[] this pointer.
+       * Get numerical value for a numbered table.
+       * @param table The table number to access.
+       * @return The value of the table. If the table wasn't found, the value is 0.
        */
-      const char* getString(const char* field);
+      float getNumber(unsigned int table);
 
       /**
-       * Get an RGBA colour value from a field.
-       * @param field The field name to access.
-       * @return The colour of the field.
+       * Get a string value for a table.
+       * @param table The table name to access.
+       * @return The contents of the table. It's the users responsibility to delete[] this pointer.
        */
-      CRGBAColour getColour(const char* field);
+      const char* getString(const char* table);
 
       /**
-       * Get a 3D vector from a named field.
-       * @param field The field name to access.
-       * @return The vector from the field.
+       * Get a string value for a numbered table.
+       * @param table The table number to access.
+       * @return The contents of the table. It's the users responsibility to delete[] this pointer.
        */
-      CVector3 getVector3(const char* field);
+      const char* getString(unsigned int table);
 
       /**
-       * Get a 3D vector from a numbered field.
-       * @param field The field number to access.
-       * @return The vector from the field.
+       * Get an RGBA colour value from a table.
+       * @param table The table name to access.
+       * @return The colour of the table.
        */
-      CVector3 getVector3(unsigned int field);
+      CRGBAColour getColour(const char* table);
 
+      /**
+       * Get an RGBA colour value from a numbered table.
+       * @param table The table number to access.
+       * @return The colour of the table.
+       */
+      CRGBAColour getColour(unsigned int table);
+
+      /**
+       * Get a 3D vector from a named table.
+       * @param table The table name to access.
+       * @return The vector from the table.
+       */
+      CVector3 getVector3(const char* table);
+
+      /**
+       * Get a 3D vector from a numbered table.
+       * @param table The table number to access.
+       * @return The vector from the table.
+       */
+      CVector3 getVector3(unsigned int table);
+
+      /**
+       * Get a 2D vector from a table.
+       * @param table The table name to access.
+       * @return The vector from the table.
+       */
+      CVector2 getVector2(const char* table);
+
+      /**
+       * Get a 2D vector from a numbered table.
+       * @param table The table number to access.
+       * @return The vector from the table.
+       */
+      CVector2 getVector2(unsigned int table);
+
+   protected:
+
+      /**
+       * Get numerical value for the current table.
+       * @return The value of the table. If the table wasn't found, the value is 0.
+       */
+      float getNumber();
+
+      /**
+       * Get a string value for the current table.
+       * @return The contents of the table. It's the users responsibility to delete[] this pointer.
+       */
+      const char* getString();
+
+      /**
+       * Get an RGBA colour value from the current table.
+       * @return The colour of the table.
+       */
+      CRGBAColour getColour();
+
+      /**
+       * Get a 3D vector from the current table
+       * @return The vector from the table.
+       */
       CVector3 getVector3();
 
       /**
-       * Get a 2D vector from a field.
-       * @param field The field name to access.
-       * @return The vector from the field.
+       * Get a 2D vector from the current table
+       * @return The vector from the table.
        */
-      CVector2 getVector2(const char* field);
+      CVector2 getVector2();
 
    private:
 

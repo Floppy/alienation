@@ -66,18 +66,36 @@ COpenGL::~COpenGL()
 
 bool COpenGL :: initGL() {
 
-	bool bPerspCorr, bPolygonSmooth;
-	{
-		NSDIO::CLua config("config.lua");
-		if (!config.setGlobalTable("config")) {
-			cerr << "Couldn't load config file!" << endl;
-			return 1;
-		}
-		m_vecScreenSize = config.getVector2("resolution");
-		bPerspCorr = static_cast<bool>(config.getNumber("perspectivecorrection"));
-		bPolygonSmooth = static_cast<bool>(config.getNumber("polygonsmooth"));
-	}
+   bool bPerspCorr, bPolygonSmooth;
+   const char* strPlayerShip(NULL);
+   vector<const char*> astrAIShips;
+   int iNumRoids(0);
+   {
+     NSDIO::CLua config("config.lua");
+     
+     if (!config.setGlobalTable("video")) {
+       cerr << "Couldn't read video config!" << endl;
+       return false;
+     }
+     m_vecScreenSize = config.getVector2("resolution");
+     bPerspCorr = static_cast<bool>(config.getNumber("perspectivecorrection"));
+     bPolygonSmooth = static_cast<bool>(config.getNumber("polygonsmooth"));
+     config.pop();
 
+     if (!config.setGlobalTable("game")) {
+       cerr << "Couldn't read game config!" << endl;
+       return false;
+     }
+     strPlayerShip = config.getString("playership");
+     iNumRoids = static_cast<int>(config.getNumber("numroids"));
+     config.push("aiships");
+     int iNumAIShips(config.tableSize());
+     for (int i=0; i<iNumAIShips; i++)
+       astrAIShips.push_back(config.getString(i));
+     config.pop();
+     config.pop();
+
+   }
 
    // Set up shading, lighting, and so on
    glShadeModel(GL_SMOOTH);                           // Enable Smooth Shading
@@ -138,13 +156,13 @@ bool COpenGL :: initGL() {
    m_poStars->initStars();
    
    // Create player ship
-   m_poShip = static_cast<CPlayerShip*>(CShipFactory::load("ter_shuttle1.lua",true));
+   m_poShip = static_cast<CPlayerShip*>(CShipFactory::load(strPlayerShip,true));
    m_poShip->setPosition(CVector3(0,0,0));
 
    // Create and load AI ships
    CRandom prng(547343);
-   for (int i=0; i<3; i++) {
-      CShip* poAIShip = CShipFactory::load("ter_fighter1.lua",false);
+   for (vector<const char*>::iterator it(astrAIShips.begin()); it != astrAIShips.end(); it++) {
+      CShip* poAIShip = CShipFactory::load(*it,false);
       poAIShip->setPosition(CVector3(prng.randDouble()*1000 - 500,
                                      prng.randDouble()*1000 - 500,
                                      prng.randDouble()*1000 - 500));
@@ -157,7 +175,7 @@ bool COpenGL :: initGL() {
 
 
    // Load roids
-   for (int r=0; r<40; r++) {
+   for (int r=0; r<iNumRoids; r++) {
       CAsteroid* pRoid = new CAsteroid(1,50000);
       // Select type
       float fRandom = prng.randDouble();

@@ -87,51 +87,109 @@ namespace NSDIO {
       return iResult;
    }
 
-   float CLua::getNumber(const char* field)
+   float CLua::getNumber(const char* table)
    {
-      if (!push(field,LUA_TNUMBER))
+      if (!push(table,LUA_TNUMBER))
          return 0;
       // Get number
-      float fResult = static_cast<float>(lua_tonumber(m_pState,-1));
+      float fResult = getNumber();
       // Pop stack
       pop();
       // Done
       return fResult;
    }
-   
-   const char* CLua::getString(const char* field)
+
+   float CLua::getNumber(unsigned int table)
    {
-      if (!push(field,LUA_TSTRING))
+      if (!push(table,LUA_TNUMBER))
+         return 0;
+      // Get number
+      float fResult = getNumber();
+      // Pop stack
+      pop();
+      // Done
+      return fResult;
+   }
+
+   float CLua::getNumber()
+   {
+      // Get number
+      return static_cast<float>(lua_tonumber(m_pState,-1));
+   }
+   
+   const char* CLua::getString(const char* table)
+   {
+      if (!push(table,LUA_TSTRING))
          return NULL;
+      // Get string
+      const char* strTemp = getString();
+      // Pop stack
+      pop();
+      // Done
+      return strTemp;
+   }
+
+   const char* CLua::getString(unsigned int table)
+   {
+      if (!push(table,LUA_TSTRING))
+         return NULL;
+      // Get string
+      const char* strTemp = getString();
+      // Pop stack
+      pop();
+      // Done
+      return strTemp;
+   }
+
+   const char* CLua::getString()
+   {
       // Copy out string
       const char* strTemp = lua_tostring(m_pState,-1);
       char* strResult = new char[strlen(strTemp)+1];
       strcpy(strResult,strTemp);
-      // Pop stack
-      pop();
       // Done
       return strResult;
    }
 
-   CRGBAColour CLua::getColour(const char* field)
+   CRGBAColour CLua::getColour(const char* table) 
    {
-      if (!push(field))
-         return CRGBAColour(0,0,0,0);
+      if (!push(table))
+         return CRGBAColour(0.0f,0.0f,0.0f,0.0f);
+      // Get vector
+      CRGBAColour val(getColour());
+      // Pop stack
+      pop();
+      // Done
+      return val;
+   }
+
+   CRGBAColour CLua::getColour(unsigned int table)
+   {
+      if (!push(table))
+         return CRGBAColour(0.0f,0.0f,0.0f,0.0f);
+      // Get vector
+      CRGBAColour val(getColour());
+      // Pop stack
+      pop();
+      // Done
+      return val;
+   }
+
+   CRGBAColour CLua::getColour()
+   {
       // Get values
       float fRed = getNumber("r");
       float fGreen = getNumber("g");
       float fBlue = getNumber("b");
       float fAlpha = getNumber("a");
-      // Pop stack
-      pop();
       // Done
       return CRGBAColour(fRed,fGreen,fBlue,fAlpha);
    }
 
-   CVector3 CLua::getVector3(const char* field) 
+   CVector3 CLua::getVector3(const char* table) 
    {
-      if (!push(field))
-         return CVector3(0,0,0);
+      if (!push(table))
+         return CVector3(0.0f,0.0f,0.0f);
       // Get vector
       CVector3 val(getVector3());
       // Pop stack
@@ -140,10 +198,10 @@ namespace NSDIO {
       return val;
    }
 
-   CVector3 CLua::getVector3(unsigned int field)
+   CVector3 CLua::getVector3(unsigned int table)
    {
-      if (!push(field))
-         return CVector3(0,0,0);
+      if (!push(table))
+         return CVector3(0.0f,0.0f,0.0f);
       // Get vector
       CVector3 val(getVector3());
       // Pop stack
@@ -163,15 +221,35 @@ namespace NSDIO {
    }
 
 
-   CVector2 CLua::getVector2(const char* field) 
+   CVector2 CLua::getVector2(const char* table) 
    {
-      if (!push(field))
-         return CVector2(0,0);
+      if (!push(table))
+         return CVector2(0.0f,0.0f);
+      // Get vector
+      CVector2 val(getVector2());
+      // Pop stack
+      pop();
+      // Done
+      return val;
+   }
+
+   CVector2 CLua::getVector2(unsigned int table)
+   {
+      if (!push(table))
+         return CVector2(0.0f,0.0f);
+      // Get vector
+      CVector2 val(getVector2());
+      // Pop stack
+      pop();
+      // Done
+      return val;
+   }
+
+   CVector2 CLua::getVector2() 
+   {
       // Get values
       float fX = getNumber("x");
       float fY = getNumber("y");
-      // Pop stack
-      pop();
       // Done
       return CVector2(fX,fY);
    }

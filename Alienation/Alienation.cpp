@@ -96,7 +96,8 @@ int main(int argc, char* argv[])
    SDL_WM_GrabInput(SDL_GRAB_ON);
 #endif
 
-   oGame.initGL();
+   if (!oGame.initGL())
+     return 0;
    
    dLastTickCount = SDL_GetTicks();
    
