@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 
   
 	// LOAD SONG
-	poMod = FSOUND_Stream_OpenFile("./Data/media/Demo.mp3", FSOUND_LOOP_NORMAL, 0);
+	poMod = FSOUND_Stream_OpenFile("./Data/Audio/demo.mp3", FSOUND_LOOP_NORMAL, 0);
 	if (!poMod)
 	{
 		return 0;
@@ -78,7 +78,10 @@ int main(int argc, char* argv[])
 	}
 
 	SDL_ShowCursor(0);
+
+        #ifdef WIN32
 	SDL_WM_GrabInput(SDL_GRAB_ON);
+        #endif
 
 
 	oGame.initGL();
@@ -121,7 +124,10 @@ int main(int argc, char* argv[])
 
 	// Shutdown
 	SDL_ShowCursor(1);
+
+        #ifdef WIN32
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
+        #endif
 
 	// Exit The Program
 	atexit(SDL_Quit);
