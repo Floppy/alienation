@@ -10,9 +10,9 @@ ship = {
 	pitch   	= 80,
 	yaw 		= 50,
 	roll 		= 90,
-	thrust		= 10000,
 	mass		= 2500,
-	trails		= {
+	enginetype	= "ter_fusion2.lua",
+	engines		= {
 		{x=0, y=0, z=5}
 	},
 	weapons		= {

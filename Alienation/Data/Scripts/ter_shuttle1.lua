@@ -10,18 +10,18 @@ ship = {
 	pitch   	= 40,
 	yaw 		= 25,
 	roll 		= 45,
-	thrust		= 10000,
 	mass		= 5000,
-	trails		= {
+	enginetype	= "ter_fusion1.lua",
+	engines		= {
 		{x= 1.6, y=-0.25, z=3.75},
 		{x=-1.6, y=-0.25, z=3.75}
 	},
+	weapontype	= "ter_ppc2.lua",
 	weapons		= {
 		{x=3, y=-0.7, z=-4},
 		{x=-3, y=-0.7, z=-4},
 		{x=0, y=-1.7, z=-7}
 	},
-	weapontype	= "ter_ppc2.lua",
 	brakes		= {
 		{x=0, y=0.7, z=-2.5}
 	},
