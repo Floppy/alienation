@@ -2,19 +2,17 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_SHIELD_H__526496BB_99F4_4109_8780_008DF56EC37D__INCLUDED_)
-#define AFX_SHIELD_H__526496BB_99F4_4109_8780_008DF56EC37D__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifndef SDS_SHIELD_H
+#define SDS_SHIELD_H
 
 #include "Equipment/Equipment.h"
 
+using namespace std;
+
 enum shieldType 
 {
-   SHIELD_FRONT,
-   SHIELD_REAR,
+   SHIELD_FORE,
+   SHIELD_AFT,
    SHIELD_RIGHT,
    SHIELD_LEFT
 };
@@ -27,8 +25,17 @@ public:
 	CShield();
 	virtual ~CShield();
 
+        /**
+         * Load a shield object from a Lua file.
+         * @param strFileName The Lua file to load from.
+         * @param type The shield type to create.
+         * @return A pointer to a new shield object
+         */
+        static CShield* load(const char* strFileName, shieldType type);
+
+
 private:
 	int m_iShieldType;
 };
 
-#endif // !defined(AFX_SHIELD_H__526496BB_99F4_4109_8780_008DF56EC37D__INCLUDED_)
+#endif // SDS_SHIELD_H
