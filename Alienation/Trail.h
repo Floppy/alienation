@@ -14,9 +14,9 @@
 #include "ParticleEngine.h"
 #include <stdio.h>
 #include <time.h>
-#include "vector.h"
+#include "Math/Vector.h"
 #include "Texture.h"
-#include "matrix.h"
+#include "Math/Matrix.h"
 
 class CTrail : public CParticleEngine  
 {

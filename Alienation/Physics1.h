@@ -12,8 +12,8 @@
 
 #include <math.h>
 #include <stdio.h>												// Header File For Standard Input/Output
-#include "quat.h"
-#include "vector.h"
+#include "Math/Quat.h"
+#include "Math/Vector.h"
 
 
 

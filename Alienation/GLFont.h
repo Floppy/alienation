@@ -12,8 +12,8 @@
 #endif // _MSC_VER > 1000
 #include <stdio.h>
 #include "Texture.h"
-#include "vector.h"
-#include "matrix.h"
+#include "Math/Vector.h"
+#include "Math/Matrix.h"
 
 
 //The infamous font class. Saw many that did a similar trick, but where far more complex. So wrote this one :)

@@ -12,7 +12,7 @@
 
 #include "config.h"
 
-#include "vector.h"
+#include "Math/Vector.h"
 #include "Physics1.h"
 
 //Should actually be called tParticle and be a struct rather than a class.

@@ -12,12 +12,12 @@
 #endif // _MSC_VER > 1000
 
 //#include "Physics1.h"
-#include "3dsLoader.h"
+#include "IO/3dsLoader.h"
 #include "Trail.h"
 #include <stdio.h>
-#include "vector.h"
-#include "quat.h"
-#include "matrix.h"
+#include "Math/Vector.h"
+#include "Math/Quat.h"
+#include "Math/Matrix.h"
 #include "Weapon.h"
 #include "Brake.h"
 
