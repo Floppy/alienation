@@ -12,5 +12,6 @@ weapon = {
 	texture		= "ball.png",
 	size		= 1,
 	lifetime	= 7,
-	speed		= 235
+	speed		= 235,
+	damage		= 4000
 }

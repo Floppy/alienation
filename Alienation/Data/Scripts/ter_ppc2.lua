@@ -12,5 +12,6 @@ weapon = {
 	texture		= "star.png",
 	size		= 1,
 	lifetime	= 7,
-	speed		= 300
+	speed		= 300,
+	damage		= 5000
 }
