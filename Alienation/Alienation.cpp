@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
    }
 
    // Set video mode
-   int iFlags = SDL_OPENGL | SDL_FULLSCREEN;
+   int iFlags = SDL_OPENGL;// | SDL_FULLSCREEN;
    // Attempt full-on SDL screen setup
    SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
    SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 5 );
