@@ -1,5 +1,5 @@
 # Initialise
-AC_PREREQ(2.57)
+AC_PREREQ(2)
 AC_INIT(Alienation,0.1)
 AM_INIT_AUTOMAKE(Alienation,0.1)
 AC_CONFIG_SRCDIR([program.cpp])
