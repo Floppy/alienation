@@ -5,106 +5,109 @@
 #include "Math/Random.h"
 #include "Math/Vector.h"
 
-/**
- * A Perlin Noise generator.
- * This uses the "improved" noise function proposed by Perlin.
- * Should be more efficient and give better results than the standard one.
- */
-class CPerlin {
-
- public:
+namespace NSDMath {
 
    /**
-    * Constructor.
-    * Calls init() internally.
-    * @param ulSeed Seed value for random number generator.
+    * A Perlin Noise generator.
+    * This uses the "improved" noise function proposed by Perlin.
+    * Should be more efficient and give better results than the standard one.
     */
-   CPerlin(unsigned long ulSeed);
+   class CPerlin {
 
-   /**
-    * Initialise noise generator.
-    * @param ulSeed Seed value for random number generator.
-    */
-   void init(unsigned long ulSeed);
+   public:
 
-   /**
-    * Calculate 3D noise.
-    * @param vecPosition 3D position of noise sample.
-    */
-   float noise(CVector3& vecPosition);
+      /**
+       * Constructor.
+       * Calls init() internally.
+       * @param ulSeed Seed value for random number generator.
+       */
+      CPerlin(unsigned long ulSeed);
 
-   /**
-    * Calculate 2D noise.
-    * @param vecPosition 2D position of noise sample.
-    */
-   float noise(CVector2& vecPosition);
+      /**
+       * Initialise noise generator.
+       * @param ulSeed Seed value for random number generator.
+       */
+      void init(unsigned long ulSeed);
 
-   /**
-    * Calculate 1D noise.
-    * @param dPosition 1D position of noise sample.
-    */
-   float noise(float fPosition);
+      /**
+       * Calculate 3D noise.
+       * @param vecPosition 3D position of noise sample.
+       */
+      float noise(CVector3& vecPosition);
 
- protected:
+      /**
+       * Calculate 2D noise.
+       * @param vecPosition 2D position of noise sample.
+       */
+      float noise(CVector2& vecPosition);
 
-   /**
-    * Generate the m_aiPermutation array.
-    * Generates a random permutation of the numbers 0..255 in the m_aiPermutation array.
-    */
-   void permuteP(void);
+      /**
+       * Calculate 1D noise.
+       * @param fPosition 1D position of noise sample.
+       */
+      float noise(float fPosition);
 
-   /**
-    * Permutation function.
-    * Generate an index into m_aiPermutation for any integer.
-    */
-   int permutation(int iX)
-   { return iX & 0xFF; }
+   protected:
 
-   /**
-    * Get the gradient for a 3d lattice point.
-    */
-   const CVector3* gradient(int iX, int iY, int iZ)
-   { return m_avGradients + (permutation(iX + permutation(iY + permutation(iZ))) & 0xF); }
+      /**
+       * Generate the m_aiPermutation array.
+       * Generates a random permutation of the numbers 0..255 in the m_aiPermutation array.
+       */
+      void permuteP(void);
 
-   /**
-    * Get the sum of the weighted gradient for a 3d lattice point.
-    */
-   float wgradient(int iX, int iY, int iZ, CVector3 weight)
-   { 
-      const CVector3* pGradient = gradient(iX,iY,iZ);
-      return pGradient->X()*weight.X() + pGradient->Y()*weight.Y() + pGradient->Z()*weight.Z(); 
-   }
+      /**
+       * Permutation function.
+       * Generate an index into m_aiPermutation for any integer.
+       */
+      int permutation(int iX)
+         { return iX & 0xFF; }
 
-   /**
-    * Spline function.
-    * s(t) = 6t^5 - 15t^4 + 10t^3
-    */
-   float spline(float fT)
-   { return fT*fT*fT * ( (6*fT*fT) - (15*fT) + 10 ); }
+      /**
+       * Get the gradient for a 3d lattice point.
+       */
+      const CVector3* gradient(int iX, int iY, int iZ)
+         { return m_avGradients + (permutation(iX + permutation(iY + permutation(iZ))) & 0xF); }
 
-   /**
-    * Linear interpolation function.
-    * l(a,m,n) = a*m + (1-a)*n
-    */
-   float lerp(float fA, float fM, float fN)
-   { return fM + (fA * (fN - fM)); }
+      /**
+       * Get the sum of the weighted gradient for a 3d lattice point.
+       */
+      float wgradient(int iX, int iY, int iZ, CVector3 weight)
+         { 
+            const CVector3* pGradient = gradient(iX,iY,iZ);
+            return pGradient->X()*weight.X() + pGradient->Y()*weight.Y() + pGradient->Z()*weight.Z(); 
+         }
 
-   /**
-    * Random number generator.
-    */
-   CRandom m_oRandom;
+      /**
+       * Spline function.
+       * s(t) = 6t^5 - 15t^4 + 10t^3
+       */
+      float spline(float fT)
+         { return fT*fT*fT * ( (6*fT*fT) - (15*fT) + 10 ); }
 
-   /**
-    * Permutation array.
-    */
-   unsigned char m_aiPermutation[0x100];
+      /**
+       * Linear interpolation function.
+       * l(a,m,n) = a*m + (1-a)*n
+       */
+      float lerp(float fA, float fM, float fN)
+         { return fM + (fA * (fN - fM)); }
+
+      /**
+       * Random number generator.
+       */
+      CRandom m_oRandom;
+
+      /**
+       * Permutation array.
+       */
+      unsigned char m_aiPermutation[0x100];
    
-   /**
-    * Gradient array.
-    */
-   static CVector3 m_avGradients[0x10];
+      /**
+       * Gradient array.
+       */
+      const static CVector3 m_avGradients[0x10];
 
-};
+   };
+
+}
 
 #endif //ALIENATION_PERLIN_H
-
