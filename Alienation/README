@@ -1,0 +1,23 @@
+Alienation 0.0.1
+----------------
+
+Linux:
+------
+
+To build the Alienation executable, run the following commands:
+
+   ./configure
+   make
+
+You will need the development packages installed for the SDL, 
+SDL_image and SDL_mixer libraries installed. configure will complain
+if you don't have them so just go ahead and try it ;)
+
+Once make has completed, you can run the demo by typing
+
+  ./Alienation
+
+You will need to be in the top-level source directory to do this, 
+otherwise it won't find the data files.
+
+Enjoy!
