@@ -24,6 +24,7 @@
 #include "3D/Frustum.h"
 #include "3D/Model.h"
 #include "3D/Sprite.h"
+#include "Math/Vector.h"
 
 #include <vector>
 
@@ -59,6 +60,8 @@ class COpenGL {
 
                 std::vector<CGameObject*> m_opObjects;
                 std::vector<CGameObject*>::iterator m_pTarget;
+
+                CVector2 m_vecScreenSize;
 
                 CSprite m_oSun;
                 //CModel m_oStation;

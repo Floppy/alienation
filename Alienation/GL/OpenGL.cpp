@@ -20,6 +20,11 @@
 #include "IO/Lua.h"
 #include "Math/Vector.h"
 
+#include <iostream>
+#ifndef WIN32
+using namespace std;
+#endif
+
 // We define the joystick axes here, because they
 // seem to be different in windows and linux
 #define JOYSTICK_AXIS_PITCH       1
@@ -60,7 +65,6 @@ COpenGL::~COpenGL()
 
 bool COpenGL :: initGL() {
 
-	CVector2 vecSize(0,0);
 	bool bPerspCorr, bPolygonSmooth;
 	{
 		NSDIO::CLua config("config.lua");
@@ -68,7 +72,7 @@ bool COpenGL :: initGL() {
 			cerr << "Couldn't load config file!" << endl;
 			return 1;
 		}
-		vecSize = config.getVector2("resolution");
+		m_vecScreenSize = config.getVector2("resolution");
 		bPerspCorr = static_cast<bool>(config.getNumber("perspectivecorrection"));
 		bPolygonSmooth = static_cast<bool>(config.getNumber("polygonsmooth"));
 	}
@@ -93,7 +97,7 @@ bool COpenGL :: initGL() {
       glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
    // Set viewport
-   glViewport(0, 0, static_cast<int>(vecSize.X()), static_cast<int>(vecSize.Y()));
+   glViewport(0, 0, static_cast<int>(m_vecScreenSize.X()), static_cast<int>(m_vecScreenSize.Y()));
 
    // Init lighting
    glEnable(GL_LIGHTING);
@@ -194,7 +198,7 @@ bool COpenGL::DrawGLScene(GLvoid) {
    // Set camera
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
-   gluPerspective(45.0f, (GLfloat)1024/(GLfloat)768, 0.1f, 25001.0f);
+   gluPerspective(45.0f, m_vecScreenSize.X()/m_vecScreenSize.Y(), 0.1f, 25001.0f);
 
    // Init modelview matrix
    glMatrixMode(GL_MODELVIEW);
