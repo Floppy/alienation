@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include "Game/Stars.h"
 #include "Game/Ship.h"
-#include "GL/GLFont.h"
+#include "2D/GLFont.h"
 #include "Game/PlayerShip.h"
 #include "3D/Light.h"
 #include "3D/Frustum.h"

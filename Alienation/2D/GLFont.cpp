@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "GL/GLFont.h"
+#include "2D/GLFont.h"
 #include "3D/TextureManager.h"
 #include "3D/Material.h"
 #include "2D/2DObject.h"

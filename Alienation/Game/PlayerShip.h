@@ -13,7 +13,7 @@
 
 #include "Game/Ship.h"
 #include "3D/Model.h"
-#include "2D/Hud.h"
+#include "Game/Hud.h"
 
 using namespace NSD2D;
 

@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "GLFontManager.h"
+#include "2D/GLFontManager.h"
 
 CGLFontManager g_oFontManager;
 

@@ -10,8 +10,8 @@
 #endif // _MSC_VER > 1000
 
 #include "2D/2DObject.h"
-#include "GL/GLFont.h"
-#include "GL/GLFontManager.h"
+#include "2D/GLFont.h"
+#include "2D/GLFontManager.h"
 #include "Math/Vector.h"
 #include <string>
 #include <vector>

@@ -5,7 +5,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "GL/GLFont.h"
+#include "2D/GLFont.h"
 #include "Game/GameObject.h"
 #include "Game/Ship.h"
 #include "2D/2DObject.h"

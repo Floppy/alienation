@@ -10,7 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #include <vector>
-#include "GLFont.h"
+#include "2D/GLFont.h"
 using namespace std;
 
 class CGLFontManager  

@@ -1,4 +1,4 @@
-#include "2D/Hud.h"
+#include "Game/Hud.h"
 #include "3D/TextureManager.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
