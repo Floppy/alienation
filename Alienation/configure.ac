@@ -61,14 +61,14 @@ AC_CHECK_LIB(lua,lua_open,,exit)
 AC_CHECK_LIB(lualib,lua_dofile,,exit)
 
 # ODE
-AC_ARG_WITH(ode,"--with-ode=<dir> - Path to ODE files",
-[	if test $withval != "yes"; then
-		LDFLAGS="$LDFLAGS -L$withval/lib"
-		CPPFLAGS="$CPPFLAGS -I$withval/include"
-	fi
-])
-AC_CHECK_HEADER(ode/ode.h,,exit)
-AC_CHECK_LIB(ode,dWorldCreate,,exit)
+#AC_ARG_WITH(ode,"--with-ode=<dir> - Path to ODE files",
+#[	if test $withval != "yes"; then
+#		LDFLAGS="$LDFLAGS -L$withval/lib"
+#		CPPFLAGS="$CPPFLAGS -I$withval/include"
+#	fi
+#])
+#AC_CHECK_HEADER(ode/ode.h,,exit)
+#AC_CHECK_LIB(ode,dWorldCreate,,exit)
 
 # Checks for headers
 AC_HEADER_STDC
