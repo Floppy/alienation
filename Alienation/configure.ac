@@ -34,33 +34,13 @@ LIBS="$LIBS -lGL -lGLU"
 SDL_LIBS="`sdl-config --libs`"
 SDL_CFLAGS="`sdl-config --cflags`"
 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
-LIBS="$LIBS $SDL_LIBS -lSDL_image"
+LIBS="$LIBS $SDL_LIBS -lSDL_image -lSDL_mixer"
 AC_CHECK_HEADER(SDL.h,,exit)
 AC_CHECK_LIB(SDL,SDL_Init,,exit)
 AC_CHECK_HEADER(SDL_image.h,,exit)
 AC_CHECK_LIB(SDL_image,IMG_Load,,exit)
-
-# fmod
-AC_ARG_WITH(fmod,
-    [ --with-fmod=<path> path to fmod. e.g. /usr or /usr/local],
-    [FMOD_PREFIX=$with_fmod]
-)
-LIBS="$LIBS -lfmod-3.62"
-if test "$with_fmod"; then
-  echo Using fmod API from $with_fmod
-  FMOD_CPPFLAGS="-I$with_fmod/include"
-  FMOD_LIBS="-L$with_fmod/lib"
-fi
-_OLD_CPPFLAGS="$CPPFLAGS"
-_OLD_LIBS="$LIBS"
-CPPFLAGS="$CPPFLAGS $FMOD_CPPFLAGS"
-LIBS="$LIBS $FMOD_LIBS"
-AC_CHECK_HEADER(fmod.h,,exit)
-AC_CHECK_LIB(fmod-3.62,FSOUND_Init,,exit)
-AC_SUBST(FMOD_CPPFLAGS)
-AC_SUBST(FMOD_LIBS)
-CPPFLAGS="$_OLD_CPPFLAGS"
-LIBS="$_OLD_LIBS"
+AC_CHECK_HEADER(SDL_mixer.h,,exit)
+AC_CHECK_LIB(SDL_mixer,Mix_OpenAudio,,exit)
 
 # Checks for headers
 AC_HEADER_STDC

@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 	SDL_Joystick *poJoystick;
 	bool bNoJoystick = true;
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) == -1)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO) == -1)
 	{
 		cerr << "Failed to initialise SDL" << endl;
 		return 1;
@@ -49,14 +49,8 @@ int main(int argc, char* argv[])
 	int iFlags = SDL_OPENGL;// | SDL_FULLSCREEN;
 
 	// Play sound
-	CSoundManager oSndMgr;
-	if (oSndMgr.ready()) {
-	  if (!oSndMgr.playLoopedMP3("./Data/Audio/demo.mp3"))
-	    cerr << "Failed to open demo.mp3" << endl;
-	}
-	else 
-	  cerr << "Failed to initialise sound subsystem!" << endl;  
-
+        if (!g_oSoundManager.playMusicFile("demo.ogg"))
+           cerr << "Failed to open demo.ogg" << endl;
 
 	// Set the video mode
 	if( SDL_SetVideoMode( 1024, 768, 16, iFlags ) == 0 ) {
