@@ -15,7 +15,6 @@
 #include "IO/3ds.h"
 #include "Math/Random.h"
 #include "3D/TextureManager.h"
-#include "Math/Chaos.h"
 
 // We define the joystick axes here, because they
 // seem to be different in windows and linux
@@ -47,12 +46,12 @@ bool COpenGL :: initGL() {
 
    // Set up shading, lighting, and so on
    glShadeModel(GL_SMOOTH);                           // Enable Smooth Shading
-   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);              // Black Background
+   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);              // Black Background
    glClearDepth(1.0f);                                // Depth Buffer Setup
    glEnable(GL_DEPTH_TEST);                           // Enables Depth Testing
    glDepthFunc(GL_LEQUAL);                            // The Type Of Depth Testing To Do
    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Really Nice Perspective Calculations
-   glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);                                 
+   //glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);                                 
    glEnable(GL_POLYGON_SMOOTH);
    glEnable(GL_TEXTURE_2D);		
 
@@ -87,16 +86,7 @@ bool COpenGL :: initGL() {
    oMaterial.m_oSpecular = CRGBAColour(0.0f, 0.0f, 0.0f,0);
    // Load sun textures
    oMaterial.m_uiTexture = g_oTextureManager.load("sun.png");
-   // Create nice random sun texture
-   //oMaterial.m_uiTexture = g_oTextureManager.create(256,256);
-   //CPerlin perlin(42);
-   //CTexture* pTexture = g_oTextureManager.texture(oMaterial.m_uiTexture);
-   //for (int x=0; x<pTexture->width(); x++) {
-      //for (int y=0; y<pTexture->height(); y++) {
-         //float val = perlin.noise(CVector2(x/10.0,y/10.0)) / 2 + 0.5;
-         //pTexture->setPixel(x,y,CRGBAColour(val,val,0,1.0f));
-      //}
-   //}
+   // Set material
    m_oSun = CSprite(oMaterial);
    m_oSun.setSize(850);
    m_oSun.init();
@@ -170,18 +160,8 @@ bool COpenGL :: initGL() {
 //is all transparent objects are drawn last
 bool COpenGL::DrawGLScene(GLvoid) {
 
-   // Perform offscreen rendering first
-   //CTexture* pTexture(g_oTextureManager.texture(m_oSun.getMaterial().m_uiTexture));
-   //pTexture->preRenderToTexture();
-   // Clear screen
-   //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   // Reset The Current Modelview Matrix
-   //glMatrixMode(GL_MODELVIEW);
-   //glLoadIdentity();					
-   // Draw
-   //m_poAIShip->drawBlended();
-   // Finish up
-   //pTexture->postRenderToTexture();
+   // Do offscreen rendering first
+   m_poShip->drawOffScreen();
 
    // Clear screen
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
