@@ -1,7 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LIBRARIES = libAlienationMath.a
+lib_LTLIBRARIES = libAlienationMath.la
 
-libAlienationMath_a_SOURCES = Matrix.cpp Matrix.h Quat.cpp Quat.h Vector.h Random.cpp Random.h Perlin.cpp Perlin.h Chaos.cpp Chaos.h
+noinst_HEADERS = Matrix.h Quat.h Vector.h Random.h Perlin.h Chaos.h
+
+libAlienationMath_la_SOURCES = Matrix.cpp Quat.cpp Random.cpp Perlin.cpp Chaos.cpp
 
 INCLUDES = -I@top_srcdir@

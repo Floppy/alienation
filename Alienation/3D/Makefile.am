@@ -1,7 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LIBRARIES = libAlienation3D.a
+noinst_LTLIBRARIES = libAlienation3D.la
 
-libAlienation3D_a_SOURCES = Material.cpp Material.h Mesh.cpp Mesh.h Model.cpp Model.h Light.cpp Light.h ParticleEngine.cpp ParticleEngine.h Particle.cpp Particle.h Texture.cpp Texture.h Frustum.cpp Frustum.h BoundingSphere.cpp BoundingSphere.h TextureManager.cpp TextureManager.h Sprite.cpp Sprite.h 3DObject.h FMesh.cpp FMesh.h HalfEdge.h HEMesh.cpp HEMesh.h WEMesh.cpp WEMesh.h WingedEdge.h
+noinst_HEADERS = Material.h Mesh.h Model.h Light.h ParticleEngine.h Particle.h Texture.h Frustum.h BoundingSphere.h TextureManager.h Sprite.h 3DObject.h FMesh.h HalfEdge.h HEMesh.h WEMesh.h WingedEdge.h
+
+libAlienation3D_la_SOURCES = Material.cpp Mesh.cpp Model.cpp Light.cpp ParticleEngine.cpp Particle.cpp Texture.cpp Frustum.cpp BoundingSphere.cpp TextureManager.cpp Sprite.cpp FMesh.cpp HEMesh.cpp WEMesh.cpp
 
 INCLUDES = -I@top_srcdir@

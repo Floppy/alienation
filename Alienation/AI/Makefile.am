@@ -1,7 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LIBRARIES = libAlienationAI.a
+noinst_LTLIBRARIES = libAlienationAI.la
 
-libAlienationAI_a_SOURCES = AIShip.cpp AIShip.h
+noinst_HEADERS = AIShip.h
+
+libAlienationAI_la_SOURCES = AIShip.cpp
 
 INCLUDES = -I@top_srcdir@

@@ -1,7 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LIBRARIES = libAlienationGame.a
+noinst_LTLIBRARIES = libAlienationGame.la
 
-libAlienationGame_a_SOURCES = Asteroid.h Asteroid.cpp Brake.h Brake.cpp GameObject.h GameObject.cpp PlayerShip.h PlayerShip.cpp Ship.h Ship.cpp Stars.h Stars.cpp Weapon.h Weapon.cpp ShipFactory.cpp ShipFactory.h WeaponFactory.cpp WeaponFactory.h
+noinst_HEADERS = Asteroid.h Brake.h GameObject.h PlayerShip.h Ship.h Stars.h Weapon.h ShipFactory.h WeaponFactory.h
+
+libAlienationGame_la_SOURCES = Asteroid.cpp Brake.cpp GameObject.cpp PlayerShip.cpp Ship.cpp Stars.cpp Weapon.cpp ShipFactory.cpp WeaponFactory.cpp
 
 INCLUDES = -I@top_srcdir@

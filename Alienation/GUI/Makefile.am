@@ -1,8 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LIBRARIES = libAlienationGUI.a
+noinst_LTLIBRARIES = libAlienationGUI.la
 
-libAlienationGUI_a_SOURCES = Button.cpp Button.h CheckBox.cpp CheckBox.h Frame.cpp Frame.h GUI.cpp GUI.h List.cpp List.h ListItem.cpp ListItem.h ListSubItem.cpp ListSubItem.h RadioButton.cpp RadioButton.h RadioContainer.cpp RadioContainer.h
+noinst_HEADERS = Button.h CheckBox.h Frame.h GUI.h List.h ListItem.h ListSubItem.h RadioButton.h RadioContainer.h
 
+libAlienationGUI_la_SOURCES = Button.cpp CheckBox.cpp Frame.cpp GUI.cpp List.cpp ListItem.cpp ListSubItem.cpp RadioButton.cpp RadioContainer.cpp
 
 INCLUDES = -I@top_srcdir@

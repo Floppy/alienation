@@ -1,7 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LIBRARIES = libAlienationSound.a
+noinst_LTLIBRARIES = libAlienationSound.la
 
-libAlienationSound_a_SOURCES = SoundManager.cpp SoundManager.h
+noinst_HEADERS = SoundManager.h
+
+libAlienationSound_la_SOURCES = SoundManager.cpp
 
 INCLUDES = -I@top_srcdir@

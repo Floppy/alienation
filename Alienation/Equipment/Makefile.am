@@ -1,8 +1,10 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LIBRARIES = libAlienationEquipment.a
+noinst_LTLIBRARIES = libAlienationEquipment.la
 
-libAlienationEquipment_a_SOURCES = Engine.cpp Engine.h Equipment.cpp Equipment.h HudInformation.cpp HudInformation.h Radar.cpp Radar.h Shield.cpp Shield.h SpeedIndicator.cpp SpeedIndicator.h TargetingComputer.cpp TargetingComputer.h ThrustInformation.cpp ThrustInformation.h Trail.h Trail.cpp 
+noinst_HEADERS = Engine.h Equipment.h HudInformation.h Radar.h Shield.h SpeedIndicator.h TargetingComputer.h ThrustInformation.h Trail.h 
+
+libAlienationEquipment_la_SOURCES = Engine.cpp Equipment.cpp HudInformation.cpp Radar.cpp Shield.cpp SpeedIndicator.cpp TargetingComputer.cpp ThrustInformation.cpp Trail.cpp 
 
 
 INCLUDES = -I@top_srcdir@

@@ -6,7 +6,7 @@ AM_INIT_AUTOMAKE(Alienation,0.0.4)
 # Check for programs
 AC_PROG_CC
 AC_PROG_CXX
-AC_PROG_RANLIB
+AC_PROG_LIBTOOL
 AC_PROG_INSTALL
 
 # Enable all warnings

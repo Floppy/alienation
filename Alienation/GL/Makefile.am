@@ -1,7 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LIBRARIES = libAlienationGL.a
+noinst_LTLIBRARIES = libAlienationGL.la
 
-libAlienationGL_a_SOURCES = OpenGL.cpp OpenGL.h Extensions.cpp Extensions.h
+noinst_HEADERS = OpenGL.h Extensions.h
+
+libAlienationGL_la_SOURCES = OpenGL.cpp Extensions.cpp
 
 INCLUDES = -I@top_srcdir@
