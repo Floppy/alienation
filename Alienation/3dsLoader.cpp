@@ -16,7 +16,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void C3dsLoader::init3ds(char* pFilename)
 {
-	char strTemp[255];
 	m_o3DModel.m_iNumOfMaterials = 0;
 	m_o3DModel.m_iNumOfObjects = 0;
 

@@ -40,7 +40,7 @@ void CTrail::update(float timepassed)
 void CTrail::update(float fDT, float fThrust, CVector3 vecPos, CVector3 vecStart, CVector3 vecDistance, CVector3 vecUp, CVector3 vecRight,
 					float fWidth, float fHeight)
 {
-	CVector3 vecSpeed, vecTemp;
+	CVector3 vecSpeed;
 
 	//Create a heading for any new particles created this update
 	// The start vector is the position of the of the origin of the 

@@ -121,7 +121,7 @@ void CAIShip::simulate(float fDT)
 
 void CAIShip::solve()
 {
-	CVector3 vecForce, vecDragForce, vecBrakeForce;
+	CVector3 vecForce, vecDragForce;
 
 	//Normal flight, forces are thrust, drag and braking (if applied)
 	vecForce = (m_poShips[0].m_vecHeading - m_ppMasses[0]->m_vecPos) * m_poShips[0].m_fThrust;
