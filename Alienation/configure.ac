@@ -80,6 +80,7 @@ AC_OUTPUT(2D/Makefile
           Data/Audio/Makefile
           Data/Model/Makefile
           Data/Texture/Makefile
+          Data/Texture/Hud/Makefile
           Game/Makefile
           GL/Makefile
           IO/Makefile
