@@ -63,7 +63,7 @@ void C3dsLoader::init3ds(char* pFilename)
 			break;
 		}
 		
-		C3DObject *pObject = &m_o3DModel.m_pObject[i];					
+		CMesh *pObject = &m_o3DModel.m_pObject[i];					
 
 
 		//problem with this code here. If object has different materials with different 
@@ -89,7 +89,7 @@ void C3dsLoader::init3ds(char* pFilename)
 		glBegin(GL_TRIANGLES);										
 		
 		int j, iWhichVertex;
-		for(j = 0; j < pObject->m_iNumOfFaces; j++)
+		for(j = 0; j < pObject->m_iNumFaces; j++)
 		{
 			
 			for(iWhichVertex = 0; iWhichVertex < 3; iWhichVertex++)

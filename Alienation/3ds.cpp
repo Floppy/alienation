@@ -88,7 +88,7 @@ void CLoad3DS::cleanUp()
 
 void CLoad3DS::processNextChunk(C3DModel *pModel, CChunk *pPreviousChunk)
 {
-	C3DObject newObject;					 
+	CMesh newObject;					 
 	CMaterialInfo newTexture;				
 	unsigned short iVersion = 0;					
 	int aiBuffer[50000] = {0};					
@@ -133,7 +133,7 @@ void CLoad3DS::processNextChunk(C3DModel *pModel, CChunk *pPreviousChunk)
 			
 			pModel->m_pObject.push_back(newObject);
 			
-			memset(&(pModel->m_pObject[pModel->m_iNumOfObjects - 1]), 0, sizeof(C3DObject));
+			memset(&(pModel->m_pObject[pModel->m_iNumOfObjects - 1]), 0, sizeof(CMesh));
 			
 			m_pCurrentChunk->m_iBytesRead += getString(pModel->m_pObject[pModel->m_iNumOfObjects - 1].m_strName);
 			
@@ -163,7 +163,7 @@ void CLoad3DS::processNextChunk(C3DModel *pModel, CChunk *pPreviousChunk)
 //		This function handles all the information about the objects in the file
 //---------------------------------- PROCESS NEXT OBJECT CHUNK -----------------------------------
 
-void CLoad3DS::processNextObjectChunk(C3DModel *pModel, C3DObject *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::processNextObjectChunk(C3DModel *pModel, CMesh *pObject, CChunk *pPreviousChunk)
 {
 	int buffer[50000] = {0};					
 	
@@ -296,16 +296,16 @@ void CLoad3DS::readColorChunk(CMaterialInfo *pMaterial, CChunk *pChunk)
 //		This function reads in the indices for the vertex array
 //---------------------------------- READ VERTEX INDECES -----------------------------------
 
-void CLoad3DS::readVertexIndices(C3DObject *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::readVertexIndices(CMesh *pObject, CChunk *pPreviousChunk)
 {
 	unsigned short iIndex = 0;					 
-	pPreviousChunk->m_iBytesRead += fread(&pObject->m_iNumOfFaces, 1, 2, m_pFilePointer);
+	pPreviousChunk->m_iBytesRead += fread(&pObject->m_iNumFaces, 1, 2, m_pFilePointer);
 	
-	pObject->m_pFaces = new CFace [pObject->m_iNumOfFaces];
-	memset(pObject->m_pFaces, 0, sizeof(CFace) * pObject->m_iNumOfFaces);
+	pObject->m_pFaces = new CFace [pObject->m_iNumFaces];
+	memset(pObject->m_pFaces, 0, sizeof(CFace) * pObject->m_iNumFaces);
 	
 	int i, j;
-	for(i = 0; i < pObject->m_iNumOfFaces; i++)
+	for(i = 0; i < pObject->m_iNumFaces; i++)
 	{
 		for(j = 0; j < 4; j++)
 		{
@@ -324,7 +324,7 @@ void CLoad3DS::readVertexIndices(C3DObject *pObject, CChunk *pPreviousChunk)
 //		This function reads in the UV coordinates for the object
 //---------------------------------- READ UV COORDINATES -----------------------------------
 
-void CLoad3DS::readUVCoordinates(C3DObject *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::readUVCoordinates(CMesh *pObject, CChunk *pPreviousChunk)
 {
 	pPreviousChunk->m_iBytesRead += fread(&pObject->m_iNumTexVertex, 1, 2, m_pFilePointer);
 	
@@ -338,12 +338,12 @@ void CLoad3DS::readUVCoordinates(C3DObject *pObject, CChunk *pPreviousChunk)
 //	This function reads in the vertices for the object
 //---------------------------------- READ VERTICES -----------------------------------
 
-void CLoad3DS::readVertices(C3DObject *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::readVertices(CMesh *pObject, CChunk *pPreviousChunk)
 { 
-	pPreviousChunk->m_iBytesRead += fread(&(pObject->m_iNumOfVerts), 1, 2, m_pFilePointer);
+	pPreviousChunk->m_iBytesRead += fread(&(pObject->m_iNumVertices), 1, 2, m_pFilePointer);
 	
-	pObject->m_pVerts = new CVector3 [pObject->m_iNumOfVerts];
-	memset(pObject->m_pVerts, 0, sizeof(CVector3) * pObject->m_iNumOfVerts);
+	pObject->m_pVerts = new CVector3 [pObject->m_iNumVertices];
+	memset(pObject->m_pVerts, 0, sizeof(CVector3) * pObject->m_iNumVertices);
 	
 	pPreviousChunk->m_iBytesRead += fread(pObject->m_pVerts, 1, pPreviousChunk->m_iLength - pPreviousChunk->m_iBytesRead, m_pFilePointer);
 }
@@ -353,7 +353,7 @@ void CLoad3DS::readVertices(C3DObject *pObject, CChunk *pPreviousChunk)
 //	This function reads in the material name assigned to the object and sets the materialID
 //---------------------------------- READ OBJECT MATERIAL -----------------------------------
 
-void CLoad3DS::readObjectMaterial(C3DModel *pModel, C3DObject *pObject, CChunk *pPreviousChunk)
+void CLoad3DS::readObjectMaterial(C3DModel *pModel, CMesh *pObject, CChunk *pPreviousChunk)
 {
 	char strMaterial[255] = {0};			
 	int aiBuffer[50000] = {0};				
@@ -395,12 +395,12 @@ void CLoad3DS::computeNormals(C3DModel *pModel)
 	int index, i, j;
 	for(index = 0; index < pModel->m_iNumOfObjects; index++)
 	{
-		C3DObject *pObject = &(pModel->m_pObject[index]);
+		CMesh *pObject = &(pModel->m_pObject[index]);
 		
-		CVector3 *pTempNormals	= new CVector3 [pObject->m_iNumOfFaces];
-		pObject->m_pNormals		= new CVector3 [pObject->m_iNumOfVerts];
+		CVector3 *pTempNormals	= new CVector3 [pObject->m_iNumFaces];
+		pObject->m_pNormals		= new CVector3 [pObject->m_iNumVertices];
 		
-		for(i=0; i < pObject->m_iNumOfFaces; i++)
+		for(i=0; i < pObject->m_iNumFaces; i++)
 		{												
 			vecPoly[0] = pObject->m_pVerts[pObject->m_pFaces[i].m_iVertIndex[0]];
 			vecPoly[1] = pObject->m_pVerts[pObject->m_pFaces[i].m_iVertIndex[1]];
@@ -421,9 +421,9 @@ void CLoad3DS::computeNormals(C3DModel *pModel)
 		CVector3 vecZero = vecSum;
 		int shared=0;
 		
-		for (i = 0; i < pObject->m_iNumOfVerts; i++)			
+		for (i = 0; i < pObject->m_iNumVertices; i++)			
 		{
-			for (j = 0; j < pObject->m_iNumOfFaces; j++)	
+			for (j = 0; j < pObject->m_iNumFaces; j++)	
 			{												
 				if (pObject->m_pFaces[j].m_iVertIndex[0] == i || 
 					pObject->m_pFaces[j].m_iVertIndex[1] == i || 

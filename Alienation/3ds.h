@@ -2,29 +2,15 @@
 #define _3DS_H
 
 #include "config.h"
-
 #include "vector.h"
+#include "Mesh.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <fstream>
 #include <vector>									
 using namespace std;
 
-class CVector2 
-{
-public:
-	float m_fx, m_fy;							// 2D vector coordinates
-};
-
-//////////////////////////////////////
-//The tFace Struct
-//////////////////////////////////////
-class CFace
-{
-public:
-	int m_iVertIndex[3];							
-	int m_iCoordIndex[3];							
-};
 
 //////////////////////////////////////
 //The tMaterialInfo Struct
@@ -42,24 +28,6 @@ public:
 	float m_fIvOffset;									
 };
 
-//////////////////////////////////////
-//The t3DObject Struct
-//////////////////////////////////////
-class C3DObject 
-{
-public:
-	int  m_iNumOfVerts;			
-	int  m_iNumOfFaces;			
-	int  m_iNumTexVertex;			
-	int  m_iMaterialID;			
-	bool m_bHasTexture;			
-	char m_strName[255];			
-	unsigned int     *m_pIndices;		
-	CVector3  *m_pVerts;			
-	CVector3  *m_pNormals;		
-	CVector2  *m_pTexVerts;		
-	CFace *m_pFaces;				
-};
 
 //////////////////////////////////////
 //The t3DModel Struct
@@ -70,7 +38,7 @@ public:
 	int m_iNumOfObjects;							
 	int m_iNumOfMaterials;							
 	vector<CMaterialInfo> m_pMaterials;
-	vector<C3DObject> m_pObject;					
+	vector<CMesh> m_pObject;
 };
 
 
@@ -115,19 +83,19 @@ private:
 
 	void processNextChunk(C3DModel *pModel, CChunk *);
 
-	void processNextObjectChunk(C3DModel *pModel, C3DObject *pObject, CChunk *);
+	void processNextObjectChunk(C3DModel *pModel, CMesh *pObject, CChunk *);
 
 	void processNextMaterialChunk(C3DModel *pModel, CChunk *);
 
 	void readColorChunk(CMaterialInfo *pMaterial, CChunk *pChunk);
 
-	void readVertices(C3DObject *pObject, CChunk *);
+	void readVertices(CMesh *pObject, CChunk *);
 
-	void readVertexIndices(C3DObject *pObject, CChunk *);
+	void readVertexIndices(CMesh *pObject, CChunk *);
 
-	void readUVCoordinates(C3DObject *pObject, CChunk *);
+	void readUVCoordinates(CMesh *pObject, CChunk *);
 
-	void readObjectMaterial(C3DModel *pModel, C3DObject *pObject, CChunk *pPreviousChunk);
+	void readObjectMaterial(C3DModel *pModel, CMesh *pObject, CChunk *pPreviousChunk);
 	
 	void computeNormals(C3DModel *pModel);
 
