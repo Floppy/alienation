@@ -7,8 +7,9 @@
 
 #include "GL/GLFont.h"
 #include "Game/Ship.h"
-#include "2DObject.h"
+#include "2D/2DObject.h"
 #include "config.h"
+#include "3D/Material.h"
 
 
 /** 
@@ -94,6 +95,11 @@ public:
    unsigned long m_iLastTime;
    
    /**
+    * Material info
+    */
+   CMaterial m_oMaterial;
+
+   /**
     * Texture IDs
     */
    unsigned int m_auiTextures[7];
@@ -101,7 +107,7 @@ public:
    /**
     * Object for 2d drawing
     */
-	C2DObject *m_po2DObject;
+   C2DObject *m_po2DObject;
 };
 
 #endif // HUD_H
