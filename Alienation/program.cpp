@@ -52,20 +52,18 @@ int main(int argc, char* argv[])
 
 	int iFlags = SDL_OPENGL;// | SDL_FULLSCREEN;
 
-	if (!FSOUND_Init(44100, 64, 0))
+	if (FSOUND_Init(44100, 64, 0))
 	{
-		cerr << "Failed to initialise FMOD" << endl;
-		return 1;
+	  // LOAD SONG
+	  poMod = FSOUND_Stream_OpenFile("./Data/Audio/demo.mp3", FSOUND_LOOP_NORMAL, 0);
+	  if (poMod)
+	    FSOUND_Stream_Play(FSOUND_FREE, poMod);   
+	  else 
+	    cerr << "Failed to open demo.mp3" << endl;
 	}
-
+	else 
+	  cerr << "Failed to initialise FMOD" << endl;
   
-	// LOAD SONG
-	poMod = FSOUND_Stream_OpenFile("./Data/Audio/demo.mp3", FSOUND_LOOP_NORMAL, 0);
-	if (!poMod)
-	{
-		cerr << "Failed to open demo.mp3" << endl;
-		return 1;
-	}
 
 
 	// Set the video mode
@@ -94,7 +92,6 @@ int main(int argc, char* argv[])
 
 	dLastTickCount = SDL_GetTicks();
 
-	FSOUND_Stream_Play(FSOUND_FREE, poMod);   
 
 	// Loop That Runs While done=false   
 	while (!bDone) {
