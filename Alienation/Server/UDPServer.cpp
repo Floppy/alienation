@@ -4,6 +4,20 @@
 
 #include "UDPServer.h"
 
+enum eMsgType {
+	MSG_NOMESSAGE     = 0,
+	MSG_TEXTMESSAGE   = 1,
+	MSG_LOGINREQUEST  = 2,  // client's first message to server
+	MSG_LOGINREPLY    = 3,  // server's response
+	MSG_CONNECTNOTICE = 4,  // player's connect status has changed
+	MSG_SNAPSHOT      = 5,
+	MSG_MOVENOTICE    = 6,  // player has moved
+	MSG_SPAWNNOTICE   = 7,
+	MSG_DEATHNOTICE   = 8,
+	MSG_COLLIDENOTICE = 9,
+	MSG_KEEPALIVE     = 10
+};
+
 CUDPServer go_UDPServer;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -19,64 +33,62 @@ CUDPServer::~CUDPServer()
 
 }
 
-bool CUDPServer::sendAll(CUDPPacket poPacket)
+void CUDPServer::sendAll(CUDPPacket poPacket)
 {
 	UDPsocket oSocket;
 	int i, iResult;
 	IPaddress *poIPAddress;
 
-	m_iCurrentSocket = - 1;
-	m_iCurrentChannel = - 1;
-	m_iCurrentChannelIP = - 1;
 
-
-	oSocket=SDLNet_UDP_Open(9998);
+	oSocket=SDLNet_UDP_Open(0);
 	if(!oSocket) 
 	{
 		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
 		exit(2);
-	}
-	m_arrSocket.push_back(oSocket);
-	m_iCurrentSocket ++;
-
+	}	
+	
 	for ( i = 0 ; i < goClientManager.getNumberClients() ; i++ )
 	{
-		m_iCurrentChannelIP ++;
-		if (m_iCurrentChannelIP >= SDLNET_MAX_UDPADDRESSES)
-		{
-			m_iCurrentChannelIP = 0;
-			m_iCurrentChannel ++;
-			if (m_iCurrentChannel >= SDLNET_MAX_UDPCHANNELS)
-			{
-				m_iCurrentChannel = 0;
-				m_iCurrentSocket ++;
-				oSocket=SDLNet_UDP_Open(9998);
-				if(!oSocket) 
-				{
-					printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
-					exit(2);
-				}
-				m_arrSocket.push_back(oSocket);
-			}
-		}
 		poIPAddress = goClientManager.getIPAddress(i);
-		iResult = SDLNet_UDP_Bind( m_arrSocket[m_iCurrentSocket], m_iCurrentChannel, poIPAddress );
+
+
+		iResult = SDLNet_UDP_Bind( oSocket, -1, poIPAddress );
 		if( iResult == -1 ) 
 		{
 			printf("SDLNet_UDP_Bind: %s\n", SDLNet_GetError());
 			// do something because we failed to bind
 		}
+		poPacket.send(oSocket, MSG_TEXTMESSAGE);
+		SDLNet_UDP_Unbind( oSocket, iResult );
+	}	
+	SDLNet_UDP_Close( oSocket );
+
+}
+
+void CUDPServer::listen(Uint32 uiTimeout)
+{
+	Uint32 uiStop = SDL_GetTicks() + uiTimeout;
+	CUDPPacket oPacket;
+	UDPsocket oSocket;
+
+	oPacket.setLastMessageRecievedType(MSG_NOMESSAGE);
+
+	oSocket = SDLNet_UDP_Open(9998);
+	if ( !oSocket ) 
+	{
+		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
 	}
 
-	for (i = 0 ; i < m_arrSocket.size() ; i++ )
+
+	while (SDL_GetTicks() < uiStop)
 	{
-		iResult = SDLNet_UDP_Send( m_arrSocket[i], 0, poPacket.getData() );
-		if( !iResult ) 
+		oPacket.recieve(oSocket);
+		if ( oPacket.getLastMessageRecievedType() != MSG_NOMESSAGE )
 		{
-		    printf("SDLNet_UDP_Send: %s\n", SDLNet_GetError());
-		    // do something because we failed to send
-		    // this may just be because no addresses are bound to the channel...
+			//send message to other clients
+			go_UDPServer.sendAll(oPacket);
 		}
-	}	
-	return true;
+	}
+	SDLNet_UDP_Close( oSocket );
+
 }

@@ -18,14 +18,11 @@ using namespace std;
 class CUDPServer  
 {
 public:
-	bool sendAll(CUDPPacket poPacket);
+	void listen(Uint32 uiTimeout);
+	void sendAll(CUDPPacket poPacket);
    CUDPServer();
    virtual ~CUDPServer();
 private:
-   vector <UDPsocket> m_arrSocket;
-   int m_iCurrentSocket;
-   int m_iCurrentChannel;
-   int m_iCurrentChannelIP;
 };
 
 extern CUDPServer go_UDPServer;

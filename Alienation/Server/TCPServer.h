@@ -13,10 +13,12 @@
 #include "SDL_net.h"
 #include "TCPPacket.h"
 #include "UDPPacket.h"
+#include "Globals.h"
 
 class CTCPServer  
 {
 public:
+	bool createSocket();
    CTCPPacket * listen(Uint32 uiTimeout);
    CTCPServer();
    virtual ~CTCPServer();

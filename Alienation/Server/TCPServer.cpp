@@ -1,6 +1,20 @@
 // TCPServer.cpp: implementation of the CTCPServer class.
 //
 //////////////////////////////////////////////////////////////////////
+enum eMsgType {
+	MSG_NOMESSAGE     = 0,
+	MSG_TEXTMESSAGE   = 1,
+	MSG_LOGINREQUEST  = 2,  // client's first message to server
+	MSG_LOGINREPLY    = 3,  // server's response
+	MSG_CONNECTNOTICE = 4,  // player's connect status has changed
+	MSG_SNAPSHOT      = 5,
+	MSG_MOVENOTICE    = 6,  // player has moved
+	MSG_SPAWNNOTICE   = 7,
+	MSG_DEATHNOTICE   = 8,
+	MSG_COLLIDENOTICE = 9,
+	MSG_KEEPALIVE     = 10
+};
+
 
 #include "TCPServer.h"
 #include "Client.h"
@@ -13,20 +27,7 @@ CTCPServer go_TCPServer;
 
 CTCPServer::CTCPServer()
 {
-   IPaddress oIP;
 
-   if( SDLNet_ResolveHost( &oIP, NULL, 9999 )==-1 ) 
-   {
-	  printf( "SDLNet_ResolveHost: %s\n", SDLNet_GetError() );
-   }
-   else
-   {
-      m_oSocket = SDLNet_TCP_Open( &oIP );
-	  if( !m_oSocket ) 
-      {
-	     printf( "SDLNet_TCP_Open: %s\n", SDLNet_GetError() );
-      }
-   }
 }
 
 CTCPServer::~CTCPServer()
@@ -44,18 +45,17 @@ CTCPPacket * CTCPServer::listen(Uint32 uiTimeout)
 	IPaddress *poNewIP;
 	const char  *strHostName;
 	int iResult;
-	int iData1, iData2;
-	long lData1, lData2;
-	char strMessage1[256], strMessage2[256];
-	unsigned int vBuffer[1024];
+	char strUserName[16], strPassword[16];
 
 	TCPsocket oSocket;
 
 	while ( SDL_GetTicks() < uiStop )
 	{
+		//Accept new connections
 		oSocket = SDLNet_TCP_Accept( m_oSocket );
 		if( oSocket ) 
 		{
+			printf ("Socket accepted packet \n");
 			poNewIP = SDLNet_TCP_GetPeerAddress(oSocket);
 			if(!(strHostName = SDLNet_ResolveIP( poNewIP ))) 
 			{
@@ -64,21 +64,51 @@ CTCPPacket * CTCPServer::listen(Uint32 uiTimeout)
 			else
 			{
 				//read packet
-				iResult = SDLNet_TCP_Recv(oSocket, vBuffer, sizeof(unsigned int) *1024);
 				//Get Type of packet (atm, only login via TCP);
-				//Do login check stuff here
-				poPacket->getData(&iData1, &iData2, &lData1, &lData2, strMessage1, strMessage2);
-				goClientManager.add( *poNewIP, strMessage1, oSocket );
+				iResult = poPacket->recieve(oSocket);
+				switch (iResult)
+				{
+				case MSG_LOGINREQUEST:
+					//Do login check stuff here
+					poPacket->getLoginRequest(strUserName, strPassword);
+					break;
+				default:
+					break;
+				}
+				goClientManager.add( *poNewIP, strUserName, oSocket );
 				//Send acknowledgement to player
-				poAckPacket->setData(iData1, iData2, lData1, lData2, "Now logged in", strMessage2);
+				poAckPacket->setLoginAcknowledgement(strUserName, "Welcome to the server!");
+				poAckPacket->send(oSocket, MSG_LOGINREPLY);
 				//Inform other players a new player has logged on
-				strcat(strInform, strMessage1);
+				strcat(strInform, strUserName);
 				strcat(strInform, " has joined the game");
-				pPlayerInformPacket.setData(strInform);
-				go_UDPServer.sendAll(pPlayerInformPacket);
+				pPlayerInformPacket.setData(strUserName, strInform);
+//				go_UDPServer.sendAll(pPlayerInformPacket);
 			}
 		}
 	}   
 
 	return poPacket;
+}
+
+bool CTCPServer::createSocket()
+{
+   IPaddress oIP;
+
+   if( SDLNet_ResolveHost( &oIP, NULL, 9999 )==-1 ) 
+   {
+	  printf( "SDLNet_ResolveHost: %s\n", SDLNet_GetError() );
+	  return false;
+   }
+   else
+   {
+		m_oSocket = SDLNet_TCP_Open( &oIP );
+		if( !m_oSocket ) 
+      {
+	     printf( "SDLNet_TCP_Open: %s\n", SDLNet_GetError() );
+		  return false;
+      }
+		return true;
+   }
+
 }
