@@ -149,7 +149,12 @@ namespace NSD2D {
          if (dX < 0) dX = 0;
          else if (dX > viewport[2]) dX = viewport[2];
          if (dY < 0) dY = 0;
-         else if (dY > viewport[3]) dY = viewport[3];
+         else if (dY > viewport[3]) dY = viewport[3];         
+         // Rescale to 1024*768
+         dX /= viewport[2];
+         dY /= viewport[3];
+         dX *= 1024.0f;
+         dY *= 768.0f;
          // Render reticle
          m_po2DObject->renderQuad(dX-32.0f, (viewport[3]-dY)+32.0f, 64.0f, 64.0f, avecTex);
          // Calculate range
