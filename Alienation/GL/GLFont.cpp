@@ -4,6 +4,7 @@
 
 #include "GL/GLFont.h"
 #include "3D/TextureManager.h"
+#include "3D/Material.h"
 #include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////
@@ -44,12 +45,8 @@ void CGLFont::print(char *str, CVector3 vecPos, float fSize)
 	g_oTextureManager.activate(m_uiTexture);
 
 	//manually sets the material properties. Hard coded, shouldnt be really
-	glPushAttrib(GL_COLOR_MATERIAL);
-	afCol[0] = 0.4f;
-	afCol[1] = 1.0f;
-	afCol[2] = 0.3f;
-	afCol[3] = 0.06f;
-	glMaterialfv(GL_FRONT, GL_AMBIENT, afCol); 
+        CRGBAColour colour(0.4f,1.0f,0.3f,0.06f);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, colour.glColour()); 
 	//then draw the particles
 	glBegin(GL_QUADS);
 		int iCount;
@@ -129,12 +126,8 @@ void CGLFont::print(char *str, CVector2 vecPos, float fSize)
 	g_oTextureManager.activate(m_uiTexture);
 
 	//manually sets the material properties. Hard coded, shouldnt be really
-	glPushAttrib(GL_COLOR_MATERIAL);
-	afCol[0] = 0.4f;
-	afCol[1] = 1.0f;
-	afCol[2] = 0.3f;
-	afCol[3] = 0.06f;
-	glMaterialfv(GL_FRONT, GL_AMBIENT, afCol); 
+        CRGBAColour colour(0.4f,1.0f,0.3f,0.06f);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, colour.glColour()); 
 	//then draw the particles
 	glBegin(GL_QUADS);
 		int iCount;

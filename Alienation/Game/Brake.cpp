@@ -5,6 +5,7 @@
 #include "Game/Brake.h"
 #include <stdlib.h>
 #include "3D/TextureManager.h"
+#include "3D/Material.h"
 
 #ifdef WIN32
   #include <windows.h>
@@ -121,7 +122,6 @@ void CBrake::createParticle(int i, CVector3 vecHead, CVector3 vecOrigin)
 void CBrake::render()
 {
 	CMatrix mat;
-	float afCol[4];
 	CVector3 vecBillboard1, vecBillboard2, vecTemp, vecTemp2, avecPlane[4];
 
 	//First set up billboarding of the particles
@@ -157,11 +157,8 @@ void CBrake::render()
 
 			glNormal3fv(vecTemp2.glVector());
 
-			afCol[0] = m_poParticles[iCount].m_fr;
-			afCol[1] = m_poParticles[iCount].m_fg;
-			afCol[2] = m_poParticles[iCount].m_fb;
-			afCol[3] = 0.4f;
-			glMaterialfv(GL_FRONT, GL_AMBIENT, afCol); 
+			CRGBAColour colour(m_poParticles[iCount].m_fr,m_poParticles[iCount].m_fg,m_poParticles[iCount].m_fb,0.4f);
+			glMaterialfv(GL_FRONT, GL_AMBIENT, colour.glColour()); 
 			glColor4f(m_poParticles[iCount].m_fr, m_poParticles[iCount].m_fg, m_poParticles[iCount].m_fb, 0.3f);	
 
 			glTexCoord2f(0.0f, 1.0f);

@@ -117,12 +117,8 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 												//shouldnt be really                        //
 												//////////////////////////////////////////////
 	glPushAttrib(GL_COLOR_MATERIAL);
-	afCol[0] = 0.4f;
-	afCol[1] = 1.0f;
-	afCol[2] = 0.3f;
-	afCol[3] = 0.06f;
-
-	glMaterialfv(GL_FRONT, GL_AMBIENT, afCol);
+        CRGBAColour colour(0.4f,1.0f,0.3f,0.06f);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, colour.glColour());
 	glEnable(GL_BLEND);
 
 												//////////////////////////////////////////////
