@@ -144,13 +144,14 @@ void CTexture::preRenderToTexture() {
    glGetIntegerv(GL_VIEWPORT,m_aiViewport);
    // Resize viewport
    glViewport(0,0,m_pTexture->w, m_pTexture->h);
+
 }
 
 void CTexture::postRenderToTexture() {
    // Bind texture
    glBindTexture(GL_TEXTURE_2D,m_uiTextureID);
    // Copy image from back buffer
-   glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 0, 0, m_pTexture->w, m_pTexture->h, 0);
+   glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, m_pTexture->w, m_pTexture->h, 0);
    // Restore viewport
    glViewport(m_aiViewport[0],m_aiViewport[1],m_aiViewport[2],m_aiViewport[3]);
 }
@@ -163,10 +164,17 @@ void CTexture::setPixel(unsigned int iX, unsigned int iY, CRGBAColour oColour)
    if (SDL_MUSTLOCK(m_pTexture)) SDL_LockSurface(m_pTexture);
    // Calculate pixel value
    unsigned int iPixel = 
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+      static_cast<unsigned int>(oColour.R() * 0xFF) << 24| 
+      static_cast<unsigned int>(oColour.G() * 0xFF) << 16 | 
+      static_cast<unsigned int>(oColour.B() * 0xFF) << 8 | 
+      static_cast<unsigned int>(oColour.A() * 0xFF);
+#else
       static_cast<unsigned int>(oColour.R() * 0xFF) | 
       static_cast<unsigned int>(oColour.G() * 0xFF) << 8 | 
       static_cast<unsigned int>(oColour.B() * 0xFF) << 16 | 
       static_cast<unsigned int>(oColour.A() * 0xFF) << 24;
+#endif
    // Set pixel
    static_cast<unsigned int*>(m_pTexture->pixels)[iY * m_pTexture->w + iX] = iPixel;
    // Unlock
