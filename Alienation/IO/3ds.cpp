@@ -19,6 +19,7 @@
 #define _3DS_MATERIAL_AMBIENT       0xA010
 #define _3DS_MATERIAL_DIFFUSE       0xA020				
 #define _3DS_MATERIAL_SPECULAR      0xA030
+#define _3DS_MATERIAL_SHININESS		0xA040
 #define _3DS_MATERIAL_TEXTUREMAP    0xA200
 #define _3DS_MATERIAL_REFLECTIONMAP 0xA220
 #define _3DS_MATERIAL_BUMPMAP       0xA230
@@ -265,7 +266,11 @@ namespace NSDIO {
          case _3DS_MATERIAL_SPECULAR: {
             newMaterial.m_oSpecular = readColorChunk(m_pCurrentChunk);
          } break;
-         
+
+			case _3DS_MATERIAL_SHININESS: {
+				newMaterial.m_fShininess = readShinyChunk(m_pCurrentChunk);
+			} break;
+
          case _3DS_MATERIAL_NAME: {         
             // Read material name
             m_pCurrentChunk->m_iBytesRead += getString(strMaterialName);
@@ -274,7 +279,11 @@ namespace NSDIO {
          case _3DS_MATERIAL_TEXTUREMAP: {
             processNextTextureChunk(newMaterial, m_pCurrentChunk);
          } break;
-         
+
+			case _3DS_MATERIAL_BUMPMAP: {
+				processNextBumpMapChunk( newMaterial, m_pCurrentChunk );
+			} break;
+
          default: {
             swallowChunk(m_pCurrentChunk);
          } break;
@@ -291,6 +300,51 @@ namespace NSDIO {
       m_pCurrentChunk = pPreviousChunk;
    }
    
+
+//**************************************************************************************
+// Function name    : CLoad3DS::processNextBumpMapChunk
+// Author           : Gary Ingram
+// Return type      : void 
+// Date Created     : 18/11/2003
+// Argument         : CChunk *pPreviousChunk
+// Description      : Procesess the bump map chunk  
+//**************************************************************************************
+	void CLoad3DS::processNextBumpMapChunk(CMaterial& oMaterial, CChunk *pPreviousChunk)
+   {
+      // Read new chunk
+      m_pCurrentChunk = new CChunk;
+      // Read contents of previous chunk
+      while (pPreviousChunk->m_iBytesRead < pPreviousChunk->m_iLength)
+      {
+         readChunk(m_pCurrentChunk);
+         
+         switch (m_pCurrentChunk->m_uiID)
+         {
+         case _3DS_MATERIAL_MAP_FILE: {
+            
+            // Get filename         
+            char strFilename[64];         
+            m_pCurrentChunk->m_iBytesRead += getString(strFilename);
+            
+            // Load texture and store ID
+            oMaterial.m_uiBumpTexture = g_oTextureManager.load(strFilename);
+				oMaterial.m_bHasBumpMap = true;
+            
+         } break;
+         
+         default: {
+            swallowChunk(m_pCurrentChunk);
+         } break;
+         
+         }
+         pPreviousChunk->m_iBytesRead += m_pCurrentChunk->m_iBytesRead;
+      }
+      
+      // Tidy up and finish
+      delete m_pCurrentChunk;
+      m_pCurrentChunk = pPreviousChunk;
+   }
+
    void CLoad3DS::processNextTextureChunk(CMaterial& oMaterial, CChunk *pPreviousChunk)
    {
       // Read new chunk
@@ -356,6 +410,26 @@ namespace NSDIO {
       return strlen(pBuffer) + 1;
    }
    
+//**************************************************************************************
+// Function name    : CLoad3DS::readShinyChunk
+// Author           : Gary Ingram
+// Return type      : CRGBAColour 
+// Date Created     : 04/11/2003
+// Argument         : CChunk *pChunk
+// Description      : Written in order to read the shininess variable in from 
+//                    the file  
+//**************************************************************************************
+	float CLoad3DS::readShinyChunk(CChunk *pChunk)
+   {
+      // Allocate colour storage
+		unsigned char shiny[1];
+      // Read data
+      readChunk(m_pTempChunk);   
+      m_pTempChunk->m_iBytesRead += fread(shiny, 1, m_pTempChunk->m_iLength - m_pTempChunk->m_iBytesRead, m_pFilePointer);
+      pChunk->m_iBytesRead += m_pTempChunk->m_iBytesRead;
+      // store
+      return (float)shiny[0];
+   }
    
    //---------------------------------- READ COLOR ----------------------------------
    //		This function reads in the RGB color data
@@ -464,5 +538,5 @@ namespace NSDIO {
       // Dump data
       delete [] pBuffer;
    }
-
 }
+
