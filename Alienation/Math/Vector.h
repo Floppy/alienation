@@ -264,6 +264,30 @@ class CVector3
    }
 
    /**
+    * Multiplication by vector value.
+    * @return A new vector equal to this * vecValue.
+    */ 
+   CVector3 operator*(CVector3 vecValue) const
+   {
+      return CVector3(m_oVector[0] * vecValue.m_oVector[0], 
+                      m_oVector[1] * vecValue.m_oVector[1],
+                      m_oVector[2] * vecValue.m_oVector[2]);
+   }
+
+   /**
+    * Multiplication by vector value.
+    * Modifies this : this = this * vecValue;
+    * @return A reference to this object.
+    */ 
+   CVector3& operator*=(CVector3 vecValue)
+   {
+      m_oVector[0] *= vecValue.m_oVector[0];
+      m_oVector[1] *= vecValue.m_oVector[1];
+      m_oVector[2] *= vecValue.m_oVector[2];
+      return *this;
+   }
+
+   /**
     * Division by scalar value.
     * @return A new vector equal to this / fValue.
     */ 
