@@ -8,7 +8,7 @@ weapon = {
 	class		= "projectile",
 	firerate	= 0.5,
 	sound		= "weapon.wav",
-	colour 		= {1, 0.2, 0.4, 1},
+	colour 		= {r=1, g=0.2, b=0.4, a=1},
 	texture		= "ball.png",
 	size		= 1,
 	lifetime	= 7,
