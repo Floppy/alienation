@@ -58,17 +58,17 @@ void CGLFont::print(char *str, CVector3 vecPos, float fSize)
 
 			//work out the u,v coordinates of the texture for the letter
 			//uses double precision as float didnt seem accurate enought
-			adCoords[3][0] = 1.0 /(256.0/(double)(iCol * 16)); 
-			adCoords[0][1] = 1.0 /(256.0/(double)(iRow * 16 + 16)); 
+			adCoords[3][0] = static_cast<double>(iCol * 16)/256.0; 
+			adCoords[0][1] = static_cast<double>(iRow * 16 + 16)/256.0; 
 
-			adCoords[1][0] = 1.0 /(256.0/(double)(iCol * 16 + 16));
-			adCoords[1][1] = 1.0 /(256.0/(double)(iRow * 16 + 16)); 
+			adCoords[1][0] = static_cast<double>(iCol * 16 + 16)/256.0; 
+			adCoords[1][1] = adCoords[0][1];
 
-			adCoords[2][0] = 1.0 /(256.0/(double)(iCol * 16 + 16)); 
-			adCoords[2][1] = 1.0 /(256.0/(double)(iRow * 16)); 
-
-			adCoords[0][0] = 1.0 /(256.0/(double)(iCol * 16)); 
-			adCoords[3][1] = 1.0 /(256.0/(double)(iRow * 16)); 
+			adCoords[2][0] = adCoords[1][0]; 
+		 	adCoords[2][1]= static_cast<double>(iRow * 16)/256.0; 
+                        
+			adCoords[0][0] = adCoords[3][0]; 
+			adCoords[3][1] = adCoords[2][1]; 
 
 
 			//Draw the letter
@@ -135,17 +135,17 @@ void CGLFont::print(char *str, CVector2 vecPos, float fSize)
 
 			//work out the u,v coordinates of the texture for the letter
 			//uses double precision as float didnt seem accurate enought
-			adCoords[3][0] = 1.0 /(256.0/(double)(iCol * 16)); 
-			adCoords[0][1] = 1.0 /(256.0/(double)(iRow * 16 + 16)); 
+			adCoords[3][0] = static_cast<double>(iCol * 16)/256.0; 
+			adCoords[0][1] = static_cast<double>(iRow * 16 + 16)/256.0; 
 
-			adCoords[1][0] = 1.0 /(256.0/(double)(iCol * 16 + 16));
-			adCoords[1][1] = 1.0 /(256.0/(double)(iRow * 16 + 16)); 
+			adCoords[1][0] = static_cast<double>(iCol * 16 + 16)/256.0; 
+			adCoords[1][1] = adCoords[0][1];
 
-			adCoords[2][0] = 1.0 /(256.0/(double)(iCol * 16 + 16)); 
-			adCoords[2][1] = 1.0 /(256.0/(double)(iRow * 16)); 
-
-			adCoords[0][0] = 1.0 /(256.0/(double)(iCol * 16)); 
-			adCoords[3][1] = 1.0 /(256.0/(double)(iRow * 16)); 
+			adCoords[2][0] = adCoords[1][0]; 
+		 	adCoords[2][1]= static_cast<double>(iRow * 16)/256.0; 
+                        
+			adCoords[0][0] = adCoords[3][0]; 
+			adCoords[3][1] = adCoords[2][1]; 
 
 
 			//Draw the letter
