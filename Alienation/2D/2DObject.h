@@ -37,7 +37,7 @@ public:
    void setPosition(float fXPos, float fYPos, float fWidth, float fHeight);
    C2DObject();
    virtual ~C2DObject();
-   void init2D(float fXPos, float fYPos, float fWidth, float fHeight, char *sFilename);
+   void init2D(float fXPos, float fYPos, float fWidth, float fHeight, const char *sFilename);
    void renderQuad();
 
 private:

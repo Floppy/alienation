@@ -97,7 +97,7 @@ void C2DObject::setPosition(float fXPos, float fYPos, float fWidth, float fHeigh
    m_fHeight = fHeight;
 }
 
-void C2DObject::init2D(float fXPos, float fYPos, float fWidth, float fHeight, char * strFilename)
+void C2DObject::init2D(float fXPos, float fYPos, float fWidth, float fHeight, const char * strFilename)
 {
    CMaterial oMaterial; 
    m_fXPos = fXPos;
