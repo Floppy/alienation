@@ -48,7 +48,7 @@ class CTextureManager
     * You don't need to add a reference until you use the texture ID for more than one object.
     * @param strFilename The texture filename to load.
     * @param bMipmap Generate mipmaps for the texture.
-    * @return The texture ID that can be used to access the loaded texture.
+    * @return The texture ID that can be used to access the loaded texture. UINT_MAX is returned on failure.
     */
    unsigned int load(const char* strFilename, bool bMipmap = true);
 
@@ -58,7 +58,7 @@ class CTextureManager
     * You don't need to add a reference until you use the texture ID for more than one object.
     * @param iX The number of pixels wide the texture should be
     * @param iY The number of pixels high the texture should be
-    * @return The texture ID that can be used to access the loaded texture.
+    * @return The texture ID that can be used to access the loaded texture. UINT_MAX is returned on failure.
     */
    unsigned int create(unsigned int iX, unsigned int iY);
 
