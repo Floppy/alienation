@@ -43,6 +43,7 @@ public:
    void renderQuad();
 
 private:
+	float m_fPercentageWidth;
    NSDMath::CVector2 m_vecTex[4];
    unsigned m_uiActiveTexture;
    unsigned int m_uiAltTexture;

@@ -40,10 +40,10 @@ void C2DObject::renderQuad()
 	  glVertex2f(m_fXPos, m_fYPos + m_fHeight);
 	  glMultiTexCoord2fARB(GL_TEXTURE0_ARB, m_vecTex[1].X(), m_vecTex[1].Y());
 	  glMultiTexCoord2fARB(GL_TEXTURE1_ARB, m_vecTex[1].X(), m_vecTex[1].Y());
-	  glVertex2f(m_fXPos + m_fWidth, m_fYPos + m_fHeight);
+	  glVertex2f(m_fXPos + m_fPercentageWidth, m_fYPos + m_fHeight);
 	  glMultiTexCoord2fARB(GL_TEXTURE0_ARB, m_vecTex[2].X(), m_vecTex[2].Y());
 	  glMultiTexCoord2fARB(GL_TEXTURE1_ARB, m_vecTex[2].X(), m_vecTex[2].Y());
-	  glVertex2f(m_fXPos + m_fWidth, m_fYPos);
+	  glVertex2f(m_fXPos + m_fPercentageWidth, m_fYPos);
 	  glMultiTexCoord2fARB(GL_TEXTURE0_ARB, m_vecTex[3].X(), m_vecTex[3].Y());
 	  glMultiTexCoord2fARB(GL_TEXTURE1_ARB, m_vecTex[3].X(), m_vecTex[3].Y());
 	  glVertex2f(m_fXPos, m_fYPos);
@@ -99,6 +99,8 @@ void C2DObject::setTexturePercentage(float fPercentage)
    m_vecTex[2] = NSDMath::CVector2(1.0f * (fPercentage / 100.0f), 0.0f);
 
    m_vecTex[3] = NSDMath::CVector2(0.0f, 0.0f);
+
+	m_fPercentageWidth = (fPercentage / 100.0f) * m_fWidth;
   
 }
 
