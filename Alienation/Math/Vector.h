@@ -198,7 +198,7 @@ class CVector3
     * @param vecV The vector to add to this one.
     * @return A new vector equal to this + vecV
     */ 
-   CVector3 operator+(const CVector3& vecV)
+   CVector3 operator+(const CVector3& vecV) const
    {
       return CVector3(m_oVector[0] + vecV.m_oVector[0], m_oVector[1] + vecV.m_oVector[1], m_oVector[2] + vecV.m_oVector[2]);
    }
@@ -222,7 +222,7 @@ class CVector3
     * @param vecV The vector to subtract from this one.
     * @return A new vector equal to this - vecV
     */ 
-   CVector3 operator-(const CVector3& vecV)
+   CVector3 operator-(const CVector3& vecV) const
    {
       return CVector3(m_oVector[0] - vecV.m_oVector[0], m_oVector[1] - vecV.m_oVector[1], m_oVector[2] - vecV.m_oVector[2]);
    }
@@ -245,7 +245,7 @@ class CVector3
     * Multiplication by scalar value.
     * @return A new vector equal to this * fValue.
     */ 
-   CVector3 operator*(float fValue)
+   CVector3 operator*(float fValue) const
    {
       return CVector3(m_oVector[0] * fValue, m_oVector[1] * fValue, m_oVector[2] * fValue);
    }
@@ -267,7 +267,7 @@ class CVector3
     * Division by scalar value.
     * @return A new vector equal to this / fValue.
     */ 
-   CVector3 operator/(float fValue)
+   CVector3 operator/(float fValue) const
    {
       return CVector3(m_oVector[0] / fValue, m_oVector[1] / fValue, m_oVector[2] / fValue);
    }
@@ -290,7 +290,7 @@ class CVector3
     * All components are negated.
     * @return A new vector which is the inverse of this one.
     */ 
-   CVector3 operator-()
+   CVector3 operator-() const
    {
       return CVector3(-m_oVector[0], -m_oVector[1], -m_oVector[2]);
    }
@@ -300,7 +300,7 @@ class CVector3
     * @param vecV The vector to take the dot product with.
     * @return The dot or scalar product of this and vecV.
     */
-   float dot(const CVector3& vecV)
+   float dot(const CVector3& vecV) const
    {
       return m_oVector[0] * vecV.m_oVector[0] + m_oVector[1] * vecV.m_oVector[1] + m_oVector[2] * vecV.m_oVector[2];
    }
@@ -310,7 +310,7 @@ class CVector3
     * @param vecV The vector to take the cross product with.
     * @return A new vector containing the cross or vector product of this and vecV.
     */
-   CVector3 cross(const CVector3& vecV)
+   CVector3 cross(const CVector3& vecV) const
    {
       CVector3 vecNormal;									
       vecNormal.m_oVector[0] = ((m_oVector[1] * vecV.m_oVector[2]) - (m_oVector[2] * vecV.m_oVector[1]));
@@ -323,7 +323,7 @@ class CVector3
     * Vector magnitude.
     * @return The length of this vector.
     */
-   float length()
+   float length() const
    {
       return static_cast<float>(sqrt(m_oVector[0]*m_oVector[0] + m_oVector[1]*m_oVector[1] + m_oVector[2]*m_oVector[2]));
    }
@@ -332,7 +332,7 @@ class CVector3
     * Make a unit vector.
     * @return A new vector which has the same direction as this one, but unit length.
     */
-   CVector3 unit()
+   CVector3 unit() const
    {
       // Copy this vector
       CVector3 vecNew(*this);
@@ -354,6 +354,16 @@ class CVector3
       if (fLength == 0) return;
       // Scale
       (*this) /= fLength;
+   }
+
+   /**
+    * Angle between two vectors.
+    * @param vec The vector to compare to.
+    * @return The angle between the two in radians, between 0 and PI.
+    */
+   float angle(const CVector3& vec) const
+   {
+      return acos(this->dot(vec) / (length() * vec.length()));
    }
 
  protected:
