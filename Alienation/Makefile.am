@@ -10,5 +10,9 @@ Alienation_LDADD = GL/libAlienationGL.a GUI/libAlienationGUI.a Game/libAlienatio
 
 EXTRA_DIST = README LICENSE config.lua
 
+docdir = $(datadir)/Alienation
+
+doc_DATA = README LICENSE config.lua
+
 doc: all doc.cfg
 	doxygen doc.cfg
