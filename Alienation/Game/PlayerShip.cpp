@@ -96,7 +96,7 @@ void CPlayerShip::draw()
 		}
 		else if (m_bRightLook)
                 {
-                   glRotatef(90.0f, vecTemp.Z(), vecTemp.Y(), vecTemp.Z());
+                   glRotatef(90.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
                 }
                 else if (m_bBackLook)
                 {
