@@ -10,7 +10,7 @@
 //////////////////////////////////////////////////////////////////////
 
 CAIShip::CAIShip(int num, float mass) : 
-   CShip(1, 5000.0f),
+   CShip(1, 2500.0f),
    m_fXAngle(0.0f),
    m_fYAngle(0.0f)
 {
@@ -24,6 +24,11 @@ CAIShip::CAIShip(int num, float mass) :
    m_poShips[0].m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
    m_poShips[0].m_oSphere.m_fRadius = 13.0f;
    
+   m_poShips[0].m_fMaxPitchRate = 80.0f;
+   m_poShips[0].m_fMaxYawRate = 50.0f;
+   m_poShips[0].m_fMaxRollRate = 90.0f;	
+
+
    m_poShips[0].m_matCamRotation.loadIdentity();
    m_vecTargetPos = CVector3(0.0f, 0.0f, 0.0f);
    
@@ -52,30 +57,11 @@ void CAIShip::loadShip()
 
 void CAIShip::simulate(float fDT)
 {
-	CVector3 vecDistanceMoved, vecMovement, vecTHead = m_poShips[0].m_vecHeading - m_ppMasses[0]->m_vecPos;
+	CVector3 vecTHead = m_poShips[0].m_vecHeading - m_ppMasses[0]->m_vecPos;
 	CVector3 vecTRight = m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos;
 	CVector3 vecTUp = m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos;
 
-	m_ppMasses[0]->simulate(fDT);
 	//Get normalised vector pointing to target
-
-
-	//Do speed and direction stuff first
-	vecMovement = m_ppMasses[0]->m_vecPos - m_ppMasses[0]->m_vecOldPos;
-	//Stores the movement as its used after its unitised
-	vecDistanceMoved = vecMovement;
-	if (vecMovement.length() == 0.0f)
-	{
-		m_poShips[0].m_fVel = 0.0f;
-		m_poShips[0].m_vecDirection = m_poShips[0].m_vecHeading;
-	}
-	else
-	{
-		//calculate velocity, new direction of movement
-		m_poShips[0].m_fVel = vecMovement.length() / fDT;
-		vecMovement.normalise();
-		m_poShips[0].m_vecDirection = vecMovement;
-	}
 
 	//vecTarget is the vector from the ai ship to the target, normalised
 	CVector3 vecTarget = m_vecTargetPos - m_ppMasses[0]->m_vecPos;
@@ -129,20 +115,14 @@ void CAIShip::simulate(float fDT)
 	else
 		m_poShips[0].m_bWeaponFire = false;
 
-	//Then rotate
-	rotate(0, fDT);
 
-    for (int i=0; i<m_poShips[0].m_iNumTrails; i++) 
-       m_poShips[0].m_poTrails[i].update(fDT, m_poShips[0].m_fThrust, m_ppMasses[0]->m_vecPos, m_poShips[0].m_avecTrailPoints[i], vecDistanceMoved, 
-	                                     m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos, m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos, 1.5f, 0.5f);
-	CVector3 vecGunHead = m_poShips[0].m_vecHeading - m_ppMasses[0]->m_vecPos;
-	m_poShips[0].m_poWeapon->update(fDT, vecGunHead, m_poShips[0].m_avecWeaponPoints[0], m_poShips[0].m_fVel, m_poShips[0].m_bWeaponFire);
+	CShip::simulate(fDT);
 }
 
 
 void CAIShip::solve()
 {
-	CVector3 vecForce, vecDragForce, vecBrakeForce;
+	CVector3 vecForce, vecDragForce;
 
 	//Normal flight, forces are thrust, drag and braking (if applied)
 	vecForce = (m_poShips[0].m_vecHeading - m_ppMasses[0]->m_vecPos) * m_poShips[0].m_fThrust;
