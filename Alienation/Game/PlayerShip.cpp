@@ -171,9 +171,6 @@ void CPlayerShip::drawHud()
       glDisable(GL_DEPTH_TEST);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       
-      m_oLight.enable();
-      m_oLight.render();
-
       // Render shields
       for (vector<CShield*>::iterator it = m_lShields.begin(); it != m_lShields.end(); it++) {
          (*it)->renderQuad();
@@ -203,8 +200,11 @@ void CPlayerShip::drawHud()
       poFont.print(strFont, CVector2(0.4f, 0.30f), 0.0075f, CVector3(0,1,0));
       //m_poThrustIndicator->setTexturePercentage(fWidthThrust);      
       //m_poThrustIndicator->renderQuad();
-      sprintf(strFont,"T: %.1f", fThrust);
-      poFont.print(strFont, CVector2(0.4f, 0.25f), 0.0075f, CVector3(0,1,0));
+      sprintf(strFont,"T: %.0f", fThrust);
+      poFont.print(strFont, CVector2(0.5f, 0.30f), 0.0075f, CVector3(0,1,0));
+
+      // Draw radar
+      m_poRadar->renderQuad();
 
       // Draw target information
       m_poTargetingComputer->render();
@@ -217,16 +217,10 @@ void CPlayerShip::drawHud()
       }
       sprintf(strFont,"%3ld FPS", iFPS);
       poFont.print(strFont, CVector2(0.9f, 0.0075f), 0.0075f, CVector3(0,1,0));
-      m_iLastTime = iTime;
-      
-      // Draw radar
-      m_poRadar->render();
-
-      m_oLight.disable();
+      m_iLastTime = iTime;      
 
       glDisable(GL_BLEND);
       glEnable(GL_DEPTH_TEST);
-
 
    }
 
@@ -238,8 +232,10 @@ void CPlayerShip::renderOffScreen()
       m_oLight.enable();
       m_oLight.render();
       m_poTargetingComputer->renderOffScreen();
-      m_poRadar->renderOffScreen(this->m_ppMasses[0]->m_vecPos, this->m_matRotation );
       m_oLight.disable();
+      glDisable(GL_LIGHTING);
+      m_poRadar->renderOffScreen(this->m_ppMasses[0]->m_vecPos, this->m_matRotation );
+      glEnable(GL_LIGHTING);
    }
 }
 

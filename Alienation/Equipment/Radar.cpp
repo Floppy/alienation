@@ -70,8 +70,15 @@ void CRadar::init()
 
 	float ambient[] = {0.4f, 0.4f, 0.4f, 1.0f};
 	m_oLight = new CLight(GL_LIGHT2);
-   m_oLight->init(oLightAmbient, oLightDiffuse, oLightSpecular, oPosition);
+        m_oLight->init(oLightAmbient, oLightDiffuse, oLightSpecular, oPosition);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
+
+        // Create material
+        setActiveMaterial(CRGBAColour(1.0f,1.0f,1.0f,1.0f),
+                          CRGBAColour(1.0f,1.0f,1.0f,1.0f),
+                          CRGBAColour(1.0f,1.0f,1.0f,1.0f),
+                          m_uiOffScreenTexture);
+
 }
 
 
@@ -105,13 +112,12 @@ void CRadar::renderOffScreen(CVector3 vecShipPos, const CMatrix matRotMatrix)
 	float fRange = m_poModel->m_ppMasses[0]->m_vecPos.length();
    
 
-   CTexture* pTexture = g_oTextureManager.texture(m_uiOffScreenTexture);
-	pTexture->init();
 
 												//////////////////////////////////////////////
 												//Prepare the texture                       //
 												//////////////////////////////////////////////
 
+   CTexture* pTexture = g_oTextureManager.texture(m_uiOffScreenTexture);
    pTexture->preRenderToTexture();
 
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -148,16 +154,16 @@ void CRadar::renderOffScreen(CVector3 vecShipPos, const CMatrix matRotMatrix)
 												//draw the model                            //
 												//////////////////////////////////////////////
 
-	glPushAttrib(GL_POLYGON_BIT);
+	glPushAttrib(GL_POLYGON_BIT | GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glEnable( GL_BLEND );
 	glDisable( GL_DEPTH_TEST );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE );
-   glDisable( GL_TEXTURE_2D );
-   glShadeModel( GL_SMOOTH );
+        glDisable( GL_TEXTURE_2D );
+        glShadeModel( GL_SMOOTH );
 	m_oLight->enable();
 	m_oLight->render();
-   m_poModel->draw( false );
+        m_poModel->draw( false );
 
 												//////////////////////////////////////////////
 												//draw the radar "blips"                    //
@@ -240,62 +246,6 @@ void CRadar::renderOffScreen(CVector3 vecShipPos, const CMatrix matRotMatrix)
 												//////////////////////////////////////////////
    pTexture->postRenderToTexture(GL_RGB);
 
-}
-
-
-//**************************************************************************************
-// Function name    : CRadar::render
-// Author           : Gary Ingram
-// Return type      : void 
-// Date Created     : 31/10/2003
-// Description      : Draws the texture created above  
-//**************************************************************************************
-void CRadar::render()
-{
-
-
-
-	CTexture *poTexture = g_oTextureManager.texture(m_uiOffScreenTexture);
-
-	CMaterial *poMaterial;
-	poMaterial = new CMaterial();
-												//////////////////////////////////////////////
-												//Create the material for drawing the       //
-												//texture                                   //
-												//////////////////////////////////////////////
-
-	poMaterial->m_oAmbient = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
-	poMaterial->m_oDiffuse = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
-	poMaterial->m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
-	poMaterial->m_uiTexture = m_uiOffScreenTexture;
-
-												//////////////////////////////////////////////
-												//Set this texture as the 2D active         //
-												//material                                  //
-												//////////////////////////////////////////////
-
-	this->setActiveMaterial(poMaterial);
-												//////////////////////////////////////////////
-												//Blending stuff                            //
-												//////////////////////////////////////////////
-
-	
-
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-
-	this->renderQuad();
-												//////////////////////////////////////////////
-												//Draw the quad (using the 2D parent        //
-												//function                                  //
-												//////////////////////////////////////////////
-
-												//////////////////////////////////////////////
-												//Blending off                              //
-												//////////////////////////////////////////////
-
-	glDisable(GL_BLEND);
 }
 
 void CRadar::setTarget(int iTargetID)
