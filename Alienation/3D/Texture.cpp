@@ -47,6 +47,7 @@ bool CTexture::load(const char* strFilename)
    // Load the file
    pNewTex = IMG_Load(strFile);
    
+
    // If texture was loaded OK
    if (pNewTex)
    {
@@ -76,9 +77,17 @@ bool CTexture::load(const char* strFilename)
          // Convert         
          m_pTexture = SDL_ConvertSurface(pNewTex, &fmt, SDL_HWSURFACE);
          SDL_FreeSurface(pNewTex);
+	 
       }
       else 
          m_pTexture = pNewTex;
+
+      // Get maximum texture size
+      int iTexSize(0);
+      glGetIntegerv(GL_MAX_TEXTURE_SIZE,&iTexSize);
+       
+      // Rescale?
+
    }
 
    // Done
@@ -124,11 +133,12 @@ unsigned int CTexture::init()
       // Bind
       glBindTexture(GL_TEXTURE_2D, m_uiTextureID);
       // Set magnification and minification filters.
-      glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
       // Copy data to GL texture
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_pTexture->w, m_pTexture->h, 0, 
-                   GL_RGBA, GL_UNSIGNED_BYTE, m_pTexture->pixels);
+      //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_pTexture->w, m_pTexture->h, 0, 
+      gluBuild2DMipmaps(GL_TEXTURE_2D,4,m_pTexture->w, m_pTexture->h, 
+			GL_RGBA, GL_UNSIGNED_BYTE, m_pTexture->pixels);
    }
    return m_uiTextureID;
 }
