@@ -29,12 +29,19 @@ public:
 	void drawCamera();
 	void draw();
 	void rotateCam(float fDT);
+        void drawOffScreen();
 
         /**
          * Draw Trail.
          * Overridden to add sound control.
          */ 
 	void drawTrail();
+
+        /**
+         * Set target.
+         * Overridden to add setting of target for HUD.
+         */
+        void setTarget(CShip& oShip);
 
 
 	CModel m_oCockpitModel;

@@ -80,7 +80,7 @@ class CShip : public CSimulation
    virtual void solve();
    virtual void simulate(float dt);
    
-   void setTarget(CShip& oShip);
+   virtual void setTarget(CShip& oShip);
 
    CShipData *m_poShips;
    CFrustum m_oFrustum;
