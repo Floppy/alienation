@@ -255,8 +255,8 @@ void CFMesh::computeNormals() {
 void CFMesh::tangentBasis(CVector3 v0, CVector3 v1, CVector3 v2, CVector2 t0, CVector2 t1, CVector2 t2, CVector3 *tangent, CVector3 *binormal)
 {
 	CVector3 cp;
-	float fTangentX, fTangentY, fTangentZ;
-	float fBiNormalX, fBiNormalY, fBiNormalZ;
+	float fTangentX(0.0f), fTangentY(0.0f), fTangentZ(0.0f);
+	float fBiNormalX(0.0f), fBiNormalY(0.0f), fBiNormalZ(0.0f);
 
 	CVector3 e0 = CVector3(v1.X() - v0.X(), t1.X() - t0.X(), t1.Y() - t0.Y() );
 	CVector3 e1 = CVector3(v2.X() - v0.X(), t2.X() - t0.X(), t2.Y() - t0.Y() );
