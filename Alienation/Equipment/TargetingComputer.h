@@ -54,6 +54,11 @@ class CTargetingComputer : public CEquipment
     */
    CFrame* m_poTargetingReticle;
 
+   /** 
+    * Holo target
+    */
+   CFrame* m_poHoloTarget;
+
    /**
     * Font for drawing
     */

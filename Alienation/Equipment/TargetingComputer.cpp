@@ -24,25 +24,40 @@ CTargetingComputer::~CTargetingComputer()
 
 void CTargetingComputer::init()
 {
-      CRGBAColour oDiffuse = CRGBAColour(0.0f,0.0f,0.0f,1.0f);
-      CRGBAColour oAmbient = CRGBAColour(0.0f,0.0f,0.0f,1.0f);
-      CRGBAColour oEmissive = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
+   // Create material colours
+   CRGBAColour oDiffuse = CRGBAColour(0.0f,0.0f,0.0f,1.0f);
+   CRGBAColour oAmbient = CRGBAColour(0.0f,0.0f,0.0f,1.0f);
+   CRGBAColour oEmissive = CRGBAColour(1.0f,1.0f,1.0f,1.0f);
 
-
-
+   // Create targeting reticle
    m_poTargetingReticle = new CFrame;
-   
    m_poTargetingReticle->init2D(0.0f, 0.0f, 0.1f, 0.1f, "Hud/hud_reticle.png");
    m_poTargetingReticle->setActiveMaterial(oDiffuse, oAmbient, oEmissive);
    
+   // Create offscreen texture
+   m_auiOffScreenTexture = g_oTextureManager.create(128,128);
+
+   // Change to green colour
+   oEmissive = CRGBAColour(0.0f,1.0f,0.0f,1.0f);
+
+   // Setup main frame
+   init2D(0.0f, 0.0f, 0.175f, 0.6f,"Hud/hud_target.png");
+   setActiveMaterial(oDiffuse, oAmbient, oEmissive);
+
+   // Change to slightly transparent green colour
+   oDiffuse = CRGBAColour(0.0f,0.0f,0.0f,0.5f);
+   oAmbient = CRGBAColour(0.0f,0.0f,0.0f,0.5f);
+   oEmissive = CRGBAColour(0.0f,1.0f,0.0f,0.5f);
+
+   // Create holo target 
+   m_poHoloTarget = new CFrame;
+   m_poHoloTarget->init2D(0.015f, 0.02f, 0.145f, 0.1933f,"");
+   m_poHoloTarget->setActiveMaterial(oDiffuse, oAmbient, oEmissive, m_auiOffScreenTexture);
+   
+   // Create font
    m_poFont = new CGLFont;
    m_poFont->load();
    
-   m_auiOffScreenTexture = g_oTextureManager.create(128,128);
-   
-   oEmissive = CRGBAColour(0.0f,1.0f,0.0f,1.0f);
-   init2D(0.0f, 0.0f, 0.175f, 0.6f,"Hud/hud_target.png");
-   setActiveMaterial(oDiffuse, oAmbient, oEmissive);
 
 }
 
@@ -99,8 +114,7 @@ void CTargetingComputer::render()
          //m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f, CVector3(1,1,1));
          //m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f, CVector3(1,1,1));
          // Radar image
-         //g_oTextureManager.render(m_auiOffScreenTexture);
-         //m_po2DObject->renderQuad(37.0f, 180.0f, 135.0f, 135.0f, avecTex);
+	 m_poHoloTarget->renderQuad();
       }
 }
  
@@ -138,10 +152,8 @@ void CTargetingComputer::render()
       
       // Draw
       glDisable(GL_TEXTURE_2D);
-      glShadeModel(GL_FLAT);
       m_pTarget->draw(false);
-      glShadeModel(GL_SMOOTH);
       glEnable(GL_TEXTURE_2D);
       // Finish up
-      pTexture->postRenderToTexture(GL_LUMINANCE_ALPHA);
+      pTexture->postRenderToTexture(GL_RGBA);
    }
