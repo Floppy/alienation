@@ -10,7 +10,15 @@ ship = {
 	yaw 		= 50,
 	roll 		= 90,
 	thrust		= 10000,
+	mass		= 2500,
 	trails		= {
-		{x= 0, y=0, z=5}
+		{0, 0, 5}
+	},
+	weapons		= {
+		{0.0, -0.3, -3.3}
+	},
+	brakes		= {
+		{0, 0, 0}
 	}
+
 }
