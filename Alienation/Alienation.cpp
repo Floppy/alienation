@@ -23,9 +23,6 @@
 #include <iostream>
 using namespace std;
 
-#define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
-#define piover180 	(0.0174532925f)
-
 int main(int argc, char* argv[])
 {
    bool     bDone = false;  // Bool Variable To Exit Loop
@@ -53,8 +50,8 @@ int main(int argc, char* argv[])
 
 	// Play sound
 	CSoundManager oSndMgr;
-	if (oSndMgr.Ready()) {
-	  if (!oSndMgr.PlayLoopedMP3("./Data/Audio/demo.mp3"))
+	if (oSndMgr.ready()) {
+	  if (!oSndMgr.playLoopedMP3("./Data/Audio/demo.mp3"))
 	    cerr << "Failed to open demo.mp3" << endl;
 	}
 	else 
