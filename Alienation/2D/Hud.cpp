@@ -260,7 +260,7 @@ namespace NSD2D {
    void CHud::renderOffScreen()
    {
       // Perform offscreen rendering
-      CTexture* pTexture(g_oTextureManager.texture(m_auiTextures[7]));
+      CTexture* pTexture = g_oTextureManager.texture(m_auiTextures[7]);
       pTexture->preRenderToTexture();
       // Clear screen
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
