@@ -268,13 +268,14 @@ namespace NSD2D {
       // Calculate direction vector
       CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
       float fRange = vecTarget.length();
-      float fSize = m_pTarget->m_poShips[0].m_oModel.boundingRadius() * 1.1;
-      float fAngle = RAD_TO_DEG(atan(fSize / fRange) * 2);
+      float fSize = m_pTarget->m_poShips[0].m_oModel.boundingRadius();
+      //float fAngle = RAD_TO_DEG(atan(fSize / fRange) * 2);
       
       // Set Projection Matrix
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
-      gluPerspective(fAngle,1.0f,fRange-fSize, fRange+fSize);
+      //gluPerspective(fAngle,1.0f,fRange-fSize, fRange+fSize);
+      glOrtho(-fSize,fSize,-fSize,fSize,fRange-fSize,fRange+fSize);
       
       // Set Modelview Matrix
       glMatrixMode(GL_MODELVIEW);
@@ -292,7 +293,7 @@ namespace NSD2D {
       // Draw
       m_pTarget->draw(false);
       // Finish up
-      pTexture->postRenderToTexture(GL_LUMINANCE_ALPHA);
+      pTexture->postRenderToTexture(GL_RGBA);
    }
    
 }
