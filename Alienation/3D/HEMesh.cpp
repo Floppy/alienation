@@ -10,6 +10,9 @@ CHEMesh::~CHEMesh() {
 }
 
 void CHEMesh::init() {
+   // Initialise material
+   m_oMaterial.init();
+
    CMesh::init();
    return;
 }

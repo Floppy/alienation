@@ -23,6 +23,9 @@ CSprite::~CSprite()
 
 void CSprite::init() {
 
+   // Initialise material
+   m_oMaterial.init();
+
    // Allocate new list
    m_uiList = glGenLists(1);
    // Create display list   

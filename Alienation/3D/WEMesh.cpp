@@ -67,6 +67,9 @@ CWEMesh::~CWEMesh() {
 }
 
 void CWEMesh::init() {
+   // Initialise material
+   m_oMaterial.init();
+
    CMesh::init();
    return;
 }

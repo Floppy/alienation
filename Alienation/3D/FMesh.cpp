@@ -25,6 +25,9 @@ CFMesh::~CFMesh() {
 
 void CFMesh::init() {
 
+   // Initialise material
+   m_oMaterial.init();
+
    // Calculate normals
    computeNormals();
 
