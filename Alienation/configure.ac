@@ -1,6 +1,6 @@
 # Initialise
 AC_PREREQ(2.13)
-AC_INIT(Alienation,0.1)
+AC_INIT(program.cpp)
 AM_INIT_AUTOMAKE(Alienation,0.1)
 
 # Check for programs
