@@ -16,7 +16,7 @@ class CShip;
 #include "Game/GameObject.h"
 #include "Game/Weapon.h"
 #include "Game/Brake.h"
-#include "Game/Trail.h"
+#include "Equipment/Engine.h"
 #include "Equipment/Shield.h"
 #include "Equipment/SpeedIndicator.h"
 #include "Equipment/ThrustInformation.h"
@@ -44,13 +44,15 @@ class CShip : public CGameObject
 
    virtual void setPosition(const CVector3& pos);
 
-   virtual void setPerformance(float fPitchRate, float fYawRate, float fRollRate, float fThrust);
+   virtual void setPerformance(float fPitchRate, float fYawRate, float fRollRate);
    
    void setWeapons(unsigned int iNumWeapons, const CVector3* pWeapons, const char* strWeapon);
 
-   void setTrails(unsigned int iNumTrails, const CVector3* pTrails);
+   void setEngines(unsigned int iNumEngines, const CVector3* pEngines, const char* strEngine);
 
    void setBrakes(unsigned int iNumBrakes, const CVector3* pBrakes);
+
+   void setThrust(float fThrust);
 
 	CVector3		m_vecLastForce;
 	bool			m_bStraffUp, m_bStraffDown, m_bStraffRight, m_bStraffLeft;
@@ -58,18 +60,17 @@ class CShip : public CGameObject
 	CQuat			m_quaCamOrientation;
 	float			m_fCamPitch, m_fCamYaw;
 	float			m_fMaxPitchRate, m_fMaxYawRate, m_fMaxRollRate;
-	float			m_fThrust;
 	CMatrix		m_matCamRotation;
-	CVector3*		m_avecTrailPoints;
-	CVector3*		m_avecOrigTrailPoints;
+	CVector3*		m_avecEnginePoints;
+	CVector3*		m_avecOrigEnginePoints;
 	CVector3*		m_avecWeaponPoints;
 	CVector3*		m_avecOrigWeaponPoints;
 	CVector3*		m_avecBrakePoints;
 	CVector3*		m_avecOrigBrakePoints;
-        int              m_iNumTrails;
+        int              m_iNumEngines;
         int              m_iNumWeapons;
         int              m_iNumBrakes;
-	CTrail		*m_poTrails;
+	CEngine**	 m_ppEngines;
 	CWeapon**        m_ppWeapons;
 	CBrake**	 m_ppBrakes;
 	int			m_iFlightMode;

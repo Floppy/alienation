@@ -23,17 +23,16 @@ CShip::CShip(float mass) :
    m_fMaxPitchRate(0.0f),
    m_fMaxYawRate(0.0f),
    m_fMaxRollRate(0.0f),
-   m_fThrust(0.0f),
-   m_avecTrailPoints(NULL),
-   m_avecOrigTrailPoints(NULL),
+   m_avecEnginePoints(NULL),
+   m_avecOrigEnginePoints(NULL),
    m_avecWeaponPoints(NULL),
    m_avecOrigWeaponPoints(NULL),
    m_avecBrakePoints(NULL),
    m_avecOrigBrakePoints(NULL),
-   m_iNumTrails(0),
+   m_iNumEngines(0),
    m_iNumWeapons(0),
    m_iNumBrakes(0),
-   m_poTrails(NULL),
+   m_ppEngines(NULL),
    m_ppWeapons(NULL),
    m_ppBrakes(NULL),
    m_iFlightMode(1),
@@ -66,9 +65,11 @@ CShip::~CShip()
       delete m_ppWeapons[i];
    delete [] m_ppWeapons;
 
-   delete [] m_avecTrailPoints;
-   delete [] m_avecOrigTrailPoints;
-   delete [] m_poTrails;
+   delete [] m_avecEnginePoints;
+   delete [] m_avecOrigEnginePoints;
+   for (i=0; i<m_iNumEngines; i++) 
+      delete m_ppEngines[i];
+   delete [] m_ppEngines;
 
    for (vector<CShield*>::iterator it = m_lShields.begin(); it != m_lShields.end(); it++) {
       delete *it;
@@ -76,7 +77,7 @@ CShip::~CShip()
 
 }
 
-//load model, trail texture and brake texture
+//load model
 void CShip::load(const char* strShipModel, const char* strCockpitModel)
 {
 
@@ -93,13 +94,10 @@ void CShip::load(const char* strShipModel, const char* strCockpitModel)
 void CShip::drawBlended() {
    int i;
 
-   // Draw trail
-   if (m_fThrust != 0.0f) {
-      for (i=0; i<m_iNumTrails; i++) {
-         m_poTrails[i].render();
-      }
-   }
-
+   // Draw engines
+   for (i=0; i<m_iNumEngines; i++)
+      m_ppEngines[i]->drawBlended();
+   
    // Draw weapons fire
    for (i=0; i<m_iNumWeapons; i++)
       m_ppWeapons[i]->render();
@@ -117,8 +115,14 @@ void CShip::solve()
 
 	if (m_iFlightMode == 1)
 	{
+           // Add up engine thrusts
+           float fThrust(0);
+           for (int i=0; i<m_iNumEngines; i++)
+              fThrust += m_ppEngines[i]->getThrust();
+
+
 		//Normal flight, forces are thrust, drag and braking (if applied)
-		vecForce = (m_vecHeading - m_ppMasses[0]->m_vecPos) * m_fThrust;
+		vecForce = (m_vecHeading - m_ppMasses[0]->m_vecPos) * fThrust;
 		vecDragForce = (m_vecDirection * -1 ) * (m_fDrag * m_fVel);
 		if (m_bBraking && m_fVel != 0.0f)
 		{
@@ -140,7 +144,7 @@ void CShip::solve()
 	{
 		m_vecForce = CVector3(0.0f, 0.0f, 0.0f);
 
-		m_fThrust = 0.0f;
+		setThrust(0.0f);
 	}
 
 	//Straff mode. The length of the last force is applied in the
@@ -148,7 +152,7 @@ void CShip::solve()
 	//make the effect more noticable)
 	if (m_iFlightMode == 3)
 	{
-		m_fThrust = 0.0f;
+		setThrust(0.0f);
 		CVector3 vecTemp = CVector3(0.0f, 0.0f, 0.0f);
 		float fLen = m_vecLastForce.length() * 2.0f;
 
@@ -184,10 +188,10 @@ void CShip::simulate(float fDT)
 	//get the amount of movement to calculate speed
 	vecDistanceMoved = m_ppMasses[0]->m_vecPos - m_ppMasses[0]->m_vecOldPos;
         
-	//update trail, weapons and heading
-        for (i=0; i<m_iNumTrails; i++) 
-           m_poTrails[i].update(fDT, m_fThrust, m_ppMasses[0]->m_vecPos, m_avecTrailPoints[i], vecDistanceMoved, 
-                                m_vecUp - m_ppMasses[0]->m_vecPos, m_vecRight - m_ppMasses[0]->m_vecPos, 1.5f, 0.5f);
+	//update engine, weapons and heading
+        for (i=0; i<m_iNumEngines; i++) 
+           m_ppEngines[i]->update(fDT, m_ppMasses[0]->m_vecPos, m_avecEnginePoints[i], vecDistanceMoved, 
+                                m_vecUp - m_ppMasses[0]->m_vecPos, m_vecRight - m_ppMasses[0]->m_vecPos);
 	vecGunHead = m_vecHeading - m_ppMasses[0]->m_vecPos;
         for (i=0; i<m_iNumWeapons; i++)
            m_ppWeapons[i]->update(fDT, vecGunHead, m_avecWeaponPoints[i], m_fVel, m_bWeaponFire);
@@ -203,10 +207,10 @@ void CShip::rotHeading(CMatrix mat)
    int i;
    for (i=0; i<m_iNumWeapons; i++)
       m_avecWeaponPoints[i] = mat * m_avecOrigWeaponPoints[i] + m_ppMasses[0]->m_vecPos;
-   for (i=0; i<m_iNumTrails; i++)
-      m_avecTrailPoints[i]  = mat * m_avecOrigTrailPoints[i] + m_ppMasses[0]->m_vecPos;
+   for (i=0; i<m_iNumEngines; i++)
+      m_avecEnginePoints[i] = mat * m_avecOrigEnginePoints[i] + m_ppMasses[0]->m_vecPos;
    for (i=0; i<m_iNumBrakes; i++)
-      m_avecBrakePoints[i] = mat * m_avecOrigBrakePoints[i] + m_ppMasses[0]->m_vecPos;
+      m_avecBrakePoints[i]  = mat * m_avecOrigBrakePoints[i]  + m_ppMasses[0]->m_vecPos;
    m_vecCamView         += m_ppMasses[0]->m_vecPos;
 }
 
@@ -220,15 +224,14 @@ void CShip::setPosition(const CVector3& pos)
    m_vecDirection = m_vecHeading;   
 }
 
-void CShip::setPerformance(float fPitchRate, float fYawRate, float fRollRate, float fThrust) {
+void CShip::setPerformance(float fPitchRate, float fYawRate, float fRollRate) {
    m_fMaxPitchRate = fPitchRate;
    m_fMaxYawRate = fYawRate;
    m_fMaxRollRate = fRollRate;
-   m_fThrust = fThrust;
 }
 
 void CShip::setWeapons(unsigned int iNumWeapons, const CVector3* pWeapons, const char* strWeapon) {
-   // Store thruster locations
+   // Store weapon locations
    m_ppWeapons = new CWeapon*[iNumWeapons];
    m_avecWeaponPoints = new CVector3[iNumWeapons];
    m_avecOrigWeaponPoints = new CVector3[iNumWeapons];
@@ -241,18 +244,17 @@ void CShip::setWeapons(unsigned int iNumWeapons, const CVector3* pWeapons, const
    }
 }
 
-void CShip::setTrails(unsigned int iNumTrails, const CVector3* pTrails) 
+void CShip::setEngines(unsigned int iNumEngines, const CVector3* pEngines, const char* strEngine)
 {
    // Allocate memory
-   m_poTrails = new CTrail[iNumTrails];
-   m_avecTrailPoints = new CVector3[iNumTrails];
-   m_avecOrigTrailPoints = new CVector3[iNumTrails];
+   m_ppEngines = new CEngine*[iNumEngines];
+   m_avecEnginePoints = new CVector3[iNumEngines];
+   m_avecOrigEnginePoints = new CVector3[iNumEngines];
    // Copy data and setup
-   m_iNumTrails = iNumTrails;
-   for (int i=0; i<m_iNumTrails; i++) {
-      m_avecTrailPoints[i] = m_avecOrigTrailPoints[i] = pTrails[i];
-      m_poTrails[i].setup(500, m_avecTrailPoints[i]);
-      m_poTrails[i].init();
+   m_iNumEngines = iNumEngines;
+   for (int i=0; i<m_iNumEngines; i++) {
+      m_avecEnginePoints[i] = m_avecOrigEnginePoints[i] = pEngines[i];
+      m_ppEngines[i] = CEngine::load(strEngine);
    }
 }
 
@@ -268,5 +270,17 @@ void CShip::setBrakes(unsigned int iNumBrakes, const CVector3* pBrakes)
       m_avecBrakePoints[i] = m_avecOrigBrakePoints[i] = pBrakes[i];
       m_ppBrakes[i] = new CBrake(100,m_avecBrakePoints[i]);
       m_ppBrakes[i]->init();
+   }
+}
+
+void CShip::setThrust(float fThrust) {
+   // Clip to 0..1
+   if (fThrust > 1.0f)
+      fThrust = 1.0f;
+   else if (fThrust < 0.0f)
+      fThrust = 0.0f;
+   // Set thrust data
+   for (int i=0; i<m_iNumEngines; i++) {
+      m_ppEngines[i]->setThrust(fThrust);
    }
 }

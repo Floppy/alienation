@@ -11,6 +11,8 @@ using namespace NSDSound;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+CGLFont poFont;
+
 //In the real thing all ship data will be loaded from file and this
 //initialisation will be got from there (or possible from the CShip
 //class, This is me a) being lazy, b) being after quick results 
@@ -42,6 +44,7 @@ CPlayerShip::CPlayerShip(float mass) :
    int iSample = g_oSoundManager.load("thrust.wav");
    m_iThrustChannel = g_oSoundManager.play(iSample,-1);
    g_oSoundManager.setVolume(0,m_iThrustChannel);
+poFont.load();
    
 }
 
@@ -122,7 +125,7 @@ void CPlayerShip::draw(bool bTestFrustum)
                                        m_vecUp - m_ppMasses[0]->m_vecPos, 
                                        m_vecRight - m_ppMasses[0]->m_vecPos);
    // Set volume
-   g_oSoundManager.setVolume(m_fThrust/10000.0f,m_iThrustChannel);
+   g_oSoundManager.setVolume(m_ppEngines[0]->getThrust()/m_ppEngines[0]->getMaxThrust(),m_iThrustChannel);
    
 }
 
@@ -177,40 +180,43 @@ void CPlayerShip::drawHud()
       }
 
       float fMaxSpeed(300.0f);
-      float fMaxThrust(9578.0f);
       
       float fWidthSpeed = (m_fVel == 0.0f) ?
          0.001f :
          (m_fVel / fMaxSpeed) + 0.001f;
       
-      float fWidthThrust = (m_fThrust == 0.0f) ? 
+      float fWidthThrust = (m_ppEngines[0]->getThrust() == 0.0f) ? 
          0.001f : 
-         (m_fThrust / fMaxThrust) + 0.001f;
+         (m_ppEngines[0]->getThrust() / m_ppEngines[0]->getMaxThrust()) + 0.001f;
 
+      // Add up engine thrusts
+      float fThrust(0);
+      int i;
+      for (i=0; i<m_iNumEngines; i++)
+         fThrust += m_ppEngines[i]->getThrust();
 
+      char strFont[20];
       // Draw engine info
-      m_poSpeedIndicator->setTexturePercentage(fWidthSpeed);
-      m_poSpeedIndicator->renderQuad();
-//      sprintf(strFont,"Velocity: %.1f", m_fVel);
-//      m_poFont->print(strFont, CVector2(420.0f, 210.0f), 5.0f);
-      m_poThrustIndicator->setTexturePercentage(fWidthThrust);      
-      m_poThrustIndicator->renderQuad();
-//      sprintf(strFont,"Thrust: %.1f", m_fThrust);
-//      m_poFont->print(strFont, CVector2(420.0f, 560.0f), 5.0f);
+      //m_poSpeedIndicator->setTexturePercentage(fWidthSpeed);
+      //m_poSpeedIndicator->renderQuad();
+      sprintf(strFont,"V: %.1f", m_fVel);
+      poFont.print(strFont, CVector2(0.4f, 0.30f), 0.0075f, CVector3(0,1,0));
+      //m_poThrustIndicator->setTexturePercentage(fWidthThrust);      
+      //m_poThrustIndicator->renderQuad();
+      sprintf(strFont,"T: %.1f", fThrust);
+      poFont.print(strFont, CVector2(0.4f, 0.25f), 0.0075f, CVector3(0,1,0));
 
       // Draw target information
       m_poTargetingComputer->render();
 
-
       // Calc FPS
-      char strFont[20];
       unsigned long iTime = SDL_GetTicks();
       unsigned long iFPS = 0;
       if (iTime != m_iLastTime) {
          iFPS = 1000/(iTime - m_iLastTime);
       }
       sprintf(strFont,"%3ld FPS", iFPS);
-//      m_poFont->print(strFont, CVector2(900.0f, 20.0f), 5.0f);
+      poFont.print(strFont, CVector2(0.9f, 0.0075f), 0.0075f, CVector3(0,1,0));
       m_iLastTime = iTime;
       
       // Draw radar

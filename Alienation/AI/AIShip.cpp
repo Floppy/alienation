@@ -74,12 +74,20 @@ void CAIShip::simulate(float fDT)
 	if (fYAngle <= 0.0f)
 		m_fYawRate = -m_fYawRate;
 
-	m_fThrust = (360.00 - fThrust) * 28.0f;
+        // Add up engine thrusts
+        float fMaxThrust(0);
+        int i;
+        for (i=0; i<m_iNumEngines; i++)
+           fMaxThrust += m_ppEngines[i]->getMaxThrust();
+        
+	float fEngineThrust = (360.00 - fThrust) * 28.0f / fMaxThrust;
 	if (fThrust < 7.0f)
 		m_bWeaponFire = true;
 	else
 		m_bWeaponFire = false;
 
+        for (i=0; i<m_iNumEngines; i++)
+           m_ppEngines[i]->setThrust(fEngineThrust/m_iNumEngines);
 
 	CShip::simulate(fDT);
 }
@@ -89,8 +97,13 @@ void CAIShip::solve()
 {
 	CVector3 vecForce, vecDragForce;
 
+        // Add up engine thrusts
+        float fThrust(0);
+        for (int i=0; i<m_iNumEngines; i++)
+           fThrust += m_ppEngines[i]->getThrust();
+
 	//Normal flight, forces are thrust, drag and braking (if applied)
-	vecForce = (m_vecHeading - m_ppMasses[0]->m_vecPos) * m_fThrust;
+	vecForce = (m_vecHeading - m_ppMasses[0]->m_vecPos) * fThrust;
 	vecDragForce = (m_vecDirection * -1 ) * (m_fDrag * m_fVel);
 	m_vecForce = vecForce + vecDragForce;
 

@@ -48,15 +48,16 @@
       delete [] pWeapons;
       state.pop();
 
-      // Load trails
-      state.push("trails");
-      unsigned int iNumTrails = state.tableSize();
-      CVector3* pTrails = new CVector3[iNumTrails];
-      for (i=0; i<iNumTrails; i++) {
-         pTrails[i] = state.getVector3(i);
+      // Load engines
+      const char* strEngine = state.getString("enginetype");
+      state.push("engines");
+      unsigned int iNumEngines = state.tableSize();
+      CVector3* pEngines = new CVector3[iNumEngines];
+      for (i=0; i<iNumEngines; i++) {
+         pEngines[i] = state.getVector3(i);
       }
-      pShip->setTrails(iNumTrails,pTrails);
-      delete [] pTrails;
+      pShip->setEngines(iNumEngines,pEngines,strEngine);
+      delete [] pEngines;
       state.pop();
 
       // Load brakes
@@ -65,7 +66,7 @@
       CVector3* pBrakes = new CVector3[iNumBrakes];
       for (i=0; i<iNumBrakes; i++) {
          pBrakes[i] = state.getVector3(i);
-      }
+      } 
       pShip->setBrakes(iNumBrakes,pBrakes);
       delete [] pBrakes;
       state.pop();
@@ -74,8 +75,7 @@
       float fPitch = state.getNumber("pitch");
       float fYaw = state.getNumber("yaw");
       float fRoll = state.getNumber("roll");
-      float fThrust = state.getNumber("thrust");
-      pShip->setPerformance(fPitch,fYaw,fRoll,fThrust);
+      pShip->setPerformance(fPitch,fYaw,fRoll);
       
       // Add front shield
       const char* strShield = state.getString("shield_fore");
