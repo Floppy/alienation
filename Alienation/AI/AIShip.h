@@ -16,6 +16,7 @@ public:
 
 	CAIShip(int num, float mass);
 	virtual ~CAIShip();
+	void loadShip();
 	void simulate(float fDT);
 	void solve();
 	CVector3 m_vecTarget;

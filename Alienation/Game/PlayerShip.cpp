@@ -54,12 +54,16 @@ CPlayerShip::~CPlayerShip()
 
 void CPlayerShip::loadShip()
 {
-   CShip::loadShip();
    CLoad3DS oLoad3ds;
+   if (oLoad3ds.import3DS(&(m_poShips[0].m_oModel), "Data/Model/shuttle.3ds")) {
+      m_poShips[0].m_oModel.init();
+   }
    if (oLoad3ds.import3DS(&m_oCockpitModel, "Data/Model/canopy02.3ds")) {
       // Prepare
       m_oCockpitModel.init();
    }
+
+   CShip::loadShip();
 }
 
 //At last!! using inheritance! Only extra thing this does is rotate the camera

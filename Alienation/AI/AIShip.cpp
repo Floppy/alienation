@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "AIShip.h"
+#include "IO/3ds.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -30,6 +31,16 @@ CAIShip::CAIShip(int num, float mass) :
 CAIShip::~CAIShip()
 {
 
+}
+
+void CAIShip::loadShip()
+{
+   CLoad3DS oLoad3ds;
+   if (oLoad3ds.import3DS(&(m_poShips[0].m_oModel), "Data/Model/fighter.3ds")) {
+      m_poShips[0].m_oModel.init();
+   }
+
+   CShip::loadShip();
 }
 
 void CAIShip::simulate(float fDT)

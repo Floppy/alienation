@@ -56,13 +56,9 @@ CShip::~CShip()
 //load model, trail texture and brake texture
 void CShip::loadShip()
 {
-   CLoad3DS oLoad3ds;
    m_poShips[0].m_poTargetData = new CShipData;
    m_poShips[0].m_poTargetMass = new CMass*[1];
    m_poShips[0].m_poTargetMass[0] = new CMass;
-   if (oLoad3ds.import3DS(&(m_poShips[0].m_oModel), "Data/Model/shuttle.3ds")) {
-      m_poShips[0].m_oModel.init();
-   }
    for (int i=0; i<m_poShips[0].m_iNumTrails; i++)
       m_poShips[0].m_poTrails[i].init();
    m_poShips[0].m_poBrake->init();
