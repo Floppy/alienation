@@ -85,7 +85,7 @@ void CRadar::init()
 void CRadar::renderOffScreen(CVector3 vecShipPos, const CMatrix matRotMatrix)
 { 
 
-	int i;
+	unsigned int i;
 	CVector3 vecDistance;
 	CVector3 vecDisplayDistance;
 	float fDistance;
@@ -195,7 +195,7 @@ void CRadar::renderOffScreen(CVector3 vecShipPos, const CMatrix matRotMatrix)
 												//Colour depending if ship or asteroid      //
 												//////////////////////////////////////////////
 
-			if (m_arrTarget[i].iTargetType = TGT_ASTEROID)
+			if (m_arrTarget[i].iTargetType == TGT_ASTEROID)
 			{
 				oMaterial.m_oAmbient = CRGBAColour(0.5f,0.5f,0.5f,0.99f);
 				oMaterial.m_oDiffuse = CRGBAColour(0.5f,0.5f,0.5f,0.99f);
