@@ -5,10 +5,23 @@
 #include "Math/Vector.h"
 #include "3D/Material.h"
 #include <SDL.h>
+#include <GL/gl.h>
+#include <GL/glext.h>
+
 
 #include <iostream>
 using namespace std;
 using namespace NSDSound;
+
+//typedef void (*GL_ActiveTextureARB_Func)(unsigned int);
+//typedef void (*GL_MultiTexCoords2fARB_Func)(unsigned int);
+
+//GL_ActiveTextureARB_Func glActiveTextureARB = NULL;
+//GL_MultiTexCoords2fARB_Func glMultiTexCoord2fARB = NULL;
+
+PFNGLACTIVETEXTUREARBPROC glActiveTextureARB=NULL;
+PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB=NULL;
+bool bNoBumps = false;
 
 /**
  * Program entry point.
@@ -58,7 +71,6 @@ int main(int argc, char* argv[])
 	}
 	
 
-
    // Set video mode
    int iFlags = SDL_OPENGL;
    if (bFullScreen) iFlags |= SDL_FULLSCREEN;
@@ -106,6 +118,12 @@ int main(int argc, char* argv[])
 #ifdef WIN32
    SDL_WM_GrabInput(SDL_GRAB_ON);
 #endif
+
+	glActiveTextureARB=(PFNGLACTIVETEXTUREARBPROC)SDL_GL_GetProcAddress("glActiveTextureARB");
+	glMultiTexCoord2fARB=(PFNGLMULTITEXCOORD2FARBPROC)SDL_GL_GetProcAddress("glMultiTexCoord2fARB");
+
+	oGame.DrawSplashScreen();
+	SDL_GL_SwapBuffers( );
 
    if (!oGame.initGL())
      return 0;
