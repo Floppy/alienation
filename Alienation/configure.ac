@@ -35,7 +35,7 @@ AC_CHECK_LIB(GLU,gluProject,,exit)
 
 # SDL
 SDL_LIBS="`sdl-config --libs`"
-SDL_CFLAGS="`sdl-config --cflags`"
+SDL_CFLAGS="`sdl-config --cflags` -DNO_SDL_GLEXT"
 LIBS="$LIBS $SDL_LIBS"
 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
 AC_CHECK_HEADER(SDL.h,,exit)
