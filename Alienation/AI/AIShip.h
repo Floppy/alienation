@@ -7,7 +7,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "Ship.h"
+#include "Game/Ship.h"
 
 class CAIShip : public CShip  
 {

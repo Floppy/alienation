@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "Stars.h"
+#include "Game/Stars.h"
 #include <stdlib.h>
 
 #include <GL/gl.h>

@@ -1,6 +1,6 @@
 # Initialise
 AC_PREREQ(2.13)
-AC_INIT(program.cpp)
+AC_INIT(Alienation.cpp)
 AM_INIT_AUTOMAKE(Alienation,0.1)
 
 # Check for programs
@@ -54,6 +54,7 @@ AC_CHECK_FUNCS([atexit memset sqrt])
 # Output
 AC_OUTPUT(3D/Makefile
           AI/Makefile
+          Game/Makefile
           GL/Makefile
           IO/Makefile
           Math/Makefile

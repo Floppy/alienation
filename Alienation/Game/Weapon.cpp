@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "Weapon.h"
+#include "Game/Weapon.h"
 #include "Physics/Physics1.h"
 
 #include <GL/gl.h>

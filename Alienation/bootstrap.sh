@@ -3,5 +3,5 @@
 aclocal
 autoconf
 automake -a
-./configure
+echo Now run "./configure" followed by "make"
 

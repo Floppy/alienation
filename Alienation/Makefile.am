@@ -1,9 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = Math 3D IO GL Physics AI
+SUBDIRS = Math 3D IO GL Physics Game AI 
 
 bin_PROGRAMS = Alienation
 
-Alienation_SOURCES = Brake.cpp Ship.cpp Brake.h Ship.h config.h Skybox.cpp Trail.cpp PlayerShip.cpp Skybox.h Trail.h PlayerShip.h Stars.cpp Weapon.cpp program.cpp Stars.h Weapon.h
+Alienation_SOURCES = config.h Alienation.cpp
 
-LDADD = Math/libAlienationMath.a 3D/libAlienation3D.a IO/libAlienationIO.a GL/libAlienationGL.a Physics/libAlienationPhysics.a AI/libAlienationAI.a
+LDADD = Math/libAlienationMath.a 3D/libAlienation3D.a IO/libAlienationIO.a GL/libAlienationGL.a Physics/libAlienationPhysics.a AI/libAlienationAI.a Game/libAlienationGame.a

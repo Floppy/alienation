@@ -17,11 +17,11 @@
 #include <GL/gl.h>
 
 #include <stdio.h>
-#include "Stars.h"
-#include "Ship.h"
+#include "Game/Stars.h"
+#include "Game/Ship.h"
 #include "GL/GLFont.h"
-#include "Skybox.h"
-#include "PlayerShip.h"
+#include "Game/Skybox.h"
+#include "Game/PlayerShip.h"
 #include "AI/AIShip.h"
 #include "3D/Light.h"
 #include <SDL.h>

@@ -1,4 +1,4 @@
-#include "Skybox.h"
+#include "Game/Skybox.h"
 #include <stdio.h>
 #include <SDL_image.h>
 

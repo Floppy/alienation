@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "Trail.h"
+#include "Game/Trail.h"
 #include <stdlib.h>
 
 #include <GL/gl.h>
