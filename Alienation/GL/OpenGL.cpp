@@ -62,15 +62,6 @@ bool COpenGL :: initGL() {
    // Set viewport
    glViewport(0, 0, 1024, 768);
 
-   // Set camera
-   glMatrixMode(GL_PROJECTION);
-   glLoadIdentity();
-   gluPerspective(45.0f, (GLfloat)1024/(GLfloat)768, 0.1f, 25001.0f);
-
-   // Init modelview matrix
-   glMatrixMode(GL_MODELVIEW);
-   glLoadIdentity();
-
    // Init lighting
    glEnable(GL_LIGHTING);
    CRGBAColour oAmbient(0.25f, 0.25f, 0.25f, 1.0f);
@@ -165,9 +156,15 @@ bool COpenGL::DrawGLScene(GLvoid) {
 
    // Clear screen
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   // Reset The Current Modelview Matrix
+
+   // Set camera
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+   gluPerspective(45.0f, (GLfloat)1024/(GLfloat)768, 0.1f, 25001.0f);
+
+   // Init modelview matrix
    glMatrixMode(GL_MODELVIEW);
-   glLoadIdentity();					
+   glLoadIdentity();
 
    m_poShip->drawCamera();
    m_oSun.setTranslation(CVector3(0,0,8500) + m_poShip->m_ppMasses[0]->m_vecPos);
