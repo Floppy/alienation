@@ -1,1 +1,1 @@
-EXTRA_DIST = demo.mp3
+EXTRA_DIST = background.ogg weapon.wav
