@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LTLIBRARIES = libAlienationIO.la
+lib_LTLIBRARIES = libAlienationIO.la
 
 noinst_HEADERS = 3ds.h Input.h Lua.h
 

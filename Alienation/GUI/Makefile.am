@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LTLIBRARIES = libAlienationGUI.la
+lib_LTLIBRARIES = libAlienationGUI.la
 
 noinst_HEADERS = Button.h CheckBox.h Frame.h GUI.h List.h ListItem.h ListSubItem.h RadioButton.h RadioContainer.h
 

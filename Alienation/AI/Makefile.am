@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LTLIBRARIES = libAlienationAI.la
+lib_LTLIBRARIES = libAlienationAI.la
 
 noinst_HEADERS = AIShip.h
 

@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LTLIBRARIES = libAlienation3D.la
+lib_LTLIBRARIES = libAlienation3D.la
 
 noinst_HEADERS = Material.h Mesh.h Model.h Light.h ParticleEngine.h Particle.h Texture.h Frustum.h BoundingSphere.h TextureManager.h Sprite.h 3DObject.h FMesh.h HalfEdge.h HEMesh.h WEMesh.h WingedEdge.h
 

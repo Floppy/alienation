@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LTLIBRARIES = libAlienationGL.la
+lib_LTLIBRARIES = libAlienationGL.la
 
 noinst_HEADERS = OpenGL.h Extensions.h
 

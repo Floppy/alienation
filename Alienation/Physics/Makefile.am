@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LTLIBRARIES = libAlienationPhysics.la
+lib_LTLIBRARIES = libAlienationPhysics.la
 
 noinst_HEADERS = Physics1.h
 

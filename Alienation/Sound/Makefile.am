@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LTLIBRARIES = libAlienationSound.la
+lib_LTLIBRARIES = libAlienationSound.la
 
 noinst_HEADERS = SoundManager.h
 

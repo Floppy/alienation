@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LTLIBRARIES = libAlienationEquipment.la
+lib_LTLIBRARIES = libAlienationEquipment.la
 
 noinst_HEADERS = Engine.h Equipment.h HudInformation.h Radar.h Shield.h SpeedIndicator.h TargetingComputer.h ThrustInformation.h Trail.h 
 

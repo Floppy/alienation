@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LTLIBRARIES = libAlienation2D.la
+lib_LTLIBRARIES = libAlienation2D.la
 
 noinst_HEADERS = 2DObject.h GLFont.h GLFontManager.h
 

@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LTLIBRARIES = libAlienationGame.la
+lib_LTLIBRARIES = libAlienationGame.la
 
 noinst_HEADERS = Asteroid.h Brake.h GameObject.h PlayerShip.h Ship.h Stars.h Weapon.h ShipFactory.h WeaponFactory.h
 
