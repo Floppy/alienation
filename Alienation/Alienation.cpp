@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 	bool bFullScreen;
 	{
 		NSDIO::CLua config("config.lua");
-		if (!config.setGlobalTable("config")) {
+		if (!config.setGlobalTable("video")) {
 			cerr << "Couldn't load config file!" << endl;
 			return 1;
 		}
