@@ -13,11 +13,11 @@
 // All Setup For OpenGL Goes Here
 COpenGL :: COpenGL() :
 	FullScreen(true),
+	m_fTimeElapsed(0.0f),
 	m_fPitch(0.0f),
 	m_fYaw(0.0f), 
 	m_fRoll(0.0f), 
-	m_fThrust(0.0f),
-	m_fTimeElapsed(0.0f)
+	m_fThrust(0.0f)
 {
    
 }
@@ -77,7 +77,6 @@ bool COpenGL :: initGL() {
 //is all transparent objects are drawn last
 bool COpenGL :: DrawGLScene(GLvoid) {
 	char str[40];
-	float p[4] = {0.0f, 2.0f, 2.0f, 0.0f};
 	sprintf(str, "Speed: %.2f", m_poShip->m_poShips[0].m_fVel);
 
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear Screen And Depth Buffer
