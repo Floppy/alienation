@@ -114,97 +114,35 @@ void CTrail::render(float fThrust, CVector3 vecOrigin)
    // Save state
    glPushAttrib(GL_COLOR_MATERIAL);
 
-   // Draw exhaust flare
-   if (m_oFrustum.PointInFrustum(vecOrigin.m_fx, vecOrigin.m_fy, vecOrigin.m_fz))
-   {
-      // Bind Texture
-      g_oTextureManager.activate(m_auiTextures[1]);
-      // Get material
-      afMaterial[0] = 1.0f;
-      afMaterial[1] = 1.0f;
-      afMaterial[2] = 1.0f;
-      afMaterial[3] = 0.05f;
+   // Draw engine flare
+   if (m_oFrustum.PointInFrustum(vecOrigin)) {
       // Calculate engine flare size
       float fSize = fThrust * 0.0005f;
       if (fSize > 2.5f) fSize = 2.5f;
-      // Render
-      renderBillboard(vecOrigin,fSize,afMaterial);
+      m_oFlare.setSize(fSize);
+      // Set location
+      m_oFlare.setTranslation(vecOrigin);
+      // Draw exhaust flare
+      m_oFlare.render();
    }
-   // Draw trail
 
-   // Bind Texture
-   g_oTextureManager.activate(m_auiTextures[0]);
-   // Draw each particle
+   // Draw trail
    for (int iCount = 0 ; iCount < m_iParticlesCreated ; iCount++)
    {
-      // Get material
-      if (m_oFrustum.PointInFrustum(m_poParticles[iCount].m_vecPosition.m_fx, 
-									m_poParticles[iCount].m_vecPosition.m_fy, 
-									m_poParticles[iCount].m_vecPosition.m_fz))
-	  {
-		 afMaterial[0] = m_poParticles[iCount].m_fr;
-		 afMaterial[1] = m_poParticles[iCount].m_fg;
-		 afMaterial[2] = m_poParticles[iCount].m_fb;
-		 afMaterial[3] = 0.03f;
-		 // Render
-		 renderBillboard(m_poParticles[iCount].m_vecPosition, m_poParticles[iCount].m_fSize,afMaterial);
-	  }
+      if (m_oFrustum.PointInFrustum(m_poParticles[iCount].m_vecPosition)) {
+         // Set location
+         m_oTrail.setTranslation(m_poParticles[iCount].m_vecPosition);
+         // Draw flare
+         m_poParticles[iCount].getGeometry()->render();
+      }
    }
-
+   
    // Restore state
    glPopAttrib();
 
    // Disable alpha blend
    glDepthMask(GL_TRUE); 
    glDisable(GL_BLEND);
-}
-
-void CTrail::renderBillboard(CVector3 oPos, float fSize, float* pfMaterial)
-{
-   // Save matrix state
-   glPushMatrix();
-   // Move to particle position
-   glTranslatef(oPos.m_fx, oPos.m_fy, oPos.m_fz);
-   
-   // Get matrix
-   float afMatrix[16];
-   glGetFloatv(GL_MODELVIEW_MATRIX, afMatrix);
-
-   // Get normal
-   CVector3 vecNormal;
-   vecNormal.m_fx = -afMatrix[2];
-   vecNormal.m_fy = -afMatrix[6];
-   vecNormal.m_fz = -afMatrix[10];
-
-   // Remove rotation from model/view matrix
-   afMatrix[0] = afMatrix[5] = afMatrix[10] = afMatrix[11] = 1.0f;
-   afMatrix[1] = afMatrix[2] = afMatrix[3] = afMatrix[4] = 0.0f;
-   afMatrix[6] = afMatrix[7] = afMatrix[8] = afMatrix[9] = 0.0f;
-   glLoadMatrixf(afMatrix);
-   
-   // Draw billboard
-   glBegin(GL_QUADS);      
-
-   // Material
-   glMaterialfv(GL_FRONT, GL_AMBIENT, pfMaterial);
-   // Normal
-   glNormal3f(vecNormal.m_fx, vecNormal.m_fy, vecNormal.m_fz);
-
-   // Vertices
-   for (int i=0; i<2; i++) 
-   {
-      for (int j=0; j<2; j++) 
-      {
-         glTexCoord2f( ( i==j ? 0.0f : 1.0f ) , ( i==0 ? 1.0f : 0.0f ) );
-         glVertex3f( ( i==j ? -fSize : fSize ) , ( i==0 ? fSize : -fSize ), 0.0f );
-      }
-   }
-   // Finish quad
-   glEnd();
-   // Restore matrix state
-   glPopMatrix();
-   // Done
-   return;
 }
 
 
@@ -263,14 +201,14 @@ void CTrail::createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vec
 	}
 
 	vecTemp = vecOrigin - vecPos;
-	vecTemp.unitize();
+	vecTemp.normalise();
 
 	fNum = RANDOM_FLOAT;
 	m_poParticles[i].m_vecPosition += vecTemp * (fNum * 4.5f);
 
-	vecTemp.m_fx = m_poParticles[i].m_vecPosition.m_fx - vecOrigin.m_fx;
-	vecTemp.m_fy = m_poParticles[i].m_vecPosition.m_fy - vecOrigin.m_fy;
-	vecTemp.m_fz = 0.0f;
+	vecTemp.X() = m_poParticles[i].m_vecPosition.X() - vecOrigin.X();
+	vecTemp.Y() = m_poParticles[i].m_vecPosition.Y() - vecOrigin.Y();
+	vecTemp.Z() = 0.0f;
 
 	m_poParticles[i].m_fr = 1.0f - vecTemp.length();
 	m_poParticles[i].m_fg = m_poParticles[i].m_fr;
@@ -289,10 +227,23 @@ void CTrail::createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vec
 
 	m_poParticles[i].m_fAge = 0.0f;
 
+        m_poParticles[i].setGeometry(&m_oTrail);
+
 }
 
 void CTrail::init()
 {
-   m_auiTextures[0] = g_oTextureManager.load("star.png");
-   m_auiTextures[1] = g_oTextureManager.load("flare.png");
+   // Create trail particle geometry
+   CMaterial oTrailMaterial;
+   oTrailMaterial.m_oDiffuse = CRGBAColour(255,255,64,0);
+   oTrailMaterial.m_uiTexture = g_oTextureManager.load("star.png");   
+   m_oTrail = CSprite(oTrailMaterial);
+   m_oTrail.init();
+
+   // Create engine flare
+   CMaterial oFlareMaterial;
+   oFlareMaterial.m_oDiffuse = CRGBAColour(255, 255, 255, 0);
+   oFlareMaterial.m_uiTexture = g_oTextureManager.load("flare.png");
+   m_oFlare = CSprite(oFlareMaterial);
+   m_oFlare.init();
 }

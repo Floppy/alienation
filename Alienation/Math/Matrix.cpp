@@ -189,9 +189,9 @@ void CMatrix::MatrixFromAxisAngle(CVector3 axis, float theta)
         float cosHalfTheta = (float)cos(halfTheta);
         float sinHalfTheta = (float)sin(halfTheta);
         float xs, ys, zs, wx, wy, wz, xx, xy, xz, yy, yz, zz;
-        q.m_fx = axis.m_fx * sinHalfTheta;
-        q.m_fy = axis.m_fy * sinHalfTheta;
-        q.m_fz = axis.m_fz * sinHalfTheta;
+        q.m_fx = axis.X() * sinHalfTheta;
+        q.m_fy = axis.Y() * sinHalfTheta;
+        q.m_fz = axis.Z() * sinHalfTheta;
         q.m_fw = cosHalfTheta;
         xs = q.m_fx * 2;  ys = q.m_fy * 2;  zs = q.m_fz * 2;
         wx = q.m_fw * xs; wy = q.m_fw * ys; wz = q.m_fw * zs;
@@ -248,17 +248,17 @@ CVector3 CMatrix::MultMatrixVector(CVector3 v)
 {
 	CVector3 temp;
 
-	temp.m_fx = m_afElement[0] * v.m_fx +
-		m_afElement[4] * v.m_fy +
-		m_afElement[8] * v.m_fz;
+	temp.X() = m_afElement[0] * v.X() +
+		m_afElement[4] * v.Y() +
+		m_afElement[8] * v.Z();
 
-	temp.m_fy = m_afElement[1] * v.m_fx +
-		m_afElement[5] * v.m_fy +
-		m_afElement[9] * v.m_fz;
+	temp.Y() = m_afElement[1] * v.X() +
+		m_afElement[5] * v.Y() +
+		m_afElement[9] * v.Z();
 
-	temp.m_fz = m_afElement[2] * v.m_fx +
-		m_afElement[6] * v.m_fy +
-		m_afElement[10] * v.m_fz;
+	temp.Z() = m_afElement[2] * v.X() +
+		m_afElement[6] * v.Y() +
+		m_afElement[10] * v.Z();
 
 	return temp;
 }

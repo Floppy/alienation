@@ -261,7 +261,7 @@ void CHud::drawQuad(CVector3 *Verts, CVector2 *Tex)
 		for ( iCount = 0 ; iCount < 4 ; iCount ++ )
 		{
 			glTexCoord2fv(Tex[iCount].glVector());
-			glVertex3f(Verts[iCount].m_fx, Verts[iCount].m_fy, Verts[iCount].m_fz);
+			glVertex3fv(Verts[iCount].glVector());
 		}
 	glEnd();
 }
@@ -317,7 +317,7 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 	vecThisHead = CVector3(0.0f, 0.0f, -1.0f);
 	vecThisUp = CVector3(0.0f, 1.0f, 0.0f);
 
-	vecTarget.unitize();
+	vecTarget.normalise();
 
 												//////////////////////////////////////////////
 												//Store the vecTarget as we will need it    //
@@ -340,7 +340,7 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 												// length)                                  //
 												//////////////////////////////////////////////
 
-	vecTarget.unitize();
+	vecTarget.normalise();
 
 												//////////////////////////////////////////////
 												// calculate the pitch angle from the ships //
@@ -393,7 +393,7 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 	vecTarget = vecTemp;
 	vecTarget = vecTarget - (vecThisUp * vecThisUp.dot(vecTarget));
 
-	vecTarget.unitize();
+	vecTarget.normalise();
 
 	float fAYaw = vecThisHead.dot(vecTarget);
 
@@ -452,7 +452,7 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 
 	glMultMatrixf(matM.m_afElement);
 
-	glTranslatef(vecHoloPos.m_fx, vecHoloPos.m_fy, vecHoloPos.m_fz);
+	glTranslatef(vecHoloPos.X(), vecHoloPos.Y(), vecHoloPos.Z());
 	glMultMatrixf(poTarget->m_matRotation.m_afElement);
 
 	glGetFloatv(GL_MODELVIEW_MATRIX, matGet.m_afElement);

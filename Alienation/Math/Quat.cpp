@@ -31,9 +31,9 @@ void CQuat::axisAngleToQuat(CVector3 axis, float theta)
 	float halfTheta = theta * 0.5f;
 	float cosHalfTheta = (float)cos(halfTheta);
 	float sinHalfTheta = (float)sin(halfTheta);
-	m_fx = axis.m_fx * sinHalfTheta;
-	m_fy = axis.m_fy * sinHalfTheta;
-	m_fz = axis.m_fz * sinHalfTheta;
+	m_fx = axis.X() * sinHalfTheta;
+	m_fy = axis.Y() * sinHalfTheta;
+	m_fz = axis.Z() * sinHalfTheta;
 	m_fw = cosHalfTheta;
 }
 
@@ -72,29 +72,19 @@ void CQuat::normaliseQuat()
 void CQuat::multQuat(CQuat q)
 {
 	CQuat q3;
-	CVector3 vectorq1;
-	CVector3 vectorq2;
-	vectorq1.m_fx = m_fx;
-	vectorq1.m_fy = m_fy;
-	vectorq1.m_fz = m_fz;
-	vectorq2.m_fx = q.m_fx;
-	vectorq2.m_fy = q.m_fy;
-	vectorq2.m_fz = q.m_fz;
+	CVector3 vectorq1(m_fx,m_fy,m_fz);
+	CVector3 vectorq2(q.m_fx,q.m_fy,q.m_fz);
 
 	CVector3 tempvec1;
-	CVector3 tempvec2;
-	CVector3 tempvec3;
 	tempvec1 = vectorq1;
 	q3.m_fw = (m_fw*q.m_fw) - tempvec1.dot(vectorq2);
 	tempvec1 = tempvec1.cross(vectorq2);
-	tempvec2.m_fx = m_fw * q.m_fx;
-	tempvec2.m_fy = m_fw * q.m_fy;
-	tempvec2.m_fz = m_fw * q.m_fz;
-	tempvec3.m_fx = q.m_fw * m_fx;
-	tempvec3.m_fy = q.m_fw * m_fy;
-	tempvec3.m_fz = q.m_fw * m_fz;
-	q3.m_fx = tempvec1.m_fx + tempvec2.m_fx + tempvec3.m_fx;
-	q3.m_fy = tempvec1.m_fy + tempvec2.m_fy + tempvec3.m_fy;
-	q3.m_fz = tempvec1.m_fz + tempvec2.m_fz + tempvec3.m_fz;
+
+	CVector3 tempvec2(vectorq2 * m_fw);
+	CVector3 tempvec3(vectorq1 * q.m_fw);
+
+	q3.m_fx = tempvec1.X() + tempvec2.X() + tempvec3.X();
+	q3.m_fy = tempvec1.Y() + tempvec2.Y() + tempvec3.Y();
+	q3.m_fz = tempvec1.Z() + tempvec2.Z() + tempvec3.Z();
 	copyQuat(q3);
 }

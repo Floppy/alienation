@@ -166,29 +166,25 @@ void CWeapon::render(void)
 	float afMaterial[4];
 
 	//Texture and blending stuff
-	g_oTextureManager.activate(m_uiTexture);
+	//g_oTextureManager.activate(m_uiTexture);
 	glEnable(GL_BLEND);
 	glDepthMask(GL_FALSE);
 	glPushAttrib(GL_COLOR_MATERIAL);
 
 	//then draw the particles
-	glBegin(GL_QUADS);
-		int iCount;
-		for (iCount = 0 ; iCount < m_iParticlesCreated ; iCount++)
-		{
-			if (m_oFrustum.PointInFrustum(m_poParticles[iCount].m_vecPosition.m_fx, 
-									m_poParticles[iCount].m_vecPosition.m_fy, 
-									m_poParticles[iCount].m_vecPosition.m_fz))
-			{
-			   afMaterial[0] = m_poParticles[iCount].m_fr;
-			   afMaterial[1] = m_poParticles[iCount].m_fg;
-			   afMaterial[2] = m_poParticles[iCount].m_fb;
-			   afMaterial[3] = 0.03f;
-			   // Render
-			   renderBillboard(m_poParticles[iCount].m_vecPosition, m_poParticles[iCount].m_fSize,afMaterial);
-			}
-		}
-	glEnd();
+	//glBegin(GL_QUADS);
+        //int iCount;
+        for (int iCount = 0 ; iCount < m_iParticlesCreated ; iCount++)
+        {
+           if (m_oFrustum.PointInFrustum(m_poParticles[iCount].m_vecPosition))
+           {
+              // Set position
+              m_oSprite.setTranslation(m_poParticles[iCount].m_vecPosition);
+              // Draw
+              m_oSprite.render();
+           }
+        }
+	//glEnd();
 	glPopAttrib();
 	glDepthMask(GL_TRUE); 
 	glDisable(GL_BLEND);
@@ -196,53 +192,9 @@ void CWeapon::render(void)
 
 void CWeapon::init()
 {
-   m_uiTexture = g_oTextureManager.load("ball.png");
-}
-
-void CWeapon::renderBillboard(CVector3 oPos, float fSize, float* pfMaterial)
-{
-   // Save matrix state
-   glPushMatrix();
-   // Move to particle position
-   glTranslatef(oPos.m_fx, oPos.m_fy, oPos.m_fz);
-   
-   // Get matrix
-   float afMatrix[16];
-   glGetFloatv(GL_MODELVIEW_MATRIX, afMatrix);
-
-   // Get normal
-   CVector3 vecNormal;
-   vecNormal.m_fx = -afMatrix[2];
-   vecNormal.m_fy = -afMatrix[6];
-   vecNormal.m_fz = -afMatrix[10];
-
-   // Remove rotation from model/view matrix
-   afMatrix[0] = afMatrix[5] = afMatrix[10] = afMatrix[11] = 1.0f;
-   afMatrix[1] = afMatrix[2] = afMatrix[3] = afMatrix[4] = 0.0f;
-   afMatrix[6] = afMatrix[7] = afMatrix[8] = afMatrix[9] = 0.0f;
-   glLoadMatrixf(afMatrix);
-   
-   // Draw billboard
-   glBegin(GL_QUADS);      
-
-   // Material
-   glMaterialfv(GL_FRONT, GL_AMBIENT, pfMaterial);
-   // Normal
-   glNormal3f(vecNormal.m_fx, vecNormal.m_fy, vecNormal.m_fz);
-
-   // Vertices
-   for (int i=0; i<2; i++) 
-   {
-      for (int j=0; j<2; j++) 
-      {
-         glTexCoord2f( ( i==j ? 0.0f : 1.0f ) , ( i==0 ? 1.0f : 0.0f ) );
-         glVertex3f( ( i==j ? -fSize : fSize ) , ( i==0 ? fSize : -fSize ), 0.0f );
-      }
-   }
-   // Finish quad
-   glEnd();
-   // Restore matrix state
-   glPopMatrix();
-   // Done
-   return;
+   CMaterial oMaterial;
+   oMaterial.m_oDiffuse = CRGBAColour(255,51,102,8);
+   oMaterial.m_uiTexture = g_oTextureManager.load("ball.png");
+   m_oSprite.setMaterial(oMaterial);
+   m_oSprite.init();
 }

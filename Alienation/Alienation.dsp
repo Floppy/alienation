@@ -141,6 +141,10 @@ SOURCE=.\GL\OpenGL.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\3D\Particle.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\3D\ParticleEngine.cpp
 # End Source File
 # Begin Source File

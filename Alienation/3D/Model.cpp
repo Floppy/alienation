@@ -32,7 +32,7 @@ void CModel::render() const {
    // Push
    glPushMatrix();
    // Translate
-   glTranslatef(m_vecTranslation.m_fx,m_vecTranslation.m_fy,m_vecTranslation.m_fz);
+   glTranslatef(m_vecTranslation.X(),m_vecTranslation.Y(),m_vecTranslation.Z());
    // Draw meshes
    for (vector<CMesh*>::const_iterator it(m_oMeshes.begin()); it!=m_oMeshes.end(); ++it) {
       (*it)->render();

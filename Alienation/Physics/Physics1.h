@@ -51,9 +51,9 @@ public:
 	*/
 	void init()
 	{
-		m_vecForce.m_fx = 0;
-		m_vecForce.m_fy = 0;
-		m_vecForce.m_fz = 0;
+		m_vecForce.X() = 0;
+		m_vecForce.Y() = 0;
+		m_vecForce.Z() = 0;
 	}
 
 	/*

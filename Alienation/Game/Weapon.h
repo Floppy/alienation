@@ -16,6 +16,7 @@
 #include "3D/Texture.h"
 #include "Math/Matrix.h"
 #include "3D/Frustum.h"
+#include "3D/Sprite.h"
 
 class CWeapon : public CParticleEngine  
 {
@@ -35,8 +36,8 @@ public:
 	float m_fTimeSinceLast;
 	bool m_abEmpty[100];
 private:
+        CSprite m_oSprite;
    CFrustum m_oFrustum;
-   inline void renderBillboard(CVector3 oPos, float fSize, float* pfMaterial);
 
 };
 

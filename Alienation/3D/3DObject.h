@@ -18,6 +18,7 @@ class C3DObject {
     * Constructor
     */
    C3DObject() :
+      m_vecTranslation(0,0,0),
       m_bInitialised(false)
    {}
    

@@ -70,7 +70,7 @@ void CShip::draw()
    if (m_oFrustum.SphereInFrustum(&m_poShips[0].m_oSphere))
    {
 	  glPushMatrix();					//Save copy of lookat rotation
-	  glTranslatef(m_ppMasses[0]->m_vecPos.m_fx, m_ppMasses[0]->m_vecPos.m_fy, m_ppMasses[0]->m_vecPos.m_fz); //move to ship position
+	  glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z()); //move to ship position
 	  glMultMatrixf(m_poShips[0].m_matRotation.m_afElement); //multiply by the ships rotation matrix
 	  m_poShips[0].m_oModel.render(); //draw the ship
 
@@ -164,7 +164,7 @@ void CShip::simulate(float fDT)
 	{
 		//calculate velocity, new direction of movement
 		m_poShips[0].m_fVel = vecMovement.length() / fDT;
-		vecMovement.unitize();
+		vecMovement.normalise();
 		m_poShips[0].m_vecDirection = vecMovement;
 	}
 

@@ -39,7 +39,7 @@ void CAIShip::simulate(float fDT)
 	CVector3 vecTUp = m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos;
 
 	m_ppMasses[0]->simulate(fDT);
-	//Get unitized vector pointing to target
+	//Get normalised vector pointing to target
 
 
 	//Do speed and direction stuff first
@@ -55,13 +55,13 @@ void CAIShip::simulate(float fDT)
 	{
 		//calculate velocity, new direction of movement
 		m_poShips[0].m_fVel = vecMovement.length() / fDT;
-		vecMovement.unitize();
+		vecMovement.normalise();
 		m_poShips[0].m_vecDirection = vecMovement;
 	}
 
 	//vecTarget is the vector from the ai ship to the target, normalised
 	CVector3 vecTarget = m_vecTargetPos - m_ppMasses[0]->m_vecPos;
-	vecTarget.unitize();
+	vecTarget.normalise();
 
 
 	float fThrust = 0.0f;
@@ -88,7 +88,7 @@ void CAIShip::simulate(float fDT)
 
 	//same now for yaw angle
 	vecTemp = vecTarget;
-	vecTemp.unitize();
+	vecTemp.normalise();
 	vecTemp = vecTemp - (vecTUp * vecTUp.dot(vecTemp));
 
 	float fAYaw = vecTHead.dot(vecTemp);

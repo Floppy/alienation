@@ -5,17 +5,20 @@
 using namespace std;
 
 CSprite::CSprite() :
+   m_fSize(1),
    m_uiList(0)
 {}
 
 CSprite::CSprite(const CMaterial& oMaterial) :
+   m_fSize(1),
    m_oMaterial(oMaterial),
    m_uiList(0)
 {}
 
 CSprite::~CSprite()
 {
-   glDeleteLists(m_uiList,1);
+   if (m_uiList)
+      glDeleteLists(m_uiList,1);
 }
 
 void CSprite::init() {
@@ -46,6 +49,7 @@ void CSprite::init() {
 
    // Done drawing
    glEnd();
+
    // Finish the list
    glEndList();   
 
@@ -62,7 +66,7 @@ void CSprite::render() const {
    // Push
    glPushMatrix();
    // Translate
-   glTranslatef(m_vecTranslation.m_fx,m_vecTranslation.m_fy,m_vecTranslation.m_fz);
+   glTranslatef(m_vecTranslation.X(),m_vecTranslation.Y(),m_vecTranslation.Z());
    
    // Get matrix
    float afMatrix[16];
@@ -79,6 +83,7 @@ void CSprite::render() const {
    // Render
    if (m_uiList)
       glCallList(m_uiList);
+
    // Pop
    glPopMatrix();
 }

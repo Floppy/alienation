@@ -74,33 +74,24 @@ void CPlayerShip::draw()
 		glLoadMatrixf(matM.m_afElement);
 		if (m_bLeftLook)
 		{
-			glRotatef(-90.0f, vecTemp.m_fx, vecTemp.m_fy, vecTemp.m_fz);
+			glRotatef(-90.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
 		}
-		else
-		{
-			if (m_bRightLook)
-			{
-				glRotatef(90.0f, vecTemp.m_fx, vecTemp.m_fy, vecTemp.m_fz);
-			}
-			else
-			{
-				if (m_bBackLook)
-				{
-					glRotatef(180.0f, vecTemp.m_fx, vecTemp.m_fy, vecTemp.m_fz);
-				}
-				else
-				{
-					if (m_bUpLook)
-					{
-						vecTemp = m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos;
-						glRotatef(-90.0f, vecTemp.m_fx, vecTemp.m_fy, vecTemp.m_fz);
-					}
-				}
-			}
-		}
-		glTranslatef(-m_ppMasses[0]->m_vecPos.m_fx, -m_ppMasses[0]->m_vecPos.m_fy, -m_ppMasses[0]->m_vecPos.m_fz); 
+		else if (m_bRightLook)
+                {
+                   glRotatef(90.0f, vecTemp.Z(), vecTemp.Y(), vecTemp.Z());
+                }
+                else if (m_bBackLook)
+                {
+                   glRotatef(180.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
+                }
+		else if (m_bUpLook)
+                {
+                   vecTemp = m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos;
+                   glRotatef(-90.0f, vecTemp.X(), vecTemp.Y(), vecTemp.Z());
+                }
+		glTranslatef(-m_ppMasses[0]->m_vecPos.X(), -m_ppMasses[0]->m_vecPos.Y(), -m_ppMasses[0]->m_vecPos.Z()); 
 		glPushMatrix();
-		glTranslatef(m_ppMasses[0]->m_vecPos.m_fx, m_ppMasses[0]->m_vecPos.m_fy, m_ppMasses[0]->m_vecPos.m_fz);
+		glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
 		glMultMatrixf(m_poShips[0].m_matRotation.m_afElement);
 		m_oCockpitModel.render(); //draw the ship
 		glPopMatrix();
@@ -110,9 +101,9 @@ void CPlayerShip::draw()
 	if (!m_bInsideView)
 	{
 		glLoadMatrixf(matC.m_afElement);
-		glTranslatef(-m_poShips[0].m_vecCamView.m_fx, -m_poShips[0].m_vecCamView.m_fy, -m_poShips[0].m_vecCamView.m_fz);
+		glTranslatef(-m_poShips[0].m_vecCamView.X(), -m_poShips[0].m_vecCamView.Y(), -m_poShips[0].m_vecCamView.Z());
 		glPushMatrix();
-		glTranslatef(m_ppMasses[0]->m_vecPos.m_fx, m_ppMasses[0]->m_vecPos.m_fy, m_ppMasses[0]->m_vecPos.m_fz);
+		glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
 		glMultMatrixf(m_poShips[0].m_matRotation.m_afElement);
 		m_poShips[0].m_oModel.render(); //draw the ship
 		glPopMatrix();

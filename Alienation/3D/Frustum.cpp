@@ -226,7 +226,7 @@ void CFrustum::CalculateFrustum()
 //                    inside the frustum) we then can assume that if a point is 
 //                    in FRONT of all of the planes, it's inside.  
 //**************************************************************************************
-bool CFrustum::PointInFrustum( float x, float y, float z )
+bool CFrustum::PointInFrustum(const CVector3& vecPoint)
 {
 												//////////////////////////////////////////////
 												//If you remember the plane equation (A*x   //
@@ -276,7 +276,7 @@ bool CFrustum::PointInFrustum( float x, float y, float z )
 												//frustum                                   //
 												//////////////////////////////////////////////
 
-		if(m_Frustum[i][A] * x + m_Frustum[i][B] * y + m_Frustum[i][C] * z + m_Frustum[i][D] <= 0)
+		if(m_Frustum[i][A] * vecPoint.X() + m_Frustum[i][B] * vecPoint.Y() + m_Frustum[i][C] * vecPoint.Z() + m_Frustum[i][D] <= 0)
 		{
 												//////////////////////////////////////////////
 												//The point was behind a side, so it ISN'T  //
@@ -344,7 +344,7 @@ bool CFrustum::SphereInFrustum( CBoundingSphere *poSphere )
 												//away from the plane than the radius       //
 												//////////////////////////////////////////////
 
-		if( m_Frustum[i][A] * poSphere->m_vecPos.m_fx + m_Frustum[i][B] * poSphere->m_vecPos.m_fy + m_Frustum[i][C] * poSphere->m_vecPos.m_fz + m_Frustum[i][D] <= -poSphere->m_fRadius )
+		if( m_Frustum[i][A] * poSphere->m_vecPos.X() + m_Frustum[i][B] * poSphere->m_vecPos.Y() + m_Frustum[i][C] * poSphere->m_vecPos.Z() + m_Frustum[i][D] <= -poSphere->m_fRadius )
 		{
 												//////////////////////////////////////////////
 												//The distance was greater than the radius  //
@@ -387,27 +387,27 @@ bool CFrustum::SphereInFrustum( CBoundingSphere *poSphere )
 //                    bounding box are not behind any one plane. This is rare 
 //                    and shouldn't effect the overall rendering speed.  
 //**************************************************************************************
-bool CFrustum::CubeInFrustum( float x, float y, float z, float size )
+bool CFrustum::CubeInFrustum(const CVector3& vecCentre, float size )
 {
 
 
 	for(int i = 0; i < 6; i++ )
 	{
-		if(m_Frustum[i][A] * (x - size) + m_Frustum[i][B] * (y - size) + m_Frustum[i][C] * (z - size) + m_Frustum[i][D] > 0)
+		if(m_Frustum[i][A] * (vecCentre.X() - size) + m_Frustum[i][B] * (vecCentre.Y() - size) + m_Frustum[i][C] * (vecCentre.Z() - size) + m_Frustum[i][D] > 0)
 		   continue;
-		if(m_Frustum[i][A] * (x + size) + m_Frustum[i][B] * (y - size) + m_Frustum[i][C] * (z - size) + m_Frustum[i][D] > 0)
+		if(m_Frustum[i][A] * (vecCentre.X() + size) + m_Frustum[i][B] * (vecCentre.Y() - size) + m_Frustum[i][C] * (vecCentre.Z() - size) + m_Frustum[i][D] > 0)
 		   continue;
-		if(m_Frustum[i][A] * (x - size) + m_Frustum[i][B] * (y + size) + m_Frustum[i][C] * (z - size) + m_Frustum[i][D] > 0)
+		if(m_Frustum[i][A] * (vecCentre.X() - size) + m_Frustum[i][B] * (vecCentre.Y() + size) + m_Frustum[i][C] * (vecCentre.Z() - size) + m_Frustum[i][D] > 0)
 		   continue;
-		if(m_Frustum[i][A] * (x + size) + m_Frustum[i][B] * (y + size) + m_Frustum[i][C] * (z - size) + m_Frustum[i][D] > 0)
+		if(m_Frustum[i][A] * (vecCentre.X() + size) + m_Frustum[i][B] * (vecCentre.Y() + size) + m_Frustum[i][C] * (vecCentre.Z() - size) + m_Frustum[i][D] > 0)
 		   continue;
-		if(m_Frustum[i][A] * (x - size) + m_Frustum[i][B] * (y - size) + m_Frustum[i][C] * (z + size) + m_Frustum[i][D] > 0)
+		if(m_Frustum[i][A] * (vecCentre.X() - size) + m_Frustum[i][B] * (vecCentre.Y() - size) + m_Frustum[i][C] * (vecCentre.Z() + size) + m_Frustum[i][D] > 0)
 		   continue;
-		if(m_Frustum[i][A] * (x + size) + m_Frustum[i][B] * (y - size) + m_Frustum[i][C] * (z + size) + m_Frustum[i][D] > 0)
+		if(m_Frustum[i][A] * (vecCentre.X() + size) + m_Frustum[i][B] * (vecCentre.Y() - size) + m_Frustum[i][C] * (vecCentre.Z() + size) + m_Frustum[i][D] > 0)
 		   continue;
-		if(m_Frustum[i][A] * (x - size) + m_Frustum[i][B] * (y + size) + m_Frustum[i][C] * (z + size) + m_Frustum[i][D] > 0)
+		if(m_Frustum[i][A] * (vecCentre.X() - size) + m_Frustum[i][B] * (vecCentre.Y() + size) + m_Frustum[i][C] * (vecCentre.Z() + size) + m_Frustum[i][D] > 0)
 		   continue;
-		if(m_Frustum[i][A] * (x + size) + m_Frustum[i][B] * (y + size) + m_Frustum[i][C] * (z + size) + m_Frustum[i][D] > 0)
+		if(m_Frustum[i][A] * (vecCentre.X() + size) + m_Frustum[i][B] * (vecCentre.Y() + size) + m_Frustum[i][C] * (vecCentre.Z() + size) + m_Frustum[i][D] > 0)
 		   continue;
 
 												//////////////////////////////////////////////

@@ -58,9 +58,9 @@ void CStars::initStars()
 				m_aoStars[i].m_fSize = 35.0f;
 			}
 		}
-		m_aoStars[i].m_vecColor.m_fx = RANDOM_FLOAT;
-		m_aoStars[i].m_vecColor.m_fy = RANDOM_FLOAT;
-		m_aoStars[i].m_vecColor.m_fz = RANDOM_FLOAT;
+		m_aoStars[i].m_vecColor.X() = RANDOM_FLOAT;
+		m_aoStars[i].m_vecColor.Y() = RANDOM_FLOAT;
+		m_aoStars[i].m_vecColor.Z() = RANDOM_FLOAT;
 	}
 
         m_auiTextures[0] = g_oTextureManager.load("an01.png");
@@ -72,9 +72,8 @@ void CStars::initStars()
 
 void CStars::draw(CVector3 vecPos)
 {
-
 	glPushMatrix();
-	glTranslatef(vecPos.m_fx, vecPos.m_fy, vecPos.m_fz);
+	glTranslatef(vecPos.X(), vecPos.Y(), vecPos.Z());
 
 	glEnable(GL_BLEND);
 
@@ -84,11 +83,9 @@ void CStars::draw(CVector3 vecPos)
 	glBegin(GL_QUADS);
 		for (iCount = 0 ; iCount < m_iNumStars ; iCount++)
 		{
-		    if (m_oFrustum.PointInFrustum(m_aoStars[iCount].m_vecPos.m_fx,
-										  m_aoStars[iCount].m_vecPos.m_fy,
-										  m_aoStars[iCount].m_vecPos.m_fz))
+                   if (m_oFrustum.PointInFrustum(m_aoStars[iCount].m_vecPos))
 			{
-			   glColor4f(m_aoStars[iCount].m_vecColor.m_fx, m_aoStars[iCount].m_vecColor.m_fy, m_aoStars[iCount].m_vecColor.m_fz, 0.3f);
+			   glColor4f(m_aoStars[iCount].m_vecColor.X(), m_aoStars[iCount].m_vecColor.Y(), m_aoStars[iCount].m_vecColor.Z(), 0.3f);
 			   renderBillboard(m_aoStars[iCount].m_vecPos, m_aoStars[iCount].m_fSize);		
 
 			}
@@ -105,17 +102,14 @@ void CStars::renderBillboard(CVector3 oPos, float fSize)
    // Save matrix state
    glPushMatrix();
    // Move to particle position
-   glTranslatef(oPos.m_fx, oPos.m_fy, oPos.m_fz);
+   glTranslatef(oPos.X(), oPos.Y(), oPos.Z());
    
    // Get matrix
    float afMatrix[16];
    glGetFloatv(GL_MODELVIEW_MATRIX, afMatrix);
 
    // Get normal
-   CVector3 vecNormal;
-   vecNormal.m_fx = -afMatrix[2];
-   vecNormal.m_fy = -afMatrix[6];
-   vecNormal.m_fz = -afMatrix[10];
+   CVector3 vecNormal(-afMatrix[2],-afMatrix[6],-afMatrix[10]);
 
    // Remove rotation from model/view matrix
    afMatrix[0] = afMatrix[5] = afMatrix[10] = afMatrix[11] = 1.0f;
@@ -127,7 +121,7 @@ void CStars::renderBillboard(CVector3 oPos, float fSize)
    glBegin(GL_QUADS);      
 
    // Normal
-   glNormal3f(vecNormal.m_fx, vecNormal.m_fy, vecNormal.m_fz);
+   glNormal3fv(vecNormal.glVector());
 
    // Vertices
    for (int i=0; i<2; i++) 

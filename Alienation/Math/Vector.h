@@ -38,7 +38,7 @@ class CVector2
     * @param vecV Vector to be copied.
     * @return Reference to this vector
     */
-   CVector2& operator= (CVector2 vecV)
+   CVector2& operator=(const CVector2& vecV)
    {
       m_oVector[0] = vecV.m_oVector[0];
       m_oVector[1] = vecV.m_oVector[1];
@@ -53,17 +53,30 @@ class CVector2
    { return m_oVector[0]; }
 
    /**
+    * X Component.
+    * @return X component of vector.
+    */
+   float X() const
+   { return m_oVector[0]; }
+
+   /**
     * Y Component.
     * @return Reference to Y component of vector.
     */
    float& Y() 
    { return m_oVector[1]; }
+   /**
+    * Y Component.
+    * @return Y component of vector.
+    */
+   float Y() const
+   { return m_oVector[1]; }
 
    /**
-    * Array access
+    * Array access.
     * @return An array suitable for using directly with glXxx2fv functions.
     */ 
-   const float* glVector() 
+   const float* glVector() const
    { return m_oVector; }
 
  protected:
@@ -75,149 +88,282 @@ class CVector2
 
 };
 
-// class Vector3D		---> An object to represent a 3D vector or a 3D point in space
+/**
+ * A 3D vector
+ */
 class CVector3
 {
-public:
-	float m_fx;									// the x value of this Vector3D
-	float m_fy;									// the y value of this Vector3D
-	float m_fz;									// the z value of this Vector3D
 
-	CVector3() :								// Constructor to set x = y = z = 0
-		m_fx(0.0f),
-		m_fy(0.0f),
-		m_fz(0.0f)
-	{}
+ public:
 
-	CVector3(float fx, float fy, float fz) :			// Constructor that initializes this Vector3D to the intended values of x, y and z
-		m_fx(fx),
-		m_fy(fy),
-		m_fz(fz)
-	{}
+   /**
+    * Constructor.
+    * Does not set to zero by default, for efficiency.
+    */
+   CVector3()
+   {}
+   
+   /**
+    * Constructor.
+    * Sets the value of the vector
+    * @param fx X value
+    * @param fy Y value
+    * @param fz Z value
+    */
+   CVector3(float fx, float fy, float fz)
+   {
+      m_oVector[0] = fx;
+      m_oVector[1] = fy;
+      m_oVector[2] = fz;
+   }
+   
+   /**
+    * Assignment operator.
+    * Copies the value of the passed vector into this.
+    * @param vecV Vector to be copied.
+    * @return Reference to this vector
+    */
+   CVector3& operator=(const CVector3& vecV)
+   {
+      m_oVector[0] = vecV.m_oVector[0];
+      m_oVector[1] = vecV.m_oVector[1];
+      m_oVector[2] = vecV.m_oVector[2];
+      return *this;
+   }
 
-	CVector3& operator= (CVector3 vecV)		// operator= sets values of v to this Vector3D. example: v1 = v2 means that values of v2 are set onto v1
-	{
-		m_fx = vecV.m_fx;
-		m_fy = vecV.m_fy;
-		m_fz = vecV.m_fz;
-		return *this;
-	}
+   /**
+    * X Component.
+    * @return Reference to X component of vector.
+    */
+   float& X() 
+   { return m_oVector[0]; }
 
-	bool operator== (CVector3 vecV)
-	{
-		if (this->m_fx == vecV.m_fx &&
-			 this->m_fy == vecV.m_fy &&
-			 this->m_fz == vecV.m_fz)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
+   /**
+    * X Component.
+    * @return X component of vector.
+    */
+   float X() const
+   { return m_oVector[0]; }
 
-	CVector3 operator+ (CVector3 vecV)				// operator+ is used to add two Vector3D's. operator+ returns a new Vector3D
-	{
-		return CVector3(m_fx + vecV.m_fx, m_fy + vecV.m_fy, m_fz + vecV.m_fz);
-	}
+   /**
+    * Y Component.
+    * @return Reference to Y component of vector.
+    */
+   float& Y() 
+   { return m_oVector[1]; }
 
-	CVector3 operator- (CVector3 vecV)				// operator- is used to take difference of two Vector3D's. operator- returns a new Vector3D
-	{
-		return CVector3(m_fx - vecV.m_fx, m_fy - vecV.m_fy, m_fz - vecV.m_fz);
-	}
+   /**
+    * Y Component.
+    * @return Y component of vector.
+    */
+   float Y() const
+   { return m_oVector[1]; }
 
-	CVector3 operator* (float fValue)			// operator* is used to scale a Vector3D by a value. This value multiplies the Vector3D's x, y and z.
-	{
-		return CVector3(m_fx * fValue, m_fy * fValue, m_fz * fValue);
-	}
+   /**
+    * Z Component.
+    * @return Reference to Z component of vector.
+    */
+   float& Z() 
+   { return m_oVector[2]; }
 
-	CVector3 operator/ (float fValue)			// operator/ is used to scale a Vector3D by a value. This value divides the Vector3D's x, y and z.
-	{
-		return CVector3(m_fx / fValue, m_fy / fValue, m_fz / fValue);
-	}
+   /**
+    * Z Component.
+    * @return Z component of vector.
+    */
+   float Z() const
+   { return m_oVector[2]; }
 
-	CVector3& operator+= (CVector3 vecV)			// operator+= is used to add another Vector3D to this Vector3D.
-	{
-		m_fx += vecV.m_fx;
-		m_fy += vecV.m_fy;
-		m_fz += vecV.m_fz;
-		return *this;
-	}
+   /**
+    * Array access.
+    * @return An array suitable for using directly with glXxx3fv functions.
+    */ 
+   const float* glVector() const
+   { return m_oVector; }
 
-	CVector3& operator-= (CVector3 vecV)			// operator-= is used to subtract another Vector3D from this Vector3D.
-	{
-		m_fx -= vecV.m_fx;
-		m_fy -= vecV.m_fy;
-		m_fz -= vecV.m_fz;
-		return *this;
-	}
+   
+   /**
+    * Equality operator.
+    * @param vecV The vector to compare to this one.
+    * @return true if the vectors are exactly equal
+    */ 
+   bool operator==(const CVector3& vecV)
+   {
+      return (m_oVector[0] == vecV.m_oVector[0] &&
+              m_oVector[1] == vecV.m_oVector[1] &&
+              m_oVector[2] == vecV.m_oVector[2]);
+   }
 
-	CVector3& operator*= (float fValue)			// operator*= is used to scale this Vector3D by a value.
-	{
-		m_fx *= fValue;
-		m_fy *= fValue;
-		m_fz *= fValue;
-		return *this;
-	}
+   /**
+    * Vector addition.
+    * @param vecV The vector to add to this one.
+    * @return A new vector equal to this + vecV
+    */ 
+   CVector3 operator+(const CVector3& vecV)
+   {
+      return CVector3(m_oVector[0] + vecV.m_oVector[0], m_oVector[1] + vecV.m_oVector[1], m_oVector[2] + vecV.m_oVector[2]);
+   }
 
-	CVector3& operator/= (float fValue)			// operator/= is used to scale this Vector3D by a value.
-	{
-		m_fx /= fValue;
-		m_fy /= fValue;
-		m_fz /= fValue;
-		return *this;
-	}
+   /**
+    * Vector addition.
+    * Modifies this : this = this + vecV;
+    * @param vecV The vector to add to this one.
+    * @return A reference to this object.
+    */ 
+   CVector3& operator+=(const CVector3& vecV)
+   {
+      m_oVector[0] += vecV.m_oVector[0];
+      m_oVector[1] += vecV.m_oVector[1];
+      m_oVector[2] += vecV.m_oVector[2];
+      return *this;
+   }
 
+   /**
+    * Vector subtraction.
+    * @param vecV The vector to subtract from this one.
+    * @return A new vector equal to this - vecV
+    */ 
+   CVector3 operator-(const CVector3& vecV)
+   {
+      return CVector3(m_oVector[0] - vecV.m_oVector[0], m_oVector[1] - vecV.m_oVector[1], m_oVector[2] - vecV.m_oVector[2]);
+   }
 
-	CVector3 operator- ()						// operator- is used to set this Vector3D's x, y, and z to the negative of them.
-	{
-		return CVector3(-m_fx, -m_fy, -m_fz);
-	}
+   /**
+    * Vector subtraction.
+    * Modifies this : this = this - vecV;
+    * @param vecV The vector to subtract from this one.
+    * @return A reference to this object.
+    */ 
+   CVector3& operator-=(const CVector3& vecV)
+   {
+      m_oVector[0] -= vecV.m_oVector[0];
+      m_oVector[1] -= vecV.m_oVector[1];
+      m_oVector[2] -= vecV.m_oVector[2];
+      return *this;
+   }
 
-	float dot(CVector3 vecV)
-	{
-		return this->m_fx * vecV.m_fx + this->m_fy * vecV.m_fy + this->m_fz * vecV.m_fz;
-	}
+   /**
+    * Multiplication by scalar value.
+    * @return A new vector equal to this * fValue.
+    */ 
+   CVector3 operator*(float fValue)
+   {
+      return CVector3(m_oVector[0] * fValue, m_oVector[1] * fValue, m_oVector[2] * fValue);
+   }
 
-	float length()								// length() returns the length of this Vector3D
-	{
-		return (float)sqrt(m_fx*m_fx + m_fy*m_fy + m_fz*m_fz);
-	};			   		
+   /**
+    * Multiplication by scalar value.
+    * Modifies this : this = this * fValue;
+    * @return A reference to this object.
+    */ 
+   CVector3& operator*=(float fValue)
+   {
+      m_oVector[0] *= fValue;
+      m_oVector[1] *= fValue;
+      m_oVector[2] *= fValue;
+      return *this;
+   }
 
-	void unitize()								// unitize() normalizes this Vector3D that its direction remains the same but its length is 1.
-	{
-		float fLength = this->length();
+   /**
+    * Division by scalar value.
+    * @return A new vector equal to this / fValue.
+    */ 
+   CVector3 operator/(float fValue)
+   {
+      return CVector3(m_oVector[0] / fValue, m_oVector[1] / fValue, m_oVector[2] / fValue);
+   }
 
-		if (fLength == 0)
-			return;
+   /**
+    * Division by scalar value.
+    * Modifies this : this = this / fValue;
+    * @return A reference to this object.
+    */ 
+   CVector3& operator/=(float fValue)
+   {
+      m_oVector[0] /= fValue;
+      m_oVector[1] /= fValue;
+      m_oVector[2] /= fValue;
+      return *this;
+   }
 
-		m_fx /= fLength;
-		m_fy /= fLength;
-		m_fz /= fLength;
-	}
+   /**
+    * Negation.
+    * All components are negated.
+    * @return A new vector which is the inverse of this one.
+    */ 
+   CVector3 operator-()
+   {
+      return CVector3(-m_oVector[0], -m_oVector[1], -m_oVector[2]);
+   }
 
-	CVector3 unit()								// unit() returns a new Vector3D. The returned value is a unitized version of this Vector3D.
-	{
-		float fLength = this->length();
+   /**
+    * Dot product.
+    * @param vecV The vector to take the dot product with.
+    * @return The dot or scalar product of this and vecV.
+    */
+   float dot(const CVector3& vecV)
+   {
+      return m_oVector[0] * vecV.m_oVector[0] + m_oVector[1] * vecV.m_oVector[1] + m_oVector[2] * vecV.m_oVector[2];
+   }
 
-		if (fLength == 0)
-			return *this;
-		
-		return CVector3(m_fx / fLength, m_fy / fLength, m_fz / fLength);
-	}
+   /**
+    * Cross product.
+    * @param vecV The vector to take the cross product with.
+    * @return A new vector containing the cross or vector product of this and vecV.
+    */
+   CVector3 cross(const CVector3& vecV)
+   {
+      CVector3 vecNormal;									
+      vecNormal.m_oVector[0] = ((m_oVector[1] * vecV.m_oVector[2]) - (m_oVector[2] * vecV.m_oVector[1]));
+      vecNormal.m_oVector[1] = ((m_oVector[2] * vecV.m_oVector[0]) - (m_oVector[0] * vecV.m_oVector[2]));
+      vecNormal.m_oVector[2] = ((m_oVector[0] * vecV.m_oVector[1]) - (m_oVector[1] * vecV.m_oVector[0]));      
+      return vecNormal;
+   }
+   
+   /**
+    * Vector magnitude.
+    * @return The length of this vector.
+    */
+   float length()
+   {
+      return static_cast<float>(sqrt(m_oVector[0]*m_oVector[0] + m_oVector[1]*m_oVector[1] + m_oVector[2]*m_oVector[2]));
+   }
 
-	CVector3 cross(CVector3 vecV)
-	{
-		CVector3 vecNormal;									
-	
-		vecNormal.m_fx = ((this->m_fy * vecV.m_fz) - (this->m_fz * vecV.m_fy));
-		vecNormal.m_fy = ((this->m_fz * vecV.m_fx) - (this->m_fx * vecV.m_fz));
-		vecNormal.m_fz = ((this->m_fx * vecV.m_fy) - (this->m_fy * vecV.m_fx));
-	
-		return vecNormal;
-	}
+   /**
+    * Make a unit vector.
+    * @return A new vector which has the same direction as this one, but unit length.
+    */
+   CVector3 unit()
+   {
+      // Copy this vector
+      CVector3 vecNew(*this);
+      // Make unit length
+      vecNew.normalise();
+      // Done
+      return vecNew;
+   }
 
+   /**
+    * Normalise this vector.
+    * Does not change this vector's direction, but makes it's length 1.
+    */
+   void normalise()
+   {
+      // Get length
+      float fLength = this->length();
+      // Check for divide-by-zero
+      if (fLength == 0) return;
+      // Scale
+      (*this) /= fLength;
+   }
+
+ protected:
+
+   /** 
+    * Vector components
+    */
+   float m_oVector[3];
+        
 };
+
 #endif
 

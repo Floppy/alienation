@@ -18,6 +18,7 @@
 #include "3D/Texture.h"
 #include "Math/Matrix.h"
 #include "3D/Frustum.h"
+#include "3D/Sprite.h"
 
 class CTrail : public CParticleEngine  
 {
@@ -34,9 +35,19 @@ public:
 	void render(float fThrust, CVector3 vecOrigin);                                    // Render particles to the screen
 	void createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vecOrigin, CVector3 vecUp, CVector3 vecRight,
 					CVector3 vecPos, float fWidth, float fHeight);
-    inline void renderBillboard(CVector3 oPos, float fSize, float* pfMaterial);
 	void reset();
 private:
+
+        /**
+         * Engine flare geometry
+         */
+        CSprite m_oFlare;
+
+        /**
+         * Trail particle geometry
+         */
+        CSprite m_oTrail;
+
 	CFrustum m_oFrustum;
 	unsigned int m_auiTextures[2];
 };

@@ -15,7 +15,7 @@ CSkybox::~CSkybox()
 void CSkybox::DrawSB(CVector3 pos)
 {
 	glPushMatrix();
-	glTranslatef(pos.m_fx, pos.m_fy, pos.m_fz);
+	glTranslatef(pos.X(), pos.Y(), pos.Z());
 	glScalef(2000.0f, 2000.0f, 2000.0f);
 	glCallList(list);
 	glPopMatrix();

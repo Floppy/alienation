@@ -34,10 +34,9 @@ const CMaterial& CMaterial::operator=(const CMaterial& material) {
 
 void CMaterial::render() const {
    // Texture
-   glEnable(GL_TEXTURE_2D);
    g_oTextureManager.activate(m_uiTexture);
    // Diffuse colour
-   glColor4ubv(m_oDiffuse.glColour());
+   //glColor4ubv(m_oDiffuse.glColour());
    // Done
    return;
 }

@@ -50,13 +50,13 @@ void CMesh::init() {
          // Get vertex number
          int iIndex = m_pFaces[j].m_iVertIndex[iWhichVertex];
          // Normal
-         glNormal3f(m_pNormals[iIndex].m_fx, m_pNormals[iIndex].m_fy, m_pNormals[iIndex].m_fz);
+         glNormal3fv(m_pNormals[iIndex].glVector());
          // Texture coordinates
          if(m_pTexVerts) {
             glTexCoord2fv(m_pTexVerts[iIndex].glVector());
          }
          // Vertex coordinate
-         glVertex3f(m_pVerts[ iIndex ].m_fx, m_pVerts[ iIndex ].m_fy, m_pVerts[ iIndex ].m_fz);
+         glVertex3fv(m_pVerts[iIndex].glVector());
       }
    }
    // Done drawing
@@ -76,7 +76,7 @@ void CMesh::render() const {
    // Push
    glPushMatrix();
    // Translate
-   glTranslatef(m_vecTranslation.m_fx,m_vecTranslation.m_fy,m_vecTranslation.m_fz);
+   glTranslatef(m_vecTranslation.X(),m_vecTranslation.Y(),m_vecTranslation.Z());
    // Render
    if (m_uiList)
       glCallList(m_uiList);
@@ -101,7 +101,7 @@ void CMesh::computeNormals() {
       CVector3 vecEdge2(m_pVerts[m_pFaces[i].m_iVertIndex[2]] - m_pVerts[m_pFaces[i].m_iVertIndex[1]]);
       // Do cross product to get normal
       pFaceNormals[i] = vecEdge1.cross(vecEdge2);
-      pFaceNormals[i].unitize();      
+      pFaceNormals[i].normalise();      
    }
    
    // Calculate vertex normals from face normals
@@ -121,7 +121,7 @@ void CMesh::computeNormals() {
          }
       }
       // Normalise
-      m_pNormals[i].unitize();
+      m_pNormals[i].normalise();
    }
 
    // Dump face normals - don't need them

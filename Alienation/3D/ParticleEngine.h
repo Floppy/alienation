@@ -25,8 +25,8 @@ class CParticleEngine
 {
 
 protected:
-	CVector3 m_vecShape[4];                                  // For particle systems that use specific shapes
-	int m_iParticlesCreated;                                   // Number of particles used in particle list
+	CVector3 m_vecShape[4];                             // For particle systems that use specific shapes
+	int m_iParticlesCreated;                            // Number of particles used in particle list
 	int m_iNumParticles;
 public:
 	CVector3 m_vecOrigin;
@@ -35,14 +35,14 @@ public:
 	CParticleEngine(int iNumParticles, CVector3 vecOrigin);
 	CParticleEngine(void);
 	virtual ~CParticleEngine(void);
-	CParticle * m_poParticles;                               // List of particles
+	CParticle * m_poParticles;                          // List of particles
 
 	
 
 
 	virtual void reset(void);                           // Resets entire particle system
 	virtual void resetParticle(int i) = 0;              // Resets specific particle (with index i)
-	virtual void update(float fDT) = 0;		             // Updates particle system
+	virtual void update(float fDT) = 0;		    // Updates particle system
 	virtual void render(void) = 0;                      // Render particles to the screen
 
 };
