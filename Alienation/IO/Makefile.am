@@ -2,6 +2,6 @@ AUTOMAKE_OPTIONS = foreign
 
 noinst_LIBRARIES = libAlienationIO.a
 
-libAlienationIO_a_SOURCES = 3ds.cpp 3ds.h
+libAlienationIO_a_SOURCES = 3ds.cpp 3ds.h Input.h
 
 INCLUDES = -I@top_srcdir@
