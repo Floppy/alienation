@@ -473,7 +473,9 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 		m_poAIShip->m_vecTargetPos = m_poShip->m_ppMasses[0]->m_vecPos;
 		m_poAIShip->m_vecTargetDirection = m_poShip->m_vecDirection;
 		m_poAIShip->m_fTargetSpeed = m_poShip->m_fVel;
-		m_poAIShip->operate(fDT);
+                
+                for (std::vector<CGameObject*>::iterator it = m_opObjects.begin(); it != m_opObjects.end(); it++)
+                   (*it)->operate(fDT);
 		m_poShip->operate(fDT);							// Iterate constantVelocity Simulation By dt Seconds
 	}
 
