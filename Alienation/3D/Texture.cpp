@@ -1,13 +1,8 @@
-// Texture.cpp: implementation of the CTexture class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #include "3D/Texture.h"
+
 #include <SDL_image.h>
 #include <SDL_opengl.h>
-
-#include <iostream>
-using namespace std;
+#include <string.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -120,20 +115,19 @@ bool CTexture::create(unsigned int iX, unsigned int iY)
 
 
 
-void CTexture::prerender() {
+void CTexture::preRenderToTexture() { 
+   // Store viewport size
    glGetIntegerv(GL_VIEWPORT,m_aiViewport);
    // Resize viewport
    glViewport(0,0,m_iX,m_iY);
 }
 
-void CTexture::postrender() {
+void CTexture::postRenderToTexture() {
    // Bind texture
    glBindTexture(GL_TEXTURE_2D,m_uiTexture);
    // Copy image from back buffer
    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 0, 0, m_iX, m_iY, 0);
    // Restore viewport
    glViewport(m_aiViewport[0],m_aiViewport[1],m_aiViewport[2],m_aiViewport[3]);
-   // Clear screen
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

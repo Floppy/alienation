@@ -1,18 +1,11 @@
-// Texture.h: interface for the CTexture class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#if !defined(AFX_TEXTURE_H__8395B95E_91B1_4EDB_BBB6_4FB7757FCBA3__INCLUDED_)
-#define AFX_TEXTURE_H__8395B95E_91B1_4EDB_BBB6_4FB7757FCBA3__INCLUDED_
+#ifndef SDS_TEXTURE_H
+#define SDS_TEXTURE_H
 
 #include "config.h"
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-
-#include <stdio.h>
-#include <string.h>
 
 class CTexture  
 {
@@ -30,11 +23,11 @@ class CTexture
    bool create(unsigned int iX, unsigned int iY);
    // Create an empty RGBA texture of the specified size.
 
-   void prerender();
-   // Offscreen rendering setup
+   void preRenderToTexture();
+   // Prepare for offscreen rendering
 
-   void postrender();
-   // Tidy up offscreen rendering
+   void postRenderToTexture();
+   // Finish offscreen rendering
 
    unsigned int ID() 
    { return m_uiTexture; }
@@ -52,4 +45,4 @@ class CTexture
 
 };
 
-#endif // !defined(AFX_TEXTURE_H__8395B95E_91B1_4EDB_BBB6_4FB7757FCBA3__INCLUDED_)
+#endif //SDS_TEXTURE_H
