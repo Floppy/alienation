@@ -17,6 +17,20 @@ class CWEEdge {
  public:
    
    /**
+    * Constructor.
+    */
+   CWEEdge() :
+      m_pStart(NULL),
+      m_pEnd(NULL),
+      m_pLeft(NULL),
+      m_pRight(NULL),
+      m_pPrevLeft(NULL),
+      m_pNextLeft(NULL),
+      m_pPrevRight(NULL),
+      m_pNextRight(NULL)
+   {}
+
+   /**
     * The vertex this winged-edge begins from.
     */
    CWEVertex* m_pStart;
@@ -24,7 +38,7 @@ class CWEEdge {
    /**
     * The vertex this winged-edge ends at.
     */
-   CWEVertex* m_pTo;
+   CWEVertex* m_pEnd;
 
    /**
     * The face to the left of this winged-edge.
@@ -66,6 +80,15 @@ class CWEVertex {
  public:
 
    /**
+    * Constructor.
+    * @param vecPosition The 3D position of the vertex.
+    */
+   CWEVertex(CVector3& vecPosition) :
+      m_vecPosition(vecPosition),
+      m_pEdge(NULL)      
+   {}
+
+   /**
     * The 3D position of the vertex.
     */
    CVector3 m_vecPosition;
@@ -86,15 +109,22 @@ class CWEFace {
  public:
 
    /**
-    * A winged-edge that borders this face.
+    * Constructor.
     */
-   CWEEdge* m_pEdge;
+   CWEFace() :
+      m_pEdge(NULL)      
+   {}
 
    /**
     * Texture coordinate indices for each corner.
     * m_iCoordIndex[0] refers to the texture coordinate for the vertex pointed to by m_pEdge.
     */
    int m_iCoordIndex[3];
+
+   /**
+    * A winged-edge that borders this face.
+    */
+   CWEEdge* m_pEdge;
 
 };
 
