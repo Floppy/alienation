@@ -133,6 +133,10 @@ SOURCE=.\Equipment\Equipment.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\GL\Extensions.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\3D\FMesh.cpp
 # End Source File
 # Begin Source File
@@ -354,6 +358,10 @@ SOURCE=.\Equipment\Engine.h
 # Begin Source File
 
 SOURCE=.\Equipment\Equipment.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GL\Extensions.h
 # End Source File
 # Begin Source File
 
