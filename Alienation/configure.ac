@@ -1,8 +1,7 @@
 # Initialise
-AC_PREREQ(2)
+AC_PREREQ(2.13)
 AC_INIT(Alienation,0.1)
 AM_INIT_AUTOMAKE(Alienation,0.1)
-AC_CONFIG_SRCDIR([program.cpp])
 
 # Check for programs
 AC_PROG_CC
@@ -45,18 +44,17 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
+#AC_HEADER_STDBOOL
 AC_C_CONST
 
 # Checks for library functions.
 AC_CHECK_FUNCS([atexit memset sqrt])
 
 # Output
-AC_CONFIG_FILES([3D/Makefile
-                 AI/Makefile
-                 GL/Makefile
-                 IO/Makefile
-                 Makefile
-                 Math/Makefile
-                 Physics/Makefile])
-AC_OUTPUT
+AC_OUTPUT(3D/Makefile
+          AI/Makefile
+          GL/Makefile
+          IO/Makefile
+          Math/Makefile
+          Physics/Makefile
+          Makefile)
