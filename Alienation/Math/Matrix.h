@@ -18,6 +18,7 @@ namespace NSDMath {
    {
 
    public:
+	   void setElement(int iIndex, float fValue);
    
       /** 
        * Default Constructor.
