@@ -70,7 +70,7 @@ bool COpenGL :: initGL() {
 // Here's Where We Do All The Drawing. Nothing hard here. Only thing to note
 //is all transparent objects are drawn last
 bool COpenGL :: DrawGLScene(GLvoid) {
-	char str[40];
+	char str[256];
 	float p[4] = {0.0f, 2.0f, 2.0f, 0.0f};
 	sprintf(str, "Speed: %.2f", m_poShip->m_poShips[0].m_fVel);
 
@@ -112,7 +112,7 @@ bool COpenGL :: DrawGLScene(GLvoid) {
 
 //Called from main, this funnction gives time based movement. Needs seperating into seperate 
 //function calls for readability
-void COpenGL::Update (unsigned int dMilliseconds)								
+void COpenGL::Update (unsigned long int dMilliseconds)								
 {
 
 

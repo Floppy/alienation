@@ -50,7 +50,7 @@ class COpenGL {
 		CSkybox *m_poSkybox;
 		CAIShip *m_poAIShip;
       COpenGL();
-		void Update (unsigned int dMilliseconds);
+		void Update (unsigned long int dMilliseconds);
       bool DrawGLScene(GLvoid);
       bool      initGL();
 		float m_fPitch, m_fYaw, m_fRoll, m_fThrust;
