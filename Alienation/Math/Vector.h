@@ -81,6 +81,53 @@ namespace NSDMath {
       const float* glVector() const
          { return m_oVector; }
 
+      /**
+       * Vector addition.
+       * @param vecV The vector to add to this one.
+       * @return A new vector equal to this + vecV
+       */ 
+      CVector2 operator+(const CVector2& vecV) const
+      {
+         return CVector2(m_oVector[0] + vecV.m_oVector[0], m_oVector[1] + vecV.m_oVector[1]);
+      }
+
+      /**
+       * Vector addition.
+       * Modifies this : this = this + vecV;
+       * @param vecV The vector to add to this one.
+       * @return A reference to this object.
+       */ 
+      CVector2& operator+=(const CVector2& vecV)
+      {
+         m_oVector[0] += vecV.m_oVector[0];
+         m_oVector[1] += vecV.m_oVector[1];
+         return *this;
+      }
+
+      /**
+       * Multiplication by vector value.
+       * @return A new vector equal to this * vecValue.
+       */ 
+      CVector2 operator*(CVector2 vecValue) const
+      {
+         return CVector2(m_oVector[0] * vecValue.m_oVector[0], 
+                         m_oVector[1] * vecValue.m_oVector[1]);
+      }
+
+      /**
+       * Multiplication by vector value.
+       * Modifies this : this = this * vecValue;
+       * @return A reference to this object.
+       */ 
+      CVector2& operator*=(CVector2 vecValue)
+      {
+         m_oVector[0] *= vecValue.m_oVector[0];
+         m_oVector[1] *= vecValue.m_oVector[1];
+         return *this;
+      }
+
+
+
    protected:
 
       /** 
