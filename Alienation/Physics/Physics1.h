@@ -86,6 +86,7 @@ public:
 	
 	CSimulation(int iNumOfMasses, float fMass) :      // Constructor creates some masses with mass values m
            m_iNumOfMasses(iNumOfMasses),
+		   m_ppMasses(NULL),
            m_fDelta_x(0.0f),
            m_fDelta_y(0.0f),
            m_fDelta_z(0.0f)
