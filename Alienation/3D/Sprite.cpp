@@ -43,8 +43,8 @@ void CSprite::init() {
    {
       for (int j=0; j<2; j++) 
       {
-         glTexCoord2f( ( i==j ? 0.0f : 1.0f ) , ( i==0 ? 1.0f : 0.0f ) );
-         glVertex3f( ( i==j ? -1.0f : 1.0f ) , ( i==0 ? 1.0f : -1.0f ), 0.0f );
+         glTexCoord2f( ( i==j ? 1.0f : 0.0f ) , ( i==0 ? 1.0f : 0.0f ) );
+         glVertex3f( ( i==j ? 1.0f : -1.0f ) , ( i==0 ? 1.0f : -1.0f ), 0.0f );
       }
    }
 

@@ -55,6 +55,10 @@ bool COpenGL :: initGL() {
    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    glBlendFunc(GL_ONE,GL_ONE);
 
+   // Enable backface culling
+   glEnable(GL_CULL_FACE);
+   glCullFace(GL_BACK);
+
    // Set viewport
    glViewport(0, 0, 1024, 768);
 
