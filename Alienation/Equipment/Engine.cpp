@@ -10,7 +10,9 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CEngine::CEngine()
+CEngine::CEngine() :
+   m_fCurrentThrust(0.0f),
+   m_fMaxThrust(0.0f)
 {
 
 }
@@ -18,6 +20,20 @@ CEngine::CEngine()
 CEngine::~CEngine()
 {
 
+}
+
+void CEngine::drawBlended() const {
+   if (m_fCurrentThrust > 0.0f)
+      m_oTrail.render();
+}
+
+void CEngine::setFlare(const char* strTexture, CRGBAColour oCol, float fSize) {
+   m_oTrail.setFlare(strTexture, oCol, fSize);   
+}
+
+void CEngine::setTrail(const char* strTexture, CRGBAColour oCol, float fSize, int iNumParticles) {
+   m_oTrail.setup(iNumParticles,CVector3(0,0,0));
+   m_oTrail.setTrail(strTexture, oCol, fSize);
 }
 
 CEngine* CEngine::load(const char* strFileName) 
@@ -40,6 +56,7 @@ CEngine* CEngine::load(const char* strFileName)
 
    // Get thrust data
    float fThrust(state.getNumber("thrust"));
+   pEngine->setMaxThrust(fThrust);
 
    // Load flare information
    state.push("flare");
@@ -47,7 +64,7 @@ CEngine* CEngine::load(const char* strFileName)
    CRGBAColour oFlareCol = state.getColour("colour");
    float fFlareSize = state.getNumber("maxsize");
    // Set flare information
-   
+   pEngine->setFlare(strFlareTex,oFlareCol,fFlareSize);
    // Done with flare
    state.pop();
 
@@ -65,7 +82,7 @@ CEngine* CEngine::load(const char* strFileName)
       int iNumParticles = static_cast<int>(state.getNumber("number"));
 
       // Set trail information
-      
+      pEngine->setTrail(strTrailTex,oTrailCol,fTrailSize,iNumParticles);
 
    }
    else {
@@ -79,3 +96,11 @@ CEngine* CEngine::load(const char* strFileName)
    // Done
    return pEngine;
 }
+
+void CEngine::update(float fDT, CVector3 vecPos, CVector3 vecStart, 
+                     CVector3 vecDistance, CVector3 vecUp, CVector3 vecRight) {
+
+   m_oTrail.update(fDT,m_fCurrentThrust,vecPos,vecStart,vecDistance,vecUp,vecRight,1.5f, 0.5f);
+   
+}
+
