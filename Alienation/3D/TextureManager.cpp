@@ -54,7 +54,7 @@ unsigned int CTextureManager::load(const char* strFilename, bool bMipmap)
       // Drop created texture
       delete pTexture;
       // Done
-      return INT_MAX;
+      return UINT_MAX;
    }
 }
 
@@ -77,14 +77,14 @@ unsigned int CTextureManager::create(unsigned int iX, unsigned int iY)
       // Drop created texture
       delete pTexture;
       // Done
-      return INT_MAX;
+      return UINT_MAX;
    }
 }
 
 
 void CTextureManager::addReference(unsigned int uiTexture) 
 {
-   if (uiTexture != INT_MAX) {            
+   if (uiTexture != UINT_MAX) {            
       // Increment reference count
       ++(m_hReferences[uiTexture]);
    }
@@ -92,7 +92,7 @@ void CTextureManager::addReference(unsigned int uiTexture)
 
 void CTextureManager::removeReference(unsigned int uiTexture) 
 {
-   if (uiTexture != INT_MAX && --(m_hReferences[uiTexture]) == 0) {
+   if (uiTexture != UINT_MAX && --(m_hReferences[uiTexture]) == 0) {
       // Delete texture
       delete m_hTextures[uiTexture];
       // Dump map entries
@@ -103,14 +103,14 @@ void CTextureManager::removeReference(unsigned int uiTexture)
 
 void CTextureManager::render(unsigned int uiTexture)
 {
-   if (uiTexture != INT_MAX) {            
+   if (uiTexture != UINT_MAX) {            
       CTexture* pTexture = m_hTextures[uiTexture];
       if (pTexture) pTexture->render();
    }
 }
 
 CTexture* CTextureManager::texture(unsigned int uiTexture) {
-   if (uiTexture != INT_MAX)
+   if (uiTexture != UINT_MAX)
       return m_hTextures[uiTexture];
    return NULL;
 }
