@@ -12,20 +12,14 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CTrail::CTrail(int iNumParticles, CVector3 vecOrigin)
+CTrail::CTrail(int iNumParticles, CVector3 vecOrigin) :
+   CParticleEngine(iNumParticles,vecOrigin)
 {
-	m_iNumParticles = iNumParticles;               // Set number of particles
-	m_vecOrigin = vecOrigin;                           // Set origin of particles
-
-	m_poParticles = new CParticle[m_iNumParticles];     // Create particle list
-	m_iParticlesCreated = 0;
-	randomSeed( (unsigned)time( NULL ) );
-
+   randomSeed( (unsigned)time( NULL ) );
 }
 
 CTrail::~CTrail()
 {
-   delete [] m_poParticles;
    for (int i=0; i<2; i++) {
       g_oTextureManager.removeReference(m_auiTextures[i]);
    }

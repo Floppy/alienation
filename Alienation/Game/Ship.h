@@ -12,13 +12,13 @@
 #endif // _MSC_VER > 1000
 
 //#include "Physics/Physics1.h"
-#include "Trail.h"
 #include <stdio.h>
 #include "Math/Vector.h"
 #include "Math/Quat.h"
 #include "Math/Matrix.h"
-#include "Weapon.h"
-#include "Brake.h"
+#include "Game/Weapon.h"
+#include "Game/Brake.h"
+#include "Game/Trail.h"
 #include "3D/Model.h"
 #include "3D/Frustum.h"
 #include "3D/BoundingSphere.h"
@@ -49,7 +49,8 @@ public:
 	float			m_fVel;
 	CVector3		m_avecTrailPoints[4];
 	CVector3		m_avecWeaponPoints[4];
-	CTrail		*m_poTrail;
+        int              m_iNumTrails;
+	CTrail		*m_poTrails;
 	CWeapon		*m_poWeapon;
 	CBrake		*m_poBrake;
 	float			m_afq[16];
@@ -66,20 +67,17 @@ public:
 //At the moment simply holds tha data for the static ship in the demo. 
 class CShip : public CSimulation  
 {
-public:
-	void drawBrake();
-	CShip(int num, float mass);
-	virtual ~CShip();
-	void loadShip();
-	void rotate(int ship, float dt);
-	void draw();
-	virtual void drawTrail();
-	void drawWeapons();
-	void rotHeading(CMatrix m);
-	virtual void solve();
-	virtual void simulate(float dt);
-	CShipData *m_poShips;
-    CFrustum m_oFrustum;
+ public:
+   CShip(int num, float mass);
+   virtual ~CShip();
+   void loadShip();
+   void rotate(int ship, float dt);
+   void draw();
+   void rotHeading(CMatrix m);
+   virtual void solve();
+   virtual void simulate(float dt);
+   CShipData *m_poShips;
+   CFrustum m_oFrustum;
 };
 
 #endif // !defined(AFX_SHIP_H__8A1BAA92_3775_40B8_B34E_AFE14888CC50__INCLUDED_)

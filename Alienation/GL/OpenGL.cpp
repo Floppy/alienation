@@ -117,12 +117,6 @@ bool COpenGL::DrawGLScene(GLvoid) {
    m_oFrustum.CalculateFrustum();
    m_poAIShip->draw();
    m_poStars->draw(m_poShip->m_ppMasses[0]->m_vecPos);
-   m_poShip->drawTrail();
-   m_poAIShip->drawTrail();
-   m_poShip->drawWeapons();
-   m_poAIShip->drawWeapons();
-   m_poShip->drawBrake();
-   m_poShip->drawHud();
     
    // Everything Went OK
    return true; 

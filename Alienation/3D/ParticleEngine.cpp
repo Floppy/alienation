@@ -8,12 +8,18 @@
 #include "ParticleEngine.h"
 
 // Empty constructor
-CParticleEngine::CParticleEngine(void)
+CParticleEngine::CParticleEngine(void) :
+   m_iNumParticles(0),
+   m_iParticlesCreated(0),
+   m_poParticles(NULL)
 {
 }
 
 // Constructor
-CParticleEngine::CParticleEngine(int iNumParticles, CVector3 vecOrigin)
+CParticleEngine::CParticleEngine(int iNumParticles, CVector3 vecOrigin) :
+   m_iNumParticles(0),
+   m_iParticlesCreated(0),
+   m_poParticles(NULL)
 {
     m_iNumParticles = iNumParticles;               // Set number of particles
     vecOrigin = vecOrigin;                           // Set origin of particles

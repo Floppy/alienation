@@ -15,21 +15,17 @@ using namespace NSDSound;
 //////////////////////////////////////////////////////////////////////
 
 CWeapon::CWeapon(int iNumParticles, CVector3 vecOrigin) :
+   CParticleEngine(iNumParticles, vecOrigin),
    m_uiSoundEffect(-1)
 {
-	m_iNumParticles = iNumParticles;               // Set number of particles
-	m_vecOrigin = vecOrigin;                           // Set origin of particles
-
-	m_poParticles = new CParticle[m_iNumParticles];     // Create particle list
-	m_iParticlesCreated = 0;
-	m_fFireRate = 0.5f;
-	m_fTimeSinceLast = 0.5f;
-	int i;
-	for (i = 0; i < 100 ; i++)
-		m_abEmpty[i] = true;
-        
-        // Load sound
-        m_uiSoundEffect = g_oSoundManager.load("weapon.wav");
+   m_fFireRate = 0.5f;
+   m_fTimeSinceLast = 0.5f;
+   int i;
+   for (i = 0; i < 100 ; i++)
+      m_abEmpty[i] = true;
+   
+   // Load sound
+   m_uiSoundEffect = g_oSoundManager.load("weapon.wav");
 }
 
 CWeapon::~CWeapon()

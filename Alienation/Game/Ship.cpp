@@ -35,8 +35,12 @@ CShip::CShip(int num, float mass) : CSimulation(num, mass)
    m_poShips[0].m_quaCamOrientation.loadIdentity();
    m_poShips[0].m_fDrag = 0.025f;
    m_poShips[0].m_iFlightMode = 1;
-   
-   m_poShips[0].m_poTrail = new CTrail(1000, CVector3(0.0f, -0.5f, 7.2f));
+
+   m_poShips[0].m_iNumTrails = 2;
+   m_poShips[0].m_poTrails = new CTrail[m_poShips[0].m_iNumTrails](0,CVector3(0,0,0));
+   m_poShips[0].m_poTrails[0] = CTrail(500, CVector3(1.0f, -0.5f, 7.2f));
+   m_poShips[0].m_poTrails[1] = CTrail(500, CVector3(-1.0f, -0.5f, 7.2f));
+
    m_poShips[0].m_poWeapon = new CWeapon(100, CVector3(0.0f, -0.3f, -3.3f)); 
    m_poShips[0].m_poBrake = new CBrake(100, CVector3(0.0f, 0.0f, 0.0f));
    
@@ -58,7 +62,8 @@ void CShip::loadShip()
    if (oLoad3ds.import3DS(&(m_poShips[0].m_oModel), "Data/Model/shuttle.3ds")) {
       m_poShips[0].m_oModel.init();
    }
-   m_poShips[0].m_poTrail->init();
+   for (int i=0; i<m_poShips[0].m_iNumTrails; i++)
+      m_poShips[0].m_poTrails[i].init();
    m_poShips[0].m_poBrake->init();
    m_poShips[0].m_poWeapon->init();
 }
@@ -76,6 +81,20 @@ void CShip::draw()
 
 	  glPopMatrix(); // Make the gluLookat matrix again active
    }
+   
+   // Draw trail
+   if (m_poShips[0].m_fThrust != 0.0f) {
+      for (int i=0; i<m_poShips[0].m_iNumTrails; i++) {
+         m_poShips[0].m_poTrails[i].render(m_poShips[0].m_fThrust, m_poShips[0].m_avecTrailPoints[0]);
+      }
+   }
+
+   // Draw weapons fire
+   m_poShips[0].m_poWeapon->render();
+
+   // Draw brake exhaust
+   m_poShips[0].m_poBrake->render();
+
 }
 
 //This function calculates the force acting on the ship
@@ -172,7 +191,8 @@ void CShip::simulate(float fDT)
 	rotate (0, fDT);
 
 	//update trail, weapons and heading
-	m_poShips[0].m_poTrail->update(fDT, m_poShips[0].m_fThrust, m_ppMasses[0]->m_vecPos, m_poShips[0].m_avecTrailPoints[0], vecDistanceMoved, 
+        for (int i=0; i<m_poShips[0].m_iNumTrails; i++) 
+           m_poShips[0].m_poTrails[i].update(fDT, m_poShips[0].m_fThrust, m_ppMasses[0]->m_vecPos, m_poShips[0].m_avecTrailPoints[0], vecDistanceMoved, 
 								  m_poShips[0].m_vecUp - m_ppMasses[0]->m_vecPos, m_poShips[0].m_vecRight - m_ppMasses[0]->m_vecPos, 1.5f, 0.5f);
 	vecGunHead = m_poShips[0].m_vecHeading - m_ppMasses[0]->m_vecPos;
 	m_poShips[0].m_poWeapon->update(fDT, vecGunHead, m_poShips[0].m_avecWeaponPoints[0], m_poShips[0].m_fVel, m_poShips[0].m_bWeaponFire);
@@ -230,22 +250,3 @@ void CShip::rotHeading(CMatrix mat)
 	m_poShips[0].m_avecWeaponPoints[0] += m_ppMasses[0]->m_vecPos;
 	m_poShips[0].m_vecBrakePoint += m_ppMasses[0]->m_vecPos;
 }
-
-void CShip::drawTrail()
-{
-	if (m_poShips[0].m_fThrust == 0.0f)
-		return;
-
-	m_poShips[0].m_poTrail->render(m_poShips[0].m_fThrust, m_poShips[0].m_avecTrailPoints[0]);
-}
-
-void CShip::drawWeapons()
-{
-	m_poShips[0].m_poWeapon->render();
-}
-
-void CShip::drawBrake()
-{
-	m_poShips[0].m_poBrake->render();
-}
-

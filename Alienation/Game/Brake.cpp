@@ -19,19 +19,14 @@
 //////////////////////////////////////////////////////////////////////
 
 CBrake::CBrake(int iNumParticles, CVector3 vecOrigin) :
+   CParticleEngine(iNumParticles, vecOrigin),
    m_uiTexture(0)
 {
-	m_iNumParticles = iNumParticles;               // Set number of particles
-	m_vecOrigin = vecOrigin;                           // Set origin of particles
-
-	m_poParticles = new CParticle[m_iNumParticles];     // Create particle list
-	m_iParticlesCreated = 0;
-	randomSeed( (unsigned)time( NULL ) );
+   randomSeed( (unsigned)time( NULL ) );
 }
 
 CBrake::~CBrake()
 {
-   delete [] m_poParticles;
    g_oTextureManager.removeReference(m_uiTexture);
 }
 
