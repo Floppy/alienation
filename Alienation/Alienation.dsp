@@ -76,7 +76,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib SDL.lib SDLmain.lib SDL_image.lib fmodvc.lib /nologo /subsystem:console /profile /map /debug /machine:I386 /nodefaultlib:"msvcrt.lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib SDL.lib SDLmain.lib SDL_image.lib SDL_mixer.lib /nologo /subsystem:console /profile /map /debug /machine:I386 /nodefaultlib:"msvcrt.lib"
 
 !ENDIF 
 
@@ -93,14 +93,6 @@ SOURCE=.\IO\3ds.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\3D\TextureManager.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\3D\Sprite.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\AI\AIShip.cpp
 # End Source File
 # Begin Source File
@@ -109,11 +101,23 @@ SOURCE=.\Alienation.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\3D\BoundingSphere.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Game\Brake.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\3D\Frustum.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\GL\GLFont.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\2D\Hud.cpp
 # End Source File
 # Begin Source File
 
@@ -165,11 +169,19 @@ SOURCE=.\Sound\SoundManager.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\3D\Sprite.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Game\Stars.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\3D\Texture.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\3D\TextureManager.cpp
 # End Source File
 # Begin Source File
 
@@ -185,23 +197,19 @@ SOURCE=.\Game\Weapon.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\IO\3ds.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\3D\3DObject.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\3D\TextureManager.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\3D\Sprite.h
+SOURCE=.\IO\3ds.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\AI\AIShip.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\3D\BoundingSphere.h
 # End Source File
 # Begin Source File
 
@@ -213,7 +221,15 @@ SOURCE=.\config.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\3D\Frustum.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\GL\GLFont.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\2D\Hud.h
 # End Source File
 # Begin Source File
 
@@ -269,11 +285,19 @@ SOURCE=.\Sound\SoundManager.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\3D\Sprite.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Game\Stars.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\3D\Texture.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\3D\TextureManager.h
 # End Source File
 # Begin Source File
 
