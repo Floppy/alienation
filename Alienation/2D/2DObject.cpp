@@ -3,6 +3,8 @@
 
 namespace NSD2D {
 
+   using namespace NSDMath;
+
    int C2DObject::m_iWidth(0);
    int C2DObject::m_iHeight(0);
    

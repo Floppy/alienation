@@ -11,7 +11,10 @@
 
 #include "config.h"
 #include <map>
+#include <string>
 #include "3D/Texture.h"
+
+using namespace std;
 
 /**
  * Texture manager class.
@@ -96,17 +99,17 @@ class CTextureManager
    /**
     * Texture pointers.
     */
-   std::map<unsigned int, CTexture*> m_hTextures;
+   map<unsigned int, CTexture*> m_hTextures;
    
    /**
     * Reference counts.
     */
-   std::map<unsigned int, unsigned int> m_hReferences;
+   map<unsigned int, unsigned int> m_hReferences;
 
    /**
     * Reference counts.
     */
-   std::map<std::string, unsigned int> m_hFiles;
+   map<string, unsigned int> m_hFiles;
 
    /**
     * Root location of textures

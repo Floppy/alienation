@@ -4,7 +4,6 @@
 
 #include "3D/TextureManager.h"
 
-#include <iostream>
 using namespace std;
 
 CTextureManager g_oTextureManager("Data/Texture/");
@@ -21,7 +20,7 @@ CTextureManager::CTextureManager(const char* strTextureRoot)
 CTextureManager::~CTextureManager()
 {
    // Dump all textures
-   for (std::map<unsigned int,CTexture*>::iterator it(m_hTextures.begin()); it != m_hTextures.end(); it++) {
+   for (map<unsigned int,CTexture*>::iterator it(m_hTextures.begin()); it != m_hTextures.end(); it++) {
       delete it->second;
    }
 }
@@ -29,8 +28,8 @@ CTextureManager::~CTextureManager()
 unsigned int CTextureManager::load(const char* strFilename)
 {   
    // Test if texture has already been loaded
-   std::string str(strFilename);
-   std::map<std::string, unsigned int>::iterator it = m_hFiles.find(str);
+   string str(strFilename);
+   map<string, unsigned int>::iterator it = m_hFiles.find(str);
    if (it!=m_hFiles.end()) return it->second;
 
    // Create new texture

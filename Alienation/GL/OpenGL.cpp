@@ -134,7 +134,7 @@ bool COpenGL :: initGL() {
 
 
    // Load roids
-   for (int i=0; i<40; i++) {
+   for (int r=0; r<40; r++) {
       CAsteroid* pRoid = new CAsteroid(1,50000);
       // Select type
       float fRandom = prng.randDouble();
