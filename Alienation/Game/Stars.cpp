@@ -25,7 +25,6 @@ CStars::~CStars()
 void CStars::initStars()
 {
 	float fy, fp;
-	CQuat quaTemp;
 	CMatrix mat;
 	CVector3 vecPos;
 	int i;
@@ -35,7 +34,7 @@ void CStars::initStars()
 	{
 		fy = RANDOM_FLOAT * 360;
 		fp = RANDOM_FLOAT * 360;
-		quaTemp.eulerToQuat(DEG_TO_RAD(fy), 0.0f, DEG_TO_RAD(fp));
+		CQuat quaTemp(DEG_TO_RAD(fy), 0.0f, DEG_TO_RAD(fp));
 		mat.QuatToMatrix(quaTemp);	
 		vecPos = CVector3(0.0f, 0.0f, -1.0f);
 		m_aoStars[i].m_vecPos = mat.MultMatrixVector(vecPos);

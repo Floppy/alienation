@@ -129,7 +129,7 @@ void CPlayerShip::draw()
 //Calcuates the external view camera
 void CPlayerShip::rotateCam(float fDT)
 {
-	CQuat quaTemp;
+	;
 	CMatrix matM;
 	float fPitch = 0.0f, fYaw = 0.0f;
 
@@ -143,9 +143,9 @@ void CPlayerShip::rotateCam(float fDT)
 		fYaw = fDT * m_poShips[0].m_fCamYaw;			//change in yaw rate over time
 	}
 
-	quaTemp.eulerToQuat(DEG_TO_RAD(fYaw), 0.0f, DEG_TO_RAD(fPitch));
-	quaTemp.multQuat(m_poShips[0].m_quaCamOrientation);
-	m_poShips[0].m_quaCamOrientation.copyQuat(quaTemp);
+	CQuat quaTemp(DEG_TO_RAD(fYaw), 0.0f, DEG_TO_RAD(fPitch));
+	quaTemp *= m_poShips[0].m_quaCamOrientation;
+	m_poShips[0].m_quaCamOrientation = quaTemp;
 	m_poShips[0].m_matCamRotation.QuatToMatrix(m_poShips[0].m_quaCamOrientation);
 
 	matM.CopyMatrix(m_poShips[0].m_matCamRotation.m_afElement);

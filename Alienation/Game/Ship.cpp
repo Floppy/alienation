@@ -31,8 +31,8 @@ CShip::CShip(int num, float mass) : CSimulation(num, mass)
    m_poShips[0].m_fMaxPitchRate = 40.0f;
    m_poShips[0].m_fMaxYawRate = 25.0f;
    m_poShips[0].m_fMaxRollRate = 45.0f;	
-   m_poShips[0].m_quaOrientation.reset();
-   m_poShips[0].m_quaCamOrientation.reset();
+   m_poShips[0].m_quaOrientation.loadIdentity();
+   m_poShips[0].m_quaCamOrientation.loadIdentity();
    m_poShips[0].m_fDrag = 0.025f;
    m_poShips[0].m_iFlightMode = 1;
    
@@ -182,7 +182,6 @@ void CShip::simulate(float fDT)
 
 void CShip::rotate(int iShip, float fDT)
 {
-	CQuat quaTemp;
 	float fPitch = 0.0f, fYaw = 0.0f, fRoll = 0.0f;
 
 	if (m_poShips[iShip].m_fPitchRate)
@@ -201,9 +200,9 @@ void CShip::rotate(int iShip, float fDT)
 	}
 
 
-	quaTemp.eulerToQuat(DEG_TO_RAD(fYaw), DEG_TO_RAD(fRoll), DEG_TO_RAD(fPitch));
-	quaTemp.multQuat(m_poShips[iShip].m_quaOrientation);
-	m_poShips[iShip].m_quaOrientation.copyQuat(quaTemp);
+	CQuat quaTemp(DEG_TO_RAD(fYaw), DEG_TO_RAD(fRoll), DEG_TO_RAD(fPitch));
+	quaTemp *= m_poShips[iShip].m_quaOrientation;
+	m_poShips[iShip].m_quaOrientation = quaTemp;
 	m_poShips[iShip].m_matRotation.QuatToMatrix(m_poShips[0].m_quaOrientation);
 
 	rotHeading(m_poShips[0].m_matRotation);

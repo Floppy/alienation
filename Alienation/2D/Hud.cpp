@@ -369,10 +369,9 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 												//rotate the target.                        //
 												//////////////////////////////////////////////
 
-	CQuat quaPitch;
 	CMatrix matP;
 
-	quaPitch.eulerToQuat(0.0f, 0.0f, DEG_TO_RAD(fPitch));
+	CQuat quaPitch(0.0f, 0.0f, DEG_TO_RAD(fPitch));
 	matP.QuatToMatrix(quaPitch);
 	vecTemp = matP.MultMatrixVector(vecTemp);
 
@@ -406,11 +405,10 @@ void CHud::drawHoloTarget(CShipData *poTarget, CMass **poMass, CShip *poThisShip
 												//operate correctly                         //
 												//////////////////////////////////////////////
 
-	CQuat quaYaw;
 	CMatrix matY, matM;
 	char strFont[20];
 
-	quaYaw.eulerToQuat(DEG_TO_RAD(fYaw), 0.0f, 0.0f);
+	CQuat quaYaw(DEG_TO_RAD(fYaw), 0.0f, 0.0f);
 	matY.QuatToMatrix(quaYaw);
 	matM = matP * matY;
 

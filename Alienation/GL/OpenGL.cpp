@@ -102,22 +102,27 @@ bool COpenGL :: initGL() {
 
 // Here's Where We Do All The Drawing. Nothing hard here. Only thing to note
 //is all transparent objects are drawn last
-bool COpenGL :: DrawGLScene(GLvoid) {
+bool COpenGL::DrawGLScene(GLvoid) {
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear Screen And Depth Buffer
-    glLoadIdentity();					// Reset The Current Modelview Matrix
-	m_poShip->draw();
-    m_oFrustum.CalculateFrustum();
-	m_poAIShip->draw();
-	m_poStars->draw(m_poShip->m_ppMasses[0]->m_vecPos);
-	m_poShip->drawTrail();
-	m_poAIShip->drawTrail();
-	m_poShip->drawWeapons();
-	m_poAIShip->drawWeapons();
-	m_poShip->drawBrake();
-	m_poShip->drawHud();
-
-   return true; // Everything Went OK
+   // Clear Screen And Depth Buffer
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+   
+   // Reset The Current Modelview Matrix
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();					
+   m_poShip->draw();
+   m_oFrustum.CalculateFrustum();
+   m_poAIShip->draw();
+   m_poStars->draw(m_poShip->m_ppMasses[0]->m_vecPos);
+   m_poShip->drawTrail();
+   m_poAIShip->drawTrail();
+   m_poShip->drawWeapons();
+   m_poAIShip->drawWeapons();
+   m_poShip->drawBrake();
+   m_poShip->drawHud();
+    
+   // Everything Went OK
+   return true; 
 }
 
 //Called from main, this funnction gives time based movement. Needs seperating into seperate 

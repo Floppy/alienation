@@ -184,48 +184,26 @@ void CMatrix::MatrixInverse()
 
 void CMatrix::MatrixFromAxisAngle(CVector3 axis, float theta)
 {
-        CQuat q;
-        float halfTheta = theta * 0.5f;
-        float cosHalfTheta = (float)cos(halfTheta);
-        float sinHalfTheta = (float)sin(halfTheta);
-        float xs, ys, zs, wx, wy, wz, xx, xy, xz, yy, yz, zz;
-        q.m_fx = axis.X() * sinHalfTheta;
-        q.m_fy = axis.Y() * sinHalfTheta;
-        q.m_fz = axis.Z() * sinHalfTheta;
-        q.m_fw = cosHalfTheta;
-        xs = q.m_fx * 2;  ys = q.m_fy * 2;  zs = q.m_fz * 2;
-        wx = q.m_fw * xs; wy = q.m_fw * ys; wz = q.m_fw * zs;
-        xx = q.m_fx * xs; xy = q.m_fx * ys; xz = q.m_fx * zs;
-        yy = q.m_fy * ys; yz = q.m_fy * zs; zz = q.m_fz * zs;
-        m_afElement[0] = 1 - (yy + zz);
-        m_afElement[1] = xy - wz;
-        m_afElement[2] = xz + wy;
-        m_afElement[4] = xy + wz;
-        m_afElement[5] = 1 - (xx + zz);
-        m_afElement[6] = yz - wx;
-        m_afElement[8] = xz - wy;
-        m_afElement[9] = yz + wx;
-        m_afElement[10] = 1 - (xx + yy);
-        m_afElement[12] = m_afElement[13] = m_afElement[14] = m_afElement[3] = m_afElement[7] = m_afElement[11] = 0;
-        m_afElement[15] = 1;
+        CQuat q(axis, theta);
+        QuatToMatrix(q);
 }
 
 void CMatrix::QuatToMatrix(CQuat quat)
 {
   	float wx, wy, wz, xx, yy, yz, xy, xz, zz, x2, y2, z2;
   	// calculate coefficients
-  	x2 = quat.m_fx + quat.m_fx;
-  	y2 = quat.m_fy + quat.m_fy;
-  	z2 = quat.m_fz + quat.m_fz;
-  	xx = quat.m_fx * x2;
-  	xy = quat.m_fx * y2;
-  	xz = quat.m_fx * z2;
-  	yy = quat.m_fy * y2;
-  	yz = quat.m_fy * z2;
-  	zz = quat.m_fz * z2;
-  	wx = quat.m_fw * x2;
-  	wy = quat.m_fw * y2;
-  	wz = quat.m_fw * z2;
+  	x2 = quat.X() + quat.X();
+  	y2 = quat.Y() + quat.Y();
+  	z2 = quat.Z() + quat.Z();
+  	xx = quat.X() * x2;
+  	xy = quat.X() * y2;
+  	xz = quat.X() * z2;
+  	yy = quat.Y() * y2;
+  	yz = quat.Y() * z2;
+  	zz = quat.Z() * z2;
+  	wx = quat.W() * x2;
+  	wy = quat.W() * y2;
+  	wz = quat.W() * z2;
   	m_afElement[0] = 1.0f - (yy + zz);
   	m_afElement[1] = xy - wz;
   	m_afElement[2] = xz + wy;

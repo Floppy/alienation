@@ -154,9 +154,8 @@ public:
 	{
 		float fRadian = 0.0174532925f;
 
-		CQuat quaTemp;
-		quaTemp.eulerToQuat(m_fDelta_x * fRadian, m_fDelta_y * fRadian, m_fDelta_z * fRadian);
-		m_quaOrientation.multQuat(quaTemp);
+		CQuat quaTemp(m_fDelta_x * fRadian, m_fDelta_y * fRadian, m_fDelta_z * fRadian);
+		m_quaOrientation *= quaTemp;
 	}
 };
 
