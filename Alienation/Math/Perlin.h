@@ -5,6 +5,9 @@
 #include "Math/Random.h"
 #include "Math/Vector.h"
 
+#include <iostream>
+using namespace std;
+
 namespace NSDMath {
 
    /**
@@ -56,40 +59,29 @@ namespace NSDMath {
       void permuteP(void);
 
       /**
-       * Permutation function.
-       * Generate an index into m_aiPermutation for any integer.
+       * Calculate the lattice gradient for a 3d point inside the cell.
        */
-      int permutation(int iX)
-         { return iX & 0xFF; }
-
-      /**
-       * Get the gradient for a 3d lattice point.
-       */
-      const CVector3* gradient(int iX, int iY, int iZ)
-         { return m_avGradients + (permutation(iX + permutation(iY + permutation(iZ))) & 0xF); }
-
-      /**
-       * Get the sum of the weighted gradient for a 3d lattice point.
-       */
-      float wgradient(int iX, int iY, int iZ, CVector3 weight)
-         { 
-            const CVector3* pGradient = gradient(iX,iY,iZ);
-            return pGradient->X()*weight.X() + pGradient->Y()*weight.Y() + pGradient->Z()*weight.Z(); 
-         }
+      float gradient(int hash, float fX, float fY, float fZ)
+      { 
+         int h = hash & 0xF;
+         double u = h<8||h==12||h==13 ? fX : fY;
+         double v = h<4||h==12||h==13 ? fY : fZ;
+         return ((h&1) == 0 ? u : -u) + ((h&2) == 0 ? v : -v);
+      }
 
       /**
        * Spline function.
        * s(t) = 6t^5 - 15t^4 + 10t^3
        */
       float spline(float fT)
-         { return fT*fT*fT * ( (6*fT*fT) - (15*fT) + 10 ); }
+      { return fT * fT * fT * ( fT * (fT * 6 - 15) + 10 ); }
 
       /**
        * Linear interpolation function.
-       * l(a,m,n) = a*m + (1-a)*n
+       * l(t,a,b) = (1-t)*a + t*b
        */
-      float lerp(float fA, float fM, float fN)
-         { return fM + (fA * (fN - fM)); }
+      float lerp(float fT, float fA, float fB)
+      { return fA + fT * (fB - fA); }
 
       /**
        * Random number generator.
@@ -99,13 +91,8 @@ namespace NSDMath {
       /**
        * Permutation array.
        */
-      unsigned char m_aiPermutation[0x100];
+      unsigned char m_aiPermutation[0x200];
    
-      /**
-       * Gradient array.
-       */
-      const static CVector3 m_avGradients[0x10];
-
    };
 
 }
