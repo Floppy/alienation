@@ -9,7 +9,7 @@ engine = {
 	trail		= {
 		type	= "particle",
 		texture	= "star.png",
-		colour  = {r=1, g=1, b=0.25, a=0.75},
+		colour  = {r=1, g=0.25, b=0.25, a=0.25},
 		maxsize	= 1,
 		number	= 250,
 	},	
