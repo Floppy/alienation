@@ -6,25 +6,26 @@
 
 #include "GL/GLFont.h"
 #include "3D/TextureManager.h"
-#include "3D/Material.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CGLFont::CGLFont() :
-   m_uiTexture(0)
+CGLFont::CGLFont()
 {
 }
 
 CGLFont::~CGLFont()
 {
-   g_oTextureManager.removeReference(m_uiTexture);
 }
 
 void CGLFont::load()
 {
-   m_uiTexture = g_oTextureManager.load("text.png");
+   m_oMaterial.m_oEmissive = CRGBAColour(0.4f,1.0f,0.3f,0.75f);
+   m_oMaterial.m_oAmbient = CRGBAColour(0.4f,1.0f,0.3f,0.75f);
+   m_oMaterial.m_oDiffuse = CRGBAColour(0.4f,1.0f,0.3f,0.75f);
+   m_oMaterial.m_uiTexture = g_oTextureManager.load("text.png");
+   m_oMaterial.init();
 }
 
 //pos is obviously the position in world co-ordinates, size is in same co-ords
@@ -41,14 +42,9 @@ void CGLFont::print(char *str, CVector3 vecPos, float fSize)
 	iLen = strlen(str);
 	glPushMatrix();
 	glLoadIdentity();
-
-	//manually sets the material properties. Hard coded, shouldnt be really
-        CMaterial oMaterial;
-        oMaterial.m_oEmissive = CRGBAColour(0.4f,1.0f,0.3f,0.75f);
-        oMaterial.m_oAmbient = CRGBAColour(0.4f,1.0f,0.3f,0.75f);
-        oMaterial.m_oDiffuse = CRGBAColour(0.4f,1.0f,0.3f,0.75f);
-        oMaterial.m_uiTexture = m_uiTexture;
-        oMaterial.render();
+        
+        // Set material
+        m_oMaterial.render();
 
 	//then draw the particles
 	glBegin(GL_QUADS);
@@ -125,13 +121,8 @@ void CGLFont::print(char *str, CVector2 vecPos, float fSize)
 	vecTempPos = vecPos;
 	iLen = strlen(str);
 
-	//manually sets the material properties. Hard coded, shouldnt be really
-        CMaterial oMaterial;
-        oMaterial.m_oEmissive = CRGBAColour(0.4f,1.0f,0.3f,0.75f);
-        oMaterial.m_oAmbient = CRGBAColour(0.4f,1.0f,0.3f,0.75f);
-        oMaterial.m_oDiffuse = CRGBAColour(0.4f,1.0f,0.3f,0.75f);
-        oMaterial.m_uiTexture = m_uiTexture;
-        oMaterial.render();
+        // Set material
+        m_oMaterial.render();
 
 	//then draw the particles
 	glBegin(GL_QUADS);

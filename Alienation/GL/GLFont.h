@@ -14,6 +14,7 @@
 #include "3D/Texture.h"
 #include "Math/Vector.h"
 #include "Math/Matrix.h"
+#include "3D/Material.h"
 
 using namespace NSDMath;
 
@@ -27,7 +28,7 @@ public:
 	void load();
 	CGLFont();
 	virtual ~CGLFont();
-        unsigned int m_uiTexture;
+        CMaterial m_oMaterial;
 };
 
 #endif // !defined(AFX_GLFONT_H__1F582CF0_7FA7_4B78_9D84_724C2654D02F__INCLUDED_)
