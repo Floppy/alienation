@@ -18,7 +18,7 @@ void randomSeed(unsigned long seed) {
    g_oTwister.seed(seed);
 }
 
-/**
+/*
  * Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
  * All rights reserved.                          
  *
