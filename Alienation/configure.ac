@@ -46,6 +46,12 @@ AC_CHECK_HEADER(SDL_mixer.h,,exit)
 AC_CHECK_LIB(SDL_mixer,Mix_OpenAudio,,exit)
 
 # Lua
+AC_ARG_WITH(lua,"--with-lua=<dir> - Path to Lua files",
+[	if test $withval != "yes"; then
+		LDFLAGS="$LDFLAGS -L$withval/lib"
+		CPPFLAGS="$CPPFLAGS -I$withval/include"
+	fi
+])
 AC_CHECK_HEADER(lua.h,,exit)
 AC_CHECK_HEADER(lualib.h,,exit)
 AC_CHECK_HEADER(lauxlib.h,,exit)
