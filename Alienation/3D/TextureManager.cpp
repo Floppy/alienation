@@ -92,7 +92,7 @@ void CTextureManager::removeReference(unsigned int uiTexture)
 
 void CTextureManager::render(unsigned int uiTexture)
 {
-   CTexture* pTexture(m_hTextures[uiTexture]);
+   CTexture* pTexture = m_hTextures[uiTexture];
    if (pTexture) pTexture->render();
 }
 

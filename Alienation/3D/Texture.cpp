@@ -36,7 +36,7 @@ bool CTexture::load(const char* strFilename)
    char strFile[200];
    
    // We will load into an SDL surface
-   SDL_Surface * pNewTex(NULL);
+   SDL_Surface * pNewTex = NULL;
    
    if (strlen(strFilename) == 0)
       return false;
