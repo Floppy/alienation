@@ -45,10 +45,6 @@ void CWeapon::resetParticle(int i)
 {
 	m_poParticles[i].m_vecPosition = CVector3(0.0f, 0.0f, 0.0f);
 	
-	m_poParticles[i].m_fr = 0.0f;
-	m_poParticles[i].m_fg = 0.0f;
-	m_poParticles[i].m_fb = 0.0f;
-
 	m_poParticles[i].m_vecOldPosition = CVector3(0.0f, 0.0f, 0.0f);
 	//Sets the m_poParticles heading (see the update method)
 	m_poParticles[i].m_vecAcceleration = CVector3(0.0f, 0.0f, 0.0f);
@@ -149,10 +145,6 @@ void CWeapon::createParticle(int i, CVector3 vecHead, CVector3 vecPos, float fSp
 	//Calculate the starting position, based on the start variable
 	//Very basic, needs updating really, does for now th0
 	
-	m_poParticles[i].m_fr = 1.0f;
-	m_poParticles[i].m_fg = 0.2f;
-	m_poParticles[i].m_fb = 0.4f;
-
 	m_poParticles[i].m_vecOldPosition = m_poParticles[i].m_vecPosition;
 	//Sets the particles heading (see the update method)
 	m_poParticles[i].m_vecAcceleration = vecHead;

@@ -204,10 +204,6 @@ void CTrail::createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vec
 	vecTemp.Y() = m_poParticles[i].m_vecPosition.Y() - vecOrigin.Y();
 	vecTemp.Z() = 0.0f;
 
-	m_poParticles[i].m_fr = 1.0f - vecTemp.length();
-	m_poParticles[i].m_fg = m_poParticles[i].m_fr;
-	m_poParticles[i].m_fb = m_poParticles[i].m_fr / 4;
-
 	m_poParticles[i].m_vecOldPosition = m_poParticles[i].m_vecPosition;
 	//Sets the m_poParticles heading (see the update method)
 	m_poParticles[i].m_vecAcceleration = vecHead - m_poParticles[i].m_vecPosition;

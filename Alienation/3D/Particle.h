@@ -78,8 +78,6 @@ class CParticle
     */
    float m_fSpeed;
 
-   float m_fr, m_fg, m_fb, m_fa;
-
  protected:
 
    /**

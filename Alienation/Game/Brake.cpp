@@ -104,10 +104,6 @@ void CBrake::createParticle(int i, CVector3 vecHead, CVector3 vecOrigin)
 
 		m_poParticles[i].m_vecPosition = vecOrigin;
 	
-		m_poParticles[i].m_fr = 0.6f;
-		m_poParticles[i].m_fg = 0.6f;
-		m_poParticles[i].m_fb = 0.6f;
-
 		m_poParticles[i].m_vecOldPosition = m_poParticles[i].m_vecPosition;
 		//Sets the particles heading (see the update method)
 		m_poParticles[i].m_vecAcceleration = vecHead + vecOrigin;
