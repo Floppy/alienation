@@ -32,14 +32,6 @@ CPlayerShip::CPlayerShip(float mass) :
    m_iThrustChannel = g_oSoundManager.play(iSample,-1);
    g_oSoundManager.setVolume(0,m_iThrustChannel);
    
-   // Setup trails
-   m_iNumTrails = 2;
-   m_avecOrigTrailPoints[0] = CVector3(1.6f, -0.25f, 3.75f);
-   m_avecOrigTrailPoints[1] = CVector3(-1.6f, -0.25f, 3.75f);
-   m_poTrails = new CTrail[m_iNumTrails];
-   for (int i=0; i<m_iNumTrails; i++)
-	  m_poTrails[i].setup(250, m_avecTrailPoints[i]);
-
 }
 
 CPlayerShip::~CPlayerShip()

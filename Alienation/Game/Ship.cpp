@@ -25,6 +25,8 @@ CShip::CShip(float mass) :
    m_fMaxYawRate(0.0f),
    m_fMaxRollRate(0.0f),
    m_fThrust(0.0f),
+   m_avecTrailPoints(NULL),
+   m_avecOrigTrailPoints(NULL),
    m_poTrails(NULL),
    m_poWeapon(NULL),
    m_poBrake(NULL),
@@ -61,8 +63,6 @@ void CShip::load(const char* strShipModel, const char* strCockpitModel)
       m_oCockpitModel.init();
    }
 
-   for (int i=0; i<m_iNumTrails; i++)
-      m_poTrails[i].init();
    m_poBrake->init();
 }
 
@@ -203,4 +203,19 @@ bool CShip::loadWeapon(const char* strWeapon) {
       return true;
    }
    return false;
+}
+
+void CShip::setTrails(unsigned int iNumTrails, const CVector3* pTrails) 
+{
+   // Allocate memory
+   m_poTrails = new CTrail[iNumTrails];
+   m_avecTrailPoints = new CVector3[iNumTrails];
+   m_avecOrigTrailPoints = new CVector3[iNumTrails];
+   // Copy data and setup
+   m_iNumTrails = iNumTrails;
+   for (int i=0; i<m_iNumTrails; i++) {
+      m_avecTrailPoints[i] = m_avecOrigTrailPoints[i] = pTrails[i];
+      m_poTrails[i].setup(500, m_avecTrailPoints[i]);
+      m_poTrails[i].init();
+   }
 }

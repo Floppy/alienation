@@ -41,6 +41,7 @@ class CShip : public CGameObject
    
    virtual bool loadWeapon(const char* strWeapon);
 
+   void setTrails(unsigned int iNumTrails, const CVector3* pTrails);
 
 	CVector3		m_vecLastForce, m_vecBrakePoint;
 	bool			m_bStraffUp, m_bStraffDown, m_bStraffRight, m_bStraffLeft;
@@ -50,8 +51,8 @@ class CShip : public CGameObject
 	float			m_fMaxPitchRate, m_fMaxYawRate, m_fMaxRollRate;
 	float			m_fThrust;
 	CMatrix		m_matCamRotation;
-	CVector3		m_avecTrailPoints[4];
-	CVector3		m_avecOrigTrailPoints[4];
+	CVector3*		m_avecTrailPoints;
+	CVector3*		m_avecOrigTrailPoints;
 	CVector3		m_avecWeaponPoints[4];
         int              m_iNumTrails;
 	CTrail		*m_poTrails;

@@ -13,13 +13,6 @@ CAIShip::CAIShip(float mass) :
    m_fXAngle(0.0f),
    m_fYAngle(0.0f)
 {
-   // Setup trails
-   m_iNumTrails = 1;
-   m_avecOrigTrailPoints[0] = CVector3(0.0f, 0.0f, 5.0f);
-   m_poTrails = new CTrail[m_iNumTrails];
-   for (int i=0; i<m_iNumTrails; i++)
-	  m_poTrails[0].setup(500, m_avecTrailPoints[i]);
-
 }
 
 CAIShip::~CAIShip()
