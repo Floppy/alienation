@@ -10,6 +10,8 @@
 #endif // _MSC_VER > 1000
 #include "Math/Vector.h"
 
+using namespace NSDMath;
+
 class CBoundingSphere  
 {
 public:

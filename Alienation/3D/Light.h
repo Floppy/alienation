@@ -10,6 +10,8 @@
 #include "Math/Vector.h"
 #include <GL/gl.h>
 
+using namespace NSDMath;
+
 /**
  * A light in a 3D scene.
  */

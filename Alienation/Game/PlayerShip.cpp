@@ -6,6 +6,8 @@
 #include "IO/3ds.h"
 #include "Sound/SoundManager.h"
 
+using namespace NSDSound;
+
 #include <GL/gl.h>
 
 //////////////////////////////////////////////////////////////////////

@@ -15,6 +15,7 @@
 #include "Math/Vector.h"
 #include "Math/Matrix.h"
 
+using namespace NSDMath;
 
 //The infamous font class. Saw many that did a similar trick, but where far more complex. So wrote this one :)
 //I think this one will be expanded fairly simply

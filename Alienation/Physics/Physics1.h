@@ -15,6 +15,7 @@
 #include "Math/Quat.h"
 #include "Math/Vector.h"
 
+using namespace NSDMath;
 
 
 // class Mass			---> An object to represent a mass

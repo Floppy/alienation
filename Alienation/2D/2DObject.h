@@ -12,6 +12,8 @@
 #include <GL/gl.h>
 #include "Math/Vector.h"
 
+using namespace NSDMath;
+
 class C2DObject  
 {
 public:

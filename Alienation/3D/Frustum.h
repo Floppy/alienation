@@ -10,6 +10,8 @@
 #endif // _MSC_VER > 1000
 #include "3D/BoundingSphere.h"
 	
+using namespace NSDMath;
+
 enum FrustumSide
 {
 	RIGHT	= 0,		// The RIGHT side of the frustum

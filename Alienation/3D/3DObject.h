@@ -4,6 +4,8 @@
 #include "config.h"
 #include "Math/Vector.h"
 
+using namespace NSDMath;
+
 /**
  * Base class for 3D objects. 
  * This class is intended to be a base for all renderable objects. Anything that can

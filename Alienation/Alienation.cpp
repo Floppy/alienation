@@ -1,21 +1,3 @@
-/********************************************************************
- * FILENAME.: Program.cpp
- * NICKNAME.: Doubt
- * NAME.....: Daniel Vivas
- * E-MAIL...: daniel@vivas.com.br
- * DATE.....: 03/08/2002
- * HOME-PAGE: http://www.danielvivas.cjb.net
- * GROUP....: Jogos Brasil
- ********************************************************************/
-
-/*
- *      This Code Was Created By Jeff Molofee 2000
- *      A HUGE Thanks To Fredric Echols and Daniel Vivas For Cleaning Up
- *      And Optimizing This Code, Making It More Flexible!
- *      If You've Found This Code Useful, Please Let Me Know.
- *      Visit My Site At nehe.gamedev.net
- */
-
 #include "GL/OpenGL.h"
 #include "Sound/SoundManager.h"
 #include "IO/Input.h"
@@ -23,9 +5,15 @@
 
 #include <iostream>
 using namespace std;
+using namespace NSDMath;
+using namespace NSDSound;
 
+/**
+ * Program entry point.
+ */
 int main(int argc, char* argv[])
 {
+   
    bool     bDone = false;  // Bool Variable To Exit Loop
    int      iVirtual_code;
 	unsigned long int		dTickCount;	
