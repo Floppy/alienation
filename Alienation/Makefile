@@ -7,7 +7,7 @@ MAKE = make
 EXE = Alienation
 DEPEND = .depend
 
-CPPFLAGS = -Wall
+CPPFLAGS = -g -Wall
 
 INC = -I/usr/include/SDL/
 
@@ -38,7 +38,7 @@ $(DEPEND):
 include $(DEPEND)
 
 clean:
-	rm -f $(OBJS) $(DEPEND)
+	rm -f $(OBJS) $(DEPEND) *~
 
 distclean: clean
 	rm -f $(EXE)
