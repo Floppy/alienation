@@ -147,11 +147,11 @@ void CTexture::preRenderToTexture() {
 
 }
 
-void CTexture::postRenderToTexture() {
+void CTexture::postRenderToTexture(GLenum mode) {
    // Bind texture
    glBindTexture(GL_TEXTURE_2D,m_uiTextureID);
    // Copy image from back buffer
-   glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, m_pTexture->w, m_pTexture->h, 0);
+   glCopyTexImage2D(GL_TEXTURE_2D, 0, mode, 0, 0, m_pTexture->w, m_pTexture->h, 0);
    // Restore viewport
    glViewport(m_aiViewport[0],m_aiViewport[1],m_aiViewport[2],m_aiViewport[3]);
 }

@@ -4,6 +4,7 @@
 #include "config.h"
 #include "3D/Material.h"
 #include <SDL.h>
+#include <SDL_opengl.h>
 
 #if _MSC_VER > 1000
 #pragma once
@@ -61,7 +62,7 @@ class CTexture
     * Finish offscreen rendering.
     * This function restores the GL viewport, and copies the contents of the back buffer into the texture.
     */
-   void postRenderToTexture();
+   void postRenderToTexture(GLenum mode);
 
    /**
     * Get OpenGL texture ID.
