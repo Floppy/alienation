@@ -65,9 +65,6 @@ void CGLFont::print(char *str, NSDMath::CVector2 vecPos, float fSize, NSDMath::C
    m_oMaterial.m_oAmbient =  CRGBAColour(0,0,0,0.5f);
    m_oMaterial.render();
 
-   glEnable(GL_BLEND);
-   glDepthMask(GL_FALSE);
-
    glMatrixMode(GL_MODELVIEW);
    glPushMatrix();
    glLoadIdentity();
@@ -123,8 +120,6 @@ void CGLFont::print(char *str, NSDMath::CVector2 vecPos, float fSize, NSDMath::C
    glPopMatrix();
    glMatrixMode(GL_MODELVIEW);
    glPopMatrix();
-   glDepthMask(GL_TRUE);
-   glDisable(GL_BLEND);
 }
 
 void CGLFont::setID(int iID)
