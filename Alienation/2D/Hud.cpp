@@ -14,10 +14,12 @@ using namespace std;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CHud::CHud() :
+CHud::CHud(CShip* pPlayerShip) :
+   m_pPlayerShip(pPlayerShip),
+   m_pTarget(NULL),
    m_iLastTime(SDL_GetTicks())
 {
-   for (int i=0; i<7; i++) {
+   for (int i=0; i<8; i++) {
       m_auiTextures[i] = 0;
    }
    init();
@@ -25,7 +27,7 @@ CHud::CHud() :
 
 CHud::~CHud()
 {
-   for (int i=0; i<7; i++) {
+   for (int i=0; i<8; i++) {
       g_oTextureManager.removeReference(m_auiTextures[i]);
    }
 }
@@ -54,9 +56,11 @@ CHud::~CHud()
 //                                         now using new class   
 //     1.1           14/06/2003   GI       Now drawn using 2d object class.  
 //**************************************************************************************
-void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
+void CHud::render()
 {   
 
+   float fMaxSpeed(300.0f);
+   float fMaxThrust(9578.0f);
 
 	char strFont[20];
 	float fWidthSpeed, fWidthThrust;
@@ -72,22 +76,22 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 												//like this (Shields armor etc)             //
 												//////////////////////////////////////////////
 
-	if (fSpeed == 0.0f)
+	if (m_pPlayerShip->m_poShips[0].m_fVel == 0.0f)
 	{
 		fWidthSpeed = 0.001f;
 	}
 	else
 	{
-		fWidthSpeed = (fSpeed / fMaxSpeed) + 0.001f;
+		fWidthSpeed = (m_pPlayerShip->m_poShips[0].m_fVel / fMaxSpeed) + 0.001f;
 	}
 
-	if (fThrust == 0.0f)
+	if (m_pPlayerShip->m_poShips[0].m_fThrust == 0.0f)
 	{
 		fWidthThrust = 0.001f;
 	}
 	else
 	{
-		fWidthThrust = (fThrust / fMaxThrust) + 0.001f;
+		fWidthThrust = (m_pPlayerShip->m_poShips[0].m_fThrust / fMaxThrust) + 0.001f;
 	}
 												//////////////////////////////////////////////
 												//NEW!!! Now using goOrtho to display the   //
@@ -188,10 +192,10 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 //	draw2DQuad(415.0f, 550.0f, 200.0f * fWidthThrust, 200.0f, avecTex);
 	m_po2DObject->renderQuad(415.0f, 550.0f, 200.0f * fWidthThrust, 200.0f, avecTex);
 
-	sprintf(strFont,"Velocity: %.1f", fSpeed);
+	sprintf(strFont,"Velocity: %.1f", m_pPlayerShip->m_poShips[0].m_fVel);
 	m_poFont->print(strFont, CVector2(420.0f, 210.0f), 5.0f);
 
-	sprintf(strFont,"Thrust: %.1f", fThrust);
+	sprintf(strFont,"Thrust: %.1f", m_pPlayerShip->m_poShips[0].m_fThrust);
 	m_poFont->print(strFont, CVector2(420.0f, 560.0f), 5.0f);
 
         // Calc FPS
@@ -200,9 +204,27 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
         if (iTime != m_iLastTime) {
            iFPS = 1000/(iTime - m_iLastTime);
         }
-	sprintf(strFont,"%3d FPS", iFPS);
+	sprintf(strFont,"%3ld FPS", iFPS);
 	m_poFont->print(strFont, CVector2(900.0f, 20.0f), 5.0f);
         m_iLastTime = iTime;
+
+        // Target data
+        if (m_pTarget) {
+           CVector3 vecTarget = m_pTarget->m_ppMasses[0]->m_vecPos - m_pPlayerShip->m_ppMasses[0]->m_vecPos;
+           int iRange = static_cast<int>(vecTarget.length());           
+           // Range
+           sprintf(strFont,"%5d m", iRange);
+           m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f);
+           m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f);
+           // Velocity
+           sprintf(strFont,"%5d m/s", static_cast<int>(m_pTarget->m_poShips[0].m_fVel));
+           m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f);
+           m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f);
+           // Radar image
+           g_oTextureManager.render(m_auiTextures[7]);
+           m_po2DObject->renderQuad(37.0f, 180.0f, 135.0f, 135.0f, avecTex);
+        }
+
 
 	glDisable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
@@ -232,7 +254,8 @@ void CHud::init()
    m_auiTextures[4] = g_oTextureManager.load("Hud/hud_speed.png");
    m_auiTextures[5] = g_oTextureManager.load("Hud/hud_thrust.png");
    m_auiTextures[6] = g_oTextureManager.load("Hud/hud_target.png");
-   for (int i=0; i<7; i++) 
+   m_auiTextures[7] = g_oTextureManager.create(128,128);
+   for (int i=0; i<8; i++) 
    {
       g_oTextureManager.texture(m_auiTextures[i])->init();
    }
@@ -277,238 +300,30 @@ void CHud::drawQuad(CVector3 *Verts, CVector2 *Tex)
 }
 
 
-
-
-
-
-//**************************************************************************************
-// Function name    : CHud::drawHoloTarget
-// Author           : Gary Ingram
-// Return type      : void 
-// Date Created     : 25/05/2003
-// Argument         : CShip *poTarget
-// Argument         : CShip *poThisShip
-// Description      : This routine draws the hologram on the target on the hud. 
-//                    Although this is its main function it is also used to 
-//                    display other target information  
-// History
-//   Version         Date         Who      Description
-//   =======         ====         ===      ===========
-//     1.0           25/05/2003   GI       Initial Version
-//     1.1           26/05/2003   GI       First working version :) As well as 
-//                                         using glOrtho for the 2D stuff, it now 
-//                                         correctly calculates the pitch and yaw 
-//                                         required to view the target correctly. 
-//                                         (Note: To work 100%, needs to render 
-//                                         to texture, so all work is in 2D)  
-//     1.2           23/08/2003   JS       Changed args to get more data.
-//**************************************************************************************
-void CHud::drawTargetData(CShip *poTarget, CShip *poThisShip)
+void CHud::renderOffScreen()
 {
+   // Perform offscreen rendering
+   CTexture* pTexture(g_oTextureManager.texture(m_auiTextures[7]));
+   pTexture->preRenderToTexture();
+   // Clear screen
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	CVector3 vecTarget, vecTemp;
-	CVector3 vecThisRight, vecThisUp, vecThisHead, vecThisLeft;
+   // Reset The Current Modelview Matrix
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();					
 
+   // Move to player ship location
+   glTranslatef(m_pPlayerShip->m_ppMasses[0]->m_vecPos.X(), 
+                m_pPlayerShip->m_ppMasses[0]->m_vecPos.Y(), 
+                m_pPlayerShip->m_ppMasses[0]->m_vecPos.Z());
 
-												//////////////////////////////////////////////
-												//Initialise all the variables. The         //
-												//vecTarget variable is the vector between  //
-												//the player ship and the target. This      //
-												//vector is normalised. All the other       //
-												//vectors (up heading and right) are moved  //
-												//to the origin                             //
-												//////////////////////////////////////////////
+   // Rotate towards target
+   
 
-	vecTarget =  poTarget->m_ppMasses[0]->m_vecPos - poThisShip->m_ppMasses[0]->m_vecPos;
-	vecThisRight = poThisShip->m_poShips[0].m_vecRight    - poThisShip->m_ppMasses[0]->m_vecPos;
-	vecThisUp    = poThisShip->m_poShips[0].m_vecUp       - poThisShip->m_ppMasses[0]->m_vecPos;	
-	vecThisHead  = poThisShip->m_poShips[0].m_vecHeading  - poThisShip->m_ppMasses[0]->m_vecPos;	
-	vecThisLeft = vecThisRight * -1.0f;
-
-	vecThisRight = CVector3(1.0f, 0.0f, 0.0f);
-	vecThisHead = CVector3(0.0f, 0.0f, -1.0f);
-	vecThisUp = CVector3(0.0f, 1.0f, 0.0f);
-
-        int iRange = static_cast<int>(vecTarget.length());
-
-	vecTarget.normalise();
-
-												//////////////////////////////////////////////
-												//Store the vecTarget as we will need it    //
-												//for calculating the yaw angle	           //
-												//////////////////////////////////////////////
-
-	vecTemp = vecTarget;
-
-												//////////////////////////////////////////////
-												// project the target vector onto the ships //
-												// zy plane (for pitch)                     //
-												//////////////////////////////////////////////
-
-	vecTarget = vecTarget - (vecThisRight * vecThisRight.dot(vecTarget));
-
-												//////////////////////////////////////////////
-												// Unitise the new target vector so that the//
-												// dot product with the heading will produce//
-												// the correct angle (heading is also unit  //
-												// length)                                  //
-												//////////////////////////////////////////////
-
-	vecTarget.normalise();
-
-												//////////////////////////////////////////////
-												// calculate the pitch angle from the ships //
-												// heading in radians                       //
-												//////////////////////////////////////////////
-
-	float fAPitch = vecThisHead.dot(vecTarget);
-
-												//////////////////////////////////////////////
-												// Calculate the final pitch in degrees     //
-												//////////////////////////////////////////////
-
-	float fPitch = RAD_TO_DEG(acos(fAPitch));
-
-												//////////////////////////////////////////////
-												// Next, check the new target vector against//
-												// the ships up vector to check for negative//
-												// or positive. This will decide if it is a //
-												// positive or negative pitch.              //
-												//////////////////////////////////////////////
-
-	float fPAngle = vecThisUp.dot(vecTarget);
-	if (fPAngle <= 0.0f)
-	{
-		fPitch = -fPitch;
-	}
-
-												//////////////////////////////////////////////
-												//Now we have the pitch we need to rotate   //
-												//the target (Held in vecTemp) around the   //
-												//pitch and then calculate the yaw. So      //
-												//first we create a pitch matrix and        //
-												//rotate the target.                        //
-												//////////////////////////////////////////////
-
-
-	CQuat quaPitch(0.0f, 0.0f, DEG_TO_RAD(fPitch));
-	CMatrix matP(quaPitch);
-	vecTemp = matP * vecTemp;
-
-												//////////////////////////////////////////////
-												//Now we have our new rotated target        //
-												//vector. To find the angle we do the same  //
-												//as above, this time comparing against     //
-												//the up vector.                            //
-												//////////////////////////////////////////////
-
-	vecTarget = vecTemp;
-	vecTarget = vecTarget - (vecThisUp * vecThisUp.dot(vecTarget));
-
-	vecTarget.normalise();
-
-	float fAYaw = vecThisHead.dot(vecTarget);
-
-	float fYaw = RAD_TO_DEG(acos(fAYaw));
-
-	float fYAngle = vecThisRight.dot(vecTarget);
-	if (fYAngle <= 0.0f)
-	{
-		fYaw = -fYaw;
-	}
-
-												//////////////////////////////////////////////
-												//Now calculate the yaw matrix (as above)   //
-												//and multiply this with the pitch matrix   //
-												//for the final matrix. As this is a view   //
-												//matrix it needs to be inverted to         //
-												//operate correctly                         //
-												//////////////////////////////////////////////
-
-	CQuat quaYaw(DEG_TO_RAD(fYaw), 0.0f, 0.0f);
-	CMatrix matY(quaYaw);
-	CMatrix matM(matP * matY);
-
-	matM.invert();
-
-												//////////////////////////////////////////////
-												//Now to draw the actual holo ship.         //
-												//Actually, this part of the routine also   //
-												//draws some text to disply data from the   //
-												//target ship such as speed and distance    //
-												//etc.                                      //
-												//////////////////////////////////////////////
-
-												//////////////////////////////////////////////
-												//Will also display more graphics soon      //
-												//////////////////////////////////////////////
-
-												//////////////////////////////////////////////
-												//Change 26/05/2003. The drawing of any 2D  //
-												//stuff (hud quads, text etc) is now done   //
-												//using glOrtho. Only the actual Target     //
-												//hologramis displayed using a              //
-												//non-orthoganal view                       //
-												//////////////////////////////////////////////
-
-	glEnable(GL_BLEND);
-	glDisable(GL_DEPTH_TEST);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glPushMatrix();
-	glLoadIdentity();
-
-	CVector3 vecHoloPos = vecTemp * 30.0f;
-
-	glMultMatrixf(matM.glElements());
-
-	glTranslatef(vecHoloPos.X(), vecHoloPos.Y(), vecHoloPos.Z());
-	glMultMatrixf(poTarget->m_poShips[0].m_matRotation.glElements());
-
-	CMatrix matGet(GL_MODELVIEW_MATRIX);
-
-	matGet.element(12) = -0.87f;
-	matGet.element(13) = 0.59f;
-	matGet.element(14) = -2.0f;
-
-	glLoadMatrixf(matGet.glElements());
-
-	glScalef(0.02f, 0.02f, 0.02f);
-
-	poTarget->m_poShips[0].m_oModel.render();
-
-	glLoadIdentity();
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glOrtho(0.0f, 1024.0f, 768.0f, 0.0f, -1.0f, 1.0f);
-	CVector2 avecTex[4];
-
-	avecTex[0] = CVector2(0.0f, 1.0f); 
-	avecTex[1] = CVector2(1.0f, 1.0f); 
-	avecTex[0] = CVector2(1.0f, 0.0f); 
-	avecTex[0] = CVector2(0.0f, 0.0f); 
-//	m_poTexture->setActive(6);
-//	draw2DQuad(100.0f, 100.0f, 100.0f, 100.0f, avecTex);
-
-	char strFont[20];
-
-	sprintf(strFont,"%5d m", iRange);
-	m_poFont->print("Range:", CVector2(50.0f, 220.0f), 5.0f);
-	m_poFont->print(strFont, CVector2(50.0f, 240.0f), 5.0f);
-
-	sprintf(strFont,"%5d m/s", static_cast<int>(poTarget->m_poShips[0].m_fVel));
-	m_poFont->print("Velocity:", CVector2(50.0f, 260.0f), 5.0f);
-	m_poFont->print(strFont, CVector2(50.0f, 280.0f), 5.0f);
-
-	glPopMatrix();
-
-	glMatrixMode(GL_MODELVIEW);	
-
-	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
-	glPopMatrix(); 
-
+   // Draw
+   m_pTarget->draw();
+   // Finish up
+   pTexture->postRenderToTexture();
 }
 
 

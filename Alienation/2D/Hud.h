@@ -22,8 +22,9 @@ public:
 
    /**
     * Constructor.
+    * @param poThisShip The player's ship
     */
-   CHud();
+   CHud(CShip *pPlayerShip);
 
    /**
     * Destructor.
@@ -32,7 +33,7 @@ public:
         
    /**
     * Initialises the hud. 
-    * Loads all the textures (quite a few)  
+    * Loads and initialises all the textures (quite a few).
     */
    void init();
    
@@ -40,24 +41,27 @@ public:
     * Draw to screen.
     * Draws the ship hud including all the information relevent to 
     * the player ship. Will be enlarged over time to include 
-    * more ship information. Note: information regarding the 
-    * ships target will be drawn in the DrawHoloTarget routine.
+    * more ship information.
     * @param fSpeed Current speed value
     * @param fMaxSpeed Maximum speed value
     * @param fThrust Current thrust value
     * @param fMaxThrust Maximum thrust value
     */
-   void draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust);
+   void render();//float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust);
    
    /**
-    * Draw a "hologram" of the current target into the radar display.
-    * This routine draws the hologram on the target on the hud. 
-    * Although this is its main function it is also used to 
-    * display other target information  
-    * @param poTarget The current target
-    * @param poThisShip The player's ship
+    * Perform offscreen rendering.
+    * This must be called before any other rendering is done, as it will 
+    * destroy any existing information in the framebuffer.
     */
-   void drawTargetData(CShip *poTarget, CShip *poThisShip);
+   void renderOffScreen();
+   
+   /**
+    * Set the current target object.
+    * @param poTarget The current target
+    */
+   void setTarget(CShip *poTarget)
+   { m_pTarget = poTarget; }
 
  protected:
 
@@ -83,6 +87,16 @@ public:
    void draw2DQuad(float fPosX, float fPosY, float fWidth, float fHeight, CVector2 *Tex);
 
    /**
+    * The player's ship.
+    */
+   CShip* m_pPlayerShip;
+
+   /**
+    * The current target.
+    */
+   CShip* m_pTarget;
+
+   /**
     * Font for drawing
     */
    CGLFont  *m_poFont;
@@ -100,7 +114,7 @@ public:
    /**
     * Texture IDs
     */
-   unsigned int m_auiTextures[7];
+   unsigned int m_auiTextures[8];
 
    /**
     * Object for 2d drawing
