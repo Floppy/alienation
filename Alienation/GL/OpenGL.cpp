@@ -26,6 +26,8 @@
 using namespace std;
 #endif
 
+extern bool bNoBumps;
+
 // We define the joystick axes here, because they
 // seem to be different in windows and linux
 #define JOYSTICK_AXIS_PITCH       1
@@ -70,6 +72,7 @@ bool COpenGL :: initGL() {
    int texfilter;   
    const char* strPlayerShip = NULL;
    vector<const char*> astrAIShips;
+
    int iNumRoids(0);
    {
      NSDIO::CLua config("config.lua");
@@ -171,6 +174,7 @@ bool COpenGL :: initGL() {
    m_bCamUp = m_bCamDown = m_bCamLeft = m_bCamRight = m_bFire = false;
    m_poGlfont = new CGLFont();
    m_poGlfont->load();
+	g_oFontManager.addFont(m_poGlfont);
    int x;
    for (x = 0 ; x < 300 ; x++)
    {
@@ -277,7 +281,7 @@ bool COpenGL::DrawGLScene(GLvoid) {
    }
    
    m_poShip->drawHud();
-//   m_poLight->disable();
+   m_poLight->disable();
    
    // Everything Went OK
    return true; 
@@ -544,6 +548,17 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 		m_poShip->decreaseRadarRange();
 	}
 
+	if (m_oKeys.m_abKeyDown[SDLK_b])
+	{
+		if (bNoBumps)
+		{
+			bNoBumps = false;
+		}
+		else
+		{
+			bNoBumps = true;
+		}
+	}
 	// dt Is The Time Interval (As Seconds) From The Previous Frame To The Current Frame.
 	// dt Will Be Used To Iterate Simulation Values Such As Velocity And Position Of Masses.
 
@@ -811,7 +826,6 @@ void COpenGL::DrawSplashScreen()
    glEnable(GL_POLYGON_SMOOTH);
    glEnable(GL_TEXTURE_2D);		
    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   glBlendFunc(GL_ONE,GL_ONE);
 
    // Set viewport
    glViewport(0, 0, 1024, 768);
