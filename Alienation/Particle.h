@@ -24,14 +24,14 @@ class CParticle
 public:
 	CVector3 m_vecPosition;
 	CVector3 m_vecOldPosition;
-	CVector3 m_vecVelocity;
+	//CVector3 m_vecVelocity;
 	CVector3 m_vecAcceleration;
 	float m_fr, m_fg, m_fb, m_fa;
 	float m_fAge;
 	float m_fSize;
 	float m_fTimeToLive;
 	float m_fDistance;
-	bool m_bAlive;
+	//bool m_bAlive;
 	float m_fSpeed;
 
 };
