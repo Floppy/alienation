@@ -19,7 +19,7 @@ public:
 	void setPosition(int iXPos, int iYPos);
    C2DObject();
    virtual ~C2DObject();
-   void C2DObject::renderQuad(float fPosX, float fPosY, float fWidth, 
+   void renderQuad(float fPosX, float fPosY, float fWidth, 
 	   float fHeight, CVector2* vecTex);
 
 private:
