@@ -3,6 +3,7 @@
 
 #include "config.h"
 #include "Math/Vector.h"
+#include "3D/BoundingSphere.h"
 
 using namespace NSDMath;
 
@@ -64,6 +65,13 @@ class C3DObject {
    virtual void setTranslation(CVector3 vecTranslation) 
    { m_vecTranslation = vecTranslation; }
    
+   /**
+    * Get size of bounding sphere.
+    * @return Radius of bounding sphere.
+    */
+   float boundingRadius() const
+   { return m_oSphere.m_fRadius; }
+
  protected:
 
    /**
@@ -75,6 +83,11 @@ class C3DObject {
     * Has init() been called? 
     */
    bool m_bInitialised;
+
+   /**
+    * Bounding sphere.
+    */
+   CBoundingSphere m_oSphere;
 
 };
 
