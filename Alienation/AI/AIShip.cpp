@@ -10,22 +10,29 @@
 //////////////////////////////////////////////////////////////////////
 
 CAIShip::CAIShip(int num, float mass) : 
-	CShip(1, 5000.0f),
-	m_fXAngle(0.0f),
-	m_fYAngle(0.0f)
+   CShip(1, 5000.0f),
+   m_fXAngle(0.0f),
+   m_fYAngle(0.0f)
 {
-	m_ppMasses[0]->m_vecPos = CVector3(0.0f, -5.0f, -20.0f);
-	m_poShips[0].m_bStraffUp = m_poShips[0].m_bStraffDown = m_poShips[0].m_bStraffLeft = m_poShips[0].m_bStraffRight = false;
-	m_poShips[0].m_vecHeading = CVector3(0.0f, -5.0f, -21.0f);
-	m_poShips[0].m_vecUp = CVector3(0.0f, -4.0f, -20.0f);
-	m_poShips[0].m_vecRight = CVector3(1.0f, -5.0f, -20.0f);
-	m_poShips[0].m_vecDirection = m_poShips[0].m_vecHeading;
-	m_poShips[0].m_bWeaponFire = false;
-	m_poShips[0].m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
-    m_poShips[0].m_oSphere.m_fRadius = 13.0f;
-
-	m_poShips[0].m_matCamRotation.loadIdentity();
-	m_vecTargetPos = CVector3(0.0f, 0.0f, 0.0f);
+   m_ppMasses[0]->m_vecPos = CVector3(0.0f, -5.0f, -20.0f);
+   m_poShips[0].m_bStraffUp = m_poShips[0].m_bStraffDown = m_poShips[0].m_bStraffLeft = m_poShips[0].m_bStraffRight = false;
+   m_poShips[0].m_vecHeading = CVector3(0.0f, -5.0f, -21.0f);
+   m_poShips[0].m_vecUp = CVector3(0.0f, -4.0f, -20.0f);
+   m_poShips[0].m_vecRight = CVector3(1.0f, -5.0f, -20.0f);
+   m_poShips[0].m_vecDirection = m_poShips[0].m_vecHeading;
+   m_poShips[0].m_bWeaponFire = false;
+   m_poShips[0].m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
+   m_poShips[0].m_oSphere.m_fRadius = 13.0f;
+   
+   m_poShips[0].m_matCamRotation.loadIdentity();
+   m_vecTargetPos = CVector3(0.0f, 0.0f, 0.0f);
+   
+   // Setup trails
+   m_poShips[0].m_iNumTrails = 1;
+   m_poShips[0].m_avecOrigTrailPoints[0] = CVector3(0.0f, 0.0f, 7.0f);
+   m_poShips[0].m_poTrails = new CTrail[m_poShips[0].m_iNumTrails];
+   for (int i=0; i<m_poShips[0].m_iNumTrails; i++)
+	  m_poShips[0].m_poTrails[0].setup(250, m_poShips[0].m_avecTrailPoints[i]);
 }
 
 CAIShip::~CAIShip()

@@ -48,6 +48,7 @@ public:
 	CMatrix		m_matCamRotation;
 	float			m_fVel;
 	CVector3		m_avecTrailPoints[4];
+	CVector3		m_avecOrigTrailPoints[4];
 	CVector3		m_avecWeaponPoints[4];
         int              m_iNumTrails;
 	CTrail		*m_poTrails;

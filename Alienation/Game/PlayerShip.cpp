@@ -23,27 +23,36 @@ CPlayerShip::CPlayerShip() :
    m_oLight(GL_LIGHT1),
    m_iThrustChannel(0)
 {
-	m_ppMasses[0]->m_vecPos = CVector3(0.0f, 0.0f, 0.0f);
-	m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
-	m_poShips[0].m_vecLastForce = CVector3(0.0f, 0.0f, 0.0f);
-	m_poShips[0].m_bStraffUp = m_poShips[0].m_bStraffDown = m_poShips[0].m_bStraffLeft = m_poShips[0].m_bStraffRight = false;
-	m_poShips[0].m_fDrag = 25.0f;
-	m_poShips[0].m_bWeaponFire = false;
+   m_ppMasses[0]->m_vecPos = CVector3(0.0f, 0.0f, 0.0f);
+   m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
+   m_poShips[0].m_vecLastForce = CVector3(0.0f, 0.0f, 0.0f);
+   m_poShips[0].m_bStraffUp = m_poShips[0].m_bStraffDown = m_poShips[0].m_bStraffLeft = m_poShips[0].m_bStraffRight = false;
+   m_poShips[0].m_fDrag = 25.0f;
+   m_poShips[0].m_bWeaponFire = false;
+   
+   m_poHud = new CHud();
+   m_poShips[0].m_matCamRotation.loadIdentity();
+   m_bLeftLook = m_bRightLook = m_bUpLook = m_bBackLook = false;
+   
+   // Setup cockpit light
+   CRGBAColour oAmbient(1.0f, 1.0f, 1.0f, 1.0f);
+   CRGBAColour oDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
+   CVector3 oPosition(0.0f, 0.0f, 0.0f);
+   m_oLight.init(oAmbient, oDiffuse, oPosition);
+   
+   // Load thruster sound
+   int iSample = g_oSoundManager.load("thrust.wav");
+   m_iThrustChannel = g_oSoundManager.play(iSample,-1);
+   g_oSoundManager.setVolume(0,m_iThrustChannel);
+   
+   // Setup trails
+   m_poShips[0].m_iNumTrails = 2;
+   m_poShips[0].m_avecOrigTrailPoints[0] = CVector3(1.6f, 0.6f, 6.4f);
+   m_poShips[0].m_avecOrigTrailPoints[1] = CVector3(-1.6f, 0.6f, 6.4f);
+   m_poShips[0].m_poTrails = new CTrail[m_poShips[0].m_iNumTrails];
+   for (int i=0; i<m_poShips[0].m_iNumTrails; i++)
+	  m_poShips[0].m_poTrails[0].setup(250, m_poShips[0].m_avecTrailPoints[i]);
 
-	m_poHud = new CHud();
-	m_poShips[0].m_matCamRotation.loadIdentity();
-	m_bLeftLook = m_bRightLook = m_bUpLook = m_bBackLook = false;
-
-        // Setup cockpit light
-        CRGBAColour oAmbient(1.0f, 1.0f, 1.0f, 1.0f);
-        CRGBAColour oDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
-        CVector3 oPosition(0.0f, 0.0f, 0.0f);
-	m_oLight.init(oAmbient, oDiffuse, oPosition);
-
-        // Load thruster sound
-        int iSample = g_oSoundManager.load("thrust.wav");
-        m_iThrustChannel = g_oSoundManager.play(iSample,-1);
-        g_oSoundManager.setVolume(0,m_iThrustChannel);
 
 }
 
