@@ -25,15 +25,23 @@
 class CShip : public CGameObject
 {
  public:
-   CShip(int num, float mass);
+   CShip(float mass);
    virtual ~CShip();
-   void load();
+
+   virtual void load(const char* strShipModel, const char* strCockpitModel = NULL);
+
    virtual void drawBlended();
    virtual void solve();
    virtual void simulate(float dt);
    virtual void rotHeading(CMatrix m);
 
+   virtual void setPosition(const CVector3& pos);
+
+   virtual void setPerformance(float fPitchRate, float fYawRate, float fRollRate, float fThrust);
    
+   virtual bool loadWeapon(const char* strWeapon);
+
+
 	CVector3		m_vecLastForce, m_vecBrakePoint;
 	bool			m_bStraffUp, m_bStraffDown, m_bStraffRight, m_bStraffLeft;
 	CVector3		m_vecCamView;
@@ -52,6 +60,7 @@ class CShip : public CGameObject
 	int			m_iFlightMode;
 	bool			m_bWeaponFire;
 	bool			m_bBraking;
+	CModel m_oCockpitModel;
 
 };
 

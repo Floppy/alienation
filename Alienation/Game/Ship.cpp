@@ -3,13 +3,15 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Game/Ship.h"
+#include "Game/WeaponFactory.h"
+#include "IO/3ds.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CShip::CShip(int num, float mass) : 
-   CGameObject(num, mass),
+CShip::CShip(float mass) : 
+   CGameObject(1, mass),
    m_vecLastForce(0.0f,0.0f,0.0f),
    m_vecBrakePoint(0.0f,0.0f,0.0f),
    m_bStraffUp(false),
@@ -19,6 +21,9 @@ CShip::CShip(int num, float mass) :
    m_vecCamView(0.0f,0.0f,0.0f),
    m_fCamPitch(0.0f),
    m_fCamYaw(0.0f),
+   m_fMaxPitchRate(0.0f),
+   m_fMaxYawRate(0.0f),
+   m_fMaxRollRate(0.0f),
    m_fThrust(0.0f),
    m_poTrails(NULL),
    m_poWeapon(NULL),
@@ -27,6 +32,11 @@ CShip::CShip(int num, float mass) :
    m_bWeaponFire(false),
    m_bBraking(false)
 {
+   m_fDrag = 25.0f;   
+
+   setPosition(CVector3(0,0,0));
+   m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
+
    //initialise data
    m_quaCamOrientation.loadIdentity();
    m_matCamRotation.loadIdentity();
@@ -39,12 +49,21 @@ CShip::~CShip()
 }
 
 //load model, trail texture and brake texture
-void CShip::load()
+void CShip::load(const char* strShipModel, const char* strCockpitModel)
 {
+
+   NSDIO::CLoad3DS oLoad3ds;
+   if (oLoad3ds.import3DS(&(m_oModel), strShipModel)) {
+      m_oModel.init();
+   }
+   if (strCockpitModel && oLoad3ds.import3DS(&m_oCockpitModel, strCockpitModel)) {
+      // Prepare
+      m_oCockpitModel.init();
+   }
+
    for (int i=0; i<m_iNumTrails; i++)
       m_poTrails[i].init();
    m_poBrake->init();
-   m_poWeapon->init();
 }
 
 void CShip::drawBlended() {
@@ -159,3 +178,29 @@ void CShip::rotHeading(CMatrix mat)
 }
 
 
+void CShip::setPosition(const CVector3& pos)
+{
+   m_ppMasses[0]->m_vecPos = pos;
+   m_vecHeading = m_ppMasses[0]->m_vecPos + CVector3(0.0f, 0.0f, -1.0f);
+   m_vecUp = m_ppMasses[0]->m_vecPos + CVector3(0.0f, 1.0f, 0.0f);
+   m_vecRight = m_ppMasses[0]->m_vecPos + CVector3(1.0f, 0.0f, 0.0f);
+   m_vecDirection = m_vecHeading;   
+}
+
+void CShip::setPerformance(float fPitchRate, float fYawRate, float fRollRate, float fThrust) {
+   m_fMaxPitchRate = fPitchRate;
+   m_fMaxYawRate = fYawRate;
+   m_fMaxRollRate = fRollRate;
+   m_fThrust = fThrust;
+}
+
+bool CShip::loadWeapon(const char* strWeapon) {
+   // Load weapon
+   CWeapon* pWeapon(CWeaponFactory::load(strWeapon));
+   if (pWeapon) {
+      m_poWeapon = pWeapon;
+      m_poWeapon->init();
+      return true;
+   }
+   return false;
+}

@@ -23,9 +23,8 @@ class CPlayerShip : public CShip
 {
 public:
    	void drawHud();
-	CPlayerShip();
+	CPlayerShip(float mass);
 	virtual ~CPlayerShip();
-	void load();
 	void simulate(float fDT);
 	void drawCamera();
 	virtual void draw(bool bTestFrustum = true);
@@ -39,7 +38,6 @@ public:
         void setTarget(CGameObject *pTarget);
 
 
-	CModel m_oCockpitModel;
 	bool  m_bInsideView;
 	bool  m_bLeftLook, m_bRightLook, m_bUpLook, m_bBackLook;
         CHud *m_poHud;

@@ -3,9 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Game/PlayerShip.h"
-#include "IO/3ds.h"
 #include "Sound/SoundManager.h"
-#include "IO/WeaponFactory.h"
 
 using namespace NSDSound;
 
@@ -16,8 +14,8 @@ using namespace NSDSound;
 //In the real thing all ship data will be loaded from file and this
 //initialisation will be got from there (or possible from the CShip
 //class, This is me a) being lazy, b) being after quick results 
-CPlayerShip::CPlayerShip() : 
-   CShip(1, 5000.0f),
+CPlayerShip::CPlayerShip(float mass) : 
+   CShip(mass),
    m_bInsideView(true),
    m_bLeftLook(false),
    m_bRightLook(false),
@@ -26,15 +24,6 @@ CPlayerShip::CPlayerShip() :
    m_poHud(NULL),
    m_iThrustChannel(0)
 {
-   m_fDrag = 25.0f;
-   m_fMaxPitchRate = 40.0f;
-   m_fMaxYawRate = 25.0f;
-   m_fMaxRollRate = 45.0f;
-   
-
-   m_ppMasses[0]->m_vecPos = CVector3(0.0f, 0.0f, 0.0f);
-   m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
-
    m_poHud = new CHud(this);
    m_matCamRotation.loadIdentity();
       
@@ -51,28 +40,11 @@ CPlayerShip::CPlayerShip() :
    for (int i=0; i<m_iNumTrails; i++)
 	  m_poTrails[i].setup(250, m_avecTrailPoints[i]);
 
-   // Load weapon
-   m_poWeapon = NSDIO::CWeaponFactory::load("ter_ppc2.lua");
-
 }
 
 CPlayerShip::~CPlayerShip()
 {
    delete m_poHud;
-}
-
-void CPlayerShip::load()
-{
-   NSDIO::CLoad3DS oLoad3ds;
-   if (oLoad3ds.import3DS(&(m_oModel), "shuttle.3ds")) {
-      m_oModel.init();
-   }
-   if (oLoad3ds.import3DS(&m_oCockpitModel, "canopy02.3ds")) {
-      // Prepare
-      m_oCockpitModel.init();
-   }
-
-   CShip::load();
 }
 
 //At last!! using inheritance! Only extra thing this does is rotate the camera
