@@ -10,6 +10,18 @@
 
 #include "opengl.h"
 
+#define JOYSTICK_AXIS_PITCH       1
+#define JOYSTICK_AXIS_YAW         0
+#ifdef WIN32
+  #define JOYSTICK_AXIS_ROLL      3
+  #define JOYSTICK_AXIS_THROTTLE  2
+#else
+  #define JOYSTICK_AXIS_ROLL      2
+  #define JOYSTICK_AXIS_THROTTLE  3
+#endif
+
+#define JOYSTICK_DEADZONE 3200
+
 // All Setup For OpenGL Goes Here
 COpenGL :: COpenGL() :
 	FullScreen(true),
@@ -397,7 +409,7 @@ bool COpenGL::jsUser(SDL_Event oEvent)
 			break;
 
 		case SDL_JOYAXISMOTION:  /* Handle Joystick Motion */
-			if( oEvent.jaxis.axis == 2) 
+			if( oEvent.jaxis.axis == JOYSTICK_AXIS_THROTTLE) 
 			{
 				m_fThrust = (float)((oEvent.jaxis.value * -1.0f) + 30000) / 65536; 
 				if (m_fThrust < 0.0f)
@@ -406,19 +418,19 @@ bool COpenGL::jsUser(SDL_Event oEvent)
 				}
 			}
 
-			if ( ( oEvent.jaxis.value < -3200 ) || (oEvent.jaxis.value > 3200 ) ) 
+			if ( ( oEvent.jaxis.value < -JOYSTICK_DEADZONE ) || (oEvent.jaxis.value > JOYSTICK_DEADZONE ) ) 
 			{
-				if( oEvent.jaxis.axis == 0) 
+				if( oEvent.jaxis.axis == JOYSTICK_AXIS_YAW) 
 				{
 					m_fYaw = (float)oEvent.jaxis.value/32768; 
 				}
 					
-				if( oEvent.jaxis.axis == 1) 
+				if( oEvent.jaxis.axis == JOYSTICK_AXIS_PITCH) 
 				{
 					m_fPitch = (float)(oEvent.jaxis.value * -1.0f)/32768; 
 				}
 
-				if( oEvent.jaxis.axis == 3) 
+				if( oEvent.jaxis.axis == JOYSTICK_AXIS_ROLL) 
 				{
 					m_fRoll = (float)oEvent.jaxis.value/32768; 
 				}
@@ -426,17 +438,17 @@ bool COpenGL::jsUser(SDL_Event oEvent)
 			}
 			else
 			{
-				if( oEvent.jaxis.axis == 0) 
+				if( oEvent.jaxis.axis == JOYSTICK_AXIS_YAW) 
 				{
 					m_fYaw = 0.0f; 
 				}
 
-				if( oEvent.jaxis.axis == 1) 
+				if( oEvent.jaxis.axis == JOYSTICK_AXIS_PITCH) 
 				{
 					m_fPitch = 0.0f; 
 				}
 
-				if( oEvent.jaxis.axis == 3) 
+				if( oEvent.jaxis.axis == JOYSTICK_AXIS_ROLL) 
 				{
 					m_fRoll = 0.0f; 
 				}
