@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
    SDL_Event oEvent;
    SDL_Joystick *poJoystick;
    bool bNoJoystick = true;
-
+   
    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO | SDL_INIT_TIMER) == -1)
    {
       cerr << "Failed to initialise SDL: " << SDL_GetError() << endl;
@@ -31,24 +31,33 @@ int main(int argc, char* argv[])
    int iFlags = SDL_OPENGL;// | SDL_FULLSCREEN;
    // Attempt full-on SDL screen setup
    SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
-   SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 5 );
+   SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 6 );
    SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
    SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 5 );
    SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
+#ifdef SDL_GL_STEREO
    SDL_GL_SetAttribute( SDL_GL_STEREO, 1 );   
+#endif
    // Try full settings
    if( SDL_SetVideoMode( 1024, 768, 16, iFlags ) == 0 ) {
       // Try without stereo
       cerr << "Disabling stereo display: " << SDL_GetError() << endl;
+#ifdef SDL_GL_STEREO
       SDL_GL_SetAttribute( SDL_GL_STEREO, 0 );
+#endif
       if( SDL_SetVideoMode( 1024, 768, 16, iFlags ) == 0 ) {
          // Try without double buffer
-         cerr << "Disabling double buffer: " << SDL_GetError() << endl;
-         SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 0 );
+         cerr << "Disabling alpha blending: " << SDL_GetError() << endl;
+         SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 0 );
          if( SDL_SetVideoMode( 1024, 768, 16, iFlags ) == 0 ) {
-            cerr << "Failed to set video mode: " << SDL_GetError() << endl;
-            return 1;
+            // Try without double buffer
+            cerr << "Disabling double buffer: " << SDL_GetError() << endl;
+            SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 0 );
+            if( SDL_SetVideoMode( 1024, 768, 16, iFlags ) == 0 ) {
+               cerr << "Failed to set video mode: " << SDL_GetError() << endl;
+               return 1;
+            }
          }
       }
    }
