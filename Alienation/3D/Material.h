@@ -115,12 +115,17 @@ class CMaterial
    void render() const;
 
    /**
-    * Diffuse Colour.
+    * Colour under ambient lighting.
+    */ 
+   CRGBAColour m_oAmbient;
+
+   /**
+    * Colour under diffuse lighting.
     */ 
    CRGBAColour m_oDiffuse;
 
    /**
-    * Emissive Colour.
+    * Colour that this object emits.
     */ 
    CRGBAColour m_oEmissive;
 

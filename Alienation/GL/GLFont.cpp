@@ -44,7 +44,7 @@ void CGLFont::print(char *str, CVector3 vecPos, float fSize)
 
 	//manually sets the material properties. Hard coded, shouldnt be really
         CMaterial oMaterial;
-        oMaterial.m_oDiffuse = CRGBAColour(0.4f,1.0f,0.3f,0.06f);
+        oMaterial.m_oEmissive = CRGBAColour(0.4f,1.0f,0.3f,0.06f);
         oMaterial.m_uiTexture = m_uiTexture;
         oMaterial.render();
 
@@ -126,7 +126,7 @@ void CGLFont::print(char *str, CVector2 vecPos, float fSize)
 
 	//manually sets the material properties. Hard coded, shouldnt be really
         CMaterial oMaterial;
-        oMaterial.m_oDiffuse = CRGBAColour(0.4f,1.0f,0.3f,0.06f);
+        oMaterial.m_oEmissive = CRGBAColour(0.4f,1.0f,0.3f,0.06f);
         oMaterial.m_uiTexture = m_uiTexture;
         oMaterial.render();
 

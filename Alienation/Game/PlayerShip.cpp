@@ -40,6 +40,13 @@ void CPlayerShip::loadShip()
    CShip::loadShip();
    CLoad3DS oLoad3ds;
    if (oLoad3ds.import3DS(&m_oCockpitModel, "Data/Model/canopy02.3ds")) {
+      // Swap colours
+      for (int i=0; i<m_oCockpitModel.numMeshes(); i++) {
+         CMaterial material = m_oCockpitModel.getMesh(i)->getMaterial();
+         material.m_oAmbient = material.m_oDiffuse;
+         m_oCockpitModel.getMesh(i)->setMaterial(material);
+      }
+      // Prepare
       m_oCockpitModel.init();
    }
 }

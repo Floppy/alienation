@@ -45,11 +45,25 @@ class CModel : public C3DObject {
    void render() const;
    
    /**
+    * Get the number of meshes in the model.
+    * @return The number of meshes in the model.
+    */
+   unsigned int numMeshes() 
+   { return m_oMeshes.size(); }
+
+   /**
     * Add a mesh to this model.
     * This model will take ownership of the mesh and will delete the pointer when it's done with.
     * @param pMesh A pointer to the mesh to add.
     */
    void addMesh(CMesh* pMesh);
+
+   /**
+    * Get a mesh pointer.
+    * @param uiMesh The mesh index to get. Should be less that numMeshes().
+    */
+   CMesh* getMesh(unsigned int uiMesh) 
+   { return m_oMeshes[uiMesh]; }
 
  protected:
 
