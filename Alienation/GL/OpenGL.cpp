@@ -15,6 +15,7 @@
 #include "IO/3ds.h"
 #include "Math/Random.h"
 #include "3D/TextureManager.h"
+#include "Game/Asteroid.h"
 
 // We define the joystick axes here, because they
 // seem to be different in windows and linux
@@ -40,6 +41,18 @@ COpenGL :: COpenGL() :
 	m_fThrust(0.0f)
 {
    
+}
+
+COpenGL::~COpenGL()
+{
+   std::vector<CGameObject*>::iterator it;
+   for (it = m_opObjects.begin(); it != m_opObjects.end(); it++) {
+      delete *it;
+   }   
+   delete m_poLight;
+   delete m_poGlfont;
+   delete m_poStars;
+   delete m_poShip;
 }
 
 bool COpenGL :: initGL() {
@@ -102,42 +115,34 @@ bool COpenGL :: initGL() {
    
    // Create and load ships
    m_poAIShip = new CAIShip(1, 5000.0f);
-   m_poAIShip->loadShip();
+   m_poAIShip->load();
    m_poShip = new CPlayerShip();
-   m_poShip->loadShip();
+   m_poShip->load();
    
-   m_poAIShip->setTarget(*m_poShip);
-   m_poShip->setTarget(*m_poAIShip);
+   m_poAIShip->setTarget(m_poShip);
+   m_poShip->setTarget(m_poAIShip);
+
+   m_opObjects.push_back(m_poAIShip);
 
    // Load roids
-   static const char* roidfiles[] = {
-      "Data/Model/gold1.3ds",
-      "Data/Model/gold2.3ds",
-      "Data/Model/gold1.3ds",
-      "Data/Model/gold2.3ds",
-      "Data/Model/ice1.3ds",
-      "Data/Model/ice1.3ds",
-      "Data/Model/redcrystal1.3ds",
-      "Data/Model/redcrystal1.3ds",
-      "Data/Model/redcrystal2.3ds",
-      "Data/Model/redcrystal3.3ds",
-      "Data/Model/roid1.3ds",
-      "Data/Model/roid1.3ds",
-      "Data/Model/roid1.3ds",
-      "Data/Model/roid1.3ds",
-      "Data/Model/roid1.3ds",
-      "Data/Model/roid1.3ds",
-   };
-   CLoad3DS oLoader;
-   CRandom prng(37473);
-   for (int i=0; i<40; i++) {      
-      if (oLoader.import3DS(m_pRoids+i, roidfiles[prng.randInt()&0xF])) {
-         m_pRoids[i].init();
-      }
-      // Set position
-      CVector3 pos((prng.randDouble()-0.5) * 5000,(prng.randDouble()-0.5) * 5000,(prng.randDouble()-0.5) * 5000);
-      m_pRoids[i].setTranslation(pos);
+   CRandom prng(42);
+   for (int i=0; i<40; i++) {
+      CAsteroid* pRoid = new CAsteroid(1,50000);
+      // Select type
+      float fRandom = prng.randDouble();
+      TAsteroidType type = ROID_RED;
+      if (fRandom < 0.25) 
+         type = ROID_COMMON;
+      else if (fRandom < 0.5) 
+         type = ROID_GOLD;
+      else if (fRandom < 0.75) 
+         type = ROID_ICE;
+      // Load
+      pRoid->load(type);
+      m_opObjects.push_back(pRoid);
    }
+
+   m_pTarget = m_opObjects.begin();
 
    //if (oLoader.import3DS(&m_oStation,"Data/Model/station.3ds"))
    //m_oStation.init();
@@ -151,8 +156,10 @@ bool COpenGL :: initGL() {
 //is all transparent objects are drawn last
 bool COpenGL::DrawGLScene(GLvoid) {
 
+   std::vector<CGameObject*>::iterator it;
+
    // Do offscreen rendering first
-   m_poShip->drawOffScreen();
+   m_poShip->renderOffScreen();
 
    // Clear screen
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -172,17 +179,19 @@ bool COpenGL::DrawGLScene(GLvoid) {
    m_poLight->render();
    m_poShip->draw();
    m_oFrustum.CalculateFrustum();
-   m_poAIShip->draw();
    m_poStars->draw(m_poShip->m_ppMasses[0]->m_vecPos);
-
-   // Draw roids
-   for (int i=0; i<40; i++) {
-      m_pRoids[i].render();
+   // Draw objects
+   for (it = m_opObjects.begin(); it != m_opObjects.end(); it++) {
+      (*it)->draw();
    }
+
    //m_oStation.render();
 
+   // Draw objects
    m_poShip->drawBlended();
-   m_poAIShip->drawBlended();
+   for (it = m_opObjects.begin(); it != m_opObjects.end(); it++) {
+      (*it)->drawBlended();
+   }
    
    m_poLight->disable();
    m_poShip->drawHud();
@@ -206,45 +215,45 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 
 	//For flight mode one and two, the js/mouse movements translate into 
 	//pitch yaw and roll, This is done here
-	if (m_poShip->m_poShips[0].m_iFlightMode == 1 || m_poShip->m_poShips[0].m_iFlightMode == 2)
+	if (m_poShip->m_iFlightMode == 1 || m_poShip->m_iFlightMode == 2)
 	{
 		if (m_fPitch == 0.0f)
 		{
-			m_poShip->m_poShips[0].m_fPitchRate = 0.0f;
+			m_poShip->m_fPitchRate = 0.0f;
 		}																	
 		else
 		{
-			m_poShip->m_poShips[0].m_fPitchRate = m_poShip->m_poShips[0].m_fMaxPitchRate * m_fPitch;
-			if (m_poShip->m_poShips[0].m_fPitchRate > m_poShip->m_poShips[0].m_fMaxPitchRate)
-				m_poShip->m_poShips[0].m_fPitchRate = m_poShip->m_poShips[0].m_fMaxPitchRate;
-			if (m_poShip->m_poShips[0].m_fPitchRate < -m_poShip->m_poShips[0].m_fMaxPitchRate)
-				m_poShip->m_poShips[0].m_fPitchRate = -m_poShip->m_poShips[0].m_fMaxPitchRate;
+			m_poShip->m_fPitchRate = m_poShip->m_fMaxPitchRate * m_fPitch;
+			if (m_poShip->m_fPitchRate > m_poShip->m_fMaxPitchRate)
+				m_poShip->m_fPitchRate = m_poShip->m_fMaxPitchRate;
+			if (m_poShip->m_fPitchRate < -m_poShip->m_fMaxPitchRate)
+				m_poShip->m_fPitchRate = -m_poShip->m_fMaxPitchRate;
 		}
 
 		if (m_fYaw == 0.0f)
 		{
-			m_poShip->m_poShips[0].m_fYawRate = 0.0f;
+			m_poShip->m_fYawRate = 0.0f;
 		}																	
 		else
 		{
-			m_poShip->m_poShips[0].m_fYawRate = m_poShip->m_poShips[0].m_fMaxYawRate * m_fYaw;
-			if (m_poShip->m_poShips[0].m_fYawRate > m_poShip->m_poShips[0].m_fMaxPitchRate)
-				m_poShip->m_poShips[0].m_fYawRate = m_poShip->m_poShips[0].m_fMaxPitchRate;
-			if (m_poShip->m_poShips[0].m_fYawRate < -m_poShip->m_poShips[0].m_fMaxYawRate)
-				m_poShip->m_poShips[0].m_fYawRate = -m_poShip->m_poShips[0].m_fMaxYawRate;
+			m_poShip->m_fYawRate = m_poShip->m_fMaxYawRate * m_fYaw;
+			if (m_poShip->m_fYawRate > m_poShip->m_fMaxPitchRate)
+				m_poShip->m_fYawRate = m_poShip->m_fMaxPitchRate;
+			if (m_poShip->m_fYawRate < -m_poShip->m_fMaxYawRate)
+				m_poShip->m_fYawRate = -m_poShip->m_fMaxYawRate;
 		}
 	
 		if (m_fRoll == 0.0f)
 		{
-			m_poShip->m_poShips[0].m_fRollRate = 0.0f;
+			m_poShip->m_fRollRate = 0.0f;
 		}																	
 		else
 		{
-			m_poShip->m_poShips[0].m_fRollRate = m_poShip->m_poShips[0].m_fMaxRollRate * m_fRoll;
-			if (m_poShip->m_poShips[0].m_fRollRate > m_poShip->m_poShips[0].m_fMaxRollRate)
-				m_poShip->m_poShips[0].m_fRollRate = m_poShip->m_poShips[0].m_fMaxRollRate;
-			if (m_poShip->m_poShips[0].m_fRollRate < -m_poShip->m_poShips[0].m_fMaxRollRate)
-				m_poShip->m_poShips[0].m_fRollRate = -m_poShip->m_poShips[0].m_fMaxRollRate;
+			m_poShip->m_fRollRate = m_poShip->m_fMaxRollRate * m_fRoll;
+			if (m_poShip->m_fRollRate > m_poShip->m_fMaxRollRate)
+				m_poShip->m_fRollRate = m_poShip->m_fMaxRollRate;
+			if (m_poShip->m_fRollRate < -m_poShip->m_fMaxRollRate)
+				m_poShip->m_fRollRate = -m_poShip->m_fMaxRollRate;
 		}
 	}
 	else //Flight mode 3. The effects of this are done in the simulate function
@@ -252,58 +261,58 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 	{
 		if (m_fPitch > 0.0f)
 		{
-			m_poShip->m_poShips[0].m_bStraffUp = true;
+			m_poShip->m_bStraffUp = true;
 		}																	
 		else
 		{
 			if (m_fPitch < 0.0f)
 			{
-				m_poShip->m_poShips[0].m_bStraffDown = true;
+				m_poShip->m_bStraffDown = true;
 			}									
 			else
 			{
-				m_poShip->m_poShips[0].m_bStraffDown = false;
-				m_poShip->m_poShips[0].m_bStraffUp = false;
+				m_poShip->m_bStraffDown = false;
+				m_poShip->m_bStraffUp = false;
 			}
 		}
 
 		if (m_fYaw > 0.0f)
 		{
-			m_poShip->m_poShips[0].m_bStraffRight = true;
+			m_poShip->m_bStraffRight = true;
 		}																	
 		else
 		{
 			if (m_fYaw < 0.0f)
 			{
-				m_poShip->m_poShips[0].m_bStraffLeft = true;
+				m_poShip->m_bStraffLeft = true;
 			}									
 			else
 			{
-				m_poShip->m_poShips[0].m_bStraffRight = false;
-				m_poShip->m_poShips[0].m_bStraffLeft = false;
+				m_poShip->m_bStraffRight = false;
+				m_poShip->m_bStraffLeft = false;
 			}
 		}
 	}
 
 	//Set the weaponFire bool if the firekey being pressed
-	if (m_bFire && !m_poShip->m_poShips[0].m_bWeaponFire)
+	if (m_bFire && !m_poShip->m_bWeaponFire)
 	{
-		m_poShip->m_poShips[0].m_bWeaponFire = true;
+		m_poShip->m_bWeaponFire = true;
 	}
 	else
 	{
-		if (!m_bFire && m_poShip->m_poShips[0].m_bWeaponFire)
-			m_poShip->m_poShips[0].m_bWeaponFire = false;
+		if (!m_bFire && m_poShip->m_bWeaponFire)
+			m_poShip->m_bWeaponFire = false;
 	}
 
 	//Thrust. Note that the max thrust is hard coded (10000), Ooooo naughty
 	if (m_fThrust == 0.0f)
 	{
-		m_poShip->m_poShips[0].m_fThrust = 0.0f;
+		m_poShip->m_fThrust = 0.0f;
 	}																	
 	else
 	{
-		m_poShip->m_poShips[0].m_fThrust = m_fThrust * 10000.00f;
+		m_poShip->m_fThrust = m_fThrust * 10000.00f;
 	}
 
 	//Basically these bools represent weather the hat switch/numeric key pad have been pressed.
@@ -317,7 +326,7 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 		}
 		else
 		{
-			m_poShip->m_poShips[0].m_fCamPitch = 10.0f;
+			m_poShip->m_fCamPitch = 10.0f;
 		}
 	}
 	else
@@ -330,12 +339,12 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 			}
 			else
 			{
-				m_poShip->m_poShips[0].m_fCamPitch = -10.0f;
+				m_poShip->m_fCamPitch = -10.0f;
 			}
 		}
 		else
 		{
-			m_poShip->m_poShips[0].m_fCamPitch = 0.0f;
+			m_poShip->m_fCamPitch = 0.0f;
 			m_poShip->m_bBackLook = m_poShip->m_bUpLook = false;
 		}
 	}
@@ -348,7 +357,7 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 		}
 		else
 		{
-			m_poShip->m_poShips[0].m_fCamYaw = 10.0f;
+			m_poShip->m_fCamYaw = 10.0f;
 		}
 	}
 	else
@@ -361,12 +370,12 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 			}
 			else
 			{
-				m_poShip->m_poShips[0].m_fCamYaw = -10.0f;
+				m_poShip->m_fCamYaw = -10.0f;
 			}
 		}
 		else
 		{
-			m_poShip->m_poShips[0].m_fCamYaw = 0.0f;
+			m_poShip->m_fCamYaw = 0.0f;
 			m_poShip->m_bRightLook = m_poShip->m_bLeftLook = false;
 		}
 	}
@@ -385,24 +394,42 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 	if (m_oKeys.m_abKeyDown[SDLK_F2] && !m_oKeys.m_abStillPressed[SDLK_F2])
 	{
 		m_oKeys.m_abStillPressed[SDLK_F2] = true;
-		if (m_poShip->m_poShips[0].m_iFlightMode != 1)
-				m_poShip->m_poShips[0].m_iFlightMode = 1;
+		if (m_poShip->m_iFlightMode != 1)
+				m_poShip->m_iFlightMode = 1;
 	}
 
 	//F3. Switches to turret flight
 	if (m_oKeys.m_abKeyDown[SDLK_F3] && !m_oKeys.m_abStillPressed[SDLK_F3])
 	{
 		m_oKeys.m_abStillPressed[SDLK_F3] = true;
-		if (m_poShip->m_poShips[0].m_iFlightMode != 2)
-			m_poShip->m_poShips[0].m_iFlightMode = 2;
+		if (m_poShip->m_iFlightMode != 2)
+			m_poShip->m_iFlightMode = 2;
 	}
 
 	//F4. Switches to straff flight
 	if (m_oKeys.m_abKeyDown[SDLK_F4] && !m_oKeys.m_abStillPressed[SDLK_F4])
 	{
 		m_oKeys.m_abStillPressed[SDLK_F4] = true;
-		if (m_poShip->m_poShips[0].m_iFlightMode != 3)
-			m_poShip->m_poShips[0].m_iFlightMode = 3;
+		if (m_poShip->m_iFlightMode != 3)
+			m_poShip->m_iFlightMode = 3;
+	}
+
+	//F5. Next target
+	if (m_oKeys.m_abKeyDown[SDLK_F5] && !m_oKeys.m_abStillPressed[SDLK_F5])
+	{
+           m_oKeys.m_abStillPressed[SDLK_F5] = true;
+           m_pTarget++;
+           if (m_pTarget == m_opObjects.end()) m_pTarget = m_opObjects.begin();
+           m_poShip->setTarget(*m_pTarget);
+	}
+
+	//F6. previous target
+	if (m_oKeys.m_abKeyDown[SDLK_F6] && !m_oKeys.m_abStillPressed[SDLK_F6])
+	{
+           m_oKeys.m_abStillPressed[SDLK_F6] = true;
+           if (m_pTarget == m_opObjects.begin()) m_pTarget = m_opObjects.end();
+           m_pTarget--;
+           m_poShip->setTarget(*m_pTarget);
 	}
 
 	//SLOW MOTION !!
@@ -418,12 +445,12 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 	//Brakes the ship (As in slow down, not as in broken;))
 	if (m_oKeys.m_abKeyDown[SDLK_SPACE])
 	{
-		if (!m_poShip->m_poShips[0].m_bBraking)
-			m_poShip->m_poShips[0].m_bBraking = true;
+		if (!m_poShip->m_bBraking)
+			m_poShip->m_bBraking = true;
 	}
 	else
 	{
-		m_poShip->m_poShips[0].m_bBraking = false;
+		m_poShip->m_bBraking = false;
 	}
 
 	// dt Is The Time Interval (As Seconds) From The Previous Frame To The Current Frame.
@@ -444,8 +471,8 @@ void COpenGL::Update (unsigned long int dMilliseconds)
 	for (a = 0; a < iNumOfIterations; ++a)					// We Need To Iterate Simulations "numOfIterations" Times
 	{
 		m_poAIShip->m_vecTargetPos = m_poShip->m_ppMasses[0]->m_vecPos;
-		m_poAIShip->m_vecTargetDirection = m_poShip->m_poShips[0].m_vecDirection;
-		m_poAIShip->m_fTargetSpeed = m_poShip->m_poShips[0].m_fVel;
+		m_poAIShip->m_vecTargetDirection = m_poShip->m_vecDirection;
+		m_poAIShip->m_fTargetSpeed = m_poShip->m_fVel;
 		m_poAIShip->operate(fDT);
 		m_poShip->operate(fDT);							// Iterate constantVelocity Simulation By dt Seconds
 	}

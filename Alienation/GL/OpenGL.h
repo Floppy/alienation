@@ -26,6 +26,8 @@
 #include "3D/Model.h"
 #include "3D/Sprite.h"
 
+#include <vector>
+
 class CKeys {											// Structure For Keyboard Stuff
 public:
 	bool m_abKeyDown [300];								// Holds TRUE / FALSE For Each Key
@@ -47,6 +49,7 @@ class COpenGL {
 		CPlayerShip *m_poShip;
 		CAIShip *m_poAIShip;
       COpenGL();
+      ~COpenGL();
 		void Update (unsigned long int dMilliseconds);
       bool DrawGLScene(GLvoid);
       bool      initGL();
@@ -55,7 +58,10 @@ class COpenGL {
 		bool m_bCamUp, m_bCamDown, m_bCamRight, m_bCamLeft, m_bFire;
 		CKeys m_oKeys;
 		CFrustum  m_oFrustum;
-                CModel m_pRoids[40];
+
+                std::vector<CGameObject*> m_opObjects;
+                std::vector<CGameObject*>::iterator m_pTarget;
+
                 CSprite m_oSun;
                 //CModel m_oStation;
 };
