@@ -153,6 +153,10 @@ SOURCE=.\Game\Ship.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Sound\SoundManager.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Game\Stars.cpp
 # End Source File
 # Begin Source File
@@ -242,6 +246,10 @@ SOURCE=.\Math\Quat.h
 # Begin Source File
 
 SOURCE=.\Game\Ship.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Sound\SoundManager.h
 # End Source File
 # Begin Source File
 
