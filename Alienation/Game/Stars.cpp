@@ -58,16 +58,21 @@ void CStars::initStars()
 				m_aoStars[i].m_fSize = 35.0f;
 			}
 		}
-		m_aoStars[i].m_vecColor.X() = RANDOM_FLOAT;
-		m_aoStars[i].m_vecColor.Y() = RANDOM_FLOAT;
-		m_aoStars[i].m_vecColor.Z() = RANDOM_FLOAT;
+		//m_aoStars[i].m_vecColor.X() = RANDOM_FLOAT;
+		//m_aoStars[i].m_vecColor.Y() = RANDOM_FLOAT;
+		//m_aoStars[i].m_vecColor.Z() = RANDOM_FLOAT;
 	}
 
-        m_auiTextures[0] = g_oTextureManager.load("an01.png");
-        m_auiTextures[1] = g_oTextureManager.load("an02.png");
-        m_auiTextures[2] = g_oTextureManager.load("an03.png");
+        // Create sprite
+        CMaterial oMaterial;
+        oMaterial.m_oEmissive = CRGBAColour(1.0f, 1.0f, 1.0f,0);
+        oMaterial.m_uiTexture = g_oTextureManager.load("an01.png");   
+        m_oSprite = CSprite(oMaterial);
+        m_oSprite.init();
+        
+        //m_auiTextures[1] = g_oTextureManager.load("an02.png");
+        //m_auiTextures[2] = g_oTextureManager.load("an03.png");
 
-//	LoadGLTextures();
 }
 
 void CStars::draw(CVector3 vecPos)
@@ -79,63 +84,21 @@ void CStars::draw(CVector3 vecPos)
 
 	g_oTextureManager.activate(m_auiTextures[0]);
 
-	int iCount;
-	glBegin(GL_QUADS);
-		for (iCount = 0 ; iCount < m_iNumStars ; iCount++)
-		{
-                   if (m_oFrustum.PointInFrustum(m_aoStars[iCount].m_vecPos))
-			{
-			   glColor4f(m_aoStars[iCount].m_vecColor.X(), m_aoStars[iCount].m_vecColor.Y(), m_aoStars[iCount].m_vecColor.Z(), 0.3f);
-			   renderBillboard(m_aoStars[iCount].m_vecPos, m_aoStars[iCount].m_fSize);		
-
-			}
-		}
-	glEnd();
+        for (int iCount = 0 ; iCount < m_iNumStars ; iCount++)
+	{
+           if (m_oFrustum.PointInFrustum(m_aoStars[iCount].m_vecPos))
+           {
+              // Set size
+              m_oSprite.setSize(m_aoStars[iCount].m_fSize);
+              // Set position
+              m_oSprite.setTranslation(m_aoStars[iCount].m_vecPos);
+              // Render
+              m_oSprite.render();
+           }
+        }
 	
 	glPopMatrix();
 	
 	glDisable(GL_BLEND);
 }
 
-void CStars::renderBillboard(CVector3 oPos, float fSize)
-{
-   // Save matrix state
-   glPushMatrix();
-   // Move to particle position
-   glTranslatef(oPos.X(), oPos.Y(), oPos.Z());
-   
-   // Get matrix
-   float afMatrix[16];
-   glGetFloatv(GL_MODELVIEW_MATRIX, afMatrix);
-
-   // Get normal
-   CVector3 vecNormal(-afMatrix[2],-afMatrix[6],-afMatrix[10]);
-
-   // Remove rotation from model/view matrix
-   afMatrix[0] = afMatrix[5] = afMatrix[10] = afMatrix[11] = 1.0f;
-   afMatrix[1] = afMatrix[2] = afMatrix[3] = afMatrix[4] = 0.0f;
-   afMatrix[6] = afMatrix[7] = afMatrix[8] = afMatrix[9] = 0.0f;
-   glLoadMatrixf(afMatrix);
-   
-   // Draw billboard
-   glBegin(GL_QUADS);      
-
-   // Normal
-   glNormal3fv(vecNormal.glVector());
-
-   // Vertices
-   for (int i=0; i<2; i++) 
-   {
-      for (int j=0; j<2; j++) 
-      {
-         glTexCoord2f( ( i==j ? 0.0f : 1.0f ) , ( i==0 ? 1.0f : 0.0f ) );
-         glVertex3f( ( i==j ? -fSize : fSize ) , ( i==0 ? fSize : -fSize ), 0.0f );
-      }
-   }
-   // Finish quad
-   glEnd();
-   // Restore matrix state
-   glPopMatrix();
-   // Done
-   return;
-}

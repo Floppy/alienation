@@ -16,6 +16,7 @@
 #include "Math/Vector.h"
 #include "3D/Texture.h"
 #include "3D/Frustum.h"
+#include "3D/Sprite.h"
 
 class CStar
 {
@@ -37,8 +38,8 @@ public:
 	void initStars();
 	void draw(CVector3 vecPos);
 private:
+        CSprite m_oSprite;
 	CFrustum m_oFrustum;
-    inline void renderBillboard(CVector3 oPos, float fSize);
 };
 
 #endif // !defined(AFX_STARS_H__32A2C3FB_4B7D_486A_9EF7_DFCF4869785B__INCLUDED_)
