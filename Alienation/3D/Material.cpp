@@ -51,7 +51,7 @@ void CMaterial::render() const {
    glMaterialfv(GL_FRONT,GL_AMBIENT,m_oAmbient.glColour());
    glMaterialfv(GL_FRONT,GL_DIFFUSE,m_oDiffuse.glColour());
    glMaterialfv(GL_FRONT,GL_EMISSION,m_oEmissive.glColour());
-   glMaterialfv(GL_FRONT,GL_SPECULAR,m_oSpecular.glColour());
+   //glMaterialfv(GL_FRONT,GL_SPECULAR,m_oSpecular.glColour());
    // Done
    return;
 }
