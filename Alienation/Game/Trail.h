@@ -33,7 +33,7 @@ public:
 	void render(float fThrust, CVector3 vecOrigin);                                    // Render particles to the screen
 	void createParticle(int i, float fThrust, CVector3 vecHead, CVector3 vecOrigin, CVector3 vecUp, CVector3 vecRight,
 					CVector3 vecPos, float fWidth, float fHeight);
-        void renderBillboard(CVector3 oPos, float fSize, float* pfMaterial);
+        inline void renderBillboard(CVector3 oPos, float fSize, float* pfMaterial);
 	void reset();
 private:
 	CTexture *m_poTexture;

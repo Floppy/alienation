@@ -17,9 +17,11 @@ AC_ARG_ENABLE(profiling,
 )
 case "$enable_profiling" in
   prof) AC_CHECK_TOOL(PROF,prof)
-        CPPFLAGS="$CPPFLAGS -p" ;;
+        CPPFLAGS="$CPPFLAGS -p"
+        CXXFLAGS="$CXXFLAGS -p" ;;
   gprof) AC_CHECK_TOOL(GPROF,gprof)
-         CPPFLAGS="$CPPFLAGS -pg" ;;
+         CPPFLAGS="$CPPFLAGS -pg"
+         CXXFLAGS="$CXXFLAGS -pg" ;;
 esac
 
 # Checks for libraries
