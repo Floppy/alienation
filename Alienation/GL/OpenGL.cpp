@@ -12,6 +12,7 @@
 #include <SDL_opengl.h>
 
 #include "GL/OpenGL.h"
+#include "GL/Extensions.h"
 #include "IO/3ds.h"
 #include "Math/Random.h"
 #include "3D/TextureManager.h"
@@ -139,8 +140,13 @@ bool COpenGL :: initGL() {
    glEnable(GL_CULL_FACE);
    glCullFace(GL_BACK);
 
-   g_oTextureManager.textureFiltering(texfilter,texfilter);
+   // Initialise extensions
+   InitGLExtensions();
 
+   // Setup texture filtering
+   g_oTextureManager.textureFiltering(texfilter,texfilter);
+   
+   // Setup rendering hints
    if (bPerspCorr)
       glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
    if (bPolygonSmooth)

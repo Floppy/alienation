@@ -1,4 +1,5 @@
 #include "GL/OpenGL.h"
+#include "GL/Extensions.h"
 #include "Sound/SoundManager.h"
 #include "IO/Input.h"
 #include "IO/Lua.h"
@@ -13,15 +14,7 @@
 using namespace std;
 using namespace NSDSound;
 
-//typedef void (*GL_ActiveTextureARB_Func)(unsigned int);
-//typedef void (*GL_MultiTexCoords2fARB_Func)(unsigned int);
-
-//GL_ActiveTextureARB_Func glActiveTextureARB = NULL;
-//GL_MultiTexCoords2fARB_Func glMultiTexCoord2fARB = NULL;
-
-PFNGLACTIVETEXTUREARBPROC glActiveTextureARB=NULL;
-PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB=NULL;
-bool bNoBumps = false;
+bool bNoBumps = true;
 
 /**
  * Program entry point.
@@ -118,9 +111,6 @@ int main(int argc, char* argv[])
 #ifdef WIN32
    SDL_WM_GrabInput(SDL_GRAB_ON);
 #endif
-
-	glActiveTextureARB=(PFNGLACTIVETEXTUREARBPROC)SDL_GL_GetProcAddress("glActiveTextureARB");
-	glMultiTexCoord2fARB=(PFNGLMULTITEXCOORD2FARBPROC)SDL_GL_GetProcAddress("glMultiTexCoord2fARB");
 
 	oGame.DrawSplashScreen();
 	SDL_GL_SwapBuffers( );
