@@ -161,10 +161,6 @@ SOURCE=.\3D\HEMesh.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Game\Hud.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\Equipment\HudInformation.cpp
 # End Source File
 # Begin Source File
@@ -270,6 +266,10 @@ SOURCE=.\3D\Sprite.cpp
 # Begin Source File
 
 SOURCE=.\Game\Stars.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Equipment\TargetingComputer.cpp
 # End Source File
 # Begin Source File
 
@@ -382,10 +382,6 @@ SOURCE=.\3D\HalfEdge.h
 # Begin Source File
 
 SOURCE=.\3D\HEMesh.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Game\Hud.h
 # End Source File
 # Begin Source File
 
@@ -502,6 +498,10 @@ SOURCE=.\3D\Sprite.h
 # Begin Source File
 
 SOURCE=.\Game\Stars.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Equipment\TargetingComputer.h
 # End Source File
 # Begin Source File
 
