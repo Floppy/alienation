@@ -3,32 +3,6 @@
 
 #include "config.h"
 
-// Primary Chunk, at the beginning of each file
-#define PRIMARY       0x4D4D
-
-// Main Chunks
-#define OBJECTINFO    0x3D3D				 
-#define VERSION       0x0002				
-#define EDITKEYFRAME  0xB000				
-
-// Sub defines of OBJECTINFO
-#define MATERIAL	  0xAFFF				
-#define OBJECT		  0x4000				
-
-// Sub defines of MATERIAL
-#define MATNAME       0xA000				
-#define MATDIFFUSE    0xA020				
-#define MATMAP        0xA200				
-#define MATMAPFILE    0xA300				
-
-#define OBJECT_MESH   0x4100				
-
-// Sub defines of OBJECT_MESH
-#define OBJECT_VERTICES     0x4110			
-#define OBJECT_FACES		0x4120			
-#define OBJECT_MATERIAL		0x4130			
-#define OBJECT_UV			0x4140			
-
 #include "vector.h"
 #include <stdio.h>
 #include <string.h>
@@ -95,7 +69,7 @@ class C3DModel
 public:
 	int m_iNumOfObjects;							
 	int m_iNumOfMaterials;							
-	vector<CMaterialInfo> m_pMaterials;			
+	vector<CMaterialInfo> m_pMaterials;
 	vector<C3DObject> m_pObject;					
 };
 
