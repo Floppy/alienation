@@ -19,6 +19,7 @@ public:
 	void load();
 	void simulate(float fDT);
 	void solve();
+
 	CVector3 m_vecTarget;
 	float m_fXAngle;
 	float m_fYAngle;

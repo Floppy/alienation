@@ -85,17 +85,18 @@ public:
 	float m_fDelta_x, m_fDelta_y, m_fDelta_z;
 	
 	CSimulation(int iNumOfMasses, float fMass) :      // Constructor creates some masses with mass values m
-		m_fDelta_x(0.0f),
-		m_fDelta_y(0.0f),
-		m_fDelta_z(0.0f)
+           m_iNumOfMasses(iNumOfMasses),
+           m_fDelta_x(0.0f),
+           m_fDelta_y(0.0f),
+           m_fDelta_z(0.0f)
 	{
-		this->m_iNumOfMasses = iNumOfMasses;
+           m_quaOrientation.loadIdentity();
 		
-		m_ppMasses = new CMass*[m_iNumOfMasses];			// Create an array of pointers
-
-		int a;
-		for (a = 0; a < m_iNumOfMasses; ++a)		// We will step to every pointer in the array
-			m_ppMasses[a] = new CMass(fMass);				// Create a Mass as a pointer and put it in the array
+           m_ppMasses = new CMass*[m_iNumOfMasses];			// Create an array of pointers
+           
+           int a;
+           for (a = 0; a < m_iNumOfMasses; ++a)		// We will step to every pointer in the array
+              m_ppMasses[a] = new CMass(fMass);				// Create a Mass as a pointer and put it in the array
 	}
 
 	virtual ~CSimulation()									// Destructor

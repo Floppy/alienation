@@ -20,23 +20,25 @@ using namespace NSDSound;
 CPlayerShip::CPlayerShip() : 
    CShip(1, 5000.0f),
    m_bInsideView(true),
+   m_bLeftLook(false),
+   m_bRightLook(false),
+   m_bUpLook(false),
+   m_bBackLook(false),
+   m_poHud(NULL),
    m_oLight(GL_LIGHT1),
    m_iThrustChannel(0)
 {
-   m_ppMasses[0]->m_vecPos = CVector3(0.0f, 0.0f, 0.0f);
-   m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
-   m_vecLastForce = CVector3(0.0f, 0.0f, 0.0f);
-   m_bStraffUp = m_bStraffDown = m_bStraffLeft = m_bStraffRight = false;
    m_fDrag = 25.0f;
-   m_bWeaponFire = false;
-   
    m_fMaxPitchRate = 40.0f;
    m_fMaxYawRate = 25.0f;
-   m_fMaxRollRate = 45.0f;	
+   m_fMaxRollRate = 45.0f;
+   
+
+   m_ppMasses[0]->m_vecPos = CVector3(0.0f, 0.0f, 0.0f);
+   m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
 
    m_poHud = new CHud(this);
    m_matCamRotation.loadIdentity();
-   m_bLeftLook = m_bRightLook = m_bUpLook = m_bBackLook = false;
    
    // Setup cockpit light
    CRGBAColour oAmbient(1.0f, 1.0f, 1.0f, 1.0f);

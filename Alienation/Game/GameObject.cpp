@@ -9,22 +9,26 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CGameObject::CGameObject(int num, float mass) : CSimulation(num, mass)
+CGameObject::CGameObject(int num, float mass) : 
+   CSimulation(num, mass),
+   m_poTarget(NULL),
+   m_vecForce(0.0f,0.0f,0.0f),
+   m_vecHeading(0.0f,0.0f,1.0f),
+   m_vecUp(0.0f,1.0f,0.0f),
+   m_vecRight(1.0f,0.0f,0.0f),
+   m_vecDirection(0.0f,0.0f,1.0f),
+   m_fPitch(0.0f),
+   m_fYaw(0.0f),
+   m_fRoll(0.0f),
+   m_fPitchRate(0.0f),
+   m_fYawRate(0.0f),
+   m_fRollRate(0.0f),	
+   m_fVel(0.0f),
+   m_fDrag(0.025f)
 {
    //initialise data
    m_ppMasses[0]->m_vecVel = CVector3(0.0f, 0.0f, 0.0f);
    m_vecHeading = CVector3(0.0f, -2.0f, -11.0f);
-   m_fPitch = 0.0f;
-   m_fYaw = 0.0f;
-   m_fRoll = 0.0f;
-   m_quaOrientation.loadIdentity();
-   m_fPitchRate = 0.0f;
-   m_fYawRate = 0.0f;
-   m_fRollRate = 0.0f;	
-   m_fVel = 0.0f;
-   m_fDrag = 0.025f;
-   m_poTarget = NULL;
-
    m_matRotation.loadIdentity();
 }
 

@@ -9,12 +9,28 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CShip::CShip(int num, float mass) : CGameObject(num, mass)
+CShip::CShip(int num, float mass) : 
+   CGameObject(num, mass),
+   m_vecLastForce(0.0f,0.0f,0.0f),
+   m_vecBrakePoint(0.0f,0.0f,0.0f),
+   m_bStraffUp(false),
+   m_bStraffDown(false),
+   m_bStraffRight(false),
+   m_bStraffLeft(false),
+   m_vecCamView(0.0f,0.0f,0.0f),
+   m_fCamPitch(0.0f),
+   m_fCamYaw(0.0f),
+   m_fThrust(0.0f),
+   m_poTrails(NULL),
+   m_poWeapon(NULL),
+   m_poBrake(NULL),
+   m_iFlightMode(1),
+   m_bWeaponFire(false),
+   m_bBraking(false)
 {
    //initialise data
-   m_fThrust = 0.0f;
    m_quaCamOrientation.loadIdentity();
-   m_iFlightMode = 1;
+   m_matCamRotation.loadIdentity();
 
    m_poWeapon = new CWeapon(100, CVector3(0.0f, -0.3f, -3.3f)); 
    m_poBrake = new CBrake(100, CVector3(0.0f, 0.0f, 0.0f));
