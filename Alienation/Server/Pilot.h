@@ -9,7 +9,10 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#ifdef WIN32
 #include <windows.h>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
