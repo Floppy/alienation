@@ -53,7 +53,7 @@ class C3DObject {
     * @return The translation value.
     * @sa setTranslation()
     */
-   const CVector3& getTranslation() const 
+   virtual const CVector3& getTranslation() const 
    { return m_vecTranslation; }
 
    /**
@@ -61,7 +61,7 @@ class C3DObject {
     * @param vecTranslation The new translation value.
     * @sa getTranslation()
     */
-   void setTranslation(CVector3 vecTranslation) 
+   virtual void setTranslation(CVector3 vecTranslation) 
    { m_vecTranslation = vecTranslation; }
    
  protected:

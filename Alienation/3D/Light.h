@@ -6,6 +6,7 @@
 #endif // _MSC_VER > 1000
 
 #include "config.h"
+#include "3D/3DObject.h"
 #include "3D/Material.h"
 #include "Math/Vector.h"
 #include <GL/gl.h>
@@ -15,7 +16,7 @@ using namespace NSDMath;
 /**
  * A light in a 3D scene.
  */
-class CLight  
+class CLight : public C3DObject
 {
 public:
         /**
@@ -30,19 +31,19 @@ public:
 	virtual ~CLight();
 
         /**
-         * Initialise.
+         * Initialisation.
          */
 	void init(const CRGBAColour& oAmbient, const CRGBAColour& oDiffuse, const CVector3& oPosition);
+
+        /**
+         * Render light.
+         */ 
+        void render() const;
 
         /**
          * Change colour.
          */
 	void update(GLenum type, const CRGBAColour& oColour);
-
-        /**
-         * Change position.
-         */
-        void updatePosition(const CVector3& position);
 
         /**
          * Turn on light.
@@ -55,6 +56,22 @@ public:
          */
         void disable()
         { glDisable(m_iLight); }
+
+        /**
+         * Set the value of the translation
+         * @param vecTranslation The new translation value.
+         * @sa getTranslation()
+         */
+        void setTranslation(CVector3 vecTranslation);
+   
+
+ private:
+        
+        /**
+         * Initialisation.
+         * Overridden and declared private to prevent usage.
+         */ 
+        void init() {}
 
  protected:
 
@@ -70,9 +87,9 @@ public:
 
         /**
          * Position.
+         * GL requires a 4D vector for this.
          */
 	float m_afPosition[4];
-
 
         /**
          * GL light ID

@@ -25,7 +25,7 @@ void CLight::init(const CRGBAColour& oAmbient, const CRGBAColour& oDiffuse, cons
 {
    update(GL_AMBIENT,oAmbient);
    update(GL_DIFFUSE,oDiffuse);
-   updatePosition(oPosition);
+   setTranslation(oPosition);
 }
 
 void CLight::update(GLenum type, const CRGBAColour& oColour)
@@ -48,11 +48,17 @@ void CLight::update(GLenum type, const CRGBAColour& oColour)
    }
 }
 
-void CLight::updatePosition(const CVector3& oPosition)
+void CLight::render()  const {
+   // Position
+   glLightfv(m_iLight, GL_POSITION, m_afPosition);
+}
+
+void CLight::setTranslation(CVector3 oPosition)
 {
    // Set values
    for (int i = 0; i < 3 ; i++)
       m_afPosition[i] = oPosition.glVector()[i];
-   // Position
-   glLightfv(m_iLight, GL_POSITION, m_afPosition);
+   // Call base
+   C3DObject::setTranslation(oPosition);
 }
+
