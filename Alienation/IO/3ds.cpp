@@ -182,7 +182,7 @@ void CLoad3DS::processNextObjectChunk(CModel *pModel, CChunk *pPreviousChunk)
    }
    
    // Store
-   pModel->addMesh(pMesh);
+   pModel->addObject(pMesh);
 
    // Tidy
    delete m_pCurrentChunk;

@@ -11,14 +11,14 @@ CModel::CModel()
 CModel::~CModel() 
 {
    // Delete meshes
-   for (vector<CMesh*>::iterator it(m_oMeshes.begin()); it!=m_oMeshes.end(); ++it) {
+   for (vector<C3DObject*>::iterator it(m_oObjects.begin()); it!=m_oObjects.end(); ++it) {
       delete *it;
    }
 }
 
 void CModel::init() {
    // Init meshes
-   for (vector<CMesh*>::iterator it(m_oMeshes.begin()); it!=m_oMeshes.end(); ++it) {
+   for (vector<C3DObject*>::iterator it(m_oObjects.begin()); it!=m_oObjects.end(); ++it) {
       (*it)->init();
    }
    C3DObject::init();
@@ -34,13 +34,13 @@ void CModel::render() const {
    // Translate
    glTranslatef(m_vecTranslation.X(),m_vecTranslation.Y(),m_vecTranslation.Z());
    // Draw meshes
-   for (vector<CMesh*>::const_iterator it(m_oMeshes.begin()); it!=m_oMeshes.end(); ++it) {
+   for (vector<C3DObject*>::const_iterator it(m_oObjects.begin()); it!=m_oObjects.end(); ++it) {
       (*it)->render();
    }
    // Pop
    glPopMatrix();
 }
 
-void CModel::addMesh(CMesh* pMesh) {
-   m_oMeshes.push_back(pMesh);
+void CModel::addObject(C3DObject* pObject) {
+   m_oObjects.push_back(pObject);
 }

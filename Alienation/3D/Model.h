@@ -3,7 +3,7 @@
 
 #include "config.h"
 #include "3D/3DObject.h"
-#include "3D/Mesh.h"
+#include "3D/3DObject.h"
 #include "3D/Material.h"
 
 #include <vector>
@@ -12,8 +12,8 @@ using namespace std;
 
 /**
  * A 3D Model.
- * This is basically just a container object for multiple CMesh objects. 
- * This means that a model can consist of many meshes with different materials
+ * This is basically just a container object for multiple C3DObject objects. 
+ * This means that a model can consist of many objects with different materials
  * and still be easily rendered.
  */
 class CModel : public C3DObject {
@@ -27,51 +27,51 @@ class CModel : public C3DObject {
 
    /**
     * Destructor.
-    * Deletes all child meshes.
+    * Deletes all child objects.
     */
    ~CModel();
 
    /**
     * Object initialisation. 
-    * Calls init() on all child meshes, and should be called once the model is 
+    * Calls init() on all child objects, and should be called once the model is 
     * completely loaded/created.
     */
    void init();
    
    /**
     * Render to screen.
-    * Applies this object's transform, and then calls render() on all child meshes.
+    * Applies this object's transform, and then calls render() on all child objects.
     */
    void render() const;
    
    /**
-    * Get the number of meshes in the model.
-    * @return The number of meshes in the model.
+    * Get the number of objects in the model.
+    * @return The number of objects in the model.
     */
-   unsigned int numMeshes() 
-   { return m_oMeshes.size(); }
+   unsigned int numObjects() 
+   { return m_oObjects.size(); }
 
    /**
-    * Add a mesh to this model.
-    * This model will take ownership of the mesh and will delete the pointer when it's done with.
-    * @param pMesh A pointer to the mesh to add.
+    * Add a object to this model.
+    * This model will take ownership of the object and will delete the pointer when it's done with.
+    * @param pObject A pointer to the object to add.
     */
-   void addMesh(CMesh* pMesh);
+   void addObject(C3DObject* pObject);
 
    /**
-    * Get a mesh pointer.
-    * @param uiMesh The mesh index to get. Should be less that numMeshes().
+    * Get a object pointer.
+    * @param uiObject The object index to get. Should be less that numObjects().
     */
-   CMesh* getMesh(unsigned int uiMesh) 
-   { return m_oMeshes[uiMesh]; }
+   C3DObject* getObject(unsigned int uiObject) 
+   { return m_oObjects[uiObject]; }
 
  protected:
 
    /**
-    * Child mesh pointers.
+    * Child object pointers.
     * Will be deleted in destructor.
     */
-   vector<CMesh*> m_oMeshes;
+   vector<C3DObject*> m_oObjects;
 
 };
 
