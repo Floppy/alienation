@@ -52,19 +52,20 @@ void CShip::loadShip()
 }
 
 //what it says on the tin
-void CShip::draw()
+void CShip::draw(bool bTestFrustum)
 {
    m_poShips[0].m_oSphere.m_vecPos = m_ppMasses[0]->m_vecPos;
-   if (m_oFrustum.SphereInFrustum(&m_poShips[0].m_oSphere))
-   {
-	  glPushMatrix();					//Save copy of lookat rotation
-	  glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z()); //move to ship position
-	  glMultMatrixf(m_poShips[0].m_matRotation.glElements()); //multiply by the ships rotation matrix
-	  m_poShips[0].m_oModel.render(); //draw the ship
-
-	  glPopMatrix(); // Make the gluLookat matrix again active
-   }
+   if (bTestFrustum && !m_oFrustum.SphereInFrustum(&m_poShips[0].m_oSphere)) return;
    
+   glPushMatrix();
+   glTranslatef(m_ppMasses[0]->m_vecPos.X(), 
+                m_ppMasses[0]->m_vecPos.Y(), 
+                m_ppMasses[0]->m_vecPos.Z());
+   glMultMatrixf(m_poShips[0].m_matRotation.glElements());
+
+   m_poShips[0].m_oModel.render(); //draw the ship
+   
+   glPopMatrix();
 
 }
 

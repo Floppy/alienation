@@ -135,7 +135,7 @@ void CPlayerShip::drawCamera()
 }
 
 //Needs to be over-ridden in this case. The use of external views means a lot more code
-void CPlayerShip::draw()
+void CPlayerShip::draw(bool bTestFrustum)
 {
 
    glPushMatrix();

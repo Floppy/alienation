@@ -74,7 +74,7 @@ class CShip : public CSimulation
    virtual ~CShip();
    void loadShip();
    void rotate(int ship, float dt);
-   void draw();
+   void draw(bool bTestFrustum = true);
    virtual void drawBlended();
    void rotHeading(CMatrix m);
    virtual void solve();

@@ -27,7 +27,7 @@ public:
 	void loadShip();
 	virtual void simulate(float fDT);
 	void drawCamera();
-	void draw();
+	void draw(bool bTestFrustum = true);
 	void rotateCam(float fDT);
         void drawOffScreen();
 
