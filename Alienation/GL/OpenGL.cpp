@@ -140,9 +140,6 @@ bool COpenGL :: initGL() {
    glEnable(GL_CULL_FACE);
    glCullFace(GL_BACK);
 
-   // Initialise extensions
-   InitGLExtensions();
-
    // Setup texture filtering
    g_oTextureManager.textureFiltering(texfilter,texfilter);
    

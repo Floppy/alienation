@@ -112,6 +112,9 @@ int main(int argc, char* argv[])
    SDL_WM_GrabInput(SDL_GRAB_ON);
 #endif
 
+	// Initialise GL extensions
+	InitGLExtensions();
+
 	oGame.DrawSplashScreen();
 	SDL_GL_SwapBuffers( );
 
