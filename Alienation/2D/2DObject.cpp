@@ -3,9 +3,6 @@
 //////////////////////////////////////////////////////////////////////
 #include "2D/2DObject.h"
 
-int C2DObject::m_iScreenWidth;
-int C2DObject::m_iScreenHeight;
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -30,20 +27,20 @@ void C2DObject::renderQuad()
    glPushMatrix(); 
    glLoadIdentity(); 
    glEnable(GL_TEXTURE_2D);
-   glOrtho(0.0f, m_iScreenWidth, m_iScreenHeight, 0.0f, 0.0f, 1.0f);
+   glOrtho(0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
 
    m_oActiveMaterial.render();
 
    glBegin(GL_QUADS);
 
 	  glTexCoord2fv(m_vecTex[0].glVector());
-	  glVertex2f(m_fScreenXPos, m_fScreenYPos - 200.0f);
+	  glVertex2f(m_fXPos, m_fYPos);
 	  glTexCoord2fv(m_vecTex[1].glVector());
-	  glVertex2f(m_fScreenXPos + m_fScreenPosWidth, m_fScreenYPos - 200.0f);
+	  glVertex2f(m_fXPos + m_fWidth, m_fYPos);
 	  glTexCoord2fv(m_vecTex[2].glVector());
-	  glVertex2f(m_fScreenXPos + m_fScreenPosWidth, m_fScreenYPos + m_fScreenPosHeight - 200.0f);
+	  glVertex2f(m_fXPos + m_fWidth, m_fYPos + m_fHeight);
 	  glTexCoord2fv(m_vecTex[3].glVector());
-	  glVertex2f(m_fScreenXPos, m_fScreenYPos + m_fScreenPosHeight - 200.0f);
+	  glVertex2f(m_fXPos, m_fYPos + m_fHeight);
 
    glEnd();
    glPopMatrix();
@@ -81,13 +78,6 @@ void C2DObject::init2D(float fXPos, float fYPos, float fWidth, float fHeight, ch
 
    setTexturePercentage(100.00f);
 
-   convertToScreenCoords();
-}
-
-void C2DObject::setScreen(int iWidth, int iHeight)
-{
-   m_iScreenWidth = iWidth;
-   m_iScreenHeight = iHeight;
 }
 
 void C2DObject::setTexturePercentage(float fPercentage)
@@ -113,16 +103,6 @@ bool C2DObject::mouseClickedInside(int iXPos, int iYPos)
 	{
 		return false;
 	}
-}
-
-int C2DObject::getScreenHeight()
-{
-	return m_iScreenHeight;
-}
-
-int C2DObject::getScreenWidth()
-{
-	return m_iScreenWidth;
 }
 
 float C2DObject::getTop()
@@ -176,14 +156,6 @@ void C2DObject::swapTextures()
 }
 
 
-
-void C2DObject::convertToScreenCoords()
-{
-   m_fScreenXPos = m_fXPos * (float) m_iScreenWidth;
-   m_fScreenYPos = m_fYPos * (float) m_iScreenHeight;
-   m_fScreenPosWidth = m_fWidth * (float) m_iScreenWidth; 
-   m_fScreenPosHeight = m_fHeight * (float) m_iScreenHeight;
-}
 
 void C2DObject::setActiveMaterial(CRGBAColour oDiffuse, CRGBAColour oAmbient, CRGBAColour oEmissive)
 {

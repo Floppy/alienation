@@ -143,7 +143,7 @@ void CGLFont::print(char *str, NSDMath::CVector2 vecPos, float fSize, NSDMath::C
    glLoadIdentity(); 
    glEnable(GL_TEXTURE_2D);
 //   glColor4f( vecColour.X(), vecColour.Y(), vecColour.Z(), 0.5f );
-   glOrtho(0.0f, p2DObject.getScreenWidth(), p2DObject.getScreenHeight(), 0.0f, 0.0f, 1.0f);
+   glOrtho(0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
 	//then draw the particles
 	glBegin(GL_QUADS);
 		int iCount;

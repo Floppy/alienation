@@ -29,11 +29,8 @@ public:
    float getWidth();
    float getLeft();
    float getTop();
-   int getScreenWidth();
-   int getScreenHeight();
    bool mouseClickedInside(int iXPos, int iYPos);
    void setTexturePercentage(float fPercentage);
-   void setScreen(int iWidth, int iHeight);
    void setPosition(float fXPos, float fYPos, float fWidth, float fHeight);
    C2DObject();
    virtual ~C2DObject();
@@ -41,11 +38,6 @@ public:
    void renderQuad();
 
 private:
-	float m_fScreenXPos;
-	float m_fScreenYPos;
-	float m_fScreenPosWidth;
-	float m_fScreenPosHeight;
-	void convertToScreenCoords();
    NSDMath::CVector2 m_vecTex[4];
    unsigned m_uiActiveTexture;
    unsigned int m_uiAltTexture;
@@ -56,9 +48,6 @@ private:
    float m_fWidth;
    float m_fHeight;
 
-
-   static int m_iScreenWidth;
-   static int m_iScreenHeight;
 };
 
 #endif // !defined(AFX_2DOBJECT_H__90BFDDBC_B0A5_4AD3_8A38_13C4ECC07894__INCLUDED_)
