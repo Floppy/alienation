@@ -41,12 +41,13 @@ void CGLFont::print(char *str, CVector3 vecPos, float fSize)
 	iLen = strlen(str);
 	glPushMatrix();
 	glLoadIdentity();
-	//Texture and blending stuff
-	g_oTextureManager.activate(m_uiTexture);
 
 	//manually sets the material properties. Hard coded, shouldnt be really
-        CRGBAColour colour(0.4f,1.0f,0.3f,0.06f);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, colour.glColour()); 
+        CMaterial oMaterial;
+        oMaterial.m_oDiffuse = CRGBAColour(0.4f,1.0f,0.3f,0.06f);
+        oMaterial.m_uiTexture = m_uiTexture;
+        oMaterial.render();
+
 	//then draw the particles
 	glBegin(GL_QUADS);
 		int iCount;
@@ -122,12 +123,13 @@ void CGLFont::print(char *str, CVector2 vecPos, float fSize)
 	//Store the initial position
 	vecTempPos = vecPos;
 	iLen = strlen(str);
-	//Texture and blending stuff
-	g_oTextureManager.activate(m_uiTexture);
 
 	//manually sets the material properties. Hard coded, shouldnt be really
-        CRGBAColour colour(0.4f,1.0f,0.3f,0.06f);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, colour.glColour()); 
+        CMaterial oMaterial;
+        oMaterial.m_oDiffuse = CRGBAColour(0.4f,1.0f,0.3f,0.06f);
+        oMaterial.m_uiTexture = m_uiTexture;
+        oMaterial.render();
+
 	//then draw the particles
 	glBegin(GL_QUADS);
 		int iCount;

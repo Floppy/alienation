@@ -116,9 +116,9 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 												//the material properties. Hard coded,      //
 												//shouldnt be really                        //
 												//////////////////////////////////////////////
-	glPushAttrib(GL_COLOR_MATERIAL);
-        CRGBAColour colour(0.4f,1.0f,0.3f,0.06f);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, colour.glColour());
+        CMaterial oMaterial;
+        oMaterial.m_oDiffuse = CRGBAColour(0.4f,1.0f,0.3f,0.06f);
+        oMaterial.render();
 	glEnable(GL_BLEND);
 
 												//////////////////////////////////////////////
@@ -183,9 +183,6 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 	g_oTextureManager.activate(m_auiTextures[5]);
 	draw2DQuad(415.0f, 550.0f, 200.0f * fWidthThrust, 200.0f, avecTex);
 
-	glPopAttrib();
-	glColor4f(0.0f, 1.0f, 1.0f, 0.7f);
-		
 	sprintf(strFont,"Velocity: %.1f", fSpeed);
 	m_poFont->print(strFont, CVector2(420.0f, 210.0f), 5.0f);
 
