@@ -7,6 +7,7 @@
 
 #include "GL/GLFont.h"
 #include "Game/Ship.h"
+#include "2DObject.h"
 #include "config.h"
 
 
@@ -97,6 +98,10 @@ public:
     */
    unsigned int m_auiTextures[7];
 
+   /**
+    * Object for 2d drawing
+    */
+	C2DObject *m_po2DObject;
 };
 
 #endif // HUD_H

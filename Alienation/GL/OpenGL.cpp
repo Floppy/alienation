@@ -87,15 +87,17 @@ bool COpenGL :: initGL() {
    m_fTimeElapsed = 0.0f;
    m_fPitch = m_fYaw = m_fRoll = m_fThrust = 0.0f;
    
+   // Create starfield
+   m_poStars = new CStars;
+   m_poStars->initStars();
+   
    // Create and load ships
-   m_poAIShip = new CAIShip(1, 5000.0f);
+	m_poAIShip = new CAIShip(1, 5000.0f);
    m_poAIShip->loadShip();
    m_poShip = new CPlayerShip();
    m_poShip->loadShip();
    
-   // Create starfield
-   m_poStars = new CStars;
-   m_poStars->initStars();
+
    
    // Done
    return true;

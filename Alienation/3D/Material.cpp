@@ -43,7 +43,10 @@ const CMaterial& CMaterial::operator=(const CMaterial& material) {
 
 void CMaterial::render() const {
    // Texture
-   g_oTextureManager.activate(m_uiTexture);
+	if (g_oTextureManager.valid(m_uiTexture))
+	{
+	   g_oTextureManager.activate(m_uiTexture);
+	}
    // Colours
    glMaterialfv(GL_FRONT,GL_AMBIENT,m_oAmbient.glColour());
    glMaterialfv(GL_FRONT,GL_DIFFUSE,m_oDiffuse.glColour());

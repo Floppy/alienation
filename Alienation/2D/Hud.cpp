@@ -51,6 +51,9 @@ CHud::~CHud()
 //     1.0           25/05/2003   GI       Initial Version
 //     1.1           26/05/2003   GI       Using glOrtho to display hud as a 
 //                                         proper 2d surface  
+//     1.2           14/06/2003   FL       Sets the material properties properly 
+//                                         now using new class   
+//     1.1           14/06/2003   GI       Now drawn using 2d object class.  
 //**************************************************************************************
 void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 {   
@@ -112,11 +115,18 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 												//the material properties. Hard coded,      //
 												//shouldnt be really                        //
 												//////////////////////////////////////////////
+//<<<<<<< Hud.cpp
+//   CMaterial oMaterial;
+//   oMaterial.m_oEmissive = CRGBAColour(0.4f,1.0f,0.3f,0.06f);
+//   oMaterial.render();
+//	glEnable(GL_BLEND);
+//=======
         CMaterial oMaterial;
         oMaterial.m_oEmissive = CRGBAColour(1.0f,1.0f,1.0f,0.5f);
         oMaterial.render();
         glEnable(GL_BLEND);
-        glDepthMask(GL_FALSE);
+//        glDepthMask(GL_FALSE);
+//>>>>>>> 1.11
 
 												//////////////////////////////////////////////
 												//Right Shield                              //
@@ -128,11 +138,13 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 	avecTex[3] = CVector2( 0.0f, 0.0f);
 
 	g_oTextureManager.activate(m_auiTextures[6]);
-	draw2DQuad(.0f, 500.0f, 400.0f, 500.0f, avecTex);
+//	draw2DQuad(.0f, 500.0f, 400.0f, 500.0f, avecTex);
+	m_po2DObject->renderQuad(0.0f, 500.0f, 400.0f, 500.0f, avecTex);
 
 
 	g_oTextureManager.activate(m_auiTextures[2]);
-	draw2DQuad(540.0f, 480.0f, 150.0f, 200.0f, avecTex);
+//	draw2DQuad(540.0f, 480.0f, 150.0f, 200.0f, avecTex);
+	m_po2DObject->renderQuad(540.0f, 480.0f, 150.0f, 200.0f, avecTex);
 	
 												//////////////////////////////////////////////
 												//Left Shield                               //
@@ -140,21 +152,24 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 
 
 	g_oTextureManager.activate(m_auiTextures[3]);
-	draw2DQuad(340.0f, 480.0f, 150.0f, 200.0f, avecTex);
+//	draw2DQuad(340.0f, 480.0f, 150.0f, 200.0f, avecTex);
+	m_po2DObject->renderQuad(340.0f, 480.0f, 150.0f, 200.0f, avecTex);
 
 												//////////////////////////////////////////////
 												//Front Shield                              //
 												//////////////////////////////////////////////
 
 	g_oTextureManager.activate(m_auiTextures[1]);
-	draw2DQuad(415.0f, 560.0f, 200.0f, 150.0f, avecTex);
+//	draw2DQuad(415.0f, 560.0f, 200.0f, 150.0f, avecTex);
+	m_po2DObject->renderQuad(415.0f, 560.0f, 200.0f, 150.0f, avecTex);
 
 												//////////////////////////////////////////////
 												//Back Shield                               //
 												//////////////////////////////////////////////
 
 	g_oTextureManager.activate(m_auiTextures[0]);
-	draw2DQuad(415.0f, 350.0f, 200.0f, 150.0f, avecTex);
+//	draw2DQuad(415.0f, 350.0f, 200.0f, 150.0f, avecTex);
+	m_po2DObject->renderQuad(415.0f, 350.0f, 200.0f, 150.0f, avecTex);
 
 												//////////////////////////////////////////////
 												//Speed Bar                                 //
@@ -166,7 +181,8 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 	avecTex[3] = CVector2( 0.0f, 0.0f);
 	
 	g_oTextureManager.activate(m_auiTextures[4]);
-	draw2DQuad(415.0f, 420.0f, 200.0f * fWidthSpeed, 200.0f, avecTex);
+//	draw2DQuad(415.0f, 420.0f, 200.0f * fWidthSpeed, 200.0f, avecTex);
+	m_po2DObject->renderQuad(415.0f, 420.0f, 200.0f * fWidthSpeed, 200.0f, avecTex);
 
 												//////////////////////////////////////////////
 												//Thrust Bar                                //
@@ -178,7 +194,8 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
 	avecTex[3] = CVector2( 0.0f, 0.0f);
 
 	g_oTextureManager.activate(m_auiTextures[5]);
-	draw2DQuad(415.0f, 550.0f, 200.0f * fWidthThrust, 200.0f, avecTex);
+//	draw2DQuad(415.0f, 550.0f, 200.0f * fWidthThrust, 200.0f, avecTex);
+	m_po2DObject->renderQuad(415.0f, 550.0f, 200.0f * fWidthThrust, 200.0f, avecTex);
 
 	sprintf(strFont,"Velocity: %.1f", fSpeed);
 	m_poFont->print(strFont, CVector2(420.0f, 210.0f), 5.0f);
@@ -197,7 +214,7 @@ void CHud::draw(float fSpeed, float fMaxSpeed, float fThrust, float fMaxThrust)
         m_iLastTime = iTime;
 
 	glDisable(GL_BLEND);
-	glDepthMask(GL_TRUE);
+//	glDepthMask(GL_TRUE);
 
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
@@ -217,13 +234,14 @@ void CHud::init()
 	m_poFont = new CGLFont;
 	m_poFont->load();
 
-        m_auiTextures[0] = g_oTextureManager.load("Hud/hud_fore.png");
-        m_auiTextures[1] = g_oTextureManager.load("Hud/hud_aft.png");
-        m_auiTextures[2] = g_oTextureManager.load("Hud/hud_right.png");
-        m_auiTextures[3] = g_oTextureManager.load("Hud/hud_left.png");
-        m_auiTextures[4] = g_oTextureManager.load("Hud/hud_speed.png");
-        m_auiTextures[5] = g_oTextureManager.load("Hud/hud_thrust.png");
-        m_auiTextures[6] = g_oTextureManager.load("Hud/hud_target.png");
+   m_auiTextures[0] = g_oTextureManager.load("Hud/hud_fore.png");
+   m_auiTextures[1] = g_oTextureManager.load("Hud/hud_aft.png");
+   m_auiTextures[2] = g_oTextureManager.load("Hud/hud_right.png");
+   m_auiTextures[3] = g_oTextureManager.load("Hud/hud_left.png");
+   m_auiTextures[4] = g_oTextureManager.load("Hud/hud_speed.png");
+   m_auiTextures[5] = g_oTextureManager.load("Hud/hud_thrust.png");
+   m_auiTextures[6] = g_oTextureManager.load("Hud/hud_target.png");
+	m_po2DObject = new C2DObject;
 }
 
 

@@ -27,13 +27,14 @@ void CSprite::init() {
    m_uiList = glGenLists(1);
    // Create display list   
    glNewList(m_uiList, GL_COMPILE);
-   
-   // Draw faces
-   glBegin(GL_QUADS);										
 
    // Set material
    m_oMaterial.render();
    
+   // Draw faces
+   glBegin(GL_QUADS);										
+
+
    // Normal
    glNormal3f(0, 0, -1);
 
@@ -63,7 +64,9 @@ void CSprite::render() const {
       cerr << "WARNING: Mesh not initialised!" << endl;
       return;
    }
-   // Push
+
+   
+	// Push
    glPushMatrix();
    // Translate
    glTranslatef(m_vecTranslation.X(),m_vecTranslation.Y(),m_vecTranslation.Z());
