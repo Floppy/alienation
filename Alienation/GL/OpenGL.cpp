@@ -15,6 +15,7 @@
 #include "IO/3ds.h"
 #include "Math/Random.h"
 #include "3D/TextureManager.h"
+#include "Math/Chaos.h"
 
 // We define the joystick axes here, because they
 // seem to be different in windows and linux
@@ -82,10 +83,23 @@ bool COpenGL :: initGL() {
    // Create sun sprite
    CMaterial oMaterial;
    oMaterial.m_oEmissive = CRGBAColour(1.0f, 1.0f, 1.0f,0);
-   oMaterial.m_uiTexture = g_oTextureManager.load("sun.png");   
+   oMaterial.m_oDiffuse  = CRGBAColour(0.0f, 0.0f, 0.0f,0);
+   oMaterial.m_oSpecular = CRGBAColour(0.0f, 0.0f, 0.0f,0);
+   // Load sun textures
+   oMaterial.m_uiTexture = g_oTextureManager.load("sun.png");
+   // Create nice random sun texture
+   //oMaterial.m_uiTexture = g_oTextureManager.create(256,256);
+   //CPerlin perlin(42);
+   //CTexture* pTexture = g_oTextureManager.texture(oMaterial.m_uiTexture);
+   //for (int x=0; x<pTexture->width(); x++) {
+      //for (int y=0; y<pTexture->height(); y++) {
+         //float val = perlin.noise(CVector2(x/10.0,y/10.0)) / 2 + 0.5;
+         //pTexture->setPixel(x,y,CRGBAColour(val,val,0,1.0f));
+      //}
+   //}
    m_oSun = CSprite(oMaterial);
    m_oSun.setSize(850);
-   m_oSun.init();   
+   m_oSun.init();
 
    //All initialisation. Nothing rocket science here.
    m_bSlowmo = false;
