@@ -31,7 +31,7 @@ void C3dsLoader::init3ds(char* pFilename)
 	int n;
 	for(n = 0; n < m_o3DModel.m_iNumOfMaterials; n++)				
 	{
-		astrFilenames[n] = new char(26);
+		astrFilenames[n] = new char[26];
 		memset ((void *) astrFilenames[n], 32, 26);
 	}
 
