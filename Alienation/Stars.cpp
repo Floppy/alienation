@@ -133,3 +133,4 @@ void CStars::draw(CVector3 vecPos)
 	
 	glDisable(GL_BLEND);
 }
+

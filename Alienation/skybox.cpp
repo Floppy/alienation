@@ -1,4 +1,4 @@
-#include "skybox.h"
+#include "Skybox.h"
 #include <stdio.h>
 
 

@@ -17,8 +17,8 @@
  */
 
 #include "opengl.h"
-#include "fmod.h"
-#include "SDL.h"
+#include <fmod.h>
+#include <SDL.h>
 
 #define RANDOM_FLOAT ((float)(rand()%1000)/1000.0f)     // Returns a random value between 0.0f and 1.0f
 #define piover180 	(0.0174532925f)
@@ -132,3 +132,4 @@ int WINAPI WinMain(HINSTANCE hInstance,     // Instance
 	SDL_Quit();
    return(0);  // Exit The Program
 }
+

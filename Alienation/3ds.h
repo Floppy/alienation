@@ -36,7 +36,6 @@
 #include <string.h>
 #include <fstream>
 #include <vector>									
-#include <crtdbg.h>
 using namespace std;
 
 class CVector2 

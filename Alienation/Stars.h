@@ -13,7 +13,6 @@
 #include <gl\gl.h>
 #include <gl\glu.h>
 #include <gl\glaux.h>
-#include "stars.h"
 #include "quat.h"
 #include "matrix.h"
 #include "vector.h"

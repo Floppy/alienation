@@ -150,3 +150,4 @@ void CAIShip::solve()
 	//apply the force to the ship
 	m_ppMasses[0]->applyForce(m_poShips[0].m_vecForce);
 }
+

@@ -6,7 +6,7 @@
 *	E-Mail					: apron@morrowland.com			*
 ************************************************************/
 
-#include"3dsloader.h"
+#include"3dsLoader.h"
 
 
 

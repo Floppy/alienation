@@ -100,3 +100,4 @@ void CGLFont::print(char *str, CVector3 vecPos, float fSize)
 	glPopAttrib();
 	glPopMatrix();
 }
+

@@ -236,3 +236,4 @@ void CShip::drawBrake()
 {
 	m_poShips[0].m_poBrake->render();
 }
+
