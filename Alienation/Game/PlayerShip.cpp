@@ -51,7 +51,7 @@ CPlayerShip::CPlayerShip() :
    m_poShips[0].m_avecOrigTrailPoints[1] = CVector3(-1.6f, 0.6f, 6.4f);
    m_poShips[0].m_poTrails = new CTrail[m_poShips[0].m_iNumTrails];
    for (int i=0; i<m_poShips[0].m_iNumTrails; i++)
-	  m_poShips[0].m_poTrails[0].setup(250, m_poShips[0].m_avecTrailPoints[i]);
+	  m_poShips[0].m_poTrails[i].setup(250, m_poShips[0].m_avecTrailPoints[i]);
 
 
 }
