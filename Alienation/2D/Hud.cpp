@@ -292,7 +292,7 @@ namespace NSD2D {
       // Draw
       m_pTarget->draw(false);
       // Finish up
-      pTexture->postRenderToTexture(GL_LUMINANCE);
+      pTexture->postRenderToTexture(GL_LUMINANCE_ALPHA);
    }
    
 }
