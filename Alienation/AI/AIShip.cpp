@@ -44,7 +44,7 @@ CAIShip::~CAIShip()
 void CAIShip::load()
 {
    NSDIO::CLoad3DS oLoad3ds;
-   if (oLoad3ds.import3DS(&(m_oModel), "Data/Model/fighter.3ds")) {
+   if (oLoad3ds.import3DS(&(m_oModel), "fighter.3ds")) {
       m_oModel.init();
    }
 

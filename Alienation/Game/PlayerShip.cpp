@@ -64,10 +64,10 @@ CPlayerShip::~CPlayerShip()
 void CPlayerShip::load()
 {
    NSDIO::CLoad3DS oLoad3ds;
-   if (oLoad3ds.import3DS(&(m_oModel), "Data/Model/shuttle.3ds")) {
+   if (oLoad3ds.import3DS(&(m_oModel), "shuttle.3ds")) {
       m_oModel.init();
    }
-   if (oLoad3ds.import3DS(&m_oCockpitModel, "Data/Model/canopy02.3ds")) {
+   if (oLoad3ds.import3DS(&m_oCockpitModel, "canopy02.3ds")) {
       // Prepare
       m_oCockpitModel.init();
    }

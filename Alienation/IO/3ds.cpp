@@ -57,7 +57,10 @@ namespace NSDIO {
       m_pCurrentChunk = new CChunk;				 
       m_pTempChunk    = new CChunk;
       
-      m_pFilePointer = fopen(strFileName, "rb");
+      char strFile[255] = "Data/Model/";
+      strcat(strFile,strFileName);
+
+      m_pFilePointer = fopen(strFile, "rb");
       
       if(!m_pFilePointer) 
       {
