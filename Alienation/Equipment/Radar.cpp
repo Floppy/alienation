@@ -50,7 +50,7 @@ void CRadar::init()
 		m_poModel->m_oModel.init();
 	}
 
-	m_poModel->m_ppMasses[0]->m_vecPos = CVector3(0.0f, -3.0f, -15.0);
+	m_poModel->m_ppMasses[0]->m_vecPos = CVector3(0.0f, -1.0f, -15.0);
 
 												//////////////////////////////////////////////
 												//Create the off screen texture to copy to  //
@@ -65,8 +65,8 @@ void CRadar::init()
 
    CRGBAColour oLightAmbient(0.4f, 0.4f, 0.4f, 1.0f);
    CRGBAColour oLightDiffuse(0.5f, 0.5f, 0.5f, 1.0f);
-   CRGBAColour oLightSpecular(0.55f, 0.55f, 0.55f, 1.0f);
-	CVector3 oPosition(-4.43553f, -2.0f, 20.0f);
+   CRGBAColour oLightSpecular(1.00f, 1.0f, 1.0f, 1.0f);
+	CVector3 oPosition(-1500000.43553f, -1500000.0f, -1500000.0f);
 
 	float ambient[] = {0.4f, 0.4f, 0.4f, 1.0f};
 	m_oLight = new CLight(GL_LIGHT2);
@@ -148,7 +148,7 @@ void CRadar::renderOffScreen(CVector3 vecShipPos, const CMatrix matRotMatrix)
 				0.0f, 1.0f, 0.0f);
 
 
-	glLineWidth(2.0f);
+	glLineWidth(1.4f);
 
 												//////////////////////////////////////////////
 												//draw the model                            //
@@ -163,8 +163,6 @@ void CRadar::renderOffScreen(CVector3 vecShipPos, const CMatrix matRotMatrix)
         glShadeModel( GL_SMOOTH );
 	m_oLight->enable();
 	m_oLight->render();
-        m_poModel->draw( false );
-
 												//////////////////////////////////////////////
 												//draw the radar "blips"                    //
 												//////////////////////////////////////////////
@@ -207,6 +205,7 @@ void CRadar::renderOffScreen(CVector3 vecShipPos, const CMatrix matRotMatrix)
 				oMaterial.m_oDiffuse = CRGBAColour(0.5f,0.5f,0.5f,0.99f);
 				oMaterial.m_oEmissive = CRGBAColour(0.5f,0.5f,0.5f,0.99f);
 				oMaterial.render();
+				glColor4f(0.5f,0.5f,0.5f,0.99f);
 			}
 			else
 			{
@@ -214,6 +213,7 @@ void CRadar::renderOffScreen(CVector3 vecShipPos, const CMatrix matRotMatrix)
 				oMaterial.m_oDiffuse = CRGBAColour(1.0f,0.2f,0.1f,0.99f);
 				oMaterial.m_oEmissive = CRGBAColour(1.0f,0.2f,0.1f,0.99f);
 				oMaterial.render();	
+				glColor4f(1.0f,0.2f,0.1f,0.99f);
 			}
 
 												//////////////////////////////////////////////
@@ -236,6 +236,9 @@ void CRadar::renderOffScreen(CVector3 vecShipPos, const CMatrix matRotMatrix)
 			glEnd();
 		}
 	}
+   m_poModel->draw( false );
+
+
 	m_oLight->disable();
    glEnable( GL_TEXTURE_2D );
 	glDisable( GL_BLEND );

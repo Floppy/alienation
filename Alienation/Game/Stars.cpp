@@ -79,18 +79,18 @@ void CStars::draw(CVector3 vecPos)
 	glPushMatrix();
 	glTranslatef(vecPos.X(), vecPos.Y(), vecPos.Z());
 
-        for (int iCount = 0 ; iCount < m_iNumStars ; iCount++)
+	for (int iCount = 0 ; iCount < m_iNumStars ; iCount++)
 	{
-           if (m_oFrustum.PointInFrustum(m_aoStars[iCount].m_vecPos))
-           {
-              // Set size
-              m_oSprite.setSize(m_aoStars[iCount].m_fSize);
-              // Set position
-              m_oSprite.setTranslation(m_aoStars[iCount].m_vecPos);
-              // Render
-              m_oSprite.render();
-           }
-        }
+		if (m_oFrustum.PointInFrustum(m_aoStars[iCount].m_vecPos))
+		{
+			// Set size
+			m_oSprite.setSize(m_aoStars[iCount].m_fSize);
+			// Set position
+			m_oSprite.setTranslation(m_aoStars[iCount].m_vecPos);
+			// Render
+			m_oSprite.render();
+		}
+	}
 	
 	glPopMatrix();
 }

@@ -102,6 +102,11 @@ class CTexture
    unsigned int m_uiTextureID;
 
    /**
+    * A GL texture ID for the bump map.
+    */
+	unsigned int m_uiBumpTextureID;
+
+   /**
     * Temporary storage for viewport data.
     * Used in the RenderToTexture functions.
     */

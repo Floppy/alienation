@@ -13,7 +13,8 @@ enum TAsteroidType {
    ROID_COMMON,
    ROID_GOLD,
    ROID_ICE,
-   ROID_RED
+   ROID_RED,
+	ROID_COPPER
 };
 
 class CAsteroid : public CGameObject

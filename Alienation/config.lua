@@ -13,9 +13,9 @@ video = {
 	depthbuffer = 16,
 	doublebuffer = 1,
 	stereo = 0,
-	polygonsmooth = 0,
+	polygonsmooth = 1,
 	perspectivecorrection = 1,
-	texturefilter = 1, -- 1 = GL_NEAREST
+	texturefilter = 6, -- 1 = GL_NEAREST
 	                   -- 2 = GL_LINEAR
 	                   -- 3 = GL_NEAREST_MIPMAP_NEAREST
 	                   -- 4 = GL_LINEAR_MIPMAP_NEAREST

@@ -2,6 +2,9 @@
 #include <SDL_opengl.h>
 #include <iostream>
 
+extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;
+extern PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB;
+
 using namespace std;
 
 CSprite::CSprite() :
@@ -33,7 +36,7 @@ void CSprite::init() {
 
    // Set material
    m_oMaterial.render();
-   
+	m_oMaterial.disableDot3();
    // Draw faces
    glBegin(GL_QUADS);										
 
@@ -46,7 +49,8 @@ void CSprite::init() {
    {
       for (int j=0; j<2; j++) 
       {
-         glTexCoord2f( ( i==j ? 1.0f : 0.0f ) , ( i==0 ? 1.0f : 0.0f ) );
+			glMultiTexCoord2fARB(GL_TEXTURE0_ARB, ( i==j ? 1.0f : 0.0f ), ( i==0 ? 1.0f : 0.0f ) );
+			glMultiTexCoord2fARB(GL_TEXTURE1_ARB, ( i==j ? 1.0f : 0.0f ), ( i==0 ? 1.0f : 0.0f ) );
          glVertex3f( ( i==j ? 1.0f : -1.0f ) , ( i==0 ? 1.0f : -1.0f ), 0.0f );
       }
    }

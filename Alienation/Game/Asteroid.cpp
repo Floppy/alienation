@@ -10,6 +10,7 @@ static const char* roidfiles[] = {
    "redcrystal1.3ds",
    "redcrystal2.3ds",
    "redcrystal3.3ds",
+	"copper.3ds"
 };
 
 
@@ -46,6 +47,9 @@ void CAsteroid::load(TAsteroidType type)
       else
          strRoidFile = roidfiles[6];
       break;
+	case ROID_COPPER:
+		strRoidFile = roidfiles[7];
+		break;
    case ROID_COMMON:
    default:
       strRoidFile = roidfiles[0];

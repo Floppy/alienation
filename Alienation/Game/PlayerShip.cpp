@@ -11,8 +11,6 @@ using namespace NSDSound;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CGLFont poFont;
-
 //In the real thing all ship data will be loaded from file and this
 //initialisation will be got from there (or possible from the CShip
 //class, This is me a) being lazy, b) being after quick results 
@@ -30,13 +28,13 @@ CPlayerShip::CPlayerShip(float mass) :
 {
    // Setup light
    CRGBAColour oLightAmbient(1.0f, 1.0f, 1.0f, 1.0f);
-   CRGBAColour oLightDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
+   CRGBAColour oLightDiffuse(0.5f, 0.5f, 0.5f, 1.0f);
    CVector3 oPosition(1000.0f, 1000.0f, -1000.0f);
    m_oLight.init(oLightAmbient, oLightDiffuse, oPosition);
 
 	m_poRadar = new CRadar();
 	m_poRadar->init();
-	m_poRadar->init2D(0.4f, 0.7f, 0.18f, 0.22f, "");
+	m_poRadar->init2D(0.41f, 0.7f, 0.18f, 0.22f, "");
 	m_poRadar->setRange(4000);
    m_matCamRotation.loadIdentity();
       
@@ -44,7 +42,7 @@ CPlayerShip::CPlayerShip(float mass) :
    int iSample = g_oSoundManager.load("thrust.wav");
    m_iThrustChannel = g_oSoundManager.play(iSample,-1);
    g_oSoundManager.setVolume(0,m_iThrustChannel);
-poFont.load();
+	m_iFontID = 1;
    
 }
 
@@ -159,6 +157,8 @@ void CPlayerShip::rotateCam(float fDT)
 
 void CPlayerShip::drawHud()
 {
+	CGLFont * oFont = g_oFontManager.getFont(m_iFontID);
+
    if (m_bInsideView) {
       glPushMatrix();
       glTranslatef(m_ppMasses[0]->m_vecPos.X(), m_ppMasses[0]->m_vecPos.Y(), m_ppMasses[0]->m_vecPos.Z());
@@ -169,8 +169,13 @@ void CPlayerShip::drawHud()
 
       glEnable(GL_BLEND);
       glDisable(GL_DEPTH_TEST);
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE);
       
+
+      m_oLight.enable();
+      m_oLight.render();
+
       // Render shields
       for (vector<CShield*>::iterator it = m_lShields.begin(); it != m_lShields.end(); it++) {
          (*it)->renderQuad();
@@ -197,11 +202,11 @@ void CPlayerShip::drawHud()
       //m_poSpeedIndicator->setTexturePercentage(fWidthSpeed);
       //m_poSpeedIndicator->renderQuad();
       sprintf(strFont,"V: %.1f", m_fVel);
-      poFont.print(strFont, CVector2(0.4f, 0.30f), 0.0075f, CVector3(0,1,0));
+      oFont->print(strFont, CVector2(0.4f, 0.30f), 0.0075f, CVector3(0,1,0));
       //m_poThrustIndicator->setTexturePercentage(fWidthThrust);      
       //m_poThrustIndicator->renderQuad();
       sprintf(strFont,"T: %.0f", fThrust);
-      poFont.print(strFont, CVector2(0.5f, 0.30f), 0.0075f, CVector3(0,1,0));
+      oFont->print(strFont, CVector2(0.5f, 0.30f), 0.0075f, CVector3(0,1,0));
 
       // Draw radar
       m_poRadar->renderQuad();
@@ -216,8 +221,14 @@ void CPlayerShip::drawHud()
          iFPS = 1000/(iTime - m_iLastTime);
       }
       sprintf(strFont,"%3ld FPS", iFPS);
-      poFont.print(strFont, CVector2(0.9f, 0.0075f), 0.0075f, CVector3(0,1,0));
+      oFont->print(strFont, CVector2(0.9f, 0.0075f), 0.0075f, CVector3(0,1,0));
       m_iLastTime = iTime;      
+
+      // Draw radar
+//      m_poRadar->render();
+      
+
+      m_oLight.disable();
 
       glDisable(GL_BLEND);
       glEnable(GL_DEPTH_TEST);
@@ -231,6 +242,7 @@ void CPlayerShip::renderOffScreen()
    if (m_bInsideView) {
       m_oLight.enable();
       m_oLight.render();
+      m_poRadar->renderOffScreen(this->m_ppMasses[0]->m_vecPos, this->m_matRotation );
       m_poTargetingComputer->renderOffScreen();
       m_oLight.disable();
       glDisable(GL_LIGHTING);

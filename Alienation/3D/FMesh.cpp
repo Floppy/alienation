@@ -125,13 +125,15 @@ void CFMesh::renderDOT3() const
 	CVector3 lightpos = CVector3(0.0f, 0.0f, -1000.0f);
 	CVector3 lightVector;
 	CVector3 colour;
+	CVector3 vecTranslation;
 	CMatrix  mat, rotMat;
 
 	m_oMaterial.renderBumpMap();
 
 	m_oMaterial.render();
 	rotMat = CMatrix(this->getRotation());
-	lightVector = rotMat * lightVector;
+	vecTranslation = CVector3(this->getTranslation());
+	lightVector = (rotMat * lightVector) - vecTranslation;
 
 	glBegin(GL_TRIANGLES);
    for(i = 0; i < m_iNumFaces; i++)

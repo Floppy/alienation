@@ -151,8 +151,8 @@ bool COpenGL :: initGL() {
 
    // Init lighting
    glEnable(GL_LIGHTING);
-   CRGBAColour oAmbient(0.25f, 0.25f, 0.25f, 1.0f);
-   CRGBAColour oDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
+   CRGBAColour oAmbient(1.0f, 1.0f, 1.0f, 1.0f);
+   CRGBAColour oDiffuse(0.65f, 0.65f, 0.65f, 1.0f);
    CVector3 oPosition(0.0f, 0.0f, -1000.0f);
 
    m_poLight = new CLight(GL_LIGHT0);
@@ -214,7 +214,7 @@ bool COpenGL :: initGL() {
       CAsteroid* pRoid = new CAsteroid(1,50000);
       // Select type
       float fRandom = prng.randDouble();
-      TAsteroidType type = ROID_RED;
+      TAsteroidType type = ROID_COPPER;
       if (fRandom < 0.25) 
          type = ROID_COMMON;
       else if (fRandom < 0.5) 

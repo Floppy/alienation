@@ -14,6 +14,8 @@
 #include "3D/Material.h"
 #include "config.h"
 #include <GL/gl.h>
+#include <GL/glext.h>
+
 
 class C2DObject  
 {

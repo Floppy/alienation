@@ -32,6 +32,9 @@ void CModel::init() {
 }
 
 void CModel::render() const {
+
+	NSDMath::CMatrix mat;
+
    if (!m_bInitialised) {
       //cerr << "WARNING: Model not initialised!" << endl;
       return;
@@ -40,8 +43,13 @@ void CModel::render() const {
    glPushMatrix();
    // Translate
    glTranslatef(m_vecTranslation.X(),m_vecTranslation.Y(),m_vecTranslation.Z());
+	mat = CMatrix(GL_MODELVIEW_MATRIX);
+
+	mat.invert();
+
    // Draw meshes
    for (vector<C3DObject*>::const_iterator it(m_oObjects.begin()); it!=m_oObjects.end(); ++it) {
+		(*it)->setRotation(mat);
       (*it)->render();
    }
    // Pop
