@@ -7,7 +7,8 @@ AC_PROG_RANLIB
 
 SDL_LIBS="`sdl-config --libs`"
 SDL_CFLAGS="`sdl-config --cflags`"
-AC_SUBST(SDL_LIBS)
-AC_SUBST(SDL_CFLAGS)
+
+CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
+LIBS="$LIBS $SDL_LIBS -lGL -lGLU -lSDL_image -lfmod-3.62"
 
 AC_OUTPUT(Makefile Math/Makefile IO/Makefile 3D/Makefile)
